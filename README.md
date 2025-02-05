@@ -1,14 +1,33 @@
-[![REUSE status](https://api.reuse.software/badge/github.com/cap-js-community/-cap-js-community-sap-afc-sdk)](https://api.reuse.software/info/github.com/cap-js-community/-cap-js-community-sap-afc-sdk)
-
 # @cap-js-community/sap-afc-sdk
 
-## About this project
+[![npm version](https://img.shields.io/npm/v/@cap-js-community/sap-afc-sdk)](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)
+[![monthly downloads](https://img.shields.io/npm/dm/@cap-js-community/sap-afc-sdk)](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)
+[![REUSE status](https://api.reuse.software/badge/github.com/cap-js-community/sap-afc-sdk)](https://api.reuse.software/info/github.com/cap-js-community/sap-afc-sdk)
+[![Main CI](https://github.com/cap-js-community/sap-afc-sdk/actions/workflows/main-ci.yml/badge.svg)](https://github.com/cap-js-community/sap-afc-sdk/commits/main)
 
-SAP Advanced Financial Closing SDK for CDS
+### [SAP Advanced Financial Closing SDK for CDS](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)
 
-## Requirements and Setup
+> Provides an SDK for SAP Advanced Financial Closing to be consumed with
+> SAP Cloud Application Programming Model (Node.js).
 
-*Insert a short description what is required to get your project running...*
+> ## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Documentation](#documentation)
+
+## Getting Started
+
+- Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` project
+- ...
+
+## Usage
+
+...
+
+## Documentation
+
+...
 
 ## Support, Feedback, Contributing
 

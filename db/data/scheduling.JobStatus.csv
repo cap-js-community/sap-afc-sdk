@@ -1,0 +1,9 @@
+code;name;descr
+requested;Requested;Requested
+running;Running;Running
+completed;Completed;Completed
+completedWithError;Completed With Error;Error
+completedWithWarning;Completed With Warning;Warning
+failed;Failed;Failed
+cancelRequested;Cancel Requested;Requested
+canceled;Canceled;Canceled

@@ -1,0 +1,127 @@
+{
+  "name": "@cap-js-community/sap-afc-sdk",
+  "version": "0.1.0",
+  "description": "SAP Advanced Financial Closing SDK for CDS",
+  "homepage": "https://cap.cloud.sap/",
+  "engines": {
+    "node": ">=22"
+  },
+  "author": "Oliver Klemenz <oklemenz@gmail.com>, ",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cap-js-community/sap-afc-sdk.git"
+  },
+  "keywords": [
+    "AFC",
+    "CAP",
+    "CDS"
+  ],
+  "files": [
+    "app",
+    "bin",
+    "db",
+    "http",
+    "openapi",
+    "src",
+    "srv",
+    "CHANGELOG.md",
+    "cds-plugin.js",
+    "index.cds"
+  ],
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "afc": "./bin/afc.js"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "watch:open": "cds watch --open",
+    "test": "jest",
+    "test:update": "npm test -- -u",
+    "lint": "npm run eslint && npm run prettier",
+    "lint:ci": "npm run eslint:ci && npm run prettier:ci",
+    "eslint": "eslint --fix .",
+    "eslint:ci": "eslint .",
+    "prettier": "prettier \"**/*.{js,json,md,yml,yaml}\" --write --log-level error",
+    "prettier:ci": "prettier \"**/*.{js,json,md,yml,yaml}\" --check",
+    "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
+    "prepareRelease": "npm prune --production",
+    "audit": "npm audit --only=prod",
+    "openapi": "npm run openapi:sspi",
+    "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi > 'openapi/afc-sspi.json' && node openapi/postprocessing/afc-sspi"
+  },
+  "dependencies": {
+    "@cap-js-community/event-queue": "^1.8.7",
+    "@cap-js-community/feature-toggle-library": "^1.2.3",
+    "@cap-js-community/websocket": "^1.6.0",
+    "@sap/sbf": "^6.8.2",
+    "verror": "^1.10.1"
+  },
+  "devDependencies": {
+    "@sap/cds": "^8.7.1",
+    "@sap/cds-dk": "^8.7.0",
+    "@cap-js/sqlite": "^1.8.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-n": "^17.15.1",
+    "express": "^4.21.2",
+    "globals": "^15.14.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
+    "ws": "^8.18.0"
+  },
+  "cds": {
+    "websocket": {
+      "kind": "ws",
+      "[production]": {
+        "adapter": {
+          "local": true,
+          "impl": "redis"
+        }
+      }
+    },
+    "eventQueue": {
+      "useAsCAPOutbox": true
+    },
+    "featureToggles": {
+      "config": {}
+    },
+    "requires": {
+      "SchedulingProcessingService": {
+        "outbox": {
+          "kind": "persistent-outbox",
+          "maxAttempts": 5,
+          "checkForNextChunk": true,
+          "parallelEventProcessing": 5
+        }
+      },
+      "SchedulingWebsocketService": {
+        "outbox": {
+          "kind": "persistent-outbox",
+          "transactionMode": "alwaysRollback",
+          "maxAttempts": 5,
+          "checkForNextChunk": true,
+          "parallelEventProcessing": 5
+        }
+      },
+      "sap-afc-sdk": {
+        "model": "@cap-js-community/sap-afc-sdk",
+        "ui": {
+          "path": "",
+          "flp": true,
+          "scheduling.monitoring.job": true
+        },
+        "[production]": {
+          "broker": true
+        },
+        "mockProcessing": false,
+        "[test]": {
+          "mockProcessing": false
+        }
+      }
+    }
+  }
+}

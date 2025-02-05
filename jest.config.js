@@ -1,0 +1,30 @@
+"use strict";
+
+module.exports = {
+  reporters: ["default"],
+  automock: false,
+  bail: false,
+  clearMocks: false,
+  collectCoverage: true,
+  collectCoverageFrom: ["**/srv/**/*.js"],
+  coverageDirectory: "reports/coverage/unit/",
+  coverageReporters: ["lcov", "text"],
+  coverageThreshold: {
+    global: {
+      branches: 85,
+      functions: 85,
+      lines: 90,
+      statements: 90,
+    },
+  },
+  moduleDirectories: ["node_modules"],
+  modulePathIgnorePatterns: [],
+  resetMocks: false,
+  resetModules: false,
+  testMatch: ["**/test/**/*.test.js"],
+  testPathIgnorePatterns: ["/node_modules/"],
+  verbose: true,
+  maxWorkers: 2,
+  setupFilesAfterEnv: ["./jest.setupAfterEnv.js"],
+  testTimeout: 60000,
+};
