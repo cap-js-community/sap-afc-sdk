@@ -1,0 +1,48 @@
+{
+  "defaultRenderer": "fiori2",
+  "applications": {
+    "Job-monitor": {
+      "title": "Monitor Scheduling Jobs",
+      "description": "Monitor Scheduling Jobs",
+      "additionalInformation": "SAPUI5.Component=scheduling.monitoring.job",
+      "applicationType": "URL",
+      "url": "./scheduling.monitoring.job/webapp"
+    }
+  },
+  "renderers": {
+    "fiori2": {
+      "componentData": {
+        "config": {
+          "enableMergeAppAndShellHeaders": true,
+          "search": "hidden"
+        }
+      }
+    }
+  },
+  "services": {
+    "NavTargetResolution": {
+      "config": {
+        "runStandaloneAppFolderWhitelist": {
+          "*": true
+        },
+        "allowTestUrlComponentConfig": true,
+        "enableClientSideTargetResolution": true
+      }
+    },
+    "EndUserFeedback": {
+      "adapter": {
+        "config": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "bootstrapPlugins": {
+    "RuntimeAuthoringPlugin": {
+      "component": "sap.ushell.plugins.rta",
+      "config": {
+        "validateAppVersion": false
+      }
+    }
+  }
+}

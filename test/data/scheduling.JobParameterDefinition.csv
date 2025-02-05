@@ -1,0 +1,11 @@
+name;job_name;description;type_code;dataType_code;value;required;mappingType_code
+A;JOB_1;Parameter A;writableValue;string;ABC;true;
+B;JOB_1;Parameter B;readOnlyValue;number;21;false;
+C;JOB_1;Parameter C;mapping;boolean;false;true;flag
+D;JOB_1;Parameter D;writableValue;number;22;false;
+E;JOB_1;Parameter D;writableValue;datetime;2025-01-01T00:00:00Z;false;
+A;JOB_2;Parameter A;writableValue;string;ABC;true;
+B;JOB_2;Parameter B;readOnlyValue;number;23;false;
+C;JOB_2;Parameter C;mapping;boolean;false;true;flag
+D;JOB_2;Parameter D;writableValue;number;24;false;
+E;JOB_2;Parameter E;writableValue;datetime;2025-01-01T00:00:00Z;false;

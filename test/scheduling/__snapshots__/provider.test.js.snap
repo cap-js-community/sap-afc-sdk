@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`API Create Job 1`] = `
+{
+  "name": "JOB_1",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "version": "1",
+}
+`;
+
+exports[`API Create Job 2`] = `
+{
+  "name": "JOB_1",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "version": "1",
+}
+`;
+
+exports[`API Create Job 3`] = `
+[
+  {
+    "name": "A",
+    "value": "abcd",
+  },
+  {
+    "name": "C",
+    "value": "true",
+  },
+  {
+    "name": "D",
+    "value": "32",
+  },
+  {
+    "name": "E",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API GET Job 1`] = `
+[
+  {
+    "name": "JOB_1",
+    "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+    "startDateTime": "2025-01-01T12:00:00Z",
+    "status": "requested",
+    "version": "1",
+  },
+  {
+    "name": "JOB_2",
+    "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
+    "startDateTime": "2025-01-02T12:00:00Z",
+    "status": "running",
+    "version": "1",
+  },
+]
+`;
+
+exports[`API GET Job 2`] = `
+{
+  "name": "JOB_1",
+  "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "version": "1",
+}
+`;
+
+exports[`API GET Job Definitions 1`] = `
+[
+  {
+    "description": "Job Definition 1",
+    "name": "JOB_1",
+    "version": "1",
+  },
+  {
+    "description": "Job Definition 2",
+    "name": "JOB_2",
+    "version": "1",
+  },
+]
+`;
+
+exports[`API GET Job Definitions 2`] = `
+{
+  "description": "Job Definition 1",
+  "name": "JOB_1",
+  "version": "1",
+}
+`;
+
+exports[`API GET Job Parameter Definitons 1`] = `
+[
+  {
+    "dataType": "string",
+    "description": "Parameter A",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "A",
+    "required": true,
+    "type": "writableValue",
+    "value": "ABC",
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter B",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "B",
+    "required": false,
+    "type": "readOnlyValue",
+    "value": "21",
+  },
+  {
+    "dataType": "boolean",
+    "description": "Parameter C",
+    "jobName": "JOB_1",
+    "mappingType": "flag",
+    "name": "C",
+    "required": true,
+    "type": "mapping",
+    "value": "0",
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter D",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "D",
+    "required": false,
+    "type": "writableValue",
+    "value": "22",
+  },
+  {
+    "dataType": "datetime",
+    "description": "Parameter D",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "E",
+    "required": false,
+    "type": "writableValue",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API GET Job Parameters 1`] = `
+[
+  {
+    "name": "A",
+    "value": "ABC",
+  },
+  {
+    "name": "B",
+    "value": "11",
+  },
+  {
+    "name": "C",
+    "value": "true",
+  },
+  {
+    "name": "D",
+    "value": "12",
+  },
+  {
+    "name": "E",
+    "value": "2025-01-02T00:00:00Z",
+  },
+  {
+    "name": "E",
+    "value": "2025-01-02T00:00:00Z",
+  },
+]
+`;

@@ -1,0 +1,52 @@
+### Job Definition
+GET http://localhost:4004/api/job-scheduling/v1/JobDefinition
+Authorization: Basic alice alice
+
+### Job Definition Parameters
+GET http://localhost:4004/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
+Authorization: Basic alice alice
+
+### Job
+GET http://localhost:4004/api/job-scheduling/v1/Job
+Authorization: Basic alice alice
+
+### Job Parameters
+GET http://localhost:4004/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+Authorization: Basic alice alice
+
+### Create Job
+POST http://localhost:4004/api/job-scheduling/v1/Job
+Authorization: Basic alice alice
+Content-Type: application/json
+
+{
+    "name": "JOB_1",
+    "referenceID": "abc4711",
+    "startDateTime": "2025-01-01T12:00:00Z",
+    "parameters": [{
+        "name": "A",
+        "value": "abc"
+      },
+      {
+        "name": "B",
+        "value": "21"
+      },
+      {
+        "name": "C",
+        "value": "false"
+      },
+      {
+        "name": "D",
+        "value": "11.12"
+      },
+      {
+        "name": "E",
+        "value": "2025-01-01T12:00:00Z"
+      }
+    ]
+}
+
+### Cancel Job
+POST http://localhost:4004/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+Authorization: Basic alice alice
+Content-Type: application/json

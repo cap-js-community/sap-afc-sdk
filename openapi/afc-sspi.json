@@ -1,0 +1,832 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "SAP Advanced Financial Closing Scheduling Service Provider Interface",
+    "description": "The Scheduling Service Provider Interface allows the integration of third-party scheduling jobs with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api/job-scheduling/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "JobDefinition"
+    },
+    {
+      "name": "Job"
+    }
+  ],
+  "paths": {
+    "/Job": {
+      "get": {
+        "summary": "Retrieves a list of job.",
+        "tags": ["Job"],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page, e.g., 10. Example: ?top=5",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referenceID",
+            "in": "query",
+            "required": false,
+            "description": "Allows filtering of query results by referenceID. Example: ?referenceID=01234567-89ab-cdef-0123-456789abcdef",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of Job",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a single job.",
+        "tags": ["Job"],
+        "requestBody": {
+          "description": "New job",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SchedulingProviderService.Job-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/Job/{ID}": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a single job.",
+        "tags": ["Job"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/Job/{ID}/parameters": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a list of parameters of a job.",
+        "tags": ["Job"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobParameter",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.JobParameter"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/JobDefinition": {
+      "get": {
+        "summary": "Retrieves a list of job definition.",
+        "tags": ["JobDefinition"],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page, e.g., 10.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved job definition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobDefinition",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.JobDefinition"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/JobDefinition/{name}": {
+      "parameters": [
+        {
+          "description": "key: name",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a single job definition.",
+        "tags": ["JobDefinition"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved job definition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingProviderService.JobDefinition"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/JobDefinition/{name}/parameters": {
+      "parameters": [
+        {
+          "description": "key: name",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a list of parameters of a job definition.",
+        "tags": ["JobDefinition"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobParameterDefinition",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.JobParameterDefinition"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        }
+      }
+    },
+    "/Job/{ID}/cancel": {
+      "post": {
+        "summary": "Invokes action cancel",
+        "tags": ["Job"],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          }
+        },
+        "parameters": [
+          {
+            "description": "key: ID",
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SchedulingProviderService.Job": {
+        "title": "Job",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "name": {
+            "type": "string"
+          },
+          "referenceID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef"
+          },
+          "startDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "running",
+              "completed",
+              "completedWithError",
+              "completedWithWarning",
+              "failed",
+              "cancelRequested",
+              "canceled"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04.0000000Z"
+          },
+          "createdBy": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04.0000000Z"
+          },
+          "modifiedBy": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        "required": ["ID", "name", "referenceID", "version", "status"]
+      },
+      "SchedulingProviderService.Job-create": {
+        "title": "Job (for create)",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "referenceID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef"
+          },
+          "startDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SchedulingProviderService.JobParameter-create"
+            }
+          }
+        },
+        "required": ["name", "referenceID"]
+      },
+      "SchedulingProviderService.JobDefinition": {
+        "title": "JobDefinition",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "version"]
+      },
+      "SchedulingProviderService.JobParameter": {
+        "title": "JobParameter",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "jobID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": ["ID", "name", "value"]
+      },
+      "SchedulingProviderService.JobParameter-create": {
+        "title": "JobParameter (for create)",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"]
+      },
+      "SchedulingProviderService.JobParameterDefinition": {
+        "title": "JobParameterDefinition",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "jobName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["readOnlyValue", "writeableValue", "mapping"]
+          },
+          "dataType": {
+            "type": "string",
+            "enum": ["string", "number", "datetime", "boolean"]
+          },
+          "mappingType": {
+            "type": "string",
+            "enum": ["companyCode", "controllingArea", "plant"]
+          },
+          "value": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["name", "dataType", "type", "mappingType"]
+      },
+      "error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "400": {
+        "description": "Incorrect request. Format or structure invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized. Action requires user authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Access forbidden. The caller does not have the required permissions to access the resource",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Resource not found. The caller either provided a wrong URL or the requested resource does not exist (any longer).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "406": {
+        "description": "Not acceptable. The caller provided content negotiation headers such as Accept, Accept-Charset, Accept-Encoding, and Accept- Language, for which the server could not produce a matching result.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Request conflict. State of the resource does not permit the request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "411": {
+        "description": "Length required. Content-Length header required.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "413": {
+        "description": "Payload Too Large. The request entity is larger than limits defined by the server.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "415": {
+        "description": "Unsupported Media Type. The server refuses to accept the request because the payload has an unsupported format.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests. The caller has sent too many requests in a given amount of time",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error. The requested operation led to an error during execution",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "501": {
+        "description": "Not implemented. The server does not support the functionality required to fulfill the request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      },
+      "503": {
+        "description": "Service unavailable. The server is not able to handle the request at present. If no Retry-After is given, the client SHOULD handle the response as it would for a 500 response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "description": "Indicates how long the client should wait before making a follow-up request, specified as a number of seconds",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "description": "To access this API, use the OAuth 2.0 client credentials grant flow.",
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2": []
+    }
+  ]
+}

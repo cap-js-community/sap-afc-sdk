@@ -1,0 +1,19 @@
+{
+  "name": "scheduling.monitoring.job",
+  "version": "1.0.0",
+  "description": "Monitor Scheduling Jobs",
+  "keywords": [
+    "ui5"
+  ],
+  "main": "webapp/index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "@ui5/cli": "^4.0.13",
+    "@sap/ux-ui5-tooling": "^1.16.2",
+    "ui5-task-zipper": "^3.0.0"
+  },
+  "scripts": {
+    "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
+    "deploy-config": "npx -p @sap/ux-ui5-tooling fiori add deploy-config cf"
+  }
+}
