@@ -92,11 +92,32 @@ Custom Job processing can be implemented by extending the Job processing service
 
 ## Documentation
 
+### All-in-one
+
+- Install `@sap/cds-dk` globally: `npm install -g @sap/cds-dk`
+- Init a new CDS project: `cds init <name>`
+- Switch to project folder: `cd <name>`
+- Add CDS features:
+  - Kyma: `cds add helm,approuter,xsuaa,html5-repo --for production`
+  - Cloud Foundry: `cds add mta,approuter,xsuaa,html5-repo --for production`
+- Add AFC SDK: `npm add @cap-js-community/sap-afc-sdk`
+- Add AFC SDK features
+  - `afc add broker,sample`
+- Install: `npm i` 
+- Deploy
+
 ### Add sample data
 
 To add sample Job definitions run:
 
 - `afc add sample`
+
+### Broker
+
+- `afc add broker`
+- Deploy
+- Create broker on CF:
+  `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
 
 ### Mock processing
 
@@ -106,16 +127,6 @@ set CDS env option `cds.requires.sap-afc-sdk.mockProcessing: true`.
 ### Approuter
 
 - `cds add approuter`
-
-### Deployment
-
-#### Kyma
-
-- `cds add helm`
-
-#### Cloud Foundry
-
-- `cds add mta`
 
 ### Authentication
 
@@ -128,13 +139,20 @@ set CDS env option `cds.requires.sap-afc-sdk.mockProcessing: true`.
 
 - `cds add ias`
 
-### Broker
+### Deployment
 
-- `cds add xsuaa`
-- Change XSUAA plan from `application` to `broker`
-- Create broker on CF:
-  `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
+#### Kyma
+
+- `cds add helm`
+
+#### Cloud Foundry
+
+- `cds add mta`
 
 ### HTML5 repo
 
+Serve UIs via HTML5 repo:
+
+- Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
 - `cds add html5-repo`
+

@@ -26,12 +26,16 @@ const commands = ["add"];
       console.log("Missing <feature> argument. Available features: 'broker'");
       return;
     }
-    const feature = process.argv[3];
-    try {
-      const featureFn = require(`./features/${feature}`);
-      await featureFn();
-    } catch (err) {
-      console.log(`Unknown feature '${feature}'`);
+    const features = (process.argv[3] ?? "").split(",").map((f) => f.trim());
+    for (const feature of features) {
+      try {
+        const featureFn = require(`./features/${feature}`);
+        console.log(`Applying feature '${feature}':`);
+        await featureFn();
+        console.log();
+      } catch (err) {
+        console.log(`Unknown feature '${feature}'`);
+      }
     }
   }
 })();
