@@ -46,7 +46,7 @@ function serveBroker() {
   }
   let brokerConfig;
   let catalogPath;
-  const brokerPath = path.join(process.cwd(), "./srv/broker.json");
+  const brokerPath = path.join(cds.root, "./srv/broker.json");
   try {
     brokerConfig = require(brokerPath);
     catalogPath = brokerConfig.catalog ?? "./srv/catalog.json";
@@ -78,17 +78,35 @@ function serveUIs() {
   if (!cds.env.requires?.["sap-afc-sdk"]?.ui) {
     return;
   }
-  const packageRoot = cds.utils.path.resolve(
-    require.resolve(process.env.CDS_PLUGIN_PACKAGE + "/package.json", { paths: [cds.root] }),
-    "..",
-  );
   const uiPath = cds.env.requires?.["sap-afc-sdk"]?.ui?.path;
-  const uiShowFlp = cds.env.requires?.["sap-afc-sdk"]?.ui?.flp;
-  const uiShowSchedulingMonitoringJob = cds.env.requires?.["sap-afc-sdk"]?.ui?.["scheduling.monitoring.job"];
+  let uiShowFlp = cds.env.requires?.["sap-afc-sdk"]?.ui?.flp;
   if (uiShowFlp) {
-    cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
-    cds.app.serve(`${uiPath}/flp.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/flp.html");
+    const packageRoot = cds.utils.path.resolve(
+      require.resolve(process.env.CDS_PLUGIN_PACKAGE + "/package.json", { paths: [cds.root] }),
+      "..",
+    );
+    if (!fs.existsSync(`${cds.root}/app/appconfig/fioriSandboxConfig.json`)) {
+      cds.app.serve(`${uiPath}/flp.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/flp.html");
+      cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
+    } else {
+      uiShowFlp = false;
+      const projectFioriSandboxConfig = require(`${cds.root}/app/appconfig/fioriSandboxConfig.json`);
+      const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);
+      projectFioriSandboxConfig.applications ??= {};
+      for (const name in packageFioriSandboxConfig.applications ?? {}) {
+        if (projectFioriSandboxConfig.applications[name]) {
+          continue;
+        }
+        const application = packageFioriSandboxConfig.applications[name];
+        application.url = `${uiPath}/${application.url}`;
+        projectFioriSandboxConfig.applications[name] = application;
+      }
+      cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
+        res.send(projectFioriSandboxConfig);
+      });
+    }
   }
+  const uiShowSchedulingMonitoringJob = cds.env.requires?.["sap-afc-sdk"]?.ui?.["scheduling.monitoring.job"];
   if (uiShowFlp || uiShowSchedulingMonitoringJob) {
     cds.app
       .serve(`${uiPath}/scheduling.monitoring.job`)
@@ -141,10 +159,10 @@ function toOpenApiDoc(req, service, filePath) {
     return openAPICache.get(filePath);
   }
   let openAPI;
-  if (fs.existsSync(path.join(process.cwd(), filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(process.cwd(), filePath)));
-  } else if (fs.existsSync(path.join(process.cwd(), "openapi", filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(process.cwd(), "openapi", filePath)));
+  if (fs.existsSync(path.join(cds.root, filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(cds.root, filePath)));
+  } else if (fs.existsSync(path.join(cds.root, "openapi", filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(cds.root, "openapi", filePath)));
   } else if (fs.existsSync(path.join(__dirname, filePath))) {
     openAPI = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)));
   } else if (fs.existsSync(path.join(__dirname, "openapi", filePath))) {

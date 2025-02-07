@@ -32,6 +32,7 @@ describe("API", () => {
       await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("Request failed with status code 404");
       response = await GET("/");
       expect(response.status).toEqual(200);
+      expect(response.data).toMatchSnapshot();
     });
   });
 

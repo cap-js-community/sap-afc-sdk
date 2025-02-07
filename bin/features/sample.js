@@ -6,7 +6,7 @@ const path = require("path");
 
 module.exports = () => {
   try {
-    fs.cpSync(path.join(__dirname, "../../test/data"), path.join(process.cwd(), "test/data"), { recursive: true });
+    fs.cpSync(path.join(__dirname, "../../test/data"), path.join(process.cwd(), "db/data"), { recursive: true });
   } catch (err) {
     console.error(err.message);
   }

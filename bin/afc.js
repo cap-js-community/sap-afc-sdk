@@ -30,7 +30,7 @@ const commands = ["add"];
     for (const feature of features) {
       try {
         const featureFn = require(`./features/${feature}`);
-        console.log(`Applying feature '${feature}':`);
+        console.log(`Applying feature '${feature}'`);
         await featureFn();
         console.log();
       } catch (err) {

@@ -176,3 +176,288 @@ exports[`API GET Job Parameters 1`] = `
   },
 ]
 `;
+
+exports[`API Open API GET API Docs Root 1`] = `
+"<!DOCTYPE html>
+<html>
+    <head>
+        <title>@cap-js-community/sap-afc-sdk 0.1.0</title>
+        <meta name="color-scheme" content="dark light">
+        <style>
+body {
+  font-family: Avenir Next, sans-serif;
+  background: #f8fbff;
+}
+
+body #welcome {
+  margin: 30px auto 50px;
+  padding: 0 30px;
+  max-width: 900px;
+}
+
+body #welcome h1, #welcome h3, #welcome h2, #welcome p {
+  margin: 20px 0;
+  color: #47637d;
+  font-weight: 400;
+}
+
+body #welcome h3.header {
+  margin: 20px 0 0 0;
+  background-color: #537492;
+  color: white;
+}
+
+body #welcome h3 a {
+  color: inherit;
+  font-weight: 500;
+}
+
+body #welcome h3 a span {
+  padding: 5px 15px;
+  font-weight: 300;
+  transition: all 0.2s ease-in;
+}
+
+body #welcome h3 a:first-child span {
+  display: inline-block;
+  padding: 5px 15px;
+}
+
+body #welcome h3 a span:hover {
+  color: #92b2d0;
+}
+
+body #welcome ul {
+  margin: 0;
+  background: #91adc5;
+  list-style-type: none;
+  padding-inline-start: 20px;
+}
+
+body #welcome li {
+  display: inline-grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  width: 100%;
+  margin-bottom: 1px;
+  background-color: #d0e9ff;
+  padding: 0;
+  /*
+  -moz-transition: background color 0.2s ease-in;
+  -webkit-transition: background 0.2s ease-in;
+  -o-transition: background 0.2s ease-in;
+  /* Standard */
+  transition: all 0.1s ease-in;
+}
+
+body #welcome ul li div:not(:first-child) a {
+  font-weight: 300;
+}
+
+body #welcome a {
+  text-decoration: none;
+}
+
+body #welcome li a, body #welcome li > span {
+  padding: 4px 10px;
+  font-weight: 500;
+  color: #1d5985;
+  transition: all 0.1s ease-in;
+}
+body #welcome li.operation span {
+  font-style: italic;
+}
+
+body #welcome li a span:hover {
+  color: #f0faff;
+  background-color: #a7c8e1;
+}
+
+body #welcome .preview {
+  font-size: small;
+}
+
+footer {
+  border-top: .5px solid;
+  margin-top: 44px;
+  padding-top: 22px;
+  width: 400px;
+  font-size: 90%;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { background: #0a2138; }
+
+  body #welcome h1, #welcome h3, #welcome h2, #welcome p {
+      color: #a6c1d9;
+  }
+  body #welcome h3 a {
+      color: #e2efff;
+  }
+  body #welcome ul {
+      background: #7894ad;
+  }
+  body #welcome li {
+      background-color: #506d88;
+  }
+  body #welcome li a, body #welcome li:hover div:not(:first-child) a, body #welcome li > span {
+      color: #d0e4f2;
+  }
+  body #welcome li a:hover {
+      color: white;
+      background-color: #7894ad;
+  }
+
+  body #welcome h3.header {
+      background-color: #304c65;
+  }
+
+  footer {
+      border-top: .5px solid #456;
+      color: #567;
+  }
+}
+        </style>
+    </head>
+    <body>
+        <div id="welcome">
+            <h1> Welcome to <i>@sap/cds</i> Server </h1>
+            <p class="subtitle"> Serving @cap-js-community/sap-afc-sdk 0.1.0 </p>
+
+            <p> These are the paths currently served:</p>
+
+            <h2> Web Applications: </h2>
+            <ul>
+                <li><a href="flp.html"><span>/flp.html</span></a></li>
+<li><a href="scheduling.monitoring.job/webapp/index.html"><span>/scheduling.monitoring.job/webapp</span></a></li>
+            </ul>
+
+            <h2> Service Endpoints: </h2>
+            
+      <div id="schedulingwebsocketservice-ws">
+        <h3 class="header">
+          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
+        </h3>
+        <ul>
+        </ul>
+        <ul>
+        </ul>
+      </div>
+  
+      <div id="featureservice-rest">
+        <h3 class="header">
+          <a href="/rest/feature"><span>/rest/feature</span></a> 
+        </h3>
+        <ul>
+        </ul>
+        <ul>
+          <li id="featureservice-rest-state" class="operation">
+            <div>
+              <a href="/rest/feature/state()" title="/rest/feature/state()"><span>state()</span></a>
+            </div>
+          </li>
+        </ul>
+      </div>
+  
+      <div id="schedulingmonitoringservice-odata">
+        <h3 class="header">
+          <a href="/srv/job-scheduling/monitoring"><span>/srv/job-scheduling/monitoring</span></a><span>/</span> <a href="/srv/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
+        </h3>
+        <ul>
+          <li id="schedulingmonitoringservice-odata-jobdefinition">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobparameterdefinition">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-job">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/Job"><span>Job</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobparameter">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobstatus">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-parametertype">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-datatype">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/DataType"><span>DataType</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-mappingtype">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+        </ul>
+        <ul>
+        </ul>
+      </div>
+  
+      <div id="schedulingproviderservice-rest">
+        <h3 class="header">
+          <a href="/api/job-scheduling/v1"><span>/api/job-scheduling/v1</span></a> <span><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></span>
+        </h3>
+        <ul>
+          <li id="schedulingproviderservice-rest-jobdefinition">
+            <div>
+              <a href="/api/job-scheduling/v1/JobDefinition"><span>JobDefinition</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+          <li id="schedulingproviderservice-rest-jobparameterdefinition">
+            <div>
+              <a href="/api/job-scheduling/v1/JobParameterDefinition"><span>JobParameterDefinition</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+          <li id="schedulingproviderservice-rest-job">
+            <div>
+              <a href="/api/job-scheduling/v1/Job"><span>Job</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+          <li id="schedulingproviderservice-rest-jobparameter">
+            <div>
+              <a href="/api/job-scheduling/v1/JobParameter"><span>JobParameter</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+        </ul>
+        <ul>
+        </ul>
+      </div>
+  
+
+            <footer>
+                This is an automatically generated page. <br>
+                You can replace it with a custom <code>./app/index.html</code>.
+            </footer>
+        </div>
+
+    </body>
+</html>
+"
+`;
