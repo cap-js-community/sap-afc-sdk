@@ -103,7 +103,7 @@ Custom Job processing can be implemented by extending the Job processing service
 - Add AFC SDK: `npm add @cap-js-community/sap-afc-sdk`
 - Add AFC SDK features
   - `afc add broker,sample`
-- Install: `npm i` 
+- Install: `npm i`
 - Deploy
 
 ### Add sample data
@@ -155,4 +155,3 @@ Serve UIs via HTML5 repo:
 
 - Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
 - `cds add html5-repo`
-
