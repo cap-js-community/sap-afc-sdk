@@ -24,6 +24,17 @@ describe("API", () => {
     await test.data.reset();
   });
 
+  describe("Open API", () => {
+    it("GET API Docs Root", async () => {
+      let response = await GET("/api-docs/api/job-scheduling/v1/");
+      expect(response.status).toEqual(200);
+      expect(response.data).toBeDefined();
+      await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("Request failed with status code 404");
+      response = await GET("/");
+      expect(response.status).toEqual(200);
+    });
+  });
+
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
     expect(response.data).toHaveLength(2);

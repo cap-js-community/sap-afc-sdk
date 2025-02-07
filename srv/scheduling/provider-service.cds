@@ -11,14 +11,14 @@ using scheduling from '../../db/scheduling';
     Description: 'To access this API, use the OAuth 2.0 client credentials grant flow.',
     Scopes     : [],
   }],
-  SecuritySchemes: [{Authorization: 'oauth2', }]
+  SecuritySchemes: [{Authorization: 'oauth2' }]
 }
-@openapi
+@openapi: 'afc-sspi.json'
 @protocol            : 'rest'
 @(path: '/api/job-scheduling/v1')
 @title               : 'SAP Advanced Financial Closing Scheduling Service Provider Interface'
 @Core.LongDescription: 'The Scheduling Service Provider Interface allows the integration of third-party scheduling jobs with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.'
-@impl                : './provider-service.js'
+@impl                : '@cap-js-community/sap-afc-sdk/srv/scheduling/provider-service.js'
 service SchedulingProviderService {
   entity JobDefinition @readonly                           as
     projection on scheduling.JobDefinition {

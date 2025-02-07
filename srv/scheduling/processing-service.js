@@ -35,6 +35,8 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     const { Job } = this.entities("scheduling");
     const { processJob, updateJob, cancelJob } = this.operations;
 
+    this.statusTransitions = STATUS_TRANSITIONS;
+
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
       const job = await SELECT.one(Job).where({ ID });
@@ -70,7 +72,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         ID: req.data.ID,
         status: JobStatus.completed,
       },
-      { "x-eventQueue-startAfter": new Date(Date.now() + Math.round(Math.random() * 60) * 1000) },
+      { "x-eventQueue-startAfter": new Date(Date.now() + Math.ceil(Math.random() * 30) * 1000) },
     );
   }
 
@@ -110,6 +112,6 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async checkStatusTransition(statusBefore, statusAfter) {
-    return STATUS_TRANSITIONS[statusBefore].includes(statusAfter);
+    return this.statusTransitions[statusBefore].includes(statusAfter);
   }
 };

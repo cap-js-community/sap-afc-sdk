@@ -644,7 +644,31 @@
           },
           "mappingType": {
             "type": "string",
-            "enum": ["companyCode", "controllingArea", "plant"]
+            "enum": [
+              "accountingPrinciple",
+              "companyCode",
+              "plant",
+              "controllingArea",
+              "fiscalPeriod",
+              "fiscalYearPeriod",
+              "fiscalYear",
+              "keyDate",
+              "chartOfAccounts",
+              "fiscalYearVariant",
+              "ledger",
+              "testRun",
+              "postingPeriodVariant",
+              "processingUser",
+              "interestedUser",
+              "userResponsible",
+              "processingUserEmail",
+              "interestedUserEmail",
+              "userResponsibleEmail",
+              "executionID",
+              "customField1",
+              "customField2",
+              "customField3"
+            ]
           },
           "value": {
             "type": "string"

@@ -1,8 +1,13 @@
 "use strict";
 
+const fs = require("fs");
+const path = require("path");
 const cds = require("@sap/cds");
 const Broker = require("@sap/sbf");
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+
+const SWAGGER_UI_PATH = "/api-docs";
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
@@ -10,6 +15,7 @@ cds.on("bootstrap", () => {
   addErrorMiddleware();
   serveBroker();
   serveUIs();
+  serveSwaggerUI();
 });
 
 cds.on("listening", () => {
@@ -35,13 +41,33 @@ function handleError(err, req, res, next) {
 }
 
 function serveBroker() {
-  if (cds.env.requires?.["sap-afc-sdk"]?.broker) {
+  if (!cds.env.requires?.["sap-afc-sdk"]?.broker) {
+    return;
+  }
+  let brokerConfig;
+  let catalogPath;
+  const brokerPath = path.join(process.cwd(), "./srv/broker.json");
+  try {
+    brokerConfig = require(brokerPath);
+    catalogPath = brokerConfig.catalog ?? "./srv/catalog.json";
+    for (const key in brokerConfig) {
+      if (key.startsWith("SBF_")) {
+        process.env[key] ??= JSON.stringify(brokerConfig[key]);
+      }
+    }
+  } catch (err) {
+    cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+  }
+  try {
     const router = express.Router();
     const broker = new Broker({
       enableAuditLog: false,
+      catalog: catalogPath,
     });
     router.use("/broker", broker.app);
     cds.app.use(router);
+  } catch (err) {
+    cds.log("/broker").error("Failed to start broker", err);
   }
 }
 
@@ -49,11 +75,18 @@ function serveUIs() {
   if (process.env.CDS_PLUGIN_PACKAGE === ".") {
     return;
   }
+  if (!cds.env.requires?.["sap-afc-sdk"]?.ui) {
+    return;
+  }
+  const packageRoot = cds.utils.path.resolve(
+    require.resolve(process.env.CDS_PLUGIN_PACKAGE + "/package.json", { paths: [cds.root] }),
+    "..",
+  );
   const uiPath = cds.env.requires?.["sap-afc-sdk"]?.ui?.path;
   const uiShowFlp = cds.env.requires?.["sap-afc-sdk"]?.ui?.flp;
   const uiShowSchedulingMonitoringJob = cds.env.requires?.["sap-afc-sdk"]?.ui?.["scheduling.monitoring.job"];
   if (uiShowFlp) {
-    cds.app.use(`/appconfig`, express.static(`${process.env.CDS_PLUGIN_PACKAGE}/app/appconfig`));
+    cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     cds.app.serve(`${uiPath}/flp.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/flp.html");
   }
   if (uiShowFlp || uiShowSchedulingMonitoringJob) {
@@ -64,6 +97,91 @@ function serveUIs() {
       .serve(`${uiPath}/scheduling.monitoring.job/webapp`)
       .from(process.env.CDS_PLUGIN_PACKAGE, "/app/scheduling.monitoring.job/webapp");
   }
+}
+
+function serveSwaggerUI() {
+  const router = express.Router();
+  cds.on("serving", (service) => {
+    const openAPI = service.definition?.["@openapi"];
+    if (openAPI) {
+      const apiPath = SWAGGER_UI_PATH + service.path;
+      cds.log("/swagger").info("Serving Swagger UI for ", { service: service.name, at: apiPath });
+      router.use(
+        apiPath,
+        ...cds.middlewares.before,
+        (req, res, next) => {
+          const restrict_all = cds.env.requires?.auth?.restrict_all_services !== false;
+          if (!restrict_all || cds.context?.user?._is_privileged || !cds.context?.user?._is_anonymous) {
+            return next();
+          }
+          res.send(401, "Unauthorized");
+        },
+        (req, res, next) => {
+          req.swaggerDoc = toOpenApiDoc(req, service, openAPI);
+          if (req.swaggerDoc) {
+            return next();
+          }
+          res.send(404, "Not found");
+        },
+        swaggerUi.serveFiles(),
+        swaggerUi.setup(null, {}),
+        ...cds.middlewares.after,
+      );
+      addLinkToIndexHtml(service, apiPath);
+    }
+  });
+  cds.app.use(router);
+}
+
+const openAPICache = new Map();
+
+function toOpenApiDoc(req, service, filePath) {
+  filePath = filePath === true ? `${service.name}.json` : filePath;
+  if (openAPICache.has(filePath)) {
+    return openAPICache.get(filePath);
+  }
+  let openAPI;
+  if (fs.existsSync(path.join(process.cwd(), filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(process.cwd(), filePath)));
+  } else if (fs.existsSync(path.join(process.cwd(), "openapi", filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(process.cwd(), "openapi", filePath)));
+  } else if (fs.existsSync(path.join(__dirname, filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)));
+  } else if (fs.existsSync(path.join(__dirname, "openapi", filePath))) {
+    openAPI = JSON.parse(fs.readFileSync(path.join(__dirname, "openapi", filePath)));
+  }
+  if (openAPI) {
+    const clientCredentials = openAPI?.components?.securitySchemes?.oauth2?.flows?.clientCredentials;
+    if (clientCredentials) {
+      clientCredentials.tokenUrl = authorizationUrl() + "/oauth/token";
+    }
+    openAPI.servers.forEach((server) => {
+      if (!server.url.startsWith("https://") && !server.url.startsWith("http://")) {
+        server.url = `${serverUrl()}${server.url}`;
+      }
+    });
+    openAPICache.set(filePath, openAPI);
+  }
+  return openAPI;
+}
+
+function serverUrl() {
+  // TODO: K8S?
+  return process.env.VCAP_APPLICATION
+    ? "https://" + JSON.parse(process.env.VCAP_APPLICATION).uris?.[0]
+    : cds.server.url;
+}
+
+function authorizationUrl() {
+  // TODO: IAS?
+  return cds.env.requires?.auth?.credentials?.url ?? "https://authentication.sap.hana.ondemand.com";
+}
+
+function addLinkToIndexHtml(service, apiPath) {
+  const provider = () => {
+    return { href: apiPath, name: "Open API", title: "Show in Swagger UI" };
+  };
+  service.$linkProviders ? service.$linkProviders.push(provider) : (service.$linkProviders = [provider]);
 }
 
 function outboxServices() {

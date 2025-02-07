@@ -13,30 +13,128 @@
 > ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Architecture](#architecture)
 - [Usage](#usage)
 - [Documentation](#documentation)
 
 ## Getting Started
 
 - Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` project
-- ...
+- Execute `cds-serve` to start server
+  - Access welcome page at http://localhost:4004
+  - Access endpoints and UIs
+
+## Architecture
+
+### Concept
+
+- Diagram
+
+### Design
+
+- Diagram
 
 ## Usage
 
-...
+### Options
+
+Options can be passed to the SDK via CDS environment via `cds.rerquires.sap-sfc-dk` section:
+
+- `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default `{}`
+  - `ui.path: String`: Path to the served UI5 application. Default `''`
+  - `ui.flp: Boolean`: Serve an FLP. Default `true`
+  - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job. Default `true`
+  - `ui.api.scheduling.job.swagger: Boolean`: Serve Scheduling Provider Swagger UI. Default `true`
+- `broker: Boolean`: Serve the Broker endpoint. Default `true` in `production`
+- `mockProcessing: Boolean`: Activate mocked job processing. Default `false`
+
+### Implement Job Processing
+
+Custom Job processing can be implemented by extending the Job processing service definition as follows:
+
+- CDS file: `srv/scheduling-processing-service.cds`
+  ```cds
+  using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+  annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+  ```
+- Implementation file: `srv/custom-processing-service.js`
+
+  ```js
+  "use strict";
+
+  const SchedulingProcessingService = require("@cap-js-community/sap-afc-sdk").SchedulingProcessingService;
+
+  class CustomSchedulingProcessingService extends SchedulingProcessingService {
+    async init() {
+      const { processJob, updateJob, cancelJob } = this.operations;
+
+      this.on(processJob, async (req, next) => {
+        // Your logic goes here
+        await next();
+      });
+
+      this.on(updateJob, async (req, next) => {
+        // Your logic goes here
+        await next();
+      });
+
+      this.on(cancelJob, async (req, next) => {
+        // Your logic goes here
+        await next();
+      });
+
+      super.init();
+    }
+  }
+
+  module.exports = CustomSchedulingProcessingService;
+  ```
 
 ## Documentation
 
-...
+### Add sample data
 
-## Support, Feedback, Contributing
+To add sample Job definitions run:
 
-This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js-community/<your-project>/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+- `afc add sample`
 
-## Code of Conduct
+### Mock processing
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone. By participating in this project, you agree to abide by its [Code of Conduct](CODE_OF_CONDUCT.md) at all times.
+To mock Job processing to complete jobs based on a random value (between 1 - 30s),
+set CDS env option `cds.requires.sap-afc-sdk.mockProcessing: true`.
 
-## Licensing
+### Approuter
 
-Copyright 2025 SAP SE or an SAP affiliate company and -cap-js-community-sap-afc-sdk contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/cap-js-community/<your-project>).
+- `cds add approuter`
+
+### Deployment
+
+#### Kyma
+
+- `cds add helm`
+
+#### Cloud Foundry
+
+- `cds add mta`
+
+### Authentication
+
+#### XSUAA
+
+- Add XSUAA: `cds add xsuaa --for production`
+- Change XSUAA service plan `servicePlanName` (helm) / `service-plan` (mta) from `application` to `broker`
+
+#### IAS
+
+- `cds add ias`
+
+### Broker
+
+- `cds add xsuaa`
+- Change XSUAA plan from `application` to `broker`
+- Create broker on CF:
+  `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
+
+### HTML5 repo
+
+- `cds add html5-repo`

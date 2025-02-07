@@ -25,6 +25,7 @@
     "openapi",
     "src",
     "srv",
+    "test/data",
     "CHANGELOG.md",
     "cds-plugin.js",
     "index.cds"
@@ -37,7 +38,6 @@
   "scripts": {
     "start": "cds-serve",
     "watch": "cds watch",
-    "watch:open": "cds watch --open",
     "test": "jest",
     "test:update": "npm test -- -u",
     "lint": "npm run eslint && npm run prettier",
@@ -49,7 +49,7 @@
     "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
     "prepareRelease": "npm prune --production",
     "audit": "npm audit --only=prod",
-    "openapi": "npm run openapi:sspi",
+    "openapi": "npm run openapi:sspi && npm run lint",
     "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi > 'openapi/afc-sspi.json' && node openapi/postprocessing/afc-sspi"
   },
   "dependencies": {
@@ -57,12 +57,14 @@
     "@cap-js-community/feature-toggle-library": "^1.2.3",
     "@cap-js-community/websocket": "^1.6.0",
     "@sap/sbf": "^6.8.2",
+    "swagger-ui-express": "^5.0.1",
     "verror": "^1.10.1"
   },
   "devDependencies": {
+    "@cap-js-community/sap-afc-sdk": "./",
+    "@cap-js/sqlite": "^1.8.0",
     "@sap/cds": "^8.7.1",
     "@sap/cds-dk": "^8.7.0",
-    "@cap-js/sqlite": "^1.8.0",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-jest": "^28.11.0",
@@ -112,16 +114,18 @@
         "ui": {
           "path": "",
           "flp": true,
-          "scheduling.monitoring.job": true
+          "scheduling.monitoring.job": true,
+          "api.scheduling.job.swagger": true
         },
         "[production]": {
           "broker": true
         },
-        "mockProcessing": false,
-        "[test]": {
-          "mockProcessing": false
-        }
+        "mockProcessing": false
       }
     }
-  }
+  },
+  "sapux": [
+    "app/admin-books",
+    "app/browse"
+  ]
 }

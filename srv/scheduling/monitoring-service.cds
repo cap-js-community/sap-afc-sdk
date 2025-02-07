@@ -1,7 +1,7 @@
 using scheduling from '../../db/scheduling';
 
 @path: '/srv/job-scheduling/monitoring'
-@impl: './monitoring-service.js'
+@impl: '@cap-js-community/sap-afc-sdk/srv/scheduling/monitoring-service.js'
 service SchedulingMonitoringService {
     entity JobDefinition @readonly          as projection on scheduling.JobDefinition;
     entity JobParameterDefinition @readonly as projection on scheduling.JobParameterDefinition;

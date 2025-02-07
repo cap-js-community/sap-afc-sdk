@@ -1,7 +1,7 @@
 using scheduling.JobStatusCode from '../../db/scheduling';
 
 @protocol: 'none'
-@impl    : './processing-service.js'
+@impl    : '@cap-js-community/sap-afc-sdk/srv/scheduling/processing-service.js'
 service SchedulingProcessingService {
     action processJob(ID: String);
     action updateJob(ID: String, status: JobStatusCode);

@@ -1,6 +1,10 @@
 "use strict";
 
 module.exports = {
+  BaseError: require("./srv/common/BaseError"),
+  BaseService: require("./srv/common/BaseService"),
+  BaseApplicationService: require("./srv/common/BaseApplicationService"),
+  JobSchedulingError: require("./srv/scheduling/common/JobSchedulingError"),
   schedulingCodeList: require("./srv/scheduling/common/codelist"),
   SchedulingProviderService: require("./srv/scheduling/provider-service"),
   SchedulingProcessingService: require("./srv/scheduling/processing-service"),

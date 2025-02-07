@@ -1,8 +1,8 @@
 using scheduling.JobStatusCode from '../../db/scheduling';
 
 @ws
-@path: '/srv/job-scheduling/websockets'
-@impl: './websocket-service.js'
+@path: '/ws/job-scheduling'
+@impl: '@cap-js-community/sap-afc-sdk/srv/scheduling/websocket-service.js'
 service SchedulingWebsocketService {
     event jobStatusChanged {
         ID : UUID;
