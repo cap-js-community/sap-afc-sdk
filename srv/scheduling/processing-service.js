@@ -48,8 +48,9 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
     this.on(processJob, async (req, next) => {
       await this.updateJobStatus(req, req.data.ID, JobStatus.running);
-      if (cds.env.requires?.["sap-afc-sdk"]?.mockProcessing) {
-        await this.mockJobProcessing(req);
+      const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
+      if (processingConfig) {
+        await this.mockJobProcessing(req, processingConfig);
       }
     });
 
@@ -64,15 +65,39 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return super.init();
   }
 
-  async mockJobProcessing(req) {
+  async mockJobProcessing(req, config) {
+    let min = config.min ?? 0;
+    let max = config.max ?? 30;
+    const processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
+    let processingStatus = JobStatus.completed;
+    if (config.status && Object.keys(config.status).length > 0) {
+      const statuses = Object.keys(config.status);
+      min = 0;
+      max = statuses.reduce((sum, status) => {
+        return sum + config.status[status];
+      }, 0);
+      const statusValue = Math.random() * (max - min) + min;
+      let value = 0;
+      for (const status of statuses) {
+        processingStatus = status;
+        value += config.status[status];
+        if (statusValue <= value) {
+          break;
+        }
+      }
+    }
+    const ID = req.data.ID;
     const srv = cds.outboxed(this);
     return await srv.send(
       "updateJob",
       {
-        ID: req.data.ID,
-        status: JobStatus.completed,
+        ID,
+        status: processingStatus,
       },
-      { "x-eventQueue-startAfter": new Date(Date.now() + Math.ceil(Math.random() * 30) * 1000) },
+      {
+        "x-eventQueue-referenceEntityKey": ID,
+        "x-eventQueue-startAfter": new Date(Date.now() + processingTime),
+      },
     );
   }
 
@@ -106,7 +131,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         status,
       },
       {
-        "x-eventqueue-referenceEntityKey": job.ID,
+        "x-eventQueue-referenceEntityKey": job.ID,
       },
     );
   }

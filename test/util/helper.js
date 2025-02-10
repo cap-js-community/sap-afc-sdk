@@ -38,7 +38,7 @@ async function clearEventQueue() {
   await DELETE.from("sap.eventqueue.Event");
 }
 
-async function eventQueueEntry(scope, referenceEntityKey) {
+async function eventQueueEntry(scope, referenceEntityKey, payload) {
   let subType = "SchedulingProcessingService";
   switch (scope) {
     case "processing":
@@ -52,6 +52,7 @@ async function eventQueueEntry(scope, referenceEntityKey) {
     type: "CAP_OUTBOX",
     subType,
     ...(referenceEntityKey && { referenceEntityKey }),
+    ...(payload && { payload: { like: `%${payload}%` } }),
   });
 }
 

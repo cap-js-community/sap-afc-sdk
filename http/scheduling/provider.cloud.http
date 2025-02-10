@@ -1,0 +1,55 @@
+@hostname=<add your own hostname from cloud deployment>
+@token=<add your token from xsuaa>
+
+### Job Definition
+GET https://{{hostname}}/api/job-scheduling/v1/JobDefinition
+Authorization: Bearer {{token}}
+
+### Job Definition Parameters
+GET https://{{hostname}}/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
+Authorization: Bearer {{token}}
+
+### Job
+GET https://{{hostname}}/api/job-scheduling/v1/Job
+Authorization: Bearer {{token}}
+
+### Job Parameters
+GET https://{{hostname}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+Authorization: Bearer {{token}}
+
+### Create Job
+POST https://{{hostname}}/api/job-scheduling/v1/Job
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "JOB_1",
+    "referenceID": "abc4711",
+    "startDateTime": "2025-01-01T12:00:00Z",
+    "parameters": [{
+        "name": "A",
+        "value": "abc"
+      },
+      {
+        "name": "B",
+        "value": "21"
+      },
+      {
+        "name": "C",
+        "value": "false"
+      },
+      {
+        "name": "D",
+        "value": "11.12"
+      },
+      {
+        "name": "E",
+        "value": "2025-01-01T12:00:00Z"
+      }
+    ]
+}
+
+### Cancel Job
+POST https://{{hostname}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+Authorization: Bearer {{token}}
+Content-Type: application/json

@@ -6,6 +6,8 @@ const cds = require("@sap/cds");
 const Broker = require("@sap/sbf");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
+const { config } = require("@cap-js-community/event-queue");
+const toggles = require("@cap-js-community/feature-toggle-library");
 
 const SWAGGER_UI_PATH = "/api-docs";
 
@@ -20,6 +22,7 @@ cds.on("bootstrap", () => {
 
 cds.on("listening", () => {
   outboxServices();
+  handleFeatureToggles();
 });
 
 function addErrorMiddleware() {
@@ -211,4 +214,15 @@ function outboxServices() {
     cds.services.SchedulingWebsocketService.options.outbox = cds.requires.SchedulingWebsocketService.outbox;
     cds.services.SchedulingWebsocketService = cds.outboxed(cds.services.SchedulingWebsocketService);
   }
+}
+
+function handleFeatureToggles() {
+  config.isEventQueueActive = toggles.getFeatureValue("eventQueue/active");
+  toggles.registerFeatureValueChangeHandler("eventQueue/active", (value) => {
+    config.isEventQueueActive = value;
+  });
+  config.instanceLoadLimit = toggles.getFeatureValue("eventQueue/instanceLoadLimit");
+  toggles.registerFeatureValueChangeHandler("eventQueue/instanceLoadLimit", (value) => {
+    config.instanceLoadLimit = value;
+  });
 }

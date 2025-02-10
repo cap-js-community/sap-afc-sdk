@@ -23,7 +23,8 @@ describe("Processing Service", () => {
     await test.data.reset();
   });
 
-  it("processJob", async () => {
+  it("processJob - no mock", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const ws = await connectToWS("job-scheduling");
     let message = ws.message("jobStatusChanged");
 
@@ -39,13 +40,49 @@ describe("Processing Service", () => {
     expect(event.ID).toBe(ID);
     expect(event.status).toBe("running");
 
-    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
-
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
     await processOutbox("processing");
 
     ws.close();
+  });
+
+  it("processJob - simple mock", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+    await processOutbox("processing");
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).not.toBe("completed");
+  });
+
+  it("processJob - advanced mock", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      status: {
+        completed: 0.7,
+        completedWithError: 0.1,
+        completedWithWarning: 0.1,
+        failed: 0.1,
+      },
+    };
+    await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+    await processOutbox("processing");
+
+    let entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry.startAfter).toBeDefined();
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+
+    await processOutbox("processing");
+
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).not.toBe("running");
+    expect(job.status_code).not.toBe("requested");
   });
 
   it("updateJob", async () => {

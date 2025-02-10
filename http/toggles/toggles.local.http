@@ -1,0 +1,49 @@
+### Feature Toggles state
+GET http://localhost:4004/rest/feature/state
+Authorization: Basic zeus zeus
+
+### Event Queue active
+POST http://localhost:4004/rest/feature/redisUpdate
+Authorization: Basic zeus zeus
+Content-Type: application/json
+
+{
+  "key": "eventQueue/active",
+  "value": false
+}
+
+### Event Queue instance load limit
+POST http://localhost:4004/rest/feature/redisUpdate
+Authorization: Basic zeus zeus
+Content-Type: application/json
+
+{
+  "key": "eventQueue/instanceLoadLimit",
+  "value": 11
+}
+
+### Remove: Event Queue active
+POST http://localhost:4004/rest/feature/redisUpdate
+Authorization: Basic zeus zeus
+Content-Type: application/json
+
+{
+  "key": "eventQueue/active",
+  "value": null,
+  "options": {
+    "clearSubScopes": true
+  }
+}
+
+### Remove: Event Queue instance load limit
+POST http://localhost:4004/rest/feature/redisUpdate
+Authorization: Basic zeus zeus
+Content-Type: application/json
+
+{
+  "key": "eventQueue/instanceLoadLimit",
+  "value": null,
+  "options": {
+    "clearSubScopes": true
+  }
+}

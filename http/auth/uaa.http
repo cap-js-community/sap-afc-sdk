@@ -1,0 +1,32 @@
+@subdomain=<add your subdomain from cloud deployment>
+@landscape=<add your landcape from cloud deployment>
+@uaaClientId=<add your client id from xsuaa>
+@uaaClientSecret=<add your client secret from xsuaa>
+# Browser: https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/passcode
+@passcode=<add your passcode from browser>
+
+### Basic (technical)
+
+POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token?grant_type=client_credentials
+Accept: application/json
+Authorization: Basic {{uaaClientId}} {{uaaClientSecret}}
+
+### Basic (user specific)
+
+POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token?grant_type=password&passcode={{passcode}}
+Accept: application/json
+Authorization: Basic {{uaaClientId}} {{uaaClientSecret}}
+
+### UAA (Form)
+POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=client_credentials&client_id={{uaaClientId}}&client_secret={{uaaClientSecret}}
+
+### UAA (Form Passcode)
+POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=password&client_id={{uaaClientId}}&client_secret={{uaaClientSecret}}&passcode={{passcode}}
