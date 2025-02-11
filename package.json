@@ -150,8 +150,10 @@
       "afc": {
         "kind": "odata-v4",
         "model": "srv/external/afc",
-        "credentials": {
-          "destination": "sap-afc"
+        "[production]": {
+          "credentials": {
+            "destination": "SAP_AFC"
+          }
         }
       },
       "auth": {

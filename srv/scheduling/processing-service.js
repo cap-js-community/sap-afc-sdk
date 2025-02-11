@@ -139,8 +139,8 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return this.statusTransitions[statusBefore].includes(statusAfter);
   }
 
-  /*async reportStatus(status) {
+  /*async reportStatus(req, status) {
     const afc = await cds.connect.to("afc");
-    return await afc.reportStatus(status);
+    return await afc.tx(req).reportStatus(status);
   }*/
 };
