@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../util/helper");
+const { connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
 const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random

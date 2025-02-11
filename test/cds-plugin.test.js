@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { authorization, clearEventQueue } = require("./util/helper");
+const { authorization, clearEventQueue } = require("./helper");
 
 const log = cds.test.log();
 

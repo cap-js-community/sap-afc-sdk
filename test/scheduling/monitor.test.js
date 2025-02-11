@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { authorization, cleanData, clearEventQueue, connectToWS, processOutbox } = require("../util/helper");
+const { authorization, cleanData, clearEventQueue, connectToWS, processOutbox } = require("../helper");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 

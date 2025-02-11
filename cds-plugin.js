@@ -9,6 +9,8 @@ const swaggerUi = require("swagger-ui-express");
 const { config } = require("@cap-js-community/event-queue");
 const toggles = require("@cap-js-community/feature-toggle-library");
 
+const { mergeDeep } = require("./src/util/helper");
+
 const SWAGGER_UI_PATH = "/api-docs";
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
@@ -75,7 +77,7 @@ function serveBroker() {
 }
 
 function serveUIs() {
-  if (process.env.CDS_PLUGIN_PACKAGE === "." && process.NODE_ENV !== "test") {
+  if (process.env.CDS_PLUGIN_PACKAGE === "." && process.env.NODE_ENV !== "test") {
     return;
   }
   if (!cds.env.requires?.["sap-afc-sdk"]?.ui) {
@@ -95,17 +97,21 @@ function serveUIs() {
       uiShowFlp = false;
       const projectFioriSandboxConfig = require(`${cds.root}/app/appconfig/fioriSandboxConfig.json`);
       const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);
-      projectFioriSandboxConfig.applications ??= {};
-      for (const name in packageFioriSandboxConfig.applications ?? {}) {
-        if (projectFioriSandboxConfig.applications[name]) {
-          continue;
+      if (uiPath) {
+        for (const name in packageFioriSandboxConfig.applications ?? {}) {
+          const application = packageFioriSandboxConfig.applications[name];
+          application.url = `${uiPath}/${application.url}`;
         }
-        const application = packageFioriSandboxConfig.applications[name];
-        application.url = `${uiPath}/${application.url}`;
-        projectFioriSandboxConfig.applications[name] = application;
+        for (const name in packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds ??
+          {}) {
+          const inbound =
+            packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds[name];
+          inbound.resolutionResult.url = `${uiPath}/${inbound.resolutionResult.url}`;
+        }
       }
+      const mergedFioriSandboxConfig = mergeDeep(packageFioriSandboxConfig, projectFioriSandboxConfig);
       cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
-        res.send(projectFioriSandboxConfig);
+        res.send(mergedFioriSandboxConfig);
       });
     }
   }
