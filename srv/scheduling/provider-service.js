@@ -166,8 +166,8 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         status: data.status,
       });
 
-      const schedulingProcessService = await cds.connect.to("SchedulingProcessingService");
-      await schedulingProcessService.tx(req).send(
+      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      await schedulingProcessingService.tx(req).send(
         "processJob",
         {
           ID: data.ID,
@@ -208,8 +208,8 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         },
       );
 
-      const schedulingProcessService = await cds.connect.to("SchedulingProcessingService");
-      await schedulingProcessService.tx(req).send(
+      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      await schedulingProcessingService.tx(req).send(
         "cancelJob",
         {
           ID: job.ID,

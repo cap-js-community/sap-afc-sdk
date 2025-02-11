@@ -38,13 +38,13 @@
     - REST API
       - [/rest/feature](http://localhost:4004/rest/feature): Feature Toggle API
     - Internal API
-      - `SchedulingProcessingService`: Scheduling Processing service (
+      - `SchedulingProcessingService`: Scheduling Processing service
         ```js
         const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
         ```
       - `SchedulingWebsocketService`: Scheduling Websocket service
         ```js
-        const schedulingProcessService = await cds.connect.to("SchedulingProcessingService");
+        const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
         ```
 
 ## Architecture
@@ -199,14 +199,14 @@ and the processing status update handling.
 
 To implement a custom Job processing extend the Job processing service definition as follows:
 
-- CDS file: `srv/scheduling-processing-service.cds`
+- CDS file: `/srv/scheduling-processing-service.cds`
 
   ```cds
   using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
   annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
   ```
 
-- Implementation file: `srv/custom-processing-service.js`
+- Implementation file: `/srv/scheduling-processing-service.js`
 
   ```js
   "use strict";
@@ -396,7 +396,7 @@ Add IAS based authentication:
 
 - Terminal: `cds add ias`
 
-### HTML5 repo
+#### HTML5 repo
 
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
@@ -404,7 +404,7 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 - Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
 - `cds add html5-repo`
 
-### Redis
+#### Redis
 
 You can scale the application by adding a Redis cache to distribute workload across application instances:
 
@@ -413,7 +413,7 @@ You can scale the application by adding a Redis cache to distribute workload acr
 Redis is used by `event-queue`, `websocket` and `feature-toggle-library` modules
 to process events, distribute websocket messages and store feature toggles.
 
-### Feature Toggles
+#### Feature Toggles
 
 The Feature Toggle Library is used to control the execution of the Event Queue. It exposes endpoints to manage feature
 toggles.
@@ -423,7 +423,7 @@ toggles.
 
 See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
 
-## MTX Tool (CF only)
+#### MTX Tool (CF only)
 
 The MTX Tool is used to manage the application lifecycle. It can be used to manage the application in Cloud Foundry.
 Details can be found at https://github.com/cap-js-community/mtx-tool.
