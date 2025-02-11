@@ -24,12 +24,15 @@
   - Access welcome page at http://localhost:4004
   - Access UIs
     - [/flp.html](http://localhost:4004/flp.html): Sandbox Fiori Launchpad
-    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
+    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone
+      Scheduling Monitoring Job UI
   - Access Service Endpoints
     - Public API
-      - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI](http://localhost:4004/api-docs/api/job-scheduling/v1))
+      - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider
+        API ([OpenAPI](http://localhost:4004/api-docs/api/job-scheduling/v1))
     - OData API (UI)
-      - [/srv/job-scheduling/monitoring](http://localhost:4004/srv/job-scheduling/monitoring): Feature Toggle API ([$metadata](http://localhost:4004/srv/job-scheduling/monitoring/$metadata))
+      - [/srv/job-scheduling/monitoring](http://localhost:4004/srv/job-scheduling/monitoring): Feature Toggle
+        API ([$metadata](http://localhost:4004/srv/job-scheduling/monitoring/$metadata))
     - WebSocket API
       - [/ws/job-scheduling](http://localhost:4004/ws/job-scheduling): Scheduling WebSocket endpoint
     - REST API
@@ -49,13 +52,17 @@
 [SAP Advanced Financial Closing (AFC)](https://help.sap.com/docs/advanced-financial-closing) lets you define, automate,
 process, and monitor the entity close for your organization.
 
-The SAP Advanced Financial Closing SDK for CDS provides a plugin for [SAP Cloud Application Programming Model (CAP)](https://cap.cloud.sap) (Node.js)
-to extend and integrate with SAP Advanced Financial Closing (AFC). Specifically, it provides an out-of-the-box implementation
-of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/afc-sspi.json) to expose a Scheduling Provider service
+The SAP Advanced Financial Closing SDK for CDS provides a plugin
+for [SAP Cloud Application Programming Model (CAP)](https://cap.cloud.sap) (Node.js)
+to extend and integrate with SAP Advanced Financial Closing (AFC). Specifically, it provides an out-of-the-box
+implementation
+of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/afc-sspi.json) to expose a
+Scheduling Provider service
 to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
 
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
-- **Event-Queue**: Provides an event queue to process Jobs asynchronously and resiliently (circuit breaker, retry, load-balancing, etc.)
+- **Event-Queue**: Provides an event queue to process Jobs asynchronously and resiliently (circuit breaker, retry,
+  load-balancing, etc.)
 - **Websocket**: Provides websocket connection support to monitor Job processing live
 - **Feature-Toggle**: Provides a feature toggle library to control the execution of the Event Queue
 - **UI**: Provides a UI5 application to monitor and cancel Jobs
@@ -69,24 +76,33 @@ building blocks as depicted in the following diagram:
 ![Architecture Concept](./docs/assets/architecture_concept.png)
 
 - **https://github.com/cap-js-community/websocket**: **WebSocket Adapter for CDS**
-  - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in context of the SAP Cloud Application Programming Model (CAP) using @sap/cds (CDS Node.js).
+  - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in context of the SAP
+    Cloud Application Programming Model (CAP) using @sap/cds (CDS Node.js).
 - **https://github.com/cap-js-community/event-queue**: **Event Queue for CDS**
-  - The Event-Queue is a framework built on top of CAP Node.js, designed specifically for efficient and streamlined asynchronous event processing
+  - The Event-Queue is a framework built on top of CAP Node.js, designed specifically for efficient and streamlined
+    asynchronous event processing
 - **https://github.com/cap-js-community/feature-toggle-library**: **Feature Toggle Library for CDS**
-  - SAP BTP feature toggle library enables Node.js applications using the SAP Cloud Application Programming Model to maintain live-updatable feature toggles via Redis
+  - SAP BTP feature toggle library enables Node.js applications using the SAP Cloud Application Programming Model to
+    maintain live-updatable feature toggles via Redis
 
-You can develop a 3rd-Party Scheduling Provider for SAP Advanced Financial Closing using the SAP Advanced Financial Closing SDK,
-built on the SAP Cloud Programming Model and enhanced with @cap-js-community open-source plugins, leveraging SAP Build Code for a seamless and scalable solution.
+You can develop a 3rd-Party Scheduling Provider for SAP Advanced Financial Closing using the SAP Advanced Financial
+Closing SDK,
+built on the SAP Cloud Programming Model and enhanced with @cap-js-community open-source plugins, leveraging SAP Build
+Code for a seamless and scalable solution.
 
-Requesting job scheduling, synchronizing status and results, and updating job definitions between SAP Advanced Financial Closing (AFC) and a 3rd-party
+Requesting job scheduling, synchronizing status and results, and updating job definitions between SAP Advanced Financial
+Closing (AFC) and a 3rd-party
 scheduling provider can be easily implemented using the AFC SDK.
 
-The open source components are shared between SAP Advanced Financial Closing and the SAP Advanced Financial Closing SDK for CDS.
+The open source components are shared between SAP Advanced Financial Closing and the SAP Advanced Financial Closing SDK
+for CDS.
 
 ### Design
 
-The architectural design of the SAP Advanced Financial Closing (AFC) SDK for implementing a Scheduling Provider is based on the SAP Cloud Application Programming Model (CAP) and SAP Build Code.
-It leverages the [@cap-js-community](https://github.com/cap-js-community) open-source components to enable scheduling services in AFC.
+The architectural design of the SAP Advanced Financial Closing (AFC) SDK for implementing a Scheduling Provider is based
+on the SAP Cloud Application Programming Model (CAP) and SAP Build Code.
+It leverages the [@cap-js-community](https://github.com/cap-js-community) open-source components to enable scheduling
+services in AFC.
 
 The following diagram illustrates the high-level architecture of the SAP Advanced Financial Closing SDK for CDS:
 
@@ -94,27 +110,28 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 **Key components and processing flow**:
 
-- SAP Advanced Financial Closing (AFC):
-  - Sends scheduling requests via AFC Scheduling Service Provider Interface using REST API ([Open API](./openapi/afc-sspi.json))
-- Scheduling Provider Service:
+- **SAP Advanced Financial Closing (AFC):**
+  - Sends scheduling requests via AFC Scheduling Service Provider Interface using REST
+    API ([Open API](./openapi/afc-sspi.json))
+- **Scheduling Provider Service:**
   - Handles incoming scheduling requests
   - Creates scheduling jobs synchronously and places asynchronous requests into the Event Queue
-- Scheduling Processing Service:
+- **Scheduling Processing Service:**
   - Processes scheduled jobs asynchronously
   - Retrieves job requests from the Event Queue and executes them.
-- Scheduling WebSocket Service:
+- **Scheduling WebSocket Service:**
   - Listens for status updates of scheduled jobs
   - Notifies the Monitoring Scheduling Job UI via WebSockets when job statuses change
-- Scheduling Monitoring Service:
+- **Scheduling Monitoring Service:**
   - Monitoring Scheduling Job UI (SAP Fiori Elements V4 / SAP UI5 application)
   - Reads scheduling job details from the database
   - Supports monitoring via OData V4 API
   - Displays scheduling job statuses and updates in real-time via WebSockets
-- Event Queue & Feature Toggles
+- **Event Queue & Feature Toggles:**
   - Event Queue (using CDS Outbox) facilitates asynchronous job execution
   - Feature Toggles allow influence Job and Event Queue processing dynamically
-- Database & Redis Caching
-  - Stores job scheduling data.
+- **Database & Redis Caching:**
+  - Stores job scheduling data in the database
   - Redis is used for information distribution (e.g. Event Queue, WebSockets, Feature Toggles)
 
 ## Usage
@@ -146,7 +163,8 @@ The library includes a mocked processing for jump-start development, which is di
 Setting option `cds.requires.sap-afc-sdk.mockProcessing: true` the mocked Job processing completes
 jobs based on a random time value between `0-30` seconds.
 
-A more advanced mocked Job processing can be configured by setting the following [CDS env](https://cap.cloud.sap/docs/node.js/cds-env)
+A more advanced mocked Job processing can be configured by setting the
+following [CDS env](https://cap.cloud.sap/docs/node.js/cds-env)
 options (as described in [options](#options)):
 
 ```json
@@ -170,20 +188,24 @@ options (as described in [options](#options)):
 }
 ```
 
-This default advanced mocked Job processing can be also configured by using CDS profile `mock` via `--profile mock` or `CDS_ENV=mock`.
+This default advanced mocked Job processing can be also configured by using CDS profile `mock` via `--profile mock` or
+`CDS_ENV=mock`.
 
 ### Implement Job Processing
 
-The basic skeleton for implementing the Job processing is already provided by the SDK. Focus can be put on the actual processing logic,
+The basic skeleton for implementing the Job processing is already provided by the SDK. Focus can be put on the actual
+processing logic,
 and the processing status update handling.
 
 To implement a custom Job processing extend the Job processing service definition as follows:
 
 - CDS file: `srv/scheduling-processing-service.cds`
+
   ```cds
   using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
   annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
   ```
+
 - Implementation file: `srv/custom-processing-service.js`
 
   ```js
@@ -226,7 +248,8 @@ As part of the custom scheduling process service implementation, the following o
   - Implement your custom logic, how the Job should be processed
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (set status to `running`)
-  - Job update can be performed via `this.processJobUpdate`, e.g. `await this.processJobUpdate(req, JobStatus.completed)`
+  - Job update can be performed via `this.processJobUpdate`, e.g.
+    `await this.processJobUpdate(req, JobStatus.completed)`
   - Throwing exceptions will automatically trigger the retry process in event queue
   - Disable mocked Job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `updateJob`:
@@ -240,8 +263,10 @@ As part of the custom scheduling process service implementation, the following o
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (set status to `canceled`)
 
-Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP Node.js,
-designed specifically for efficient and streamlined asynchronous event processing. In case of errors, the Event Queue provides
+Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
+Node.js,
+designed specifically for efficient and streamlined asynchronous event processing. In case of errors, the Event Queue
+provides
 resilient processing (circuit breaker, retry, load-balancing, etc.).
 
 ## Documentation
@@ -249,7 +274,8 @@ resilient processing (circuit breaker, retry, load-balancing, etc.).
 ### Bootstrap Project
 
 A new CDS project can be initialized using [SAP Build Code](https://help.sap.com/docs/build_code)
-tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to boostrap a new CAP application.
+tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to boostrap a new
+CAP application.
 
 **SAP Build Code**:
 
@@ -266,20 +292,48 @@ tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cd
 
 **CDS CLI**:
 
-- Install `@sap/cds-dk` globally: `npm install -g @sap/cds-dk`
-- Init a new CDS project: `cds init <name>`
-- Switch to project folder: `cd <name>`
+- Install `@sap/cds-dk` globally:
+  - Terminal: `npm install -g @sap/cds-dk`
+- Init a new CDS project:
+  - Terminal: `cds init <name>`
+- Switch to project folder:
+  - Terminal: `cd <name>`
 
 ### All-in-one Setup
 
 **Adding Features**:
 
 - Add CDS features:
-  - Kyma: `cds add helm,approuter,xsuaa,html5-repo --for production`
-  - Cloud Foundry: `cds add mta,approuter,xsuaa,html5-repo --for production`
-- Add AFC SDK: `npm add @cap-js-community/sap-afc-sdk`
+  - Kyma:
+    - Terminal: `cds add helm,approuter,xsuaa,html5-repo --for production`
+  - Cloud Foundry:
+    - Terminal: `cds add mta,approuter,xsuaa,html5-repo --for production`
+- Add AFC SDK:
+  - Terminal: `npm add @cap-js-community/sap-afc-sdk`
 - Add AFC SDK features: `afc add broker,sample,http`
 - Install: `npm install`
+
+### Local Testing
+
+Project can be tested locally:
+
+- Terminal: `npm start`
+- Browser: `http://localhost:4004`
+
+### Deployment
+
+To fully test the application, also accessing API from external a deployment needs to be performed.
+BTP offers different deployment options, depending on the target environment (Kyma or Cloud Foundry).
+
+#### Kyma
+
+- Terminal: `cds add helm`
+- Follow Guide for Kyma: https://cap.cloud.sap/docs/guides/deployment/to-kyma
+
+#### Cloud Foundry
+
+- Terminal: `cds add mta`
+- Follow Guide for CF: https://cap.cloud.sap/docs/guides/deployment/to-cf
 
 ### Step-by-step Setup
 
@@ -287,48 +341,65 @@ tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cd
 
 To add sample Job definitions and Job instances run:
 
-- `afc add sample`
+- Terminal: `afc add sample`
 
-#### Broker
+Test data will be placed at `/db/data`.
+
+#### Add .http files
+
+To add `.http` files for testing the API endpoints run:
+
+- Terminal: `afc add http`
+
+HTTP files will be placed at `/http`.
+
+#### Broker (Cloud Foundry)
 
 An Open Service Broker compliant broker implementation can be added to the CAP project.
 The broker is used to manage service key management to the API.
 
-- `afc add broker`
+- Terminal: `afc add broker`
 - Deploy (see above)
-- Create broker on CF:
+- Create broker:
   `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
+- Create a service from broker: `cf cs <service-name> standard <name>`
+- Create a service key: `cf create-service-key <name> <name>-key`
+- Display service key: `cf service-key <name> <name>-key`
+- Perform OAuth token request using service key credentials
+  - See [uaa.http](./http/auth/uaa.http) for obtaining an OAuth token
+- Call API using OAuth token
+  - See `.http` files in [/http](./http) to call API endpoints
+  - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
 
 #### Approuter
 
+To serve UIs and provided authentication mechanisms via browser, and approuter needs to be added to project:
+
 - `cds add approuter`
+
+Approuter is added in folder `/app/router`. It can be deployed as separate application.
 
 #### Authentication
 
+Authentication can be performed omn BTP using XSUAA or IAS.
+
 ##### XSUAA
 
-- Add XSUAA: `cds add xsuaa --for production`
+Add XSUAA based authentication:
+
+- Terminal: `cds add xsuaa --for production`
 - Change XSUAA service plan `servicePlanName` (helm) / `service-plan` (mta) from `application` to `broker`
 
 ##### IAS
 
-- `cds add ias`
+Add IAS based authentication:
 
-### Deployment
-
-#### Kyma
-
-- `cds add helm`
-- Follow Guide for Kyma: https://cap.cloud.sap/docs/guides/deployment/to-kyma
-
-#### Cloud Foundry
-
-- `cds add mta`
-- Follow Guide for CF: https://cap.cloud.sap/docs/guides/deployment/to-cf
+- Terminal: `cds add ias`
 
 ### HTML5 repo
 
-Serve UIs via HTML5 repo:
+For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
+server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
 - Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
 - `cds add html5-repo`
@@ -339,21 +410,20 @@ You can scale the application by adding a Redis cache to distribute workload acr
 
 - `cds add redis`
 
-Redis is used by event-queue, websocket and feature-toggle library to process events, distribute websocket messages and store feature toggles.
-
-### HTTP files
-
-- `afc add http`
+Redis is used by `event-queue`, `websocket` and `feature-toggle-library` modules
+to process events, distribute websocket messages and store feature toggles.
 
 ### Feature Toggles
 
-The Feature Toggle Library is used to control the execution of the Event Queue. It exposes endpoints to manage feature toggles.
+The Feature Toggle Library is used to control the execution of the Event Queue. It exposes endpoints to manage feature
+toggles.
 
-`GET /rest/feature/state()`: Read current feature toggle states
+`GET /rest/feature/state()`: Read current feature toggle state
+`POST /rest/feature/redisUpdate`: Update feature toggle state
 
-The `.http` file can be used to test the feature toggle endpoints.
+See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
 
-## MTX Tool (CF)
+## MTX Tool (CF only)
 
 The MTX Tool is used to manage the application lifecycle. It can be used to manage the application in Cloud Foundry.
 Details can be found at https://github.com/cap-js-community/mtx-tool.

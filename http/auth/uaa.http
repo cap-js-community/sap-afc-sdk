@@ -6,25 +6,23 @@
 @passcode=<add your passcode from browser>
 
 ### Basic (technical)
-
 POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token?grant_type=client_credentials
 Accept: application/json
 Authorization: Basic {{uaaClientId}} {{uaaClientSecret}}
 
 ### Basic (user specific)
-
 POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token?grant_type=password&passcode={{passcode}}
 Accept: application/json
 Authorization: Basic {{uaaClientId}} {{uaaClientSecret}}
 
-### UAA (Form)
+### Form (technical)
 POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
 grant_type=client_credentials&client_id={{uaaClientId}}&client_secret={{uaaClientSecret}}
 
-### UAA (Form Passcode)
+### Form (user specific)
 POST https://{{subdomain}}.authentication.{{landscape}}.hana.ondemand.com/oauth/token
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
