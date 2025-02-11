@@ -40,10 +40,6 @@ describe("Processing Service", () => {
     expect(event.ID).toBe(ID);
     expect(event.status).toBe("running");
 
-    await expect(processingService.processJob(ID)).resolves.not.toThrow();
-
-    await processOutbox("processing");
-
     ws.close();
   });
 
@@ -52,8 +48,21 @@ describe("Processing Service", () => {
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
     await processOutbox("processing");
+
+    let entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry.startAfter).toBeDefined();
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+
+    await processOutbox("processing");
+
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).not.toBe("completed");
+    expect(job.status_code).not.toBe("running");
+    expect(job.status_code).not.toBe("requested");
   });
 
   it("processJob - advanced mock", async () => {

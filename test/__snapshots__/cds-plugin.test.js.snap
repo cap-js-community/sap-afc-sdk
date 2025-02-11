@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CDS Plugin GET Feature Toggles 1`] = `
+{
+  "eventQueue/active": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "boolean",
+    },
+    "fallbackValue": true,
+  },
+  "eventQueue/instanceLoadLimit": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "number",
+    },
+    "fallbackValue": 100,
+  },
+}
+`;
+
+exports[`CDS Plugin POST Feature Toggles (remove) 1`] = `
+{
+  "eventQueue/active": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "boolean",
+    },
+    "fallbackValue": true,
+  },
+  "eventQueue/instanceLoadLimit": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "number",
+    },
+    "fallbackValue": 100,
+  },
+}
+`;
+
+exports[`CDS Plugin POST Feature Toggles 1`] = `
+{
+  "eventQueue/active": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "boolean",
+    },
+    "fallbackValue": true,
+    "rootValue": false,
+  },
+  "eventQueue/instanceLoadLimit": {
+    "config": {
+      "SOURCE": "RUNTIME",
+      "TYPE": "number",
+    },
+    "fallbackValue": 100,
+    "rootValue": 11,
+  },
+}
+`;

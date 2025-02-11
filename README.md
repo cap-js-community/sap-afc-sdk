@@ -22,7 +22,27 @@
 - Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` project
 - Execute `cds-serve` to start server
   - Access welcome page at http://localhost:4004
-  - Access UIs and service endpoints
+  - Access UIs
+    - [/flp.html](http://localhost:4004/flp.html): Sandbox Fiori Launchpad
+    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
+  - Access Service Endpoints
+    - Public API
+      - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI](http://localhost:4004/api-docs/api/job-scheduling/v1))
+    - OData API (UI)
+      - [/srv/job-scheduling/monitoring](http://localhost:4004/srv/job-scheduling/monitoring): Feature Toggle API ([$metadata](http://localhost:4004/srv/job-scheduling/monitoring/$metadata))
+    - WebSocket API
+      - [/ws/job-scheduling](http://localhost:4004/ws/job-scheduling): Scheduling WebSocket endpoint
+    - REST API
+      - [/rest/feature](http://localhost:4004/rest/feature): Feature Toggle API
+    - Internal API
+      - `SchedulingProcessingService`: Scheduling Processing service (
+        ```js
+        const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+        ```
+      - `SchedulingWebsocketService`: Scheduling Websocket service
+        ```js
+        const schedulingProcessService = await cds.connect.to("SchedulingProcessingService");
+        ```
 
 ## Architecture
 
@@ -169,7 +189,7 @@ To implement a custom Job processing extend the Job processing service definitio
   ```js
   "use strict";
 
-  const SchedulingProcessingService = require("@cap-js-community/sap-afc-sdk").SchedulingProcessingService;
+  const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
 
   class CustomSchedulingProcessingService extends SchedulingProcessingService {
     async init() {
@@ -177,6 +197,7 @@ To implement a custom Job processing extend the Job processing service definitio
 
       this.on(processJob, async (req, next) => {
         // Your logic goes here
+        //   await this.processJobUpdate(req, JobStatus.completed);
         await next();
       });
 
@@ -205,6 +226,7 @@ As part of the custom scheduling process service implementation, the following o
   - Implement your custom logic, how the Job should be processed
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (set status to `running`)
+  - Job update can be performed via `this.processJobUpdate`, e.g. `await this.processJobUpdate(req, JobStatus.completed)`
   - Throwing exceptions will automatically trigger the retry process in event queue
   - Disable mocked Job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `updateJob`:

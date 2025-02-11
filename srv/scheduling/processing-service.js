@@ -47,7 +47,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     });
 
     this.on(processJob, async (req, next) => {
-      await this.updateJobStatus(req, req.data.ID, JobStatus.running);
+      await this.processJobUpdate(req, JobStatus.running);
       const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
       if (processingConfig) {
         await this.mockJobProcessing(req, processingConfig);
@@ -55,11 +55,11 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     });
 
     this.on(updateJob, async (req, next) => {
-      await this.updateJobStatus(req, req.data.ID, req.data.status);
+      await this.processJobUpdate(req, req.data.status);
     });
 
     this.on(cancelJob, async (req, next) => {
-      await this.updateJobStatus(req, req.data.ID, JobStatus.canceled);
+      await this.processJobUpdate(req, JobStatus.canceled);
     });
 
     return super.init();
@@ -101,7 +101,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     );
   }
 
-  async updateJobStatus(req, ID, status) {
+  async processJobUpdate(req, status) {
     const { Job } = this.entities("scheduling");
     const job = req.job;
     if (!status) {
@@ -116,12 +116,11 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (!(await this.checkStatusTransition(req.job.status_code, status))) {
       return req.reject(JobSchedulingError.statusTransitionNotAllowed(req.job.status_code, status));
     }
-
     await UPDATE.entity(Job)
       .set({
         status_code: status,
       })
-      .where({ ID });
+      .where({ ID: job.ID });
 
     const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
     await schedulingWebsocketService.tx(req).emit(
@@ -139,4 +138,9 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   async checkStatusTransition(statusBefore, statusAfter) {
     return this.statusTransitions[statusBefore].includes(statusAfter);
   }
+
+  /*async reportStatus(status) {
+    const afc = await cds.connect.to("afc");
+    return await afc.reportStatus(status);
+  }*/
 };

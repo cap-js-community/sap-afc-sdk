@@ -75,7 +75,7 @@ function serveBroker() {
 }
 
 function serveUIs() {
-  if (process.env.CDS_PLUGIN_PACKAGE === ".") {
+  if (process.env.CDS_PLUGIN_PACKAGE === "." && process.NODE_ENV !== "test") {
     return;
   }
   if (!cds.env.requires?.["sap-afc-sdk"]?.ui) {
@@ -85,7 +85,7 @@ function serveUIs() {
   let uiShowFlp = cds.env.requires?.["sap-afc-sdk"]?.ui?.flp;
   if (uiShowFlp) {
     const packageRoot = cds.utils.path.resolve(
-      require.resolve(process.env.CDS_PLUGIN_PACKAGE + "/package.json", { paths: [cds.root] }),
+      require.resolve(path.join(process.env.CDS_PLUGIN_PACKAGE, "package.json"), { paths: [cds.root] }),
       "..",
     );
     if (!fs.existsSync(`${cds.root}/app/appconfig/fioriSandboxConfig.json`)) {
@@ -162,14 +162,19 @@ function toOpenApiDoc(req, service, filePath) {
     return openAPICache.get(filePath);
   }
   let openAPI;
-  if (fs.existsSync(path.join(cds.root, filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(cds.root, filePath)));
-  } else if (fs.existsSync(path.join(cds.root, "openapi", filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(cds.root, "openapi", filePath)));
-  } else if (fs.existsSync(path.join(__dirname, filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(__dirname, filePath)));
-  } else if (fs.existsSync(path.join(__dirname, "openapi", filePath))) {
-    openAPI = JSON.parse(fs.readFileSync(path.join(__dirname, "openapi", filePath)));
+  const paths = [
+    path.join(cds.root, filePath),
+    path.join(cds.root, "openapi", filePath),
+    path.join(__dirname, filePath),
+    path.join(__dirname, "openapi", filePath),
+  ];
+  for (const path of paths) {
+    if (fs.existsSync(path)) {
+      openAPI = JSON.parse(fs.readFileSync(path));
+      if (openAPI) {
+        break;
+      }
+    }
   }
   if (openAPI) {
     const clientCredentials = openAPI?.components?.securitySchemes?.oauth2?.flows?.clientCredentials;
