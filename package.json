@@ -67,7 +67,7 @@
     "@cap-js/sqlite": "^1.8.0",
     "@sap/cds": "^8.7.1",
     "@sap/cds-dk": "^8.7.0",
-    "eslint": "^9.20.0",
+    "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-n": "^17.15.1",

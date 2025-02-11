@@ -94,25 +94,8 @@ function serveUIs() {
       cds.app.serve(`${uiPath}/flp.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/flp.html");
       cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     } else {
+      serveAppConfig(packageRoot, uiPath);
       uiShowFlp = false;
-      const projectFioriSandboxConfig = require(`${cds.root}/app/appconfig/fioriSandboxConfig.json`);
-      const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);
-      if (uiPath) {
-        for (const name in packageFioriSandboxConfig.applications ?? {}) {
-          const application = packageFioriSandboxConfig.applications[name];
-          application.url = `${uiPath}/${application.url}`;
-        }
-        for (const name in packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds ??
-          {}) {
-          const inbound =
-            packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds[name];
-          inbound.resolutionResult.url = `${uiPath}/${inbound.resolutionResult.url}`;
-        }
-      }
-      const mergedFioriSandboxConfig = mergeDeep(packageFioriSandboxConfig, projectFioriSandboxConfig);
-      cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
-        res.send(mergedFioriSandboxConfig);
-      });
     }
   }
   const uiShowSchedulingMonitoringJob = cds.env.requires?.["sap-afc-sdk"]?.ui?.["scheduling.monitoring.job"];
@@ -124,6 +107,26 @@ function serveUIs() {
       .serve(`${uiPath}/scheduling.monitoring.job/webapp`)
       .from(process.env.CDS_PLUGIN_PACKAGE, "/app/scheduling.monitoring.job/webapp");
   }
+}
+
+function serveAppConfig(packageRoot, uiPath) {
+  cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
+    const projectFioriSandboxConfig = require(`${cds.root}/app/appconfig/fioriSandboxConfig.json`);
+    const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);
+    if (uiPath) {
+      for (const name in packageFioriSandboxConfig.applications ?? {}) {
+        const application = packageFioriSandboxConfig.applications[name];
+        application.url = `${uiPath}/${application.url}`;
+      }
+      for (const name in packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds ??
+        {}) {
+        const inbound = packageFioriSandboxConfig.services?.ClientSideTargetResolution?.adapter?.config?.inbounds[name];
+        inbound.resolutionResult.url = `${uiPath}/${inbound.resolutionResult.url}`;
+      }
+    }
+    const mergedFioriSandboxConfig = mergeDeep(packageFioriSandboxConfig, projectFioriSandboxConfig);
+    res.send(mergedFioriSandboxConfig);
+  });
 }
 
 function serveSwaggerUI() {

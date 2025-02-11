@@ -404,6 +404,8 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 - Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
 - `cds add html5-repo`
 
+### Additional Setup
+
 #### Redis
 
 You can scale the application by adding a Redis cache to distribute workload across application instances:
