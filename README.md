@@ -75,20 +75,19 @@ building blocks as depicted in the following diagram:
 
 ![Architecture Concept](./docs/assets/architecture_concept.png)
 
-- **https://github.com/cap-js-community/websocket**: **WebSocket Adapter for CDS**
+- **WebSocket Adapter for CDS** (https://github.com/cap-js-community/websocket)
   - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in context of the SAP
     Cloud Application Programming Model (CAP) using @sap/cds (CDS Node.js).
-- **https://github.com/cap-js-community/event-queue**: **Event Queue for CDS**
+- **Event Queue for CDS** (https://github.com/cap-js-community/event-queue)
   - The Event-Queue is a framework built on top of CAP Node.js, designed specifically for efficient and streamlined
     asynchronous event processing
-- **https://github.com/cap-js-community/feature-toggle-library**: **Feature Toggle Library for CDS**
+- **Feature Toggle Library for CDS** (https://github.com/cap-js-community/feature-toggle-library)
   - SAP BTP feature toggle library enables Node.js applications using the SAP Cloud Application Programming Model to
     maintain live-updatable feature toggles via Redis
 
 You can develop a 3rd-Party Scheduling Provider for SAP Advanced Financial Closing using the SAP Advanced Financial
-Closing SDK,
-built on the SAP Cloud Programming Model and enhanced with @cap-js-community open-source plugins, leveraging SAP Build
-Code for a seamless and scalable solution.
+Closing SDK, built on the SAP Cloud Programming Model and enhanced with @cap-js-community open-source plugins,
+leveraging SAP Build Code for a seamless and scalable solution.
 
 Requesting job scheduling, synchronizing status and results, and updating job definitions between SAP Advanced Financial
 Closing (AFC) and a 3rd-party
@@ -256,12 +255,15 @@ As part of the custom scheduling process service implementation, the following o
   - A job status update is requested
   - Implement your custom logic, how the Job status should be updated
   - Job data can be retrieved via `req.job`
+  - Job status transition is validated via `async checkStatusTransition(statusBefore, statusAfter)`
+    - Valid status transitions are defined in `this.statusTransitions`
+    - Check function and status transitions can be customized
   - Call `await next()` to perform default implementation (update status to requested status)
 - `cancelJob`:
   - A job cancellation is requested
   - Implement your custom logic, how the Job should be canceled
   - Job data can be retrieved via `req.job`
-  - Call `await next()` to perform default implementation (set status to `canceled`)
+  - Call `await next()` to perform default implementation (update status to `canceled`)
 
 Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
 Node.js,
@@ -287,8 +289,8 @@ CAP application.
 - Provide Project Name
 - Select Development Stack: `Node.js`
 - Press `Create`
-- Open terminal
-- Continue with `cds` CLI, adding features
+- Open Terminal
+  - Continue with `cds` CLI, adding features
 
 **CDS CLI**:
 
@@ -361,7 +363,7 @@ The broker is used to manage service key management to the API.
 - Terminal: `afc add broker`
 - Deploy (see above)
 - Create broker:
-  `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
+  - Terminal: `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
 - Create a service from broker: `cf cs <service-name> standard <name>`
 - Create a service key: `cf create-service-key <name> <name>-key`
 - Display service key: `cf service-key <name> <name>-key`
@@ -375,7 +377,7 @@ The broker is used to manage service key management to the API.
 
 To serve UIs and provided authentication mechanisms via browser, and approuter needs to be added to project:
 
-- `cds add approuter`
+- Terminal: `cds add approuter`
 
 Approuter is added in folder `/app/router`. It can be deployed as separate application.
 
@@ -390,19 +392,19 @@ Add XSUAA based authentication:
 - Terminal: `cds add xsuaa --for production`
 - Change XSUAA service plan `servicePlanName` (helm) / `service-plan` (mta) from `application` to `broker`
 
-##### IAS
+##### Identify Services (IAS)
 
 Add IAS based authentication:
 
 - Terminal: `cds add ias`
 
-#### HTML5 repo
+#### HTML5 Repo
 
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Disable serving UIs in server: `cds.requires.sap-afc-sdk.ui: false`
-- `cds add html5-repo`
+- Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
+- Terminal: `cds add html5-repo`
 
 ### Additional Setup
 
@@ -410,7 +412,7 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
 You can scale the application by adding a Redis cache to distribute workload across application instances:
 
-- `cds add redis`
+- Terminal: `cds add redis`
 
 Redis is used by `event-queue`, `websocket` and `feature-toggle-library` modules
 to process events, distribute websocket messages and store feature toggles.
