@@ -2,6 +2,7 @@
 
 exports[`API Create Job 1`] = `
 {
+  "link": null,
   "name": "JOB_1",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -12,6 +13,7 @@ exports[`API Create Job 1`] = `
 
 exports[`API Create Job 2`] = `
 {
+  "link": null,
   "name": "JOB_1",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -44,6 +46,7 @@ exports[`API Create Job 3`] = `
 exports[`API GET Job 1`] = `
 [
   {
+    "link": "https://sap.com",
     "name": "JOB_1",
     "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-01T12:00:00Z",
@@ -51,6 +54,7 @@ exports[`API GET Job 1`] = `
     "version": "1",
   },
   {
+    "link": "https://sap.com",
     "name": "JOB_2",
     "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-02T12:00:00Z",
@@ -62,6 +66,7 @@ exports[`API GET Job 1`] = `
 
 exports[`API GET Job 2`] = `
 {
+  "link": "https://sap.com",
   "name": "JOB_1",
   "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -388,11 +393,29 @@ footer {
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
+          <li id="schedulingmonitoringservice-odata-jobresult">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobresultmessage">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
           <li id="schedulingmonitoringservice-odata-jobstatus">
             <div>
               <a href="/srv/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobresulttype">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/JobResultType"><span>JobResultType</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-parametertype">
             <div>
@@ -411,6 +434,12 @@ footer {
               <a href="/srv/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-messageseverity">
+            <div>
+              <a href="/srv/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
         </ul>
         <ul>
@@ -443,6 +472,18 @@ footer {
           <li id="schedulingproviderservice-rest-jobparameter">
             <div>
               <a href="/api/job-scheduling/v1/JobParameter"><span>JobParameter</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+          <li id="schedulingproviderservice-rest-jobresult">
+            <div>
+              <a href="/api/job-scheduling/v1/JobResult"><span>JobResult</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
+          <li id="schedulingproviderservice-rest-jobresultmessage">
+            <div>
+              <a href="/api/job-scheduling/v1/JobResultMessage"><span>JobResultMessage</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>

@@ -16,6 +16,9 @@
     },
     {
       "name": "Job"
+    },
+    {
+      "name": "JobResult"
     }
   ],
   "paths": {
@@ -37,7 +40,7 @@
             "name": "top",
             "in": "query",
             "required": false,
-            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page, e.g., 10. Example: ?top=5",
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
             "schema": {
               "type": "string"
             }
@@ -79,8 +82,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -90,6 +105,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       },
@@ -130,8 +148,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -141,6 +171,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -185,8 +218,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -196,6 +241,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -244,8 +292,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -255,6 +315,83 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/Job/{ID}/results": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a list of results of a job.",
+        "tags": ["Job"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobResult",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.JobResult"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -268,7 +405,7 @@
             "name": "skip",
             "in": "query",
             "required": false,
-            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0.",
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
             "schema": {
               "type": "string"
             }
@@ -277,7 +414,7 @@
             "name": "top",
             "in": "query",
             "required": false,
-            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page, e.g., 10.",
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
             "schema": {
               "type": "string"
             }
@@ -310,8 +447,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -321,6 +470,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -364,8 +516,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -375,6 +539,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -422,8 +589,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -433,6 +612,224 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/JobResult/{ID}": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a single job result.",
+        "tags": ["JobResult"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved job result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingProviderService.JobResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/JobResult/{ID}/messages": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a list of messages of a job result.",
+        "tags": ["JobResult"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved messages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobResultMessage",
+                  "items": {
+                    "$ref": "#/components/schemas/SchedulingProviderService.JobResultMessage"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/JobResult/{ID}/data": {
+      "parameters": [
+        {
+          "description": "key: ID",
+          "in": "path",
+          "name": "ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves data of a job result.",
+        "tags": ["JobResult"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved data",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         }
       }
@@ -457,8 +854,20 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -468,6 +877,9 @@
           },
           "501": {
             "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
           }
         },
         "parameters": [
@@ -541,6 +953,9 @@
           "modifiedBy": {
             "type": "string",
             "maxLength": 255
+          },
+          "link": {
+            "type": "string"
           }
         },
         "required": ["ID", "name", "referenceID", "version", "status"]
@@ -679,6 +1094,57 @@
           }
         },
         "required": ["name", "dataType", "type", "mappingType"]
+      },
+      "SchedulingProviderService.JobResult": {
+        "title": "JobResult",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "jobID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "type": {
+            "type": "string",
+            "enum": ["link", "data", "messages"]
+          },
+          "name": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        }
+      },
+      "SchedulingProviderService.JobResultMessage": {
+        "title": "JobResultMessage",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "resultID": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["error", "warning", "info"]
+          },
+          "text": {
+            "type": "string"
+          }
+        }
       },
       "error": {
         "type": "object",

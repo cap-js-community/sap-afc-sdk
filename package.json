@@ -48,9 +48,9 @@
     "prettier:ci": "prettier \"**/*.{js,json,md,yml,yaml}\" --check",
     "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
     "prepareRelease": "npm prune --production",
-    "audit": "npm audit --only=prod",
     "openapi": "npm run openapi:sspi && npm run lint",
-    "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi > 'openapi/afc-sspi.json' && node openapi/postprocessing/afc-sspi"
+    "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi -o openapi && node postprocessing/openapi",
+    "audit": "npm audit --only=prod"
   },
   "dependencies": {
     "@cap-js-community/event-queue": "^1.8.7",

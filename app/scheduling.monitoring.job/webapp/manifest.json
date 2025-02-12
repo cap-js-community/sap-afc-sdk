@@ -105,6 +105,16 @@
           "pattern": "Job({key}):?query:",
           "name": "JobObjectPage",
           "target": "JobObjectPage"
+        },
+        {
+          "pattern": "Job({key})/parameters({key2}):?query:",
+          "name": "JobParameterObjectPage",
+          "target": "JobParameterObjectPage"
+        },
+        {
+          "pattern": "Job({key})/results({key2}):?query:",
+          "name": "JobResultObjectPage",
+          "target": "JobResultObjectPage"
         }
       ],
       "targets": {
@@ -141,7 +151,41 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/Job"
+              "contextPath": "/Job",
+              "navigation": {
+                "JobParameter": {
+                  "detail": {
+                    "route": "JobParameterObjectPage"
+                  }
+                },
+                "JobResult": {
+                  "detail": {
+                    "route": "JobResultObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobParameterObjectPage": {
+          "type": "Component",
+          "id": "JobParameterObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobParameter"
+            }
+          }
+        },
+        "JobResultObjectPage": {
+          "type": "Component",
+          "id": "JobResultObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobResult"
             }
           }
         }

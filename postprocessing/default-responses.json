@@ -1,0 +1,142 @@
+{
+  "400": {
+    "description": "Incorrect request. Format or structure invalid",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "401": {
+    "description": "Unauthorized. Action requires user authentication",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "403": {
+    "description": "Access forbidden. The caller does not have the required permissions to access the resource",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "404": {
+    "description": "Resource not found. The caller either provided a wrong URL or the requested resource does not exist (any longer).",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "406": {
+    "description": "Not acceptable. The caller provided content negotiation headers such as Accept, Accept-Charset, Accept-Encoding, and Accept- Language, for which the server could not produce a matching result.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "409": {
+    "description": "Request conflict. State of the resource does not permit the request.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "411": {
+    "description": "Length required. Content-Length header required.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "413": {
+    "description": "Payload Too Large. The request entity is larger than limits defined by the server.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "415": {
+    "description": "Unsupported Media Type. The server refuses to accept the request because the payload has an unsupported format.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "429": {
+    "description": "Too many requests. The caller has sent too many requests in a given amount of time",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "500": {
+    "description": "Internal server error. The requested operation led to an error during execution",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "501": {
+    "description": "Not implemented. The server does not support the functionality required to fulfill the request",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    }
+  },
+  "503": {
+    "description": "Service unavailable. The server is not able to handle the request at present. If no Retry-After is given, the client SHOULD handle the response as it would for a 500 response.",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    },
+    "headers": {
+      "Retry-After": {
+        "description": "Indicates how long the client should wait before making a follow-up request, specified as a number of seconds",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

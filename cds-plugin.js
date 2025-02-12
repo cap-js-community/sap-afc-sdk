@@ -165,8 +165,8 @@ function serveSwaggerUI() {
 
 const openAPICache = new Map();
 
-function toOpenApiDoc(req, service, filePath) {
-  filePath = filePath === true ? `${service.name}.json` : filePath;
+function toOpenApiDoc(req, service, name) {
+  const filePath = `${name === true ? service.name : name}.openapi3.json`;
   if (openAPICache.has(filePath)) {
     return openAPICache.get(filePath);
   }

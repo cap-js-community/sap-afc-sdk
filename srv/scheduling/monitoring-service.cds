@@ -22,8 +22,13 @@ service SchedulingMonitoringService {
         };
 
     entity JobParameter @readonly           as projection on scheduling.JobParameter;
+    entity JobResult @readonly              as projection on scheduling.JobResult;
+    entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage;
     entity JobStatus @readonly              as projection on scheduling.JobStatus;
+    entity JobResultType @readonly          as projection on scheduling.JobResultType;
+
     entity ParameterType @readonly          as projection on scheduling.ParameterType;
     entity DataType @readonly               as projection on scheduling.DataType;
     entity MappingType @readonly            as projection on scheduling.MappingType;
+    entity MessageSeverity @readonly        as projection on scheduling.MessageSeverity;
 }

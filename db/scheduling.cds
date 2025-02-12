@@ -6,6 +6,7 @@ using {
     sap.common.CodeList
 } from '@sap/cds/common';
 
+@title: '{i18n>JobDefinition}'
 entity JobDefinition {
         @title: '{i18n>Name}'
     key name        : String not null;
@@ -17,10 +18,12 @@ entity JobDefinition {
         version     : String not null;
 
         @readonly
+        @title: '{i18n>Parameters}'
         parameters  : Composition of many JobParameterDefinition
                           on parameters.job = $self;
 };
 
+@title: '{i18n>JobParameterDefinition}'
 entity JobParameterDefinition {
         @title: '{i18n>Name}'
     key name        : String;
@@ -47,43 +50,99 @@ entity JobParameterDefinition {
         required    : Boolean not null default false;
 };
 
+@title: '{i18n>Job}'
 entity Job : cuid, managed {
-    key ID            : UUID @readonly;
+    @title: '{i18n>ReferenceID}'
+    referenceID   : UUID not null;
 
-        @title: '{i18n>ReferenceID}'
-        referenceID   : UUID not null;
+    @title: '{i18n>StartDateTime}'
+    startDateTime : DateTime;
 
-        @title: '{i18n>StartDateTime}'
-        startDateTime : DateTime;
+    @title: '{i18n>Name}'
+    definition    : Association to JobDefinition not null;
 
-        @title: '{i18n>Name}'
-        definition    : Association to JobDefinition not null;
+    @readonly
+    @title: '{i18n>Version}'
+    version       : String not null;
 
-        @readonly
-        @title: '{i18n>Version}'
-        version       : String not null;
+    @readonly
+    @title: '{i18n>Link}'
+    link          : String;
 
-        @readonly
-        @title: '{i18n>Status}'
-        status        : Association to JobStatus not null default 'requested'; // TODO: #requested
-        parameters    : Composition of many JobParameter
-                            on parameters.job = $self;
+    @readonly
+    @title: '{i18n>Status}'
+    status        : Association to JobStatus not null default 'requested'; // TODO: #requested
+
+    @title: '{i18n>Parameters}'
+    parameters    : Composition of many JobParameter
+                        on parameters.job = $self;
+
+    @title: '{i18n>Results}'
+    results       : Composition of many JobResult
+                        on results.job = $self;
 };
 
+@title                    : '{i18n>JobParameter}'
+@assert.unique.semanticKey: [
+    job,
+    definition
+]
 entity JobParameter : cuid, {
-    key ID         : UUID @readonly;
+    @title: '{i18n>Job}'
+    job        : Association to Job not null;
 
-        @title: '{i18n>Job}'
-        job        : Association to Job not null;
+    @title: '{i18n>Name}'
+    definition : Association to JobParameterDefinition not null;
 
-        @title: '{i18n>Name}'
-        definition : Association to JobParameterDefinition not null;
-
-        @title: '{i18n>Value}'
-        value      : String;
+    @title: '{i18n>Value}'
+    value      : String;
 };
 
-type JobStatusCode     : String enum {
+@title                    : '{i18n>JobResult}'
+@assert.unique.semanticKey: [
+    job,
+    name
+]
+entity JobResult : cuid, {
+    @title: '{i18n>Job}'
+    job      : Association to Job not null;
+
+    @title: '{i18n>Name}'
+    name     : String not null;
+
+    @title: '{i18n>Type}'
+    type     : Association to JobResultType not null;
+
+    @title: '{i18n>Link}'
+    link     : String;
+
+    @title: '{i18n>MimeType}'
+    mimeType : String;
+
+    @title: '{i18n>Data}'
+    fileName : String;
+
+    @title: '{i18n>Data}'
+    data : LargeBinary;
+
+    @title: '{i18n>Messages}'
+    messages : Composition of many JobResultMessage
+                   on messages.result = $self;
+};
+
+@title: '{i18n>JobResultMessage}'
+entity JobResultMessage : cuid, {
+    @title: '{i18n>JobResult}'
+    result   : Association to JobResult not null;
+
+    @title: '{i18n>Message}'
+    text     : String not null;
+
+    @title: '{i18n>Severity}'
+    severity : Association to MessageSeverity not null default 'info'; // TODO: #info
+};
+
+type JobStatusCode       : String enum {
     requested;
     running;
     completed;
@@ -97,10 +156,9 @@ type JobStatusCode     : String enum {
 entity JobStatus : CodeList {
         @title: '{i18n>Status}'
     key code : JobStatusCode;
-}
+};
 
-
-type ParameterTypeCode : String enum {
+type ParameterTypeCode   : String enum {
     readOnlyValue;
     writeableValue;
     mapping;
@@ -109,9 +167,9 @@ type ParameterTypeCode : String enum {
 entity ParameterType : CodeList {
         @title: '{i18n>ParameterType}'
     key code : ParameterTypeCode;
-}
+};
 
-type DataTypeCode      : String enum {
+type DataTypeCode        : String enum {
     string;
     number;
     datetime;
@@ -121,9 +179,9 @@ type DataTypeCode      : String enum {
 entity DataType : CodeList {
         @title: '{i18n>DataType}'
     key code : DataTypeCode;
-}
+};
 
-type MappingTypeCode   : String enum {
+type MappingTypeCode     : String enum {
     accountingPrinciple;
     companyCode;
     plant;
@@ -152,4 +210,26 @@ type MappingTypeCode   : String enum {
 entity MappingType : CodeList {
         @title: '{i18n>MappingType}'
     key code : MappingTypeCode;
-}
+};
+
+type JobResultTypeCode   : String enum {
+    link;
+    data;
+    messages;
+};
+
+entity JobResultType : CodeList {
+        @title: '{i18n>JobResultType}'
+    key code : JobResultTypeCode;
+};
+
+type MessageSeverityCode : String enum {
+    error;
+    warning;
+    info;
+};
+
+entity MessageSeverity : CodeList {
+        @title: '{i18n>MessageSeverityType}'
+    key code : MessageSeverityCode;
+};
