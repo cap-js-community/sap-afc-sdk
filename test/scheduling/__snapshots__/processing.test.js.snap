@@ -3,18 +3,53 @@
 exports[`Processing Service processJob - simple mock 1`] = `
 [
   {
-    "fileName": null,
+    "filename": null,
     "link": "https://www.sap.com",
     "mimeType": null,
     "name": "Link",
     "type_code": "link",
   },
   {
-    "fileName": null,
+    "filename": null,
     "link": null,
     "mimeType": null,
     "name": "Result",
     "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service updateJob - results 1`] = `
+[
+  {
+    "filename": "test.txt",
+    "link": null,
+    "mimeType": "text/plain",
+    "name": "Data",
+    "type_code": "data",
+  },
+  {
+    "filename": null,
+    "link": "https://www.sap.com",
+    "mimeType": null,
+    "name": "Link",
+    "type_code": "link",
+  },
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Result",
+    "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service updateJob - results 2`] = `
+[
+  {
+    "severity_code": "info",
+    "text": "Job completed successfully",
   },
 ]
 `;

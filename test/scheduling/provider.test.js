@@ -3,6 +3,7 @@
 const cds = require("@sap/cds");
 
 const { authorization, cleanData, clearEventQueue, eventQueueEntry, connectToWS, processOutbox } = require("../helper");
+const { JobStatus } = require("../../srv/scheduling/common/codelist");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
@@ -90,6 +91,23 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("GET Job Results", async () => {
+    const response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results");
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
+  it("GET Job Result Messages", async () => {
+    let response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
+    expect(response.data).toEqual([]);
+  });
+
+  it.skip("GET Job Result Message Data", async () => {
+    const response = await GET("/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data");
+    expect(response.data).toEqual("This is a test")
+  });
+
   it("Create Job", async () => {
     let response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_1",
@@ -138,10 +156,10 @@ describe("API", () => {
     await processOutbox();
     event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("running");
+    expect(event.status).toBe(JobStatus.running);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
-    expect(response.data.status).toBe("running");
+    expect(response.data.status).toBe(JobStatus.running);
 
     ws.close();
   });
@@ -153,22 +171,22 @@ describe("API", () => {
     let response = await POST(`/api/job-scheduling/v1/Job/${ID}/cancel`, {});
     expect(response.status).toBe(204);
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
-    expect(response.data.status).toEqual("cancelRequested");
+    expect(response.data.status).toEqual(JobStatus.cancelRequested);
 
     let message = ws.message("jobStatusChanged");
     await processOutbox("websocket");
     let event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("cancelRequested");
+    expect(event.status).toBe(JobStatus.cancelRequested);
 
     message = ws.message("jobStatusChanged");
     await processOutbox();
     event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("canceled");
+    expect(event.status).toBe(JobStatus.canceled);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
-    expect(response.data.status).toBe("canceled");
+    expect(response.data.status).toBe(JobStatus.canceled);
 
     ws.close();
   });

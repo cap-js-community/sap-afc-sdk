@@ -225,7 +225,6 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       );
     });
 
-    // TODO: Document how to customize...
     // TODO: Implement with CDS 8.8
     this.on(JobResult.actions.data, JobResult, async (req) => {
       const ID = req.params[0];

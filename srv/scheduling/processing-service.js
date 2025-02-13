@@ -65,6 +65,140 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return super.init();
   }
 
+  async processJobUpdate(req, status, results) {
+    const { Job, JobResult } = this.entities("scheduling");
+    const job = req.job;
+    if (!status) {
+      return req.reject(JobSchedulingError.statusValueMissing());
+    }
+    if (!JobStatus[status]) {
+      return req.reject(JobSchedulingError.invalidJobStatus(status));
+    }
+    if (req.job.status_code === status) {
+      return;
+    }
+    if (!(await this.checkStatusTransition(req, req.job.status_code, status))) {
+      return req.reject(JobSchedulingError.statusTransitionNotAllowed(req.job.status_code, status));
+    }
+    await UPDATE.entity(Job)
+      .set({
+        status_code: status,
+      })
+      .where({ ID: job.ID });
+    if (results && results.length > 0) {
+      const insertResults = await this.checkJobResult(req, results);
+      await INSERT.into(JobResult).entries(insertResults);
+    }
+    const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+    await schedulingWebsocketService.tx(req).emit(
+      "jobStatusChanged",
+      {
+        ID: job.ID,
+        status,
+      },
+      {
+        "x-eventQueue-referenceEntityKey": job.ID,
+      },
+    );
+  }
+
+  async checkStatusTransition(req, statusBefore, statusAfter) {
+    return this.statusTransitions[statusBefore].includes(statusAfter);
+  }
+
+  async checkJobResult(req, result) {
+    const job = req.job;
+    return (result || []).map((entry) => {
+      if (!entry.name) {
+        return req.reject(JobSchedulingError.resultNameMissing());
+      }
+      if (!entry.type) {
+        return req.reject(JobSchedulingError.resultTypeMissing());
+      }
+      switch (entry.type) {
+        case JobResultType.link:
+          if (!entry.link) {
+            return req.reject(JobSchedulingError.linkMissing());
+          }
+          if (entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          }
+          if (entry.filename) {
+            return req.reject(JobSchedulingError.filenameNotAllowed(entry.type));
+          }
+          if (entry.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          }
+          if (entry.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          }
+          break;
+        case JobResultType.data:
+          if (!entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeMissing());
+          }
+          if (!entry.filename) {
+            return req.reject(JobSchedulingError.filenameMissing());
+          }
+          if (!entry.data) {
+            return req.reject(JobSchedulingError.dataMissing());
+          }
+          if (entry.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          }
+          if (entry.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          }
+          break;
+        case JobResultType.message:
+          if (!(entry?.messages.length > 0)) {
+            return req.reject(JobSchedulingError.messagesMissing());
+          }
+          for (const message of entry.messages) {
+            if (!message.text) {
+              return req.reject(JobSchedulingError.textMissing());
+            }
+            if (!message.severity) {
+              return req.reject(JobSchedulingError.severityMissing());
+            }
+            if (!MessageSeverity[message.severity]) {
+              return req.reject(JobSchedulingError.invalidMessageSeverity(message.severity));
+            }
+          }
+          if (entry.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          }
+          if (entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          }
+          if (entry.filename) {
+            return req.reject(JobSchedulingError.filenameNotAllowed(entry.type));
+          }
+          if (entry.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          }
+          break;
+        default:
+          return req.reject(JobSchedulingError.invalidResultType(entry.type));
+      }
+      return {
+        job_ID: job.ID,
+        name: entry.name,
+        type_code: entry.type,
+        link: entry.link,
+        mimeType: entry.mimeType,
+        filename: entry.filename,
+        data: entry.data,
+        messages: (entry.messages || []).map((message) => {
+          return {
+            text: message.text,
+            severity_code: message.severity,
+          };
+        }),
+      };
+    });
+  }
+
   async mockJobProcessing(req, config) {
     let min = config.min ?? 0;
     let max = config.max ?? 30;
@@ -148,140 +282,6 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         "x-eventQueue-startAfter": new Date(Date.now() + processingTime),
       },
     );
-  }
-
-  async processJobUpdate(req, status, results) {
-    const { Job, JobResult } = this.entities("scheduling");
-    const job = req.job;
-    if (!status) {
-      return req.reject(JobSchedulingError.statusValueMissing());
-    }
-    if (!JobStatus[status]) {
-      return req.reject(JobSchedulingError.invalidJobStatus(status));
-    }
-    if (req.job.status_code === status) {
-      return;
-    }
-    if (!(await this.checkStatusTransition(req, req.job.status_code, status))) {
-      return req.reject(JobSchedulingError.statusTransitionNotAllowed(req.job.status_code, status));
-    }
-    await UPDATE.entity(Job)
-      .set({
-        status_code: status,
-      })
-      .where({ ID: job.ID });
-    if (results && results.length > 0) {
-      const insertResults = await this.checkJobResult(req, results);
-      await INSERT.into(JobResult).entries(insertResults);
-    }
-    const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
-    await schedulingWebsocketService.tx(req).emit(
-      "jobStatusChanged",
-      {
-        ID: job.ID,
-        status,
-      },
-      {
-        "x-eventQueue-referenceEntityKey": job.ID,
-      },
-    );
-  }
-
-  async checkStatusTransition(req, statusBefore, statusAfter) {
-    return this.statusTransitions[statusBefore].includes(statusAfter);
-  }
-
-  async checkJobResult(req, result) {
-    const job = req.job;
-    return (result || []).map((entry) => {
-      if (!entry.name) {
-        return req.reject(JobSchedulingError.resultNameMissing());
-      }
-      if (!entry.type) {
-        return req.reject(JobSchedulingError.resultTypeMissing());
-      }
-      switch (entry.type) {
-        case JobResultType.link:
-          if (!entry.link) {
-            return req.reject(JobSchedulingError.linkMissing());
-          }
-          if (entry.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
-          }
-          if (entry.fileName) {
-            return req.reject(JobSchedulingError.fileNameNotAllowed(entry.type));
-          }
-          if (entry.data) {
-            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
-          }
-          if (entry.messages) {
-            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
-          }
-          break;
-        case JobResultType.data:
-          if (!entry.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeMissing());
-          }
-          if (!entry.fileName) {
-            return req.reject(JobSchedulingError.fileNameMissing());
-          }
-          if (!entry.data) {
-            return req.reject(JobSchedulingError.dataMissing());
-          }
-          if (entry.link) {
-            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
-          }
-          if (entry.messages) {
-            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
-          }
-          break;
-        case JobResultType.message:
-          if (!(entry?.messages.length > 0)) {
-            return req.reject(JobSchedulingError.messagesMissing());
-          }
-          for (const message of entry.messages) {
-            if (!message.text) {
-              return req.reject(JobSchedulingError.textMissing());
-            }
-            if (!message.severity) {
-              return req.reject(JobSchedulingError.severityMissing());
-            }
-            if (!MessageSeverity[message.severity]) {
-              return req.reject(JobSchedulingError.invalidMessageSeverity(message.severity));
-            }
-          }
-          if (entry.link) {
-            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
-          }
-          if (entry.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
-          }
-          if (entry.fileName) {
-            return req.reject(JobSchedulingError.fileNameNotAllowed(entry.type));
-          }
-          if (entry.data) {
-            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
-          }
-          break;
-        default:
-          return req.reject(JobSchedulingError.invalidResultType(entry.type));
-      }
-      return {
-        job_ID: job.ID,
-        name: entry.name,
-        type_code: entry.type,
-        link: entry.link,
-        mimeType: entry.mimeType,
-        fileName: entry.fileName,
-        data: entry.data,
-        messages: (entry.messages || []).map((message) => {
-          return {
-            text: message.text,
-            severity_code: message.severity,
-          };
-        }),
-      };
-    });
   }
 
   /*async reportStatus(req, status) {

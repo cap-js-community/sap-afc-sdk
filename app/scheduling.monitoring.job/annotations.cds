@@ -2,7 +2,6 @@ using SchedulingMonitoringService as service from '../../srv/scheduling/monitori
 
 annotate service.Job with @(
     UI.Identification     : [
-        {Value: ID},
         {
             $Type             : 'UI.DataFieldForAction',
             Label             : '{i18n>Cancel}',
@@ -117,7 +116,6 @@ annotate service.Job actions {
 };
 
 annotate service.JobParameter with @(
-    UI.Identification     : [{Value: ID}, ],
     UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
@@ -175,8 +173,8 @@ annotate service.JobParameter with @(
         },
     ],
     UI.HeaderInfo         : {
-        TypeName      : '{i18n>Job}',
-        TypeNamePlural: '{i18n>Jobs}',
+        TypeName      : '{i18n>JobParameter}',
+        TypeNamePlural: '{i18n>JobParameters}',
     },
     UI.PresentationVariant: {SortOrder: [{
         $Type     : 'Common.SortOrderType',
@@ -193,7 +191,6 @@ annotate service.JobParameterDefinition {
 };
 
 annotate service.JobResult with @(
-    UI.Identification     : [{Value: ID}, ],
     UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
@@ -221,8 +218,9 @@ annotate service.JobResult with @(
                 ![@UI.Hidden] : (type.code != 'data' ? true : false)
             },
             {
-                $Type: 'UI.DataField',
-                Value: fileName,
+                $Type: 'UI.DataFieldWithUrl',
+                Value: filename,
+                Url  : dataLink,
                 ![@UI.Hidden] : (type.code != 'data' ? true : false)
             }
         ],
@@ -259,8 +257,9 @@ annotate service.JobResult with @(
             ![@UI.Hidden] : (type.code != 'data' ? true : false)
         },
         {
-            $Type: 'UI.DataField',
-            Value: fileName,
+            $Type: 'UI.DataFieldWithUrl',
+            Value: filename,
+            Url  : dataLink,
             ![@UI.Hidden] : (type.code != 'data' ? true : false)
         }
     ],
@@ -279,10 +278,10 @@ annotate service.JobResult with @(
 annotate service.JobResult {
     type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
     link  @HTML5.LinkTarget               : '_blank';
+    dataLink  @HTML5.LinkTarget           : '_blank';
 };
 
 annotate service.JobResultMessage with @(
-    UI.Identification     : [{Value: ID}, ],
     UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [

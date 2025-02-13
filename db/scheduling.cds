@@ -71,7 +71,7 @@ entity Job : cuid, managed {
 
     @readonly
     @title: '{i18n>Status}'
-    status        : Association to JobStatus not null default 'requested'; // TODO: #requested
+    status        : Association to JobStatus not null default 'requested'; // #requested
 
     @title: '{i18n>Parameters}'
     parameters    : Composition of many JobParameter
@@ -82,11 +82,11 @@ entity Job : cuid, managed {
                         on results.job = $self;
 };
 
-@title                    : '{i18n>JobParameter}'
 @assert.unique.semanticKey: [
     job,
     definition
 ]
+@title                    : '{i18n>JobParameter}'
 entity JobParameter : cuid, {
     @title: '{i18n>Job}'
     job        : Association to Job not null;
@@ -98,11 +98,11 @@ entity JobParameter : cuid, {
     value      : String;
 };
 
-@title                    : '{i18n>JobResult}'
 @assert.unique.semanticKey: [
     job,
     name
 ]
+@title                    : '{i18n>JobResult}'
 entity JobResult : cuid, {
     @title: '{i18n>Job}'
     job      : Association to Job not null;
@@ -120,7 +120,7 @@ entity JobResult : cuid, {
     mimeType : String;
 
     @title: '{i18n>Data}'
-    fileName : String;
+    filename : String;
 
     @title: '{i18n>Data}'
     data : LargeBinary;
@@ -139,7 +139,7 @@ entity JobResultMessage : cuid, {
     text     : String not null;
 
     @title: '{i18n>Severity}'
-    severity : Association to MessageSeverity not null default 'info'; // TODO: #info
+    severity : Association to MessageSeverity not null default 'info'; // #info
 };
 
 type JobStatusCode       : String enum {

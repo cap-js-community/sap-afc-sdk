@@ -1,8 +1,12 @@
 "use strict";
 
 const cds = require("@sap/cds");
+const { text } = require("node:stream/consumers");
 
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
+const { JobStatus, JobResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
+
+
 const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
@@ -33,12 +37,12 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     let job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).toBe("running");
+    expect(job.status_code).toBe(JobStatus.running);
 
     await processOutbox("websocket");
     let event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("running");
+    expect(event.status).toBe(JobStatus.running);
 
     ws.close();
   });
@@ -62,8 +66,8 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).not.toBe("running");
-    expect(job.status_code).not.toBe("requested");
+    expect(job.status_code).not.toBe(JobStatus.running);
+    expect(job.status_code).not.toBe(JobStatus.requested);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
     expect(cleanData(jobResult)).toMatchSnapshot();
@@ -95,15 +99,15 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).not.toBe("running");
-    expect(job.status_code).not.toBe("requested");
+    expect(job.status_code).not.toBe(JobStatus.running);
+    expect(job.status_code).not.toBe(JobStatus.requested);
   });
 
-  it("updateJob", async () => {
+  it("updateJob - status", async () => {
     const ws = await connectToWS("job-scheduling");
 
     let message = ws.message("jobStatusChanged");
-    await expect(processingService.updateJob(ID, "running")).resolves.not.toThrow();
+    await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
 
     await processOutbox();
     let event = await message;
@@ -111,20 +115,60 @@ describe("Processing Service", () => {
     expect(event.status).toBe("running");
 
     message = ws.message("jobStatusChanged");
-    await expect(processingService.updateJob(ID, "completed")).resolves.not.toThrow();
+    await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
 
     await processOutbox();
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).toBe("completed");
+    expect(job.status_code).toBe(JobStatus.completed);
     event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("completed");
+    expect(event.status).toBe(JobStatus.completed);
 
-    message = ws.message("jobStatusChanged");
-    await expect(processingService.updateJob(ID, "completed")).resolves.not.toThrow();
+    await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
     await processOutbox();
 
     ws.close();
+  });
+
+  it("updateJob - results", async () => {
+    await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
+    await processOutbox();
+    await expect(
+      processingService.updateJob(ID, JobStatus.completed, [
+        {
+          type: JobResultType.link,
+          name: "Link",
+          link: "https://www.sap.com",
+        },
+        {
+          type: JobResultType.data,
+          name: "Data",
+          filename: "test.txt",
+          mimeType: "text/plain",
+          data: "VGhpcyBpcyBhIHRlc3Q="
+        },
+        {
+          type: JobResultType.message,
+          name: "Result",
+          messages: [
+            {
+              text: "Job completed successfully",
+              severity: MessageSeverity.info,
+            },
+          ],
+        },
+      ]),
+    ).resolves.not.toThrow();
+    await processOutbox();
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.completed);
+    const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const resultIDs = jobResults.map(j => j.ID);
+    expect(cleanData(jobResults)).toMatchSnapshot();
+    const jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
+    expect(cleanData(jobMessages)).toMatchSnapshot();
+    const result = await SELECT.one.from("scheduling.JobResult").columns("data").where({ job_ID: ID, type: JobResultType.data });
+    expect(await text(result.data)).toEqual("This is a test");
   });
 
   it("cancelJob", async () => {
@@ -136,12 +180,12 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).toBe("canceled");
+    expect(job.status_code).toBe(JobStatus.canceled);
 
     await processOutbox("websocket");
     let event = await message;
     expect(event.ID).toBe(ID);
-    expect(event.status).toBe("canceled");
+    expect(event.status).toBe(JobStatus.canceled);
 
     ws.close();
   });
@@ -158,7 +202,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
     });
 
-    it("updateJob", async () => {
+    it("updateJob - status", async () => {
       await expect(processingService.updateJob("XXX")).resolves.not.toThrow();
       await processOutbox("processing");
       let entry = await eventQueueEntry();
@@ -194,6 +238,10 @@ describe("Processing Service", () => {
       expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*requested.*completed/s));
       log.clear();
       await clearEventQueue();
+    });
+
+    it("updateJob - results", async () => {
+
     });
 
     it("cancelJob", async () => {

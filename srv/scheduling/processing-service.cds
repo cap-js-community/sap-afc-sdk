@@ -11,7 +11,7 @@ service SchedulingProcessingService {
         type     :      JobResultTypeCode not null;
         link     :      String;
         mimeType :      String;
-        fileName :      String;
+        filename :      String;
         data     :      LargeBinary;
         messages : many JobResultMessage;
     };

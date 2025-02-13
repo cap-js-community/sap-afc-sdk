@@ -157,8 +157,8 @@ class JobSchedulingError extends BaseError {
     });
   }
 
-  static fileNameMissing() {
-    return new JobSchedulingError("fileNameMissing", {
+  static filenameMissing() {
+    return new JobSchedulingError("filenameMissing", {
       args: [],
       httpStatus: 400,
     });
@@ -213,8 +213,8 @@ class JobSchedulingError extends BaseError {
     });
   }
 
-  static fileNameNotAllowed(resultType) {
-    return new JobSchedulingError("fileNameNotAllowed", {
+  static filenameNotAllowed(resultType) {
+    return new JobSchedulingError("filenameNotAllowed", {
       args: [resultType],
       httpStatus: 400,
     });

@@ -189,11 +189,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="type_code" Type="Edm.String" Nullable="false"/>
         <Property Name="link" Type="Edm.String"/>
         <Property Name="mimeType" Type="Edm.String"/>
-        <Property Name="fileName" Type="Edm.String"/>
-        <Property Name="data" Type="Edm.Binary"/>
+        <Property Name="filename" Type="Edm.String"/>
+        <Property Name="data" Type="Edm.Stream"/>
         <NavigationProperty Name="messages" Type="Collection(SchedulingMonitoringService.JobResultMessage)" Partner="result">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
+        <Property Name="dataLink" Type="Edm.String"/>
       </EntityType>
       <EntityType Name="JobResultMessage">
         <Key>
@@ -512,9 +513,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.Job">
         <Annotation Term="UI.Identification">
           <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
             <Record Type="UI.DataFieldForAction">
               <PropertyValue Property="Label" String="Cancel"/>
               <PropertyValue Property="Action" String="SchedulingMonitoringService.cancel"/>
@@ -775,13 +773,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.IsActionCritical" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter">
-        <Annotation Term="UI.Identification">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
-          </Collection>
-        </Annotation>
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
@@ -837,8 +828,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
-            <PropertyValue Property="TypeName" String="Job"/>
-            <PropertyValue Property="TypeNamePlural" String="Jobs"/>
+            <PropertyValue Property="TypeName" String="Job Parameter"/>
+            <PropertyValue Property="TypeNamePlural" String="JobParameters"/>
           </Record>
         </Annotation>
         <Annotation Term="UI.PresentationVariant">
@@ -911,13 +902,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Value"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult">
-        <Annotation Term="UI.Identification">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
-          </Collection>
-        </Annotation>
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
@@ -958,8 +942,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                     </If>
                   </Annotation>
                 </Record>
-                <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="fileName"/>
+                <Record Type="UI.DataFieldWithUrl">
+                  <PropertyValue Property="Value" Path="filename"/>
+                  <PropertyValue Property="Url" Path="dataLink"/>
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
@@ -1036,8 +1021,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 </If>
               </Annotation>
             </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="fileName"/>
+            <Record Type="UI.DataFieldWithUrl">
+              <PropertyValue Property="Value" Path="filename"/>
+              <PropertyValue Property="Url" Path="dataLink"/>
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
@@ -1149,25 +1135,29 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Link"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/mimeType">
+        <Annotation Term="Core.IsMediaType" Bool="true"/>
         <Annotation Term="Common.Label" String="Mime Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/fileName">
+      <Annotations Target="SchedulingMonitoringService.JobResult/filename">
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/data">
+        <Annotation Term="Core.ContentDisposition">
+          <Record Type="Core.ContentDispositionType">
+            <PropertyValue Property="Filename" Path="filename"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Core.MediaType" Path="mimeType"/>
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/messages">
         <Annotation Term="Common.Label" String="Messages"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/dataLink">
+        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage">
-        <Annotation Term="UI.Identification">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
-          </Collection>
-        </Annotation>
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">

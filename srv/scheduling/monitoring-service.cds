@@ -31,4 +31,13 @@ service SchedulingMonitoringService {
     entity DataType @readonly               as projection on scheduling.DataType;
     entity MappingType @readonly            as projection on scheduling.MappingType;
     entity MessageSeverity @readonly        as projection on scheduling.MessageSeverity;
-}
+};
+
+annotate SchedulingMonitoringService.JobResult {
+    mimeType @Core.IsMediaType;
+    data @Core.ContentDisposition.Filename: filename @Core.MediaType: mimeType;
+};
+
+extend SchedulingMonitoringService.JobResult with columns {
+    case type.code when 'data' then '/srv/job-scheduling/monitoring/JobResult(' || ID || ')/data' else null end as dataLink: String
+};
