@@ -9,8 +9,8 @@ const JobSchedulingError = require("./common/JobSchedulingError");
 
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
-    const { Job, JobParameter } = this.entities;
-    const { JobDefinition: DBJobDefinition, Job: DBJob } = this.entities("scheduling");
+    const { Job, JobParameter, JobResult } = this.entities;
+    const { JobDefinition: DBJobDefinition, Job: DBJob, JobResult: DBJobResult } = this.entities("scheduling");
 
     this.before("READ", "*", (req) => {
       delete req.query.SELECT.where;
@@ -57,6 +57,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
       if (!req.data.referenceID) {
         return req.reject(JobSchedulingError.referenceIDMissing());
+      }
+
+      // Results
+      if (req.data.results) {
+        return req.reject(JobSchedulingError.jobResultsReadOnly());
       }
 
       // Header
@@ -218,6 +223,23 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": job.ID,
         },
       );
+    });
+
+    // TODO: Document how to customize...
+    // TODO: Implement with CDS 8.8
+    this.on(JobResult.actions.data, JobResult, async (req) => {
+      const ID = req.params[0];
+      const jobResult = await SELECT.one(JobResult).where({ ID });
+      if (!jobResult) {
+        return req.reject(JobSchedulingError.jobResultNotFound(ID));
+      }
+      const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
+      return {
+        value: data,
+        $mediaContentType: jobResult.mimeType,
+        $mediaContentDispositionFilename: jobResult.filename,
+        $mediaContentDispositionType: "attachment",
+      };
     });
 
     return super.init();

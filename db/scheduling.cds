@@ -160,7 +160,7 @@ entity JobStatus : CodeList {
 
 type ParameterTypeCode   : String enum {
     readOnlyValue;
-    writeableValue;
+    writableValue;
     mapping;
 };
 
@@ -215,7 +215,7 @@ entity MappingType : CodeList {
 type JobResultTypeCode   : String enum {
     link;
     data;
-    messages;
+    message;
 };
 
 entity JobResultType : CodeList {

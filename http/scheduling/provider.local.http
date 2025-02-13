@@ -14,6 +14,18 @@ Authorization: Basic alice alice
 GET http://localhost:4004/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
 Authorization: Basic alice alice
 
+### Job Results
+GET http://localhost:4004/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+Authorization: Basic alice alice
+
+### Job Result Messages
+GET http://localhost:4004/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+Authorization: Basic alice alice
+
+### Job Result Message Data
+GET http://localhost:4004/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+Authorization: Basic alice alice
+
 ### Create Job
 POST http://localhost:4004/api/job-scheduling/v1/Job
 Authorization: Basic alice alice

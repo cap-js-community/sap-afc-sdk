@@ -61,6 +61,14 @@ exports[`API GET Job 1`] = `
     "status": "running",
     "version": "1",
   },
+  {
+    "link": "https://sap.com",
+    "name": "JOB_3",
+    "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+    "startDateTime": "2025-01-02T12:00:00Z",
+    "status": "completedWithError",
+    "version": "1",
+  },
 ]
 `;
 
@@ -87,6 +95,11 @@ exports[`API GET Job Definitions 1`] = `
     "name": "JOB_2",
     "version": "1",
   },
+  {
+    "description": "Job Definition 3",
+    "name": "JOB_3",
+    "version": "1",
+  },
 ]
 `;
 
@@ -98,7 +111,7 @@ exports[`API GET Job Definitions 2`] = `
 }
 `;
 
-exports[`API GET Job Parameter Definitons 1`] = `
+exports[`API GET Job Parameter Definitions 1`] = `
 [
   {
     "dataType": "string",
@@ -170,10 +183,6 @@ exports[`API GET Job Parameters 1`] = `
   {
     "name": "D",
     "value": "12",
-  },
-  {
-    "name": "E",
-    "value": "2025-01-02T00:00:00Z",
   },
   {
     "name": "E",

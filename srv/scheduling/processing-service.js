@@ -4,7 +4,7 @@ const cds = require("@sap/cds");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 
-const { JobStatus } = require("./common/codelist");
+const { JobStatus, JobResultType, MessageSeverity } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
 
 const STATUS_TRANSITIONS = {
@@ -55,7 +55,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     });
 
     this.on(updateJob, async (req, next) => {
-      await this.processJobUpdate(req, req.data.status);
+      await this.processJobUpdate(req, req.data.status, req.data.results);
     });
 
     this.on(cancelJob, async (req, next) => {
@@ -87,12 +87,61 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       }
     }
     const ID = req.data.ID;
+    const results = [];
+    switch (processingStatus) {
+      case JobStatus.completed:
+        results.push(
+          {
+            type: JobResultType.link,
+            name: "Link",
+            link: "https://www.sap.com",
+          },
+          {
+            type: JobResultType.message,
+            name: "Result",
+            messages: [
+              {
+                text: "Job completed successfully",
+                severity: MessageSeverity.info,
+              },
+            ],
+          },
+        );
+        break;
+      case JobStatus.completedWithError:
+        results.push({
+          type: JobResultType.message,
+          name: "Result",
+          messages: [
+            {
+              text: "An error occurred during job processing",
+              severity: MessageSeverity.error,
+            },
+          ],
+        });
+        break;
+      case JobStatus.completedWithWarning:
+        results.push({
+          type: JobResultType.message,
+          name: "Result",
+          messages: [
+            {
+              text: "A warning occurred during job processing",
+              severity: MessageSeverity.warning,
+            },
+          ],
+        });
+        break;
+      case JobStatus.failed:
+        break;
+    }
     const srv = cds.outboxed(this);
     return await srv.send(
       "updateJob",
       {
         ID,
         status: processingStatus,
+        results,
       },
       {
         "x-eventQueue-referenceEntityKey": ID,
@@ -101,8 +150,8 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     );
   }
 
-  async processJobUpdate(req, status) {
-    const { Job } = this.entities("scheduling");
+  async processJobUpdate(req, status, results) {
+    const { Job, JobResult } = this.entities("scheduling");
     const job = req.job;
     if (!status) {
       return req.reject(JobSchedulingError.statusValueMissing());
@@ -113,7 +162,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (req.job.status_code === status) {
       return;
     }
-    if (!(await this.checkStatusTransition(req.job.status_code, status))) {
+    if (!(await this.checkStatusTransition(req, req.job.status_code, status))) {
       return req.reject(JobSchedulingError.statusTransitionNotAllowed(req.job.status_code, status));
     }
     await UPDATE.entity(Job)
@@ -121,7 +170,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         status_code: status,
       })
       .where({ ID: job.ID });
-
+    if (results && results.length > 0) {
+      const insertResults = await this.checkJobResult(req, results);
+      await INSERT.into(JobResult).entries(insertResults);
+    }
     const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
     await schedulingWebsocketService.tx(req).emit(
       "jobStatusChanged",
@@ -135,8 +187,101 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     );
   }
 
-  async checkStatusTransition(statusBefore, statusAfter) {
+  async checkStatusTransition(req, statusBefore, statusAfter) {
     return this.statusTransitions[statusBefore].includes(statusAfter);
+  }
+
+  async checkJobResult(req, result) {
+    const job = req.job;
+    return (result || []).map((entry) => {
+      if (!entry.name) {
+        return req.reject(JobSchedulingError.resultNameMissing());
+      }
+      if (!entry.type) {
+        return req.reject(JobSchedulingError.resultTypeMissing());
+      }
+      switch (entry.type) {
+        case JobResultType.link:
+          if (!entry.link) {
+            return req.reject(JobSchedulingError.linkMissing());
+          }
+          if (entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          }
+          if (entry.fileName) {
+            return req.reject(JobSchedulingError.fileNameNotAllowed(entry.type));
+          }
+          if (entry.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          }
+          if (entry.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          }
+          break;
+        case JobResultType.data:
+          if (!entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeMissing());
+          }
+          if (!entry.fileName) {
+            return req.reject(JobSchedulingError.fileNameMissing());
+          }
+          if (!entry.data) {
+            return req.reject(JobSchedulingError.dataMissing());
+          }
+          if (entry.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          }
+          if (entry.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          }
+          break;
+        case JobResultType.message:
+          if (!(entry?.messages.length > 0)) {
+            return req.reject(JobSchedulingError.messagesMissing());
+          }
+          for (const message of entry.messages) {
+            if (!message.text) {
+              return req.reject(JobSchedulingError.textMissing());
+            }
+            if (!message.severity) {
+              return req.reject(JobSchedulingError.severityMissing());
+            }
+            if (!MessageSeverity[message.severity]) {
+              return req.reject(JobSchedulingError.invalidMessageSeverity(message.severity));
+            }
+          }
+          if (entry.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          }
+          if (entry.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          }
+          if (entry.fileName) {
+            return req.reject(JobSchedulingError.fileNameNotAllowed(entry.type));
+          }
+          if (entry.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          }
+          break;
+        default:
+          return req.reject(JobSchedulingError.invalidResultType(entry.type));
+      }
+      return {
+        job_ID: job.ID,
+        name: entry.name,
+        type_code: entry.type,
+        link: entry.link,
+        mimeType: entry.mimeType,
+        fileName: entry.fileName,
+        data: entry.data,
+        messages: (entry.messages || []).map((message) => {
+          return {
+            text: message.text,
+            severity_code: message.severity,
+          };
+        }),
+      };
+    });
   }
 
   /*async reportStatus(req, status) {

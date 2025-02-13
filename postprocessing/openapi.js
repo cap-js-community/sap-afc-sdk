@@ -58,6 +58,7 @@ function processSchedulingProviderService(file) {
   delete input.components.schemas["SchedulingProviderService.Job-create"].properties.results;
 
   delete input.paths["/JobResult"];
+  delete input.paths["/JobResult/{ID}/SchedulingProviderService.data"];
   input.paths["/JobResult/{ID}/data"] = {
     parameters: [
       {

@@ -13,7 +13,7 @@ module.exports = {
   },
   ParameterType: {
     readOnlyValue: "readOnlyValue",
-    writeableValue: "writeableValue",
+    writableValue: "writableValue",
     mapping: "mapping",
   },
   DataType: {
@@ -46,5 +46,15 @@ module.exports = {
     customField1: "customField1",
     customField2: "customField2",
     customField3: "customField3",
+  },
+  JobResultType: {
+    link: "link",
+    data: "data",
+    message: "message",
+  },
+  MessageSeverity: {
+    error: "error",
+    warning: "warning",
+    info: "info",
   },
 };

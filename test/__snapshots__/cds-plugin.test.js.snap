@@ -1,5 +1,89 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CDS Plugin GET App Config 1`] = `
+{
+  "services": {
+    "ClientSideTargetResolution": {
+      "adapter": {
+        "config": {
+          "inbounds": {
+            "JobMonitor": {
+              "action": "monitor",
+              "resolutionResult": {
+                "additionalInformation": "SAPUI5.Component=scheduling.monitoring.job",
+                "applicationType": "SAPUI5",
+                "url": "/custom/./scheduling.monitoring.job/webapp",
+              },
+              "semanticObject": "Job",
+              "signature": {
+                "additionalParameters": "allowed",
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID",
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID",
+                  },
+                },
+              },
+              "title": "Monitor Scheduling Jobs",
+            },
+          },
+        },
+      },
+    },
+    "LaunchPage": {
+      "adapter": {
+        "config": {
+          "catalogs": [],
+          "groups": [
+            {
+              "id": "Scheduling",
+              "isGroupLocked": false,
+              "isPreset": true,
+              "isVisible": true,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "properties": {
+                    "targetURL": "#Job-monitor",
+                    "title": "Monitor Scheduling Jobs",
+                  },
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                },
+              ],
+              "title": "Scheduling",
+            },
+            {
+              "id": "Scheduling",
+              "isGroupLocked": false,
+              "isPreset": true,
+              "isVisible": true,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "properties": {
+                    "targetURL": "#Job-monitor",
+                    "title": "Monitor Scheduling Jobs",
+                  },
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                },
+              ],
+              "title": "Scheduling",
+            },
+          ],
+        },
+      },
+    },
+    "NavTargetResolution": {
+      "config": {
+        "enableClientSideTargetResolution": true,
+      },
+    },
+  },
+}
+`;
+
 exports[`CDS Plugin GET Feature Toggles 1`] = `
 {
   "eventQueue/active": {

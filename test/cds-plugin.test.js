@@ -11,6 +11,7 @@ const { GET, POST, axios, test } = cds.test(__dirname + "/..");
 process.env.PORT = 0; // Random
 
 cds.env.requires["sap-afc-sdk"].broker = true;
+cds.env.requires["sap-afc-sdk"].ui.path = "/custom";
 
 describe("CDS Plugin", () => {
   beforeEach(async () => {
@@ -25,6 +26,11 @@ describe("CDS Plugin", () => {
     expect(log.output).toEqual(
       expect.stringMatching(/broker.json not found at '.*srv\/broker.json'. Call 'afc add broker'/s),
     );
+  });
+
+  it("GET App Config", async () => {
+    const response = await GET("/appconfig/fioriSandboxConfig.json");
+    expect(response.data).toMatchSnapshot();
   });
 
   it("GET Feature Toggles", async () => {

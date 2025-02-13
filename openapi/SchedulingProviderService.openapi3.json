@@ -1051,7 +1051,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["readOnlyValue", "writeableValue", "mapping"]
+            "enum": ["readOnlyValue", "writableValue", "mapping"]
           },
           "dataType": {
             "type": "string",
@@ -1109,7 +1109,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["link", "data", "messages"]
+            "enum": ["link", "data", "message"]
           },
           "name": {
             "type": "string"

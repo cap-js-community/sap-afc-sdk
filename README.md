@@ -255,7 +255,7 @@ As part of the custom scheduling process service implementation, the following o
   - A job status update is requested
   - Implement your custom logic, how the Job status should be updated
   - Job data can be retrieved via `req.job`
-  - Job status transition is validated via `async checkStatusTransition(statusBefore, statusAfter)`
+  - Job status transition is validated via `async checkStatusTransition(req, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
   - Call `await next()` to perform default implementation (update status to requested status)
@@ -398,15 +398,21 @@ Add IAS based authentication:
 
 - Terminal: `cds add ias`
 
+### Advanced Setup
+
+#### Work Zone (Standard)
+
+Add Work Zone integration to display UIs in a launchpad:
+
+- Terminal: `cds add workzone-standard`
+
 #### HTML5 Repo
 
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
 - Terminal: `cds add html5-repo`
-
-### Additional Setup
+- Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
 
 #### Redis
 
@@ -427,7 +433,12 @@ toggles.
 
 See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
 
-#### MTX Tool (CF only)
+#### Multi-tenancy
+
+The project can be enabled for multi-tenancy by following the guide:
+https://cap.cloud.sap/docs/guides/multitenancy/#enable-multitenancy
+
+##### MTX Tool (CF only)
 
 The MTX Tool is used to manage the application lifecycle. It can be used to manage the application in Cloud Foundry.
 Details can be found at https://github.com/cap-js-community/mtx-tool.

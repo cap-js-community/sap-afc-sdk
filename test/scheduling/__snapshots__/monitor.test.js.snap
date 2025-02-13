@@ -426,6 +426,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Parameter Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/type_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="type/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
         <Annotation Term="Common.Label" String="Parameter Type"/>
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
@@ -449,6 +453,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Data Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/dataType_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="dataType/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
         <Annotation Term="Common.Label" String="Data Type"/>
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
@@ -472,6 +480,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Mapping Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/mappingType_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="mappingType/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
         <Annotation Term="Common.Label" String="Mapping Type"/>
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
@@ -511,7 +523,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.FieldGroup" Qualifier="General">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
               <Collection>
@@ -541,13 +553,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </PropertyValue>
           </Record>
         </Annotation>
-        <Annotation Term="UI.Facets">
+        <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="ID" String="General"/>
-              <PropertyValue Property="Label" String="General Information"/>
-              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
+              <PropertyValue Property="Label" String="Details"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
             </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.Facets">
+          <Collection>
             <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Parameters"/>
               <PropertyValue Property="Target" AnnotationPath="parameters/@UI.LineItem"/>
@@ -565,6 +580,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="definition_name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="version"/>
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="status_code"/>
@@ -764,7 +782,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.FieldGroup" Qualifier="General">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
               <Collection>
@@ -790,20 +808,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </PropertyValue>
           </Record>
         </Annotation>
-        <Annotation Term="UI.Facets">
+        <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="ID" String="General"/>
-              <PropertyValue Property="Label" String="General Information"/>
-              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
+              <PropertyValue Property="Label" String="Details"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
             </Record>
           </Collection>
         </Annotation>
         <Annotation Term="UI.LineItem">
           <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="definition_name"/>
             </Record>
@@ -832,7 +846,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
+                  <PropertyValue Property="Property" PropertyPath="definition/name"/>
                   <PropertyValue Property="Descending" Bool="true"/>
                 </Record>
               </Collection>
@@ -841,7 +855,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="UI.SelectionFields">
           <Collection>
-            <PropertyPath>definition_name</PropertyPath>
+            <PropertyPath>definition/name</PropertyPath>
           </Collection>
         </Annotation>
         <Annotation Term="Common.Label" String="Job Parameter"/>
@@ -852,7 +866,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
+                  <PropertyValue Property="Property" PropertyPath="definition/name"/>
                   <PropertyValue Property="Descending" Bool="true"/>
                 </Record>
               </Collection>
@@ -904,7 +918,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.FieldGroup" Qualifier="General">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
               <Collection>
@@ -917,51 +931,123 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="type_code"/>
                 </Record>
-                <Record Type="UI.DataField">
+                <Record Type="UI.DataFieldWithUrl">
                   <PropertyValue Property="Value" Path="link"/>
+                  <PropertyValue Property="Url" Path="link"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>link</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
                 </Record>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="mimeType"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>data</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
                 </Record>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="fileName"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>data</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
                 </Record>
               </Collection>
             </PropertyValue>
           </Record>
         </Annotation>
+        <Annotation Term="UI.HeaderFacets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="Details"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+          </Collection>
+        </Annotation>
         <Annotation Term="UI.Facets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="ID" String="General"/>
-              <PropertyValue Property="Label" String="General Information"/>
-              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
-            </Record>
-            <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Messages"/>
               <PropertyValue Property="Target" AnnotationPath="messages/@UI.LineItem"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>message</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
             </Record>
           </Collection>
         </Annotation>
         <Annotation Term="UI.LineItem">
           <Collection>
             <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
-            <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="name"/>
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="type_code"/>
             </Record>
-            <Record Type="UI.DataField">
+            <Record Type="UI.DataFieldWithUrl">
               <PropertyValue Property="Value" Path="link"/>
+              <PropertyValue Property="Url" Path="link"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>link</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="mimeType"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>data</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="fileName"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>data</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
             </Record>
           </Collection>
         </Annotation>
@@ -1035,6 +1121,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/type_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="type/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
         <Annotation Term="Common.Label" String="Type"/>
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
@@ -1055,6 +1145,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/link">
+        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
         <Annotation Term="Common.Label" String="Link"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/mimeType">
@@ -1077,7 +1168,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.FieldGroup" Qualifier="General">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
               <Collection>
@@ -1094,20 +1185,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </PropertyValue>
           </Record>
         </Annotation>
-        <Annotation Term="UI.Facets">
+        <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="ID" String="General"/>
-              <PropertyValue Property="Label" String="General Information"/>
-              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
+              <PropertyValue Property="Label" String="Details"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
             </Record>
           </Collection>
         </Annotation>
         <Annotation Term="UI.LineItem">
           <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="text"/>
             </Record>
@@ -1186,6 +1273,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Severity"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/severity_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="severity/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
         <Annotation Term="Common.Label" String="Severity"/>
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
@@ -1321,8 +1412,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="data"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="messages"/>
-              <PropertyValue Property="Value" String="messages"/>
+              <Annotation Term="Core.SymbolicName" String="message"/>
+              <PropertyValue Property="Value" String="message"/>
             </Record>
           </Collection>
         </Annotation>
@@ -1368,8 +1459,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="readOnlyValue"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="writeableValue"/>
-              <PropertyValue Property="Value" String="writeableValue"/>
+              <Annotation Term="Core.SymbolicName" String="writableValue"/>
+              <PropertyValue Property="Value" String="writableValue"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="mapping"/>
@@ -1685,8 +1776,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="data"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="messages"/>
-              <PropertyValue Property="Value" String="messages"/>
+              <Annotation Term="Core.SymbolicName" String="message"/>
+              <PropertyValue Property="Value" String="message"/>
             </Record>
           </Collection>
         </Annotation>
@@ -1709,8 +1800,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="readOnlyValue"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="writeableValue"/>
-              <PropertyValue Property="Value" String="writeableValue"/>
+              <Annotation Term="Core.SymbolicName" String="writableValue"/>
+              <PropertyValue Property="Value" String="writableValue"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="mapping"/>
@@ -1955,7 +2046,7 @@ exports[`Monitoring Service Get Codelists 2`] = `
       "name": "Read-Only Value",
     },
     {
-      "code": "writeableValue",
+      "code": "writableValue",
       "descr": "Writable Value",
       "name": "Writable Value",
     },
@@ -2232,6 +2323,63 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
       ],
       "version": "1",
     },
+    {
+      "description": "Job Definition 3",
+      "name": "JOB_3",
+      "parameters": [
+        {
+          "dataType_code": "string",
+          "description": "Parameter A",
+          "job_name": "JOB_3",
+          "mappingType_code": null,
+          "name": "A",
+          "required": true,
+          "type_code": "writableValue",
+          "value": "ABC",
+        },
+        {
+          "dataType_code": "number",
+          "description": "Parameter B",
+          "job_name": "JOB_3",
+          "mappingType_code": null,
+          "name": "B",
+          "required": false,
+          "type_code": "readOnlyValue",
+          "value": "23",
+        },
+        {
+          "dataType_code": "boolean",
+          "description": "Parameter C",
+          "job_name": "JOB_3",
+          "mappingType_code": "testRun",
+          "name": "C",
+          "required": true,
+          "type_code": "mapping",
+          "value": "0",
+        },
+        {
+          "dataType_code": "number",
+          "description": "Parameter D",
+          "job_name": "JOB_3",
+          "mappingType_code": null,
+          "name": "D",
+          "required": false,
+          "type_code": "writableValue",
+          "value": "24",
+        },
+        {
+          "dataType_code": "datetime",
+          "description": "Parameter E",
+          "job_name": "JOB_3",
+          "mappingType_code": null,
+          "name": "E",
+          "required": false,
+          "type_code": "writableValue",
+          "value": "2025-01-01T00:00:00Z",
+        },
+      ],
+      "version": "1",
+    },
   ],
 }
 `;
@@ -2369,37 +2517,26 @@ exports[`Monitoring Service Get Jobs 1`] = `
         {
           "definition_job_name": "JOB_1",
           "definition_name": "A",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "ABC",
         },
         {
           "definition_job_name": "JOB_1",
           "definition_name": "B",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "11",
         },
         {
           "definition_job_name": "JOB_1",
           "definition_name": "C",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "true",
         },
         {
           "definition_job_name": "JOB_1",
           "definition_name": "D",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "12",
         },
         {
           "definition_job_name": "JOB_1",
           "definition_name": "E",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
-          "value": "2025-01-02T00:00:00Z",
-        },
-        {
-          "definition_job_name": "JOB_2",
-          "definition_name": "E",
-          "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "2025-01-02T00:00:00Z",
         },
       ],
@@ -2415,31 +2552,67 @@ exports[`Monitoring Service Get Jobs 1`] = `
         {
           "definition_job_name": "JOB_2",
           "definition_name": "A",
-          "job_ID": "4a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "ABC",
         },
         {
           "definition_job_name": "JOB_2",
           "definition_name": "B",
-          "job_ID": "4a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "13",
         },
         {
           "definition_job_name": "JOB_2",
           "definition_name": "C",
-          "job_ID": "4a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "false",
         },
         {
           "definition_job_name": "JOB_2",
           "definition_name": "D",
-          "job_ID": "4a89dfec-59f9-4a91-90fe-3c7ca7407103",
           "value": "14",
+        },
+        {
+          "definition_job_name": "JOB_2",
+          "definition_name": "E",
+          "value": "2025-01-02T00:00:00Z",
         },
       ],
       "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
       "startDateTime": "2025-01-02T12:00:00Z",
       "status_code": "running",
+      "version": "1",
+    },
+    {
+      "definition_name": "JOB_3",
+      "link": "https://sap.com",
+      "parameters": [
+        {
+          "definition_job_name": "JOB_3",
+          "definition_name": "A",
+          "value": "ABC",
+        },
+        {
+          "definition_job_name": "JOB_3",
+          "definition_name": "B",
+          "value": "13",
+        },
+        {
+          "definition_job_name": "JOB_3",
+          "definition_name": "C",
+          "value": "false",
+        },
+        {
+          "definition_job_name": "JOB_3",
+          "definition_name": "D",
+          "value": "15",
+        },
+        {
+          "definition_job_name": "JOB_3",
+          "definition_name": "E",
+          "value": "2025-01-02T00:00:00Z",
+        },
+      ],
+      "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+      "startDateTime": "2025-01-02T12:00:00Z",
+      "status_code": "completedWithError",
       "version": "1",
     },
   ],
@@ -2455,37 +2628,26 @@ exports[`Monitoring Service Get Jobs 2`] = `
     {
       "definition_job_name": "JOB_1",
       "definition_name": "A",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
       "value": "ABC",
     },
     {
       "definition_job_name": "JOB_1",
       "definition_name": "B",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
       "value": "11",
     },
     {
       "definition_job_name": "JOB_1",
       "definition_name": "C",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
       "value": "true",
     },
     {
       "definition_job_name": "JOB_1",
       "definition_name": "D",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
       "value": "12",
     },
     {
       "definition_job_name": "JOB_1",
       "definition_name": "E",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
-      "value": "2025-01-02T00:00:00Z",
-    },
-    {
-      "definition_job_name": "JOB_2",
-      "definition_name": "E",
-      "job_ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
       "value": "2025-01-02T00:00:00Z",
     },
   ],

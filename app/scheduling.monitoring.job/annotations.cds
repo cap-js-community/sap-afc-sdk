@@ -11,7 +11,7 @@ annotate service.Job with @(
             Criticality       : #Negative
         }
     ],
-    UI.FieldGroup #General: {
+    UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
             {
@@ -45,13 +45,12 @@ annotate service.Job with @(
             },
         ],
     },
+    UI.HeaderFacets       : [{
+        $Type : 'UI.ReferenceFacet',
+        Label : '{i18n>Details}',
+        Target: '@UI.FieldGroup#Details',
+    }, ],
     UI.Facets             : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'General',
-            Label : '{i18n>GeneralInformation}',
-            Target: '@UI.FieldGroup#General',
-        },
         {
             $Type : 'UI.ReferenceFacet',
             Label : '{i18n>Parameters}',
@@ -71,6 +70,10 @@ annotate service.Job with @(
         {
             $Type: 'UI.DataField',
             Value: definition_name,
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: version,
         },
         {
             $Type: 'UI.DataField',
@@ -115,7 +118,7 @@ annotate service.Job actions {
 
 annotate service.JobParameter with @(
     UI.Identification     : [{Value: ID}, ],
-    UI.FieldGroup #General: {
+    UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
             {
@@ -144,17 +147,12 @@ annotate service.JobParameter with @(
             },
         ],
     },
-    UI.Facets             : [{
+    UI.HeaderFacets       : [{
         $Type : 'UI.ReferenceFacet',
-        ID    : 'General',
-        Label : '{i18n>GeneralInformation}',
-        Target: '@UI.FieldGroup#General',
+        Label : '{i18n>Details}',
+        Target: '@UI.FieldGroup#Details',
     }, ],
     UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: ID,
-        },
         {
             $Type: 'UI.DataField',
             Value: definition_name,
@@ -182,15 +180,21 @@ annotate service.JobParameter with @(
     },
     UI.PresentationVariant: {SortOrder: [{
         $Type     : 'Common.SortOrderType',
-        Property  : definition_name,
+        Property  : definition.name,
         Descending: true
     }]},
-    UI.SelectionFields    : [definition_name],
+    UI.SelectionFields    : [definition.name],
 );
+
+annotate service.JobParameterDefinition {
+    type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
+    dataType     @Common.ValueListWithFixedValues: true  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
+    mappingType  @Common.ValueListWithFixedValues: true  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
+};
 
 annotate service.JobResult with @(
     UI.Identification     : [{Value: ID}, ],
-    UI.FieldGroup #General: {
+    UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
             {
@@ -206,37 +210,35 @@ annotate service.JobResult with @(
                 Value: type_code,
             },
             {
-                $Type: 'UI.DataField',
+                $Type: 'UI.DataFieldWithUrl',
                 Value: link,
+                Url  : link,
+                ![@UI.Hidden] : (type.code != 'link' ? true : false)
             },
             {
                 $Type: 'UI.DataField',
                 Value: mimeType,
+                ![@UI.Hidden] : (type.code != 'data' ? true : false)
             },
             {
                 $Type: 'UI.DataField',
                 Value: fileName,
+                ![@UI.Hidden] : (type.code != 'data' ? true : false)
             }
         ],
     },
-    UI.Facets             : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'General',
-            Label : '{i18n>GeneralInformation}',
-            Target: '@UI.FieldGroup#General',
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>Messages}',
-            Target: 'messages/@UI.LineItem'
-        }
-    ],
+    UI.HeaderFacets       : [{
+        $Type : 'UI.ReferenceFacet',
+        Label : '{i18n>Details}',
+        Target: '@UI.FieldGroup#Details',
+    }, ],
+    UI.Facets             : [{
+        $Type         : 'UI.ReferenceFacet',
+        Label         : '{i18n>Messages}',
+        Target        : 'messages/@UI.LineItem',
+        ![@UI.Hidden] : (type.code != 'message' ? true : false)
+    }],
     UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: ID,
-        },
         {
             $Type: 'UI.DataField',
             Value: name,
@@ -246,16 +248,20 @@ annotate service.JobResult with @(
             Value: type_code,
         },
         {
-            $Type: 'UI.DataField',
+            $Type: 'UI.DataFieldWithUrl',
             Value: link,
+            Url  : link,
+            ![@UI.Hidden] : (type.code != 'link' ? true : false)
         },
         {
             $Type: 'UI.DataField',
             Value: mimeType,
+            ![@UI.Hidden] : (type.code != 'data' ? true : false)
         },
         {
             $Type: 'UI.DataField',
             Value: fileName,
+            ![@UI.Hidden] : (type.code != 'data' ? true : false)
         }
     ],
     UI.HeaderInfo         : {
@@ -270,9 +276,14 @@ annotate service.JobResult with @(
     UI.SelectionFields    : [ID],
 );
 
+annotate service.JobResult {
+    type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
+    link  @HTML5.LinkTarget               : '_blank';
+};
+
 annotate service.JobResultMessage with @(
     UI.Identification     : [{Value: ID}, ],
-    UI.FieldGroup #General: {
+    UI.FieldGroup #Details: {
         $Type: 'UI.FieldGroupType',
         Data : [
             {
@@ -289,18 +300,12 @@ annotate service.JobResultMessage with @(
             },
         ],
     },
-    UI.Facets             : [{
+    UI.HeaderFacets       : [{
         $Type : 'UI.ReferenceFacet',
-        ID    : 'General',
-        Label : '{i18n>GeneralInformation}',
-        Target: '@UI.FieldGroup#General',
+        Label : '{i18n>Details}',
+        Target: '@UI.FieldGroup#Details',
     }, ],
     UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: ID,
-
-        },
         {
             $Type: 'UI.DataField',
             Value: text,
@@ -321,3 +326,7 @@ annotate service.JobResultMessage with @(
     }]},
     UI.SelectionFields    : [ID],
 );
+
+annotate service.JobResultMessage {
+    severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
+};

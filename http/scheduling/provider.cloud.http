@@ -17,6 +17,18 @@ Authorization: Bearer {{token}}
 GET https://{{hostname}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
 Authorization: Bearer {{token}}
 
+### Job Results
+GET http://{{hostname}}/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+Authorization: Bearer {{token}}
+
+### Job Result Messages
+GET http://{{hostname}}/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+Authorization: Bearer {{token}}
+
+### Job Result Message Data
+GET http://{{hostname}}/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+Authorization: Bearer {{token}}
+
 ### Create Job
 POST https://{{hostname}}/api/job-scheduling/v1/Job
 Authorization: Bearer {{token}}

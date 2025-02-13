@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 
 const eventQueue = require("@cap-js-community/event-queue");
 
-const FIELDS_TO_CLEAN = ["ID", "jobID", "createdBy", "createdAt", "modifiedBy", "modifiedAt"];
+const FIELDS_TO_CLEAN = ["ID", "jobID", "job_ID", "createdBy", "createdAt", "modifiedBy", "modifiedAt"];
 
 const ALICE = `Basic ${Buffer.from("alice:", "utf8").toString("base64")}`;
 const ZEUS = `Basic ${Buffer.from("zeus:", "utf8").toString("base64")}`;

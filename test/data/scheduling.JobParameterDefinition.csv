@@ -9,3 +9,8 @@ B;JOB_2;Parameter B;readOnlyValue;number;23;false;
 C;JOB_2;Parameter C;mapping;boolean;false;true;testRun
 D;JOB_2;Parameter D;writableValue;number;24;false;
 E;JOB_2;Parameter E;writableValue;datetime;2025-01-01T00:00:00Z;false;
+A;JOB_3;Parameter A;writableValue;string;ABC;true;
+B;JOB_3;Parameter B;readOnlyValue;number;23;false;
+C;JOB_3;Parameter C;mapping;boolean;false;true;testRun
+D;JOB_3;Parameter D;writableValue;number;24;false;
+E;JOB_3;Parameter E;writableValue;datetime;2025-01-01T00:00:00Z;false;

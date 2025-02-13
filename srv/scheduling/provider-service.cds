@@ -70,7 +70,7 @@ service SchedulingProviderService {
                 *,
                 parameters : redirected to JobParameter
                 on parameters.jobID = $self.ID,
-                @readonly
+                // @readonly
                 results    : redirected to JobResult
                 on results.jobID = $self.ID,
         }
@@ -102,13 +102,17 @@ service SchedulingProviderService {
                 job.ID    as jobID : String(500) @readonly,
                 type.code as type,
                 *,
-                @readonly
+                // @readonly
                 messages           : redirected to JobResultMessage
                 on messages.resultID = $self.ID,
         }
         excluding {
             job,
             type,
+            data,
+        }
+        actions {
+            function data() returns LargeBinary;
         };
 
     @title: null

@@ -59,6 +59,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static jobResultsReadOnly() {
+    return new JobSchedulingError("jobResultsReadOnly", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
   static jobParameterNameMissing() {
     return new JobSchedulingError("jobParameterNameMissing", {
       args: [],
@@ -104,6 +111,125 @@ class JobSchedulingError extends BaseError {
   static jobCannotBeCanceled(status) {
     return new JobSchedulingError("jobCannotBeCanceled", {
       args: [status],
+      httpStatus: 400,
+    });
+  }
+
+  static jobResultNotFound(ID) {
+    return new JobSchedulingError("jobResultNotFound", {
+      args: [ID],
+      httpStatus: 404,
+    });
+  }
+
+  static resultNameMissing() {
+    return new JobSchedulingError("resultNameMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static resultTypeMissing() {
+    return new JobSchedulingError("resultTypeMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static invalidResultType(resultType) {
+    return new JobSchedulingError("invalidResultType", {
+      args: [resultType],
+      httpStatus: 400,
+    });
+  }
+
+  static linkMissing() {
+    return new JobSchedulingError("linkMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static mimeTypeMissing() {
+    return new JobSchedulingError("mimeTypeMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static fileNameMissing() {
+    return new JobSchedulingError("fileNameMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static dataMissing() {
+    return new JobSchedulingError("dataMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static messagesMissing() {
+    return new JobSchedulingError("messagesMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static textMissing() {
+    return new JobSchedulingError("textMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static severityMissing() {
+    return new JobSchedulingError("severityMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static invalidMessageSeverity(messageSeverity) {
+    return new JobSchedulingError("invalidMessageSeverity", {
+      args: [messageSeverity],
+      httpStatus: 400,
+    });
+  }
+
+  static linkNotAllowed(resultType) {
+    return new JobSchedulingError("linkNotAllowed", {
+      args: [resultType],
+      httpStatus: 400,
+    });
+  }
+
+  static mimeTypeNotAllowed(resultType) {
+    return new JobSchedulingError("mimeTypeNotAllowed", {
+      args: [resultType],
+      httpStatus: 400,
+    });
+  }
+
+  static fileNameNotAllowed(resultType) {
+    return new JobSchedulingError("fileNameNotAllowed", {
+      args: [resultType],
+      httpStatus: 400,
+    });
+  }
+
+  static dataNotAllowed(resultType) {
+    return new JobSchedulingError("dataNotAllowed", {
+      args: [resultType],
+      httpStatus: 400,
+    });
+  }
+
+  static messagesNotAllowed(resultType) {
+    return new JobSchedulingError("messagesNotAllowed", {
+      args: [resultType],
       httpStatus: 400,
     });
   }

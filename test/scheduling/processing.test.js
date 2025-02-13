@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
+const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
 const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
@@ -50,6 +50,7 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     let entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry).toBeDefined();
     expect(entry.startAfter).toBeDefined();
     const result = await UPDATE.entity("sap.eventqueue.Event")
       .set({
@@ -63,6 +64,9 @@ describe("Processing Service", () => {
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).not.toBe("running");
     expect(job.status_code).not.toBe("requested");
+
+    const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    expect(cleanData(jobResult)).toMatchSnapshot();
   });
 
   it("processJob - advanced mock", async () => {
@@ -79,6 +83,7 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     let entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry).toBeDefined();
     expect(entry.startAfter).toBeDefined();
     const result = await UPDATE.entity("sap.eventqueue.Event")
       .set({
@@ -146,6 +151,7 @@ describe("Processing Service", () => {
       await expect(processingService.processJob("XXX")).resolves.not.toThrow();
       await processOutbox("processing");
       const entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
       log.clear();
@@ -156,6 +162,7 @@ describe("Processing Service", () => {
       await expect(processingService.updateJob("XXX")).resolves.not.toThrow();
       await processOutbox("processing");
       let entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
       log.clear();
@@ -164,6 +171,7 @@ describe("Processing Service", () => {
       await expect(processingService.updateJob(ID)).resolves.not.toThrow();
       await processOutbox("processing");
       entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/statusValueMissing/s));
       log.clear();
@@ -172,6 +180,7 @@ describe("Processing Service", () => {
       await expect(processingService.updateJob(ID, "XXX")).resolves.not.toThrow();
       await processOutbox("processing");
       entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/invalidJobStatus.*XXX/s));
       log.clear();
@@ -180,6 +189,7 @@ describe("Processing Service", () => {
       await expect(processingService.updateJob(ID, "completed")).resolves.not.toThrow();
       await processOutbox("processing");
       entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*requested.*completed/s));
       log.clear();
@@ -190,6 +200,7 @@ describe("Processing Service", () => {
       await expect(processingService.cancelJob("XXX")).resolves.not.toThrow();
       await processOutbox("processing");
       let entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
       log.clear();
@@ -202,6 +213,7 @@ describe("Processing Service", () => {
       await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
       await processOutbox("processing");
       entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*running.*canceled/s));
       log.clear();
