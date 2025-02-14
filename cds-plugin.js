@@ -91,7 +91,7 @@ function serveUIs() {
       "..",
     );
     if (!fs.existsSync(`${cds.root}/app/appconfig/fioriSandboxConfig.json`)) {
-      cds.app.serve(`${uiPath}/flp.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/flp.html");
+      cds.app.serve(`${uiPath}/launchpad.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/launchpad.html");
       cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     } else {
       serveAppConfig(packageRoot, uiPath);
