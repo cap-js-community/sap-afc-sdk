@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Processing Service processJob - simple mock 1`] = `
+exports[`Processing Service processJob - simple mock - completed 1`] = `
 [
   {
     "filename": null,
-    "link": "https://www.sap.com",
+    "link": "https://sap.com",
     "mimeType": null,
     "name": "Link",
     "type_code": "link",
@@ -19,6 +19,32 @@ exports[`Processing Service processJob - simple mock 1`] = `
 ]
 `;
 
+exports[`Processing Service processJob - simple mock - completed with error 1`] = `
+[
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Result",
+    "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - completed with warning 1`] = `
+[
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Result",
+    "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - failed 1`] = `[]`;
+
 exports[`Processing Service updateJob - results 1`] = `
 [
   {
@@ -30,7 +56,7 @@ exports[`Processing Service updateJob - results 1`] = `
   },
   {
     "filename": null,
-    "link": "https://www.sap.com",
+    "link": "https://sap.com",
     "mimeType": null,
     "name": "Link",
     "type_code": "link",

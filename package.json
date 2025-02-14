@@ -40,12 +40,13 @@
     "watch": "cds watch",
     "test": "jest --silent",
     "test:update": "npm test -- -u",
-    "lint": "npm run eslint && npm run prettier",
+    "lint": "npm run eslint && npm run prettier && npm run prettier:cds",
     "lint:ci": "npm run eslint:ci && npm run prettier:ci",
     "eslint": "eslint --fix .",
     "eslint:ci": "eslint .",
     "prettier": "prettier \"**/*.{js,json,md,yml,yaml}\" --write --log-level error",
     "prettier:ci": "prettier \"**/*.{js,json,md,yml,yaml}\" --check",
+    "prettier:cds": "format-cds app db srv -f",
     "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
     "prepareRelease": "npm prune --production",
     "openapi": "npm run openapi:sspi && npm run lint",
@@ -67,6 +68,7 @@
     "@cap-js/sqlite": "^1.8.0",
     "@sap/cds": "^8.7.1",
     "@sap/cds-dk": "^8.7.0",
+    "@sap/cds-lsp": "^8.5.1",
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-jest": "^28.11.0",
@@ -140,8 +142,8 @@
             "max": 30,
             "status": {
               "completed": 0.5,
-              "completedWithError": 0.2,
               "completedWithWarning": 0.2,
+              "completedWithError": 0.2,
               "failed": 0.1
             }
           }

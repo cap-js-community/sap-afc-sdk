@@ -210,6 +210,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="severity_code" Type="Edm.String" Nullable="false" DefaultValue="info"/>
+        <Property Name="criticality" Type="Edm.Int32"/>
       </EntityType>
       <EntityType Name="JobStatus">
         <Key>
@@ -597,14 +598,30 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job"/>
             <PropertyValue Property="TypeNamePlural" String="Jobs"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="Job"/>
+                <PropertyValue Property="Value" Path="ID"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="definition/name"/>
+              </Record>
+            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="createdBy"/>
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
                   <PropertyValue Property="Descending" Bool="true"/>
                 </Record>
               </Collection>
@@ -622,10 +639,15 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.EntityContainer/Job">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="createdBy"/>
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
                   <PropertyValue Property="Descending" Bool="true"/>
                 </Record>
               </Collection>
@@ -689,7 +711,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/definition_name">
-        <Annotation Term="Common.Text" Path="definition/name">
+        <Annotation Term="Common.Text" Path="definition/description">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
         </Annotation>
         <Annotation Term="Common.ValueList">
@@ -758,6 +780,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Results"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.cancel(SchedulingMonitoringService.Job)">
+        <Annotation Term="Common.IsActionCritical" Bool="true"/>
         <Annotation Term="Core.OperationAvailable">
           <Or>
             <Eq>
@@ -770,7 +793,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Eq>
           </Or>
         </Annotation>
-        <Annotation Term="Common.IsActionCritical" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
@@ -830,15 +852,31 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job Parameter"/>
             <PropertyValue Property="TypeNamePlural" String="JobParameters"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="Job Parameter"/>
+                <PropertyValue Property="Value" Path="definition/name"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="definition/type_code"/>
+              </Record>
+            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
                   <PropertyValue Property="Property" PropertyPath="definition/name"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -854,11 +892,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.EntityContainer/JobParameter">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
                   <PropertyValue Property="Property" PropertyPath="definition/name"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1041,35 +1084,54 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job Result"/>
             <PropertyValue Property="TypeNamePlural" String="JobResults"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="Job Result"/>
+                <PropertyValue Property="Value" Path="name"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="type/code"/>
+              </Record>
+            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="ID"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.SelectionFields">
-          <Collection>
-            <PropertyPath>ID</PropertyPath>
-          </Collection>
+          <Collection/>
         </Annotation>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResult">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="ID"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1156,6 +1218,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobResult/dataLink">
         <Annotation Term="HTML5.LinkTarget" String="_blank"/>
         <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Data Link"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
@@ -1166,10 +1229,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <PropertyValue Property="Value" Path="ID"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="text"/>
+                  <PropertyValue Property="Value" Path="severity_code"/>
+                  <PropertyValue Property="Criticality" Path="criticality"/>
+                  <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="severity_code"/>
+                  <PropertyValue Property="Value" Path="text"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1183,49 +1248,71 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.LineItem">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="text"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="severity_code"/>
-            </Record>
-          </Collection>
-        </Annotation>
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job Result"/>
             <PropertyValue Property="TypeNamePlural" String="JobResults"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="Job Result"/>
+                <PropertyValue Property="Value" Path="text"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="severity/code"/>
+              </Record>
+            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="ID"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="criticality"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.SelectionFields">
+          <Collection/>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
           <Collection>
-            <PropertyPath>ID</PropertyPath>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="severity_code"/>
+              <PropertyValue Property="Criticality" Path="criticality"/>
+              <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="text"/>
+            </Record>
           </Collection>
+          <Annotation Term="UI.Criticality" Path="criticality"/>
         </Annotation>
         <Annotation Term="Common.Label" String="Job Result Message"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResultMessage">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="ID"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="criticality"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1286,6 +1373,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/criticality">
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Criticality"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobStatus">
         <Annotation Term="UI.Identification">
           <Collection>
@@ -1335,12 +1426,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="completed"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
-              <PropertyValue Property="Value" String="completedWithError"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="completedWithWarning"/>
               <PropertyValue Property="Value" String="completedWithWarning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
+              <PropertyValue Property="Value" String="completedWithError"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="failed"/>
@@ -1722,12 +1813,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="completed"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
-              <PropertyValue Property="Value" String="completedWithError"/>
-            </Record>
-            <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="completedWithWarning"/>
               <PropertyValue Property="Value" String="completedWithWarning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
+              <PropertyValue Property="Value" String="completedWithError"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="failed"/>

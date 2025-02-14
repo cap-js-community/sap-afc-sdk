@@ -1,331 +1,380 @@
 using SchedulingMonitoringService as service from '../../srv/scheduling/monitoring-service';
 
 annotate service.Job with @(
-    UI.Identification     : [
-        {
-            $Type             : 'UI.DataFieldForAction',
-            Label             : '{i18n>Cancel}',
-            Action            : 'SchedulingMonitoringService.cancel',
-            InvocationGrouping: #Isolated,
-            Criticality       : #Negative
-        }
+  UI.Identification     : [{
+    $Type             : 'UI.DataFieldForAction',
+    Label             : '{i18n>Cancel}',
+    Action            : 'SchedulingMonitoringService.cancel',
+    InvocationGrouping: #Isolated,
+    Criticality       : #Negative
+  }],
+  UI.FieldGroup #Details: {
+    $Type: 'UI.FieldGroupType',
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: ID,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition_name,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: version,
+      },
+      {
+        $Type: 'UI.DataFieldWithUrl',
+        Value: link,
+        Url  : link,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: status_code,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: modifiedAt,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: createdAt,
+      },
     ],
-    UI.FieldGroup #Details: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: ID,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: definition_name,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: version,
-            },
-            {
-                $Type: 'UI.DataFieldWithUrl',
-                Value: link,
-                Url  : link,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: status_code,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: modifiedAt,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: createdAt,
-            },
-        ],
+  },
+  UI.HeaderFacets       : [{
+    $Type : 'UI.ReferenceFacet',
+    Label : '{i18n>Details}',
+    Target: '@UI.FieldGroup#Details',
+  }, ],
+  UI.Facets             : [
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>Parameters}',
+      Target: 'parameters/@UI.LineItem'
     },
-    UI.HeaderFacets       : [{
-        $Type : 'UI.ReferenceFacet',
-        Label : '{i18n>Details}',
-        Target: '@UI.FieldGroup#Details',
-    }, ],
-    UI.Facets             : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>Parameters}',
-            Target: 'parameters/@UI.LineItem'
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>Results}',
-            Target: 'results/@UI.LineItem'
-        }
-    ],
-    UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: ID,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: definition_name,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: version,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: status_code,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: modifiedAt,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: createdAt,
-        },
-    ],
-    UI.HeaderInfo         : {
-        TypeName      : '{i18n>Job}',
-        TypeNamePlural: '{i18n>Jobs}',
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>Results}',
+      Target: 'results/@UI.LineItem'
+    }
+  ],
+  UI.LineItem           : [
+    {
+      $Type: 'UI.DataField',
+      Value: ID,
     },
-    UI.PresentationVariant: {SortOrder: [{
-        $Type     : 'Common.SortOrderType',
-        Property  : createdBy,
-        Descending: true
-    }]},
-    UI.SelectionFields    : [
-        definition_name,
-        status_code,
-    ],
+    {
+      $Type: 'UI.DataField',
+      Value: definition_name,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: version,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: status_code,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: modifiedAt,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: createdAt,
+    },
+  ],
+  UI.HeaderInfo         : {
+    $Type         : 'UI.HeaderInfoType',
+    TypeName      : '{i18n>Job}',
+    TypeNamePlural: '{i18n>Jobs}',
+    Title         : {
+      Label: '{i18n>Job}',
+      Value: ID
+    },
+    Description   : {Value: definition.name}
+  },
+  UI.PresentationVariant: {
+    Visualizations: ['@UI.LineItem'],
+    SortOrder     : [{
+      $Type     : 'Common.SortOrderType',
+      Property  : createdAt,
+      Descending: true
+    }]
+  },
+  UI.SelectionFields    : [
+    definition_name,
+    status_code,
+  ],
 );
 
 annotate service.Job {
-    status      @Common.ValueListWithFixedValues: true  @Common.Text: status.name      @Common.TextArrangement: #TextFirst;
-    link        @HTML5.LinkTarget               : '_blank';
-    definition  @ValueList                      : {
-        entity: 'JobDefinition',
-        type  : #Fixed
-    }                                                   @Common.Text: definition.name  @Common.TextArrangement: #TextFirst;
+  status      @Common.ValueListWithFixedValues: true  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
+  link        @HTML5.LinkTarget               : '_blank';
+  definition  @ValueList                      : {
+    entity: 'JobDefinition',
+    type  : #Fixed
+  }                                                   @Common.Text: definition.description  @Common.TextArrangement: #TextFirst;
 };
 
 annotate service.Job actions {
-    cancel @Common.IsActionCritical;
+  cancel  @Common.IsActionCritical  @Core.OperationAvailable: {$edmJson: {$Or: [
+    {$Eq: [
+      {$Path: 'in/status_code'},
+      'requested'
+    ]},
+    {$Eq: [
+      {$Path: 'in/status_code'},
+      'running'
+    ]}
+  ]}}
 };
 
 annotate service.JobParameter with @(
-    UI.FieldGroup #Details: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: ID,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: definition_name,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: definition.type_code,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: definition.dataType_code,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: definition.mappingType_code,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: value,
-            },
-        ],
-    },
-    UI.HeaderFacets       : [{
-        $Type : 'UI.ReferenceFacet',
-        Label : '{i18n>Details}',
-        Target: '@UI.FieldGroup#Details',
-    }, ],
-    UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: definition_name,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: definition.type_code,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: definition.dataType_code,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: definition.mappingType_code,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: value,
-        },
+  UI.FieldGroup #Details: {
+    $Type: 'UI.FieldGroupType',
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: ID,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition_name,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.type_code,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.dataType_code,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.mappingType_code,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: value,
+      },
     ],
-    UI.HeaderInfo         : {
-        TypeName      : '{i18n>JobParameter}',
-        TypeNamePlural: '{i18n>JobParameters}',
+  },
+  UI.HeaderFacets       : [{
+    $Type : 'UI.ReferenceFacet',
+    Label : '{i18n>Details}',
+    Target: '@UI.FieldGroup#Details',
+  }, ],
+  UI.LineItem           : [
+    {
+      $Type: 'UI.DataField',
+      Value: definition_name,
     },
-    UI.PresentationVariant: {SortOrder: [{
-        $Type     : 'Common.SortOrderType',
-        Property  : definition.name,
-        Descending: true
-    }]},
-    UI.SelectionFields    : [definition.name],
+    {
+      $Type: 'UI.DataField',
+      Value: definition.type_code,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: definition.dataType_code,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: definition.mappingType_code,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: value,
+    },
+  ],
+  UI.HeaderInfo         : {
+    $Type         : 'UI.HeaderInfoType',
+    TypeName      : '{i18n>JobParameter}',
+    TypeNamePlural: '{i18n>JobParameters}',
+    Title         : {
+      Label: '{i18n>JobParameter}',
+      Value: definition.name
+    },
+    Description   : {Value: definition.type_code}
+  },
+  UI.PresentationVariant: {
+    Visualizations: ['@UI.LineItem'],
+    SortOrder     : [{
+      $Type     : 'Common.SortOrderType',
+      Property  : definition.name,
+      Descending: false
+    }]
+  },
+  UI.SelectionFields    : [definition.name],
 );
 
 annotate service.JobParameterDefinition {
-    type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
-    dataType     @Common.ValueListWithFixedValues: true  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
-    mappingType  @Common.ValueListWithFixedValues: true  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
+  type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
+  dataType     @Common.ValueListWithFixedValues: true  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
+  mappingType  @Common.ValueListWithFixedValues: true  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
 };
 
 annotate service.JobResult with @(
-    UI.FieldGroup #Details: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: ID,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: name,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: type_code,
-            },
-            {
-                $Type: 'UI.DataFieldWithUrl',
-                Value: link,
-                Url  : link,
-                ![@UI.Hidden] : (type.code != 'link' ? true : false)
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: mimeType,
-                ![@UI.Hidden] : (type.code != 'data' ? true : false)
-            },
-            {
-                $Type: 'UI.DataFieldWithUrl',
-                Value: filename,
-                Url  : dataLink,
-                ![@UI.Hidden] : (type.code != 'data' ? true : false)
-            }
-        ],
-    },
-    UI.HeaderFacets       : [{
-        $Type : 'UI.ReferenceFacet',
-        Label : '{i18n>Details}',
-        Target: '@UI.FieldGroup#Details',
-    }, ],
-    UI.Facets             : [{
-        $Type         : 'UI.ReferenceFacet',
-        Label         : '{i18n>Messages}',
-        Target        : 'messages/@UI.LineItem',
-        ![@UI.Hidden] : (type.code != 'message' ? true : false)
-    }],
-    UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: name,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: type_code,
-        },
-        {
-            $Type: 'UI.DataFieldWithUrl',
-            Value: link,
-            Url  : link,
-            ![@UI.Hidden] : (type.code != 'link' ? true : false)
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: mimeType,
-            ![@UI.Hidden] : (type.code != 'data' ? true : false)
-        },
-        {
-            $Type: 'UI.DataFieldWithUrl',
-            Value: filename,
-            Url  : dataLink,
-            ![@UI.Hidden] : (type.code != 'data' ? true : false)
-        }
+  UI.FieldGroup #Details : {
+    $Type: 'UI.FieldGroupType',
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: ID,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: name,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: type_code,
+      },
+      {
+        $Type         : 'UI.DataFieldWithUrl',
+        Value         : link,
+        Url           : link,
+        ![@UI.Hidden] : (type.code != 'link' ? true : false)
+      },
+      {
+        $Type         : 'UI.DataField',
+        Value         : mimeType,
+        ![@UI.Hidden] : (type.code != 'data' ? true : false)
+      },
+      {
+        $Type         : 'UI.DataFieldWithUrl',
+        Value         : filename,
+        Url           : dataLink,
+        ![@UI.Hidden] : (type.code != 'data' ? true : false)
+      }
     ],
-    UI.HeaderInfo         : {
-        TypeName      : '{i18n>JobResult}',
-        TypeNamePlural: '{i18n>JobResults}',
+  },
+  UI.HeaderFacets        : [{
+    $Type : 'UI.ReferenceFacet',
+    Label : '{i18n>Details}',
+    Target: '@UI.FieldGroup#Details',
+  }, ],
+  UI.Facets              : [{
+    $Type         : 'UI.ReferenceFacet',
+    Label         : '{i18n>Messages}',
+    Target        : 'messages/@UI.LineItem',
+    ![@UI.Hidden] : (type.code != 'message' ? true : false)
+  }],
+  UI.LineItem            : [
+    {
+      $Type: 'UI.DataField',
+      Value: name,
     },
-    UI.PresentationVariant: {SortOrder: [{
-        $Type     : 'Common.SortOrderType',
-        Property  : ID,
-        Descending: true
-    }]},
-    UI.SelectionFields    : [ID],
+    {
+      $Type: 'UI.DataField',
+      Value: type_code,
+    },
+    {
+      $Type         : 'UI.DataFieldWithUrl',
+      Value         : link,
+      Url           : link,
+      ![@UI.Hidden] : (type.code != 'link' ? true : false)
+    },
+    {
+      $Type         : 'UI.DataField',
+      Value         : mimeType,
+      ![@UI.Hidden] : (type.code != 'data' ? true : false)
+    },
+    {
+      $Type         : 'UI.DataFieldWithUrl',
+      Value         : filename,
+      Url           : dataLink,
+      ![@UI.Hidden] : (type.code != 'data' ? true : false)
+    }
+  ],
+  UI.HeaderInfo          : {
+    $Type         : 'UI.HeaderInfoType',
+    TypeName      : '{i18n>JobResult}',
+    TypeNamePlural: '{i18n>JobResults}',
+    Title         : {
+      Label: '{i18n>JobResult}',
+      Value: name
+    },
+    Description   : {Value: type.code}
+  },
+  UI.PresentationVariant : {
+    Visualizations: ['@UI.LineItem'],
+    SortOrder     : [{
+      $Type     : 'Common.SortOrderType',
+      Property  : name,
+      Descending: false
+    }]
+  },
+  UI.SelectionFields     : [],
 );
 
 annotate service.JobResult {
-    type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
-    link  @HTML5.LinkTarget               : '_blank';
-    dataLink  @HTML5.LinkTarget           : '_blank';
+  type     @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
+  link     @HTML5.LinkTarget               : '_blank';
+  dataLink @HTML5.LinkTarget               : '_blank';
 };
 
 annotate service.JobResultMessage with @(
-    UI.FieldGroup #Details: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Value: ID,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: text,
-            },
-            {
-                $Type: 'UI.DataField',
-                Value: severity_code,
-            },
-        ],
-    },
-    UI.HeaderFacets       : [{
-        $Type : 'UI.ReferenceFacet',
-        Label : '{i18n>Details}',
-        Target: '@UI.FieldGroup#Details',
-    }, ],
-    UI.LineItem           : [
-        {
-            $Type: 'UI.DataField',
-            Value: text,
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: severity_code,
-        },
+  UI.FieldGroup #Details: {
+    $Type: 'UI.FieldGroupType',
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: ID,
+      },
+      {
+        $Type                    : 'UI.DataField',
+        Value                    : severity_code,
+        Criticality              : criticality,
+        CriticalityRepresentation: #WithIcon,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: text,
+      },
     ],
-    UI.HeaderInfo         : {
-        TypeName      : '{i18n>JobResult}',
-        TypeNamePlural: '{i18n>JobResults}',
+  },
+  UI.HeaderFacets       : [{
+    $Type : 'UI.ReferenceFacet',
+    Label : '{i18n>Details}',
+    Target: '@UI.FieldGroup#Details',
+  }, ],
+  UI.LineItem           : [
+    {
+      $Type                    : 'UI.DataField',
+      Value                    : severity_code,
+      Criticality              : criticality,
+      CriticalityRepresentation: #WithIcon,
     },
-    UI.PresentationVariant: {SortOrder: [{
-        $Type     : 'Common.SortOrderType',
-        Property  : ID,
-        Descending: true
-    }]},
-    UI.SelectionFields    : [ID],
+    {
+      $Type: 'UI.DataField',
+      Value: text,
+    },
+  ],
+  UI.HeaderInfo         : {
+    $Type         : 'UI.HeaderInfoType',
+    TypeName      : '{i18n>JobResult}',
+    TypeNamePlural: '{i18n>JobResults}',
+    Title         : {
+      Label: '{i18n>JobResult}',
+      Value: text
+    },
+    Description   : {Value: severity.code}
+  },
+  UI.PresentationVariant: {
+    Visualizations: ['@UI.LineItem'],
+    SortOrder     : [{
+      $Type     : 'Common.SortOrderType',
+      Property  : criticality,
+      Descending: false
+    }]
+  },
+  UI.SelectionFields    : [],
 );
 
 annotate service.JobResultMessage {
-    severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
+  severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
 };
+
+annotate service.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );

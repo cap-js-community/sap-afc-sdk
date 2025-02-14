@@ -11,19 +11,19 @@ const STATUS_TRANSITIONS = {
   [JobStatus.requested]: [JobStatus.running, JobStatus.cancelRequested, JobStatus.canceled],
   [JobStatus.running]: [
     JobStatus.completed,
-    JobStatus.completedWithError,
     JobStatus.completedWithWarning,
+    JobStatus.completedWithError,
     JobStatus.failed,
     JobStatus.cancelRequested,
   ],
   [JobStatus.completed]: [],
-  [JobStatus.completedWithError]: [],
   [JobStatus.completedWithWarning]: [],
+  [JobStatus.completedWithError]: [],
   [JobStatus.failed]: [],
   [JobStatus.cancelRequested]: [
     JobStatus.completed,
-    JobStatus.completedWithError,
     JobStatus.completedWithWarning,
+    JobStatus.completedWithError,
     JobStatus.failed,
     JobStatus.canceled,
   ],
@@ -86,7 +86,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       })
       .where({ ID: job.ID });
     if (results && results.length > 0) {
-      const insertResults = await this.checkJobResult(req, results);
+      const insertResults = await this.checkJobResults(req, results);
       await INSERT.into(JobResult).entries(insertResults);
     }
     const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
@@ -106,55 +106,55 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return this.statusTransitions[statusBefore].includes(statusAfter);
   }
 
-  async checkJobResult(req, result) {
+  async checkJobResults(req, results) {
     const job = req.job;
-    return (result || []).map((entry) => {
-      if (!entry.name) {
+    return results.map((result) => {
+      if (!result.name) {
         return req.reject(JobSchedulingError.resultNameMissing());
       }
-      if (!entry.type) {
+      if (!result.type) {
         return req.reject(JobSchedulingError.resultTypeMissing());
       }
-      switch (entry.type) {
+      switch (result.type) {
         case JobResultType.link:
-          if (!entry.link) {
+          if (!result.link) {
             return req.reject(JobSchedulingError.linkMissing());
           }
-          if (entry.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          if (result.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(result.type));
           }
-          if (entry.filename) {
-            return req.reject(JobSchedulingError.filenameNotAllowed(entry.type));
+          if (result.filename) {
+            return req.reject(JobSchedulingError.filenameNotAllowed(result.type));
           }
-          if (entry.data) {
-            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          if (result.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(result.type));
           }
-          if (entry.messages) {
-            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          if (result.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(result.type));
           }
           break;
         case JobResultType.data:
-          if (!entry.mimeType) {
+          if (!result.mimeType) {
             return req.reject(JobSchedulingError.mimeTypeMissing());
           }
-          if (!entry.filename) {
+          if (!result.filename) {
             return req.reject(JobSchedulingError.filenameMissing());
           }
-          if (!entry.data) {
+          if (!result.data) {
             return req.reject(JobSchedulingError.dataMissing());
           }
-          if (entry.link) {
-            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          if (result.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(result.type));
           }
-          if (entry.messages) {
-            return req.reject(JobSchedulingError.messagesNotAllowed(entry.type));
+          if (result.messages) {
+            return req.reject(JobSchedulingError.messagesNotAllowed(result.type));
           }
           break;
         case JobResultType.message:
-          if (!(entry?.messages.length > 0)) {
+          if (!(result?.messages?.length > 0)) {
             return req.reject(JobSchedulingError.messagesMissing());
           }
-          for (const message of entry.messages) {
+          for (const message of result.messages) {
             if (!message.text) {
               return req.reject(JobSchedulingError.textMissing());
             }
@@ -165,31 +165,31 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
               return req.reject(JobSchedulingError.invalidMessageSeverity(message.severity));
             }
           }
-          if (entry.link) {
-            return req.reject(JobSchedulingError.linkNotAllowed(entry.type));
+          if (result.link) {
+            return req.reject(JobSchedulingError.linkNotAllowed(result.type));
           }
-          if (entry.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeNotAllowed(entry.type));
+          if (result.mimeType) {
+            return req.reject(JobSchedulingError.mimeTypeNotAllowed(result.type));
           }
-          if (entry.filename) {
-            return req.reject(JobSchedulingError.filenameNotAllowed(entry.type));
+          if (result.filename) {
+            return req.reject(JobSchedulingError.filenameNotAllowed(result.type));
           }
-          if (entry.data) {
-            return req.reject(JobSchedulingError.dataNotAllowed(entry.type));
+          if (result.data) {
+            return req.reject(JobSchedulingError.dataNotAllowed(result.type));
           }
           break;
         default:
-          return req.reject(JobSchedulingError.invalidResultType(entry.type));
+          return req.reject(JobSchedulingError.invalidResultType(result.type));
       }
       return {
         job_ID: job.ID,
-        name: entry.name,
-        type_code: entry.type,
-        link: entry.link,
-        mimeType: entry.mimeType,
-        filename: entry.filename,
-        data: entry.data,
-        messages: (entry.messages || []).map((message) => {
+        name: result.name,
+        type_code: result.type,
+        link: result.link,
+        mimeType: result.mimeType,
+        filename: result.filename,
+        data: result.data,
+        messages: (result.messages || []).map((message) => {
           return {
             text: message.text,
             severity_code: message.severity,
@@ -203,7 +203,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     let min = config.min ?? 0;
     let max = config.max ?? 30;
     const processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
-    let processingStatus = JobStatus.completed;
+    let processingStatus = config.default ?? JobStatus.completed;
     if (config.status && Object.keys(config.status).length > 0) {
       const statuses = Object.keys(config.status);
       min = 0;
@@ -228,7 +228,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           {
             type: JobResultType.link,
             name: "Link",
-            link: "https://www.sap.com",
+            link: "https://sap.com",
           },
           {
             type: JobResultType.message,
@@ -242,18 +242,6 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           },
         );
         break;
-      case JobStatus.completedWithError:
-        results.push({
-          type: JobResultType.message,
-          name: "Result",
-          messages: [
-            {
-              text: "An error occurred during job processing",
-              severity: MessageSeverity.error,
-            },
-          ],
-        });
-        break;
       case JobStatus.completedWithWarning:
         results.push({
           type: JobResultType.message,
@@ -262,6 +250,18 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             {
               text: "A warning occurred during job processing",
               severity: MessageSeverity.warning,
+            },
+          ],
+        });
+        break;
+      case JobStatus.completedWithError:
+        results.push({
+          type: JobResultType.message,
+          name: "Result",
+          messages: [
+            {
+              text: "An error occurred during job processing",
+              severity: MessageSeverity.error,
             },
           ],
         });

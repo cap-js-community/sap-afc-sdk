@@ -146,12 +146,13 @@ Options can be passed to the SDK via CDS environment via `cds.rerquires.sap-sfc-
   - `ui.api.scheduling.job.swagger: Boolean`: Serve Scheduling Provider Swagger UI. Default `true`
 - `broker: Boolean`: Serve the Broker endpoint. Default `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
+  - `mockProcessing.default: String`: Default processing status. Default `completed`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
   - `mockProcessing.max: Number`: Maximum processing time in seconds. Default `30`
   - `mockProcessing.status: Object`: Status distribution values
     - `mockProcessing.status.completed: Number`: Completed status distribution value
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
+    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
 
 ### Mock Job Processing
@@ -176,8 +177,8 @@ options (as described in [options](#options)):
           "max": 30,
           "status": {
             "completed": 0.5,
-            "completedWithError": 0.2,
             "completedWithWarning": 0.2,
+            "completedWithError": 0.2,
             "failed": 0.1
           }
         }
@@ -192,7 +193,7 @@ This default advanced mocked Job processing can be also configured by using CDS 
 
 ### Implement Job Processing
 
-The default implementation of the Job processing is already provided by the SDK. Focus can be put on 
+The default implementation of the Job processing is already provided by the SDK. Focus can be put on
 custpm processing logic, and the processing status update handling.
 
 To implement a custom Job processing extend the Job processing service definition as follows:
@@ -217,7 +218,7 @@ To implement a custom Job processing extend the Job processing service definitio
 
       this.on(processJob, async (req, next) => {
         // Your logic goes here
-        //   await this.processJobUpdate(req, JobStatus.completed);
+        // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
         await next();
       });
 
@@ -246,23 +247,71 @@ As part of the custom scheduling process service implementation, the following o
   - Implement your custom logic, how the Job should be processed
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (set status to `running`)
-  - Job update can be performed via `this.processJobUpdate`, e.g.
-    `await this.processJobUpdate(req, JobStatus.completed)`
+  - Job update can be performed via `this.processJobUpdate()` providing the new status and Job results
+    - e.g. `await this.processJobUpdate(req, JobStatus.completed, [{...}])`
   - Throwing exceptions will automatically trigger the retry process in event queue
   - Disable mocked Job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `on(updateJob)`:
-  - A job status update is requested
+  - A job status update is requested and the Job results are stored
   - Implement your custom logic, how the Job status should be updated
   - Job data can be retrieved via `req.job`
   - Job status transition is validated via `async checkStatusTransition(req, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
+  - Job results are checked and processed via `async checkJobResults(req, results)`
+    - Valid results are valid according to Job Results signature constraints (see below)
+    - Returns the processed Job Results to be inserted
   - Call `await next()` to perform default implementation (update status to requested status)
 - `on(cancelJob)`:
   - A job cancellation is requested
   - Implement your custom logic, how the Job should be canceled
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (update status to `canceled`)
+
+The Job Results signature is defined as follows:
+
+```cds
+type JobResultTypeCode   : String enum {
+  link;
+  data;
+  message;
+};
+
+type MessageSeverityCode : String enum {
+  error;
+  warning;
+  info;
+};
+
+type JobResult {
+  name     :      String not null;
+  type     :      JobResultTypeCode not null;
+  link     :      String;
+  mimeType :      String;
+  filename :      String;
+  data     :      LargeBinary;
+  messages : many JobResultMessage;
+};
+
+type JobResultMessage {
+  text     : String not null;
+  severity : MessageSeverityCode not null;
+};
+```
+
+Multiple Job Results can be passed for Job update.
+The following constraints apply for each Job result type:
+
+- `link`:
+  - Properties `name` and `link` need to be provided
+  - Other properties are not allowed
+- `data`:
+  - Properties `name`, `mimeType`, `filename` and `data` need to be provided
+  - Other properties are not allowed
+- `message`:
+  - Properties `name` and `messages` need to be provided
+  - Messages need to be provided as array of Job result messages
+  - Other properties are not allowed
 
 Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
 Node.js, designed specifically for efficient and streamlined asynchronous event processing. In case of errors, the Event Queue
@@ -286,36 +335,36 @@ To implement a custom Job provider extend the Job provider service definition as
 
 #### Implementation file: `/srv/scheduling-provider-service.js`
 
-  ```js
-  "use strict";
+```js
+"use strict";
 
-  const { SchedulingProviderService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProviderService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
 
-  class CustomSchedulingProviderService extends SchedulingProviderService {
-    async init() {
-      const { Job, JobResult } = this.entities;    
+class CustomSchedulingProviderService extends SchedulingProviderService {
+  async init() {
+    const { Job, JobResult } = this.entities;
 
-      this.on("CREATE", Job, async (req, next) => {
-        // Your logic goes here
-        await next();
-      });
-  
-      this.on(Job.actions.cancel, Job, async (req, next) => {
-        // Your logic goes here
-        await next();
-      });
-  
-      this.on(JobResult.actions.data, JobResult, async (req) => {
-        // Your logic goes here
-        await next();
-      });
+    this.on("CREATE", Job, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
 
-      super.init();
-    }
+    this.on(Job.actions.cancel, Job, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    this.on(JobResult.actions.data, JobResult, async (req) => {
+      // Your logic goes here
+      await next();
+    });
+
+    super.init();
   }
+}
 
-  module.exports = CustomSchedulingProviderService;
-  ```
+module.exports = CustomSchedulingProviderService;
+```
 
 As part of the custom scheduling provider service implementation, the following operations can be implemented:
 

@@ -6,7 +6,6 @@ const { text } = require("node:stream/consumers");
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
 const { JobStatus, JobResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
 
-
 const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
@@ -47,13 +46,13 @@ describe("Processing Service", () => {
     ws.close();
   });
 
-  it("processJob - simple mock", async () => {
+  it("processJob - simple mock - completed", async () => {
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
     await processOutbox("processing");
 
-    let entry = await eventQueueEntry("processing", ID, "updateJob");
+    const entry = await eventQueueEntry("processing", ID, "updateJob");
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBeDefined();
     const result = await UPDATE.entity("sap.eventqueue.Event")
@@ -66,8 +65,88 @@ describe("Processing Service", () => {
     await processOutbox("processing");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
-    expect(job.status_code).not.toBe(JobStatus.running);
-    expect(job.status_code).not.toBe(JobStatus.requested);
+    expect(job.status_code).toBe(JobStatus.completed);
+
+    const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    expect(cleanData(jobResult)).toMatchSnapshot();
+  });
+
+  it("processJob - simple mock - completed with warning", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      default: JobStatus.completedWithWarning,
+    };
+    await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+    await processOutbox("processing");
+
+    const entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry).toBeDefined();
+    expect(entry.startAfter).toBeDefined();
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+
+    await processOutbox("processing");
+
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.completedWithWarning);
+
+    const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    expect(cleanData(jobResult)).toMatchSnapshot();
+  });
+
+  it("processJob - simple mock - completed with error", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      default: JobStatus.completedWithError,
+    };
+    await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+    await processOutbox("processing");
+
+    const entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry).toBeDefined();
+    expect(entry.startAfter).toBeDefined();
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+
+    await processOutbox("processing");
+
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.completedWithError);
+
+    const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    expect(cleanData(jobResult)).toMatchSnapshot();
+  });
+
+  it("processJob - simple mock - failed", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      default: JobStatus.failed,
+    };
+    await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+    await processOutbox("processing");
+
+    const entry = await eventQueueEntry("processing", ID, "updateJob");
+    expect(entry).toBeDefined();
+    expect(entry.startAfter).toBeDefined();
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+
+    await processOutbox("processing");
+
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.failed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
     expect(cleanData(jobResult)).toMatchSnapshot();
@@ -77,8 +156,8 @@ describe("Processing Service", () => {
     cds.env.requires["sap-afc-sdk"].mockProcessing = {
       status: {
         completed: 0.7,
-        completedWithError: 0.1,
         completedWithWarning: 0.1,
+        completedWithError: 0.1,
         failed: 0.1,
       },
     };
@@ -138,14 +217,14 @@ describe("Processing Service", () => {
         {
           type: JobResultType.link,
           name: "Link",
-          link: "https://www.sap.com",
+          link: "https://sap.com",
         },
         {
           type: JobResultType.data,
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
-          data: "VGhpcyBpcyBhIHRlc3Q="
+          data: btoa("This is a test"),
         },
         {
           type: JobResultType.message,
@@ -163,11 +242,14 @@ describe("Processing Service", () => {
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
     const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const resultIDs = jobResults.map(j => j.ID);
+    const resultIDs = jobResults.map((j) => j.ID);
     expect(cleanData(jobResults)).toMatchSnapshot();
     const jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
     expect(cleanData(jobMessages)).toMatchSnapshot();
-    const result = await SELECT.one.from("scheduling.JobResult").columns("data").where({ job_ID: ID, type: JobResultType.data });
+    const result = await SELECT.one
+      .from("scheduling.JobResult")
+      .columns("data")
+      .where({ job_ID: ID, type: JobResultType.data });
     expect(await text(result.data)).toEqual("This is a test");
   });
 
@@ -230,7 +312,7 @@ describe("Processing Service", () => {
       log.clear();
       await clearEventQueue();
 
-      await expect(processingService.updateJob(ID, "completed")).resolves.not.toThrow();
+      await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
       await processOutbox("processing");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
@@ -241,7 +323,404 @@ describe("Processing Service", () => {
     });
 
     it("updateJob - results", async () => {
+      await expect(processingService.updateJob(ID, JobStatus.completed, {})).resolves.not.toThrow();
+      await processOutbox("processing");
+      let entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/message: 'ASSERT_ARRAY', target: 'results'/s));
+      log.clear();
+      await clearEventQueue();
 
+      await expect(processingService.updateJob(ID, JobStatus.running, [{}])).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/resultNameMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Link" }])).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/resultTypeMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [{ name: "Link", type: "X" }]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/invalidResultType.*'X'/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Link",
+            type: JobResultType.link,
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/linkMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Link",
+            type: JobResultType.link,
+            link: "https://sap.com",
+            mimeType: "plain/text",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Link",
+            type: JobResultType.link,
+            link: "https://sap.com",
+            filename: "test.txt",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Link",
+            type: JobResultType.link,
+            link: "https://sap.com",
+            data: "xxx",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Link",
+            type: JobResultType.link,
+            link: "https://sap.com",
+            messages: [],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Data" }])).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/resultTypeMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Data",
+            type: JobResultType.data,
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/mimeTypeMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Data",
+            type: JobResultType.data,
+            mimeType: "plain/text",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/filenameMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Data",
+            type: JobResultType.data,
+            mimeType: "plain/text",
+            filename: "test.txt",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/dataMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Data",
+            type: JobResultType.data,
+            mimeType: "plain/text",
+            filename: "test.txt",
+            data: btoa("This is a test"),
+            link: "https://sap.com",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Data",
+            type: JobResultType.data,
+            mimeType: "plain/text",
+            filename: "test.txt",
+            data: btoa("This is a test"),
+            messages: [],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/messagesMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: {},
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/ASSERT_ARRAY', target: 'messages'/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/messagesMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{}],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/textMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message" }],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/severityMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message", severity: "X" }],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/invalidMessageSeverity.*'X'/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            link: "https://sap.com",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            mimeType: "text/plain",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            filename: "test.txt",
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: JobResultType.message,
+            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            data: btoa("This is a test"),
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed/s));
+      log.clear();
+      await clearEventQueue();
     });
 
     it("cancelJob", async () => {

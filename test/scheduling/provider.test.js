@@ -103,9 +103,19 @@ describe("API", () => {
     expect(response.data).toEqual([]);
   });
 
-  it.skip("GET Job Result Message Data", async () => {
-    const response = await GET("/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data");
-    expect(response.data).toEqual("This is a test")
+  it("GET Job Result Message Data", async () => {
+    await expect(
+      GET("/api/job-scheduling/v1/JobResult/x2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data"),
+    ).rejects.toThrowAPIError(404, "jobResultNotFound", ["x2eb590f-9505-4fd6-a5e2-511a1b2ff47f"]);
+    // CDS 8.8
+    await expect(
+      GET("/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data"),
+    ).rejects.toThrowAPIError(
+      500,
+      "Failed to validate return value of type 'cds.LargeBinary' for custom function 'data': Value [object Object] is invalid.",
+    );
+    // const response = await ;
+    // expect(response.data).toEqual("This is a test");
   });
 
   it("Create Job", async () => {
@@ -458,7 +468,7 @@ describe("API", () => {
           results: [
             {
               type: "link",
-              link: "https://www.sap.com",
+              link: "https://sap.com",
             },
           ],
           parameters: [

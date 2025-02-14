@@ -929,8 +929,8 @@
               "requested",
               "running",
               "completed",
-              "completedWithError",
               "completedWithWarning",
+              "completedWithError",
               "failed",
               "cancelRequested",
               "canceled"
