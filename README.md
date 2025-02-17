@@ -15,7 +15,13 @@
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
 - [Usage](#usage)
+  - [Options](#options)
+  - [Implementation](#implementation)
 - [Documentation](#documentation)
+  - [Boostrap Project](#bootstrap-project)
+  - [Add Features](#add-features)
+  - [Deployment](#deployment)
+  - [Advanced Setup](#advanced-setup)
 
 ## Getting Started
 
@@ -155,7 +161,9 @@ Options can be passed to the SDK via CDS environment via `cds.rerquires.sap-sfc-
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
 
-### Mock Job Processing
+### Implementation
+
+#### Mock Job Processing
 
 The library includes a mocked processing for jump-start development, which is disabled by default via option.
 `cds.requires.sap-afc-sdk.mockProcessing: false`
@@ -191,7 +199,7 @@ options (as described in [options](#options)):
 This default advanced mocked Job processing can be also configured by using CDS profile `mock` via `--profile mock` or
 `CDS_ENV=mock`.
 
-### Implement Job Processing
+#### Implement Job Processing
 
 The default implementation of the Job processing is already provided by the SDK. Focus can be put on
 custpm processing logic, and the processing status update handling.
@@ -322,7 +330,7 @@ provides resilient processing (circuit breaker, retry, load-balancing, etc.).
 
 In addition, to overwriting the default implementation via an `on` handler, also additional `before` and `after` handlers can be registered.
 
-### Implement Job Provider
+#### Implement Job Provider
 
 The default implementation of the Job provider is already provided by the SDK.
 Focus can be put on additional custom provider logic, e.g. streaming of data from a remote location.
@@ -338,7 +346,7 @@ To implement a custom Job provider extend the Job provider service definition as
 
 Service can be restricted for authorization adding `@requires` annotation.
 
-#### Implementation file: `/srv/scheduling-provider-service.js`
+- Implementation file: `/srv/scheduling-provider-service.js`
 
 ```js
 "use strict";
@@ -387,6 +395,10 @@ As part of the custom scheduling provider service implementation, the following 
 
 In addition, to overwriting the default implementation via an `on`-handler, also additional `before` and `after` handlers can be registered.
 
+#### Implement Periodic Job Sync
+
+- wip
+
 ## Documentation
 
 ### Bootstrap Project
@@ -415,7 +427,7 @@ CAP application.
 - Switch to project folder:
   - Terminal: `cd <name>`
 
-### Add features
+### Add Features
 
 **AFC initialize**:
 
@@ -440,15 +452,25 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 #### Cloud Foundry
 
-- Terminal: `cds add mta`
-- Follow Guide for CF: https://cap.cloud.sap/docs/guides/deployment/to-cf
+- Add MTA feature
+  - Terminal: `cds add mta`
+- Build MTA
+  - Terminal: `mbt build`
+- Follow Guide for [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
 
 #### Kyma
 
-- Terminal: `cds add helm`
-- Follow Guide for Kyma: https://cap.cloud.sap/docs/guides/deployment/to-kyma
+- Add helm feature
+  - Terminal: `cds add helm`
+- Containerize
+  - Terminal: `ctz containerize.yaml --push`
+- Upgrade chart
+  - Terminal: `helm upgrade --install <name> ./gen/chart -n <namespace>`
+- Rollout and restart deployment
+  - Terminal: `kubectl rollout restart deployment -n <namespace>`
+- Follow Guide for [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
 
-### Step-by-step Setup
+### Advanced Setup
 
 #### Add sample data
 
@@ -509,8 +531,6 @@ To serve UIs and provided authentication mechanisms via browser, and approuter n
 
 Approuter is added in folder `/app/router`. It can be deployed as separate application.
 
-### Advanced Setup
-
 #### Work Zone (Standard)
 
 Add Work Zone integration to display UIs in a launchpad:
@@ -524,6 +544,8 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
 - Terminal: `cds add html5-repo`
 - Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
+- Apps from AFC SDK can be included into project at `/app` via (necessary for Kyma deployment):
+  - Terminal: `afc add app` 
 
 #### Redis
 

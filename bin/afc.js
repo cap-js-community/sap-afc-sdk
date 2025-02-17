@@ -51,6 +51,7 @@ Features:
   broker \t\t - expose a broker service
   sample \t\t - add sample data
   http \t\t\t - add .http files
+  app \t\t\t - add app files
 
 Examples:
   afc add broker
@@ -60,13 +61,13 @@ Examples:
 
 program.unknownOption = function () {};
 
-program.parse();
+program.parse(process.argv);
 
-async function initProject() {
-  const options = program.opts();
-  const initFn = require(`./init`);
-  await initFn(options.target);
+async function initProject(target) {
   console.log(`Initializing project`);
+  const initFn = require(`./init`);
+  await initFn(target);
+  const options = this.opts();
   if (options.add) {
     const features = options.add.split(",").map((f) => f.trim());
     await applyFeatures(features);
@@ -83,9 +84,8 @@ async function applyFeatures(features) {
   for (const feature of features) {
     try {
       const featureFn = require(`./features/${feature}`);
-      console.log(`Applying feature '${feature}'`);
+      console.log(`Adding feature '${feature}'`);
       await featureFn();
-      console.log();
     } catch (err) {
       console.log(`Unknown feature '${feature}'`);
     }
