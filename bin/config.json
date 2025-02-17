@@ -1,36 +1,12 @@
 {
-  "targets": [
-    "cf",
-    "kyma"
-  ],
+  "targets": ["cf", "kyma"],
   "defaultTarget": "cf",
   "appRoot": "app",
-  "apps": [
-    "scheduling.monitoring.job"
-  ],
+  "apps": ["scheduling.monitoring.job"],
   "features": {
-    "cds": [
-      "sqlite",
-      "hana",
-      "xsuaa",
-      "approuter",
-      "html5-repo",
-      "workzone",
-      "connectivity",
-      "destination",
-      "redis"
-    ],
-    "cf": [
-      "mta"
-    ],
-    "kyma": [
-      "helm",
-      "containerize"
-    ],
-    "afc": [
-      "broker",
-      "sample",
-      "http"
-    ]
+    "cds": ["sqlite", "hana", "xsuaa", "approuter", "html5-repo", "workzone", "connectivity", "destination", "redis"],
+    "cf": ["mta"],
+    "kyma": ["helm", "containerize"],
+    "afc": ["broker", "sample", "http"]
   }
 }

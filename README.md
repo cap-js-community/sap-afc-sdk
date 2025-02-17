@@ -545,7 +545,7 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 - Terminal: `cds add html5-repo`
 - Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
 - Apps from AFC SDK can be included into project at `/app` via (necessary for Kyma deployment):
-  - Terminal: `afc add app` 
+  - Terminal: `afc add app`
 
 #### Redis
 
