@@ -23,7 +23,7 @@
 - Execute `cds-serve` to start server
   - Access welcome page at http://localhost:4004
   - Access UIs
-    - [/launchpad.html](http://localhost:4004/launchpad.html): Sandbox Launchpad
+    - [/$launchpad](http://localhost:4004/$launchpad): Sandbox Launchpad
     - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone
       Scheduling Monitoring Job UI
   - Access Service Endpoints
