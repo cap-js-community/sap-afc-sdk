@@ -7,6 +7,6 @@
     "cds": ["sqlite", "hana", "xsuaa", "approuter", "html5-repo", "workzone", "connectivity", "destination", "redis"],
     "cf": ["mta"],
     "kyma": ["helm", "containerize"],
-    "afc": ["broker", "sample", "http"]
+    "afc": ["broker", "sample", "http", "add"]
   }
 }
