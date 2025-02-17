@@ -45,7 +45,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 1`
 
 exports[`Processing Service processJob - simple mock - failed 1`] = `[]`;
 
-exports[`Processing Service updateJob - results 1`] = `
+exports[`Processing Service updateJob - results - base64 1`] = `
 [
   {
     "filename": "test.txt",
@@ -71,7 +71,7 @@ exports[`Processing Service updateJob - results 1`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - results 2`] = `
+exports[`Processing Service updateJob - results - base64 2`] = `
 [
   {
     "severity_code": "info",
@@ -79,3 +79,17 @@ exports[`Processing Service updateJob - results 2`] = `
   },
 ]
 `;
+
+exports[`Processing Service updateJob - results - readable 1`] = `
+[
+  {
+    "filename": "test.txt",
+    "link": null,
+    "mimeType": "text/plain",
+    "name": "Data",
+    "type_code": "data",
+  },
+]
+`;
+
+exports[`Processing Service updateJob - results - readable 2`] = `[]`;

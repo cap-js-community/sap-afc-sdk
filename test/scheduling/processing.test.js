@@ -2,6 +2,8 @@
 
 const cds = require("@sap/cds");
 const { text } = require("node:stream/consumers");
+const util = require("util");
+const { Readable } = require("stream");
 
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
 const { JobStatus, JobResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
@@ -209,7 +211,7 @@ describe("Processing Service", () => {
     ws.close();
   });
 
-  it("updateJob - results", async () => {
+  it("updateJob - results - base64", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
     await processOutbox();
     await expect(
@@ -250,7 +252,60 @@ describe("Processing Service", () => {
       .from("scheduling.JobResult")
       .columns("data")
       .where({ job_ID: ID, type: JobResultType.data });
-    expect(await text(result.data)).toEqual("This is a test");
+    const data = await text(result.data);
+    expect(data).toEqual("This is a test");
+  });
+
+  it("updateJob - results - readable", async () => {
+    await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
+    await processOutbox();
+    const stream = new Readable();
+    stream.push("This is a test");
+    stream.push(null);
+    await expect(
+      processingService.updateJob(ID, JobStatus.completed, [
+        {
+          type: JobResultType.data,
+          name: "Data",
+          filename: "test.txt",
+          mimeType: "text/plain",
+          data: stream,
+        },
+      ]),
+    ).resolves.not.toThrow();
+    await processOutbox();
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.completed);
+    const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const resultIDs = jobResults.map((j) => j.ID);
+    expect(cleanData(jobResults)).toMatchSnapshot();
+    const jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
+    expect(cleanData(jobMessages)).toMatchSnapshot();
+    const result = await SELECT.one
+      .from("scheduling.JobResult")
+      .columns("data")
+      .where({ job_ID: ID, type: JobResultType.data });
+    const data = await text(result.data);
+    expect(data).toEqual("���r�^i֛�");
+  });
+
+  it("updateJob - results - arraybuffer", async () => {
+    await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
+    await processOutbox();
+    const encoder = new util.TextEncoder();
+    await expect(
+      processingService.updateJob(ID, JobStatus.completed, [
+        {
+          type: JobResultType.data,
+          name: "Data",
+          filename: "test.txt",
+          mimeType: "text/plain",
+          data: encoder.encode("This is a test"),
+        },
+      ]),
+    ).resolves.not.toThrow();
+    await processOutbox();
+    expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary { type: 'cds.LargeBinary' }/s));
   });
 
   it("cancelJob", async () => {

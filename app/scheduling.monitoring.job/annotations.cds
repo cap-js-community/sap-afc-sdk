@@ -51,12 +51,12 @@ annotate service.Job with @(
     {
       $Type : 'UI.ReferenceFacet',
       Label : '{i18n>Parameters}',
-      Target: 'parameters/@UI.LineItem'
+      Target: 'parameters/@UI.PresentationVariant'
     },
     {
       $Type : 'UI.ReferenceFacet',
       Label : '{i18n>Results}',
-      Target: 'results/@UI.LineItem'
+      Target: 'results/@UI.PresentationVariant'
     }
   ],
   UI.LineItem           : [
@@ -194,7 +194,7 @@ annotate service.JobParameter with @(
     TypeNamePlural: '{i18n>JobParameters}',
     Title         : {
       Label: '{i18n>JobParameter}',
-      Value: definition.name
+      Value: definition_name
     },
     Description   : {Value: definition.type_code}
   },
@@ -202,12 +202,16 @@ annotate service.JobParameter with @(
     Visualizations: ['@UI.LineItem'],
     SortOrder     : [{
       $Type     : 'Common.SortOrderType',
-      Property  : definition.name,
+      Property  : definition_name,
       Descending: false
     }]
   },
   UI.SelectionFields    : [definition.name],
 );
+
+annotate service.JobParameter {
+  job @UI.Hidden;
+}
 
 annotate service.JobParameterDefinition {
   type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
@@ -258,7 +262,7 @@ annotate service.JobResult with @(
   UI.Facets              : [{
     $Type         : 'UI.ReferenceFacet',
     Label         : '{i18n>Messages}',
-    Target        : 'messages/@UI.LineItem',
+    Target        : 'messages/@UI.PresentationVariant',
     ![@UI.Hidden] : (type.code != 'message' ? true : false)
   }],
   UI.LineItem            : [
@@ -310,6 +314,7 @@ annotate service.JobResult with @(
 );
 
 annotate service.JobResult {
+  job      @UI.Hidden;
   type     @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
   link     @HTML5.LinkTarget               : '_blank';
   dataLink @HTML5.LinkTarget               : '_blank';
@@ -362,18 +367,12 @@ annotate service.JobResultMessage with @(
     },
     Description   : {Value: severity.code}
   },
-  UI.PresentationVariant: {
-    Visualizations: ['@UI.LineItem'],
-    SortOrder     : [{
-      $Type     : 'Common.SortOrderType',
-      Property  : criticality,
-      Descending: false
-    }]
-  },
+  UI.PresentationVariant: {Visualizations: ['@UI.LineItem'], },
   UI.SelectionFields    : [],
 );
 
 annotate service.JobResultMessage {
+  result    @UI.Hidden;
   severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
 };
 

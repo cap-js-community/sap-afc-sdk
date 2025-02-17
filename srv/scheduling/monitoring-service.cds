@@ -13,7 +13,11 @@ service SchedulingMonitoringService {
 
   entity JobParameter @readonly           as projection on scheduling.JobParameter;
   entity JobResult @readonly              as projection on scheduling.JobResult;
-  entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage;
+
+  entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage
+                                             order by
+                                               criticality asc;
+
   entity JobStatus @readonly              as projection on scheduling.JobStatus;
   entity JobResultType @readonly          as projection on scheduling.JobResultType;
   entity ParameterType @readonly          as projection on scheduling.ParameterType;
@@ -24,7 +28,7 @@ service SchedulingMonitoringService {
 
 annotate SchedulingMonitoringService.JobResult {
   mimeType @Core.IsMediaType;
-  data     @Core.ContentDisposition.Filename: filename  @Core.MediaType: mimeType;
+  data     @Core.MediaType: mimeType  @Core.ContentDisposition.Type: 'attachment'  @Core.ContentDisposition.Filename: filename;
 };
 
 extend SchedulingMonitoringService.JobResult with columns {

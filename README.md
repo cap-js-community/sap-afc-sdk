@@ -23,7 +23,7 @@
 - Execute `cds-serve` to start server
   - Access welcome page at http://localhost:4004
   - Access UIs
-    - [/$launchpad](http://localhost:4004/$launchpad): Sandbox Launchpad
+    - [/launchpad.html](http://localhost:4004/launchpad.html): Sandbox Launchpad
     - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone
       Scheduling Monitoring Job UI
   - Access Service Endpoints
@@ -205,6 +205,8 @@ To implement a custom Job processing extend the Job processing service definitio
   annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
   ```
 
+Service can be restricted for authorization adding `@requires` annotation.
+
 - Implementation file: `/srv/scheduling-processing-service.js`
 
   ```js
@@ -307,6 +309,7 @@ The following constraints apply for each Job result type:
   - Other properties are not allowed
 - `data`:
   - Properties `name`, `mimeType`, `filename` and `data` need to be provided
+  - Data needs to be provided as base64 encoded string
   - Other properties are not allowed
 - `message`:
   - Properties `name` and `messages` need to be provided
@@ -332,6 +335,8 @@ To implement a custom Job provider extend the Job provider service definition as
   using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
   annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';
   ```
+
+Service can be restricted for authorization adding `@requires` annotation.
 
 #### Implementation file: `/srv/scheduling-provider-service.js`
 
@@ -400,53 +405,48 @@ CAP application.
 - Provide Project Name
 - Select Development Stack: `Node.js`
 - Press `Create`
-- Open Terminal
-  - Continue with `cds` CLI, adding features
+- Continue with `cds` CLI, [adding features](#add-features)
 
-**CDS CLI**:
+**CDS Command-Line-Interface**:
 
-- Install `@sap/cds-dk` globally:
-  - Terminal: `npm install -g @sap/cds-dk`
+- Terminal: `npm install -g @sap/cds-dk`
 - Init a new CDS project:
   - Terminal: `cds init <name>`
 - Switch to project folder:
   - Terminal: `cd <name>`
 
-### All-In-One Setup
+### Add features
 
-**Adding Features**:
+**AFC initialize**:
 
-- Add CDS features:
-  - Kyma:
-    - Terminal: `cds add helm,approuter,xsuaa,html5-repo --for production`
+- Add AFC SDK
+  - Terminal `npm install @cap-js-community/sap-afc-sdk`
+- Init Target Environment:
   - Cloud Foundry:
-    - Terminal: `cds add mta,approuter,xsuaa,html5-repo --for production`
-- Add AFC SDK:
-  - Terminal: `npm add @cap-js-community/sap-afc-sdk`
-- Add AFC SDK features: `afc add broker,sample,http`
+    - Terminal: `afc init cf`
+  - Kyma:
+    - Terminal: `afc init kyma`
+- Add AFC SDK features:
+  - Terminal: `afc add broker,sample,http`
 - Install: `npm install`
-
-### Local Testing
-
-Project can be tested locally:
-
-- Terminal: `npm start`
-- Browser: `http://localhost:4004`
+- Test
+  - Terminal: `npm start`
+  - Browser: `http://localhost:4004`
 
 ### Deployment
 
 To fully test the application, also accessing API from external a deployment needs to be performed.
-BTP offers different deployment options, depending on the target environment (Kyma or Cloud Foundry).
-
-#### Kyma
-
-- Terminal: `cds add helm`
-- Follow Guide for Kyma: https://cap.cloud.sap/docs/guides/deployment/to-kyma
+BTP offers different deployment options, depending on the target environment (Cloud Foundry or Kyma).
 
 #### Cloud Foundry
 
 - Terminal: `cds add mta`
 - Follow Guide for CF: https://cap.cloud.sap/docs/guides/deployment/to-cf
+
+#### Kyma
+
+- Terminal: `cds add helm`
+- Follow Guide for Kyma: https://cap.cloud.sap/docs/guides/deployment/to-kyma
 
 ### Step-by-step Setup
 
@@ -484,14 +484,6 @@ The broker is used to manage service key management to the API.
   - See `.http` files in [/http](./http) to call API endpoints
   - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
 
-#### Approuter
-
-To serve UIs and provided authentication mechanisms via browser, and approuter needs to be added to project:
-
-- Terminal: `cds add approuter`
-
-Approuter is added in folder `/app/router`. It can be deployed as separate application.
-
 #### Authentication
 
 Authentication can be performed omn BTP using XSUAA or IAS.
@@ -508,6 +500,14 @@ Add XSUAA based authentication:
 Add IAS based authentication:
 
 - Terminal: `cds add ias`
+
+#### Approuter
+
+To serve UIs and provided authentication mechanisms via browser, and approuter needs to be added to project:
+
+- Terminal: `cds add approuter`
+
+Approuter is added in folder `/app/router`. It can be deployed as separate application.
 
 ### Advanced Setup
 

@@ -564,11 +564,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <Collection>
             <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Parameters"/>
-              <PropertyValue Property="Target" AnnotationPath="parameters/@UI.LineItem"/>
+              <PropertyValue Property="Target" AnnotationPath="parameters/@UI.PresentationVariant"/>
             </Record>
             <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Results"/>
-              <PropertyValue Property="Target" AnnotationPath="results/@UI.LineItem"/>
+              <PropertyValue Property="Target" AnnotationPath="results/@UI.PresentationVariant"/>
             </Record>
           </Collection>
         </Annotation>
@@ -855,7 +855,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="Title">
               <Record Type="UI.DataField">
                 <PropertyValue Property="Label" String="Job Parameter"/>
-                <PropertyValue Property="Value" Path="definition/name"/>
+                <PropertyValue Property="Value" Path="definition_name"/>
               </Record>
             </PropertyValue>
             <PropertyValue Property="Description">
@@ -875,7 +875,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="definition/name"/>
+                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
                   <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
@@ -900,7 +900,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="definition/name"/>
+                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
                   <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
@@ -927,9 +927,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter/job">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter/job_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter/definition">
@@ -1015,7 +1017,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <Collection>
             <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Messages"/>
-              <PropertyValue Property="Target" AnnotationPath="messages/@UI.LineItem"/>
+              <PropertyValue Property="Target" AnnotationPath="messages/@UI.PresentationVariant"/>
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
@@ -1157,9 +1159,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/job">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/job_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/name">
@@ -1204,12 +1208,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/data">
+        <Annotation Term="Core.MediaType" Path="mimeType"/>
         <Annotation Term="Core.ContentDisposition">
           <Record Type="Core.ContentDispositionType">
+            <PropertyValue Property="Type" String="attachment"/>
             <PropertyValue Property="Filename" Path="filename"/>
           </Record>
         </Annotation>
-        <Annotation Term="Core.MediaType" Path="mimeType"/>
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/messages">
@@ -1272,14 +1277,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <AnnotationPath>@UI.LineItem</AnnotationPath>
               </Collection>
             </PropertyValue>
-            <PropertyValue Property="SortOrder">
-              <Collection>
-                <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="criticality"/>
-                  <PropertyValue Property="Descending" Bool="false"/>
-                </Record>
-              </Collection>
-            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.SelectionFields">
@@ -1308,14 +1305,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <AnnotationPath>@UI.LineItem</AnnotationPath>
               </Collection>
             </PropertyValue>
-            <PropertyValue Property="SortOrder">
-              <Collection>
-                <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="criticality"/>
-                  <PropertyValue Property="Descending" Bool="false"/>
-                </Record>
-              </Collection>
-            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1338,9 +1327,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/result">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/result_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/text">

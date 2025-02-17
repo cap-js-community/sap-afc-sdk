@@ -4,8 +4,7 @@
 const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
-const { execSync } = require("child_process");
-const sbf = "npx -y -p @sap/sbf hash-broker-password -b";
+const shelljs = require("shelljs");
 
 const BROKER_PATH = path.join(process.cwd(), "./srv/broker.json");
 const CATALOG_PATH = path.join(process.cwd(), "./srv/catalog.json");
@@ -79,7 +78,7 @@ function writeFile(path, content) {
 }
 
 function generateHashBrokerPassword() {
-  const result = String(execSync(sbf));
+  const result = shelljs.exec("npx -y -p @sap/sbf hash-broker-password -b").stdout;
   const parts = result.split("\n");
   const [, clear, , hash] = parts;
   return {

@@ -206,7 +206,7 @@ exports[`API GET Job Result Messages 1`] = `
   {
     "resultID": "c2eb590f-9505-4fd6-a5e2-511a1b2ff47f",
     "severity": "info",
-    "text": "This is a information",
+    "text": "This is an information",
   },
 ]
 `;
@@ -238,323 +238,86 @@ exports[`API GET Job Results 1`] = `
 `;
 
 exports[`API Open API GET API Docs Root 1`] = `
-"<!DOCTYPE html>
-<html>
-    <head>
-        <title>@cap-js-community/sap-afc-sdk 0.1.0</title>
-        <meta name="color-scheme" content="dark light">
-        <style>
-body {
-  font-family: Avenir Next, sans-serif;
-  background: #f8fbff;
-}
-
-body #welcome {
-  margin: 30px auto 50px;
-  padding: 0 30px;
-  max-width: 900px;
-}
-
-body #welcome h1, #welcome h3, #welcome h2, #welcome p {
-  margin: 20px 0;
-  color: #47637d;
-  font-weight: 400;
-}
-
-body #welcome h3.header {
-  margin: 20px 0 0 0;
-  background-color: #537492;
-  color: white;
-}
-
-body #welcome h3 a {
-  color: inherit;
-  font-weight: 500;
-}
-
-body #welcome h3 a span {
-  padding: 5px 15px;
-  font-weight: 300;
-  transition: all 0.2s ease-in;
-}
-
-body #welcome h3 a:first-child span {
-  display: inline-block;
-  padding: 5px 15px;
-}
-
-body #welcome h3 a span:hover {
-  color: #92b2d0;
-}
-
-body #welcome ul {
-  margin: 0;
-  background: #91adc5;
-  list-style-type: none;
-  padding-inline-start: 20px;
-}
-
-body #welcome li {
-  display: inline-grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  width: 100%;
-  margin-bottom: 1px;
-  background-color: #d0e9ff;
-  padding: 0;
-  /*
-  -moz-transition: background color 0.2s ease-in;
-  -webkit-transition: background 0.2s ease-in;
-  -o-transition: background 0.2s ease-in;
-  /* Standard */
-  transition: all 0.1s ease-in;
-}
-
-body #welcome ul li div:not(:first-child) a {
-  font-weight: 300;
-}
-
-body #welcome a {
-  text-decoration: none;
-}
-
-body #welcome li a, body #welcome li > span {
-  padding: 4px 10px;
-  font-weight: 500;
-  color: #1d5985;
-  transition: all 0.1s ease-in;
-}
-body #welcome li.operation span {
-  font-style: italic;
-}
-
-body #welcome li a span:hover {
-  color: #f0faff;
-  background-color: #a7c8e1;
-}
-
-body #welcome .preview {
-  font-size: small;
-}
-
-footer {
-  border-top: .5px solid;
-  margin-top: 44px;
-  padding-top: 22px;
-  width: 400px;
-  font-size: 90%;
-}
-
-@media (prefers-color-scheme: dark) {
-  body { background: #0a2138; }
-
-  body #welcome h1, #welcome h3, #welcome h2, #welcome p {
-      color: #a6c1d9;
-  }
-  body #welcome h3 a {
-      color: #e2efff;
-  }
-  body #welcome ul {
-      background: #7894ad;
-  }
-  body #welcome li {
-      background-color: #506d88;
-  }
-  body #welcome li a, body #welcome li:hover div:not(:first-child) a, body #welcome li > span {
-      color: #d0e4f2;
-  }
-  body #welcome li a:hover {
-      color: white;
-      background-color: #7894ad;
-  }
-
-  body #welcome h3.header {
-      background-color: #304c65;
-  }
-
-  footer {
-      border-top: .5px solid #456;
-      color: #567;
-  }
-}
-        </style>
-    </head>
-    <body>
-        <div id="welcome">
-            <h1> Welcome to <i>@sap/cds</i> Server </h1>
-            <p class="subtitle"> Serving @cap-js-community/sap-afc-sdk 0.1.0 </p>
-
-            <p> These are the paths currently served:</p>
-
-            <h2> Web Applications: </h2>
-            <ul>
-                <li><a href="launchpad.html"><span>/launchpad.html</span></a></li>
-<li><a href="scheduling.monitoring.job/webapp/index.html"><span>/scheduling.monitoring.job/webapp</span></a></li>
-<li><a href="/scheduling.monitoring.job"><span>/scheduling.monitoring.job</span></a></li>
-            </ul>
-
-            <h2> Service Endpoints: </h2>
-            
-      <div id="schedulingwebsocketservice-ws">
-        <h3 class="header">
-          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-        </ul>
-      </div>
+"
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   
-      <div id="featureservice-rest">
-        <h3 class="header">
-          <a href="/rest/feature"><span>/rest/feature</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-          <li id="featureservice-rest-state" class="operation">
-            <div>
-              <a href="/rest/feature/state()" title="/rest/feature/state()"><span>state()</span></a>
-            </div>
-          </li>
-        </ul>
-      </div>
-  
-      <div id="schedulingmonitoringservice-odata">
-        <h3 class="header">
-          <a href="/srv/job-scheduling/monitoring"><span>/srv/job-scheduling/monitoring</span></a><span>/</span> <a href="/srv/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
-        </h3>
-        <ul>
-          <li id="schedulingmonitoringservice-odata-jobdefinition">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobparameterdefinition">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-job">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/Job"><span>Job</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobparameter">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobresult">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobresultmessage">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobstatus">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobresulttype">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/JobResultType"><span>JobResultType</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-parametertype">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-datatype">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/DataType"><span>DataType</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-mappingtype">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-messageseverity">
-            <div>
-              <a href="/srv/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
-      <div id="schedulingproviderservice-rest">
-        <h3 class="header">
-          <a href="/api/job-scheduling/v1"><span>/api/job-scheduling/v1</span></a> <span><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></span>
-        </h3>
-        <ul>
-          <li id="schedulingproviderservice-rest-jobdefinition">
-            <div>
-              <a href="/api/job-scheduling/v1/JobDefinition"><span>JobDefinition</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-          <li id="schedulingproviderservice-rest-jobparameterdefinition">
-            <div>
-              <a href="/api/job-scheduling/v1/JobParameterDefinition"><span>JobParameterDefinition</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-          <li id="schedulingproviderservice-rest-job">
-            <div>
-              <a href="/api/job-scheduling/v1/Job"><span>Job</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-          <li id="schedulingproviderservice-rest-jobparameter">
-            <div>
-              <a href="/api/job-scheduling/v1/JobParameter"><span>JobParameter</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-          <li id="schedulingproviderservice-rest-jobresult">
-            <div>
-              <a href="/api/job-scheduling/v1/JobResult"><span>JobResult</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-          <li id="schedulingproviderservice-rest-jobresultmessage">
-            <div>
-              <a href="/api/job-scheduling/v1/JobResultMessage"><span>JobResultMessage</span></a>
-            </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
-          </li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
+  <title>Swagger UI</title>
+  <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
+  <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" /><link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
 
-            <footer>
-                This is an automatically generated page. <br>
-                You can replace it with a custom <code>./app/index.html</code>.
-            </footer>
-        </div>
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+</head>
 
-    </body>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute;width:0;height:0">
+  <defs>
+    <symbol viewBox="0 0 20 20" id="unlocked">
+      <path d="M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V6h2v-.801C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8z"></path>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="locked">
+      <path d="M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8zM12 8H8V5.199C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="close">
+      <path d="M14.348 14.849c-.469.469-1.229.469-1.697 0L10 11.819l-2.651 3.029c-.469.469-1.229.469-1.697 0-.469-.469-.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-.469-.469-.469-1.228 0-1.697.469-.469 1.228-.469 1.697 0L10 8.183l2.651-3.031c.469-.469 1.228-.469 1.697 0 .469.469.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c.469.469.469 1.229 0 1.698z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="large-arrow">
+      <path d="M13.25 10L6.109 2.58c-.268-.27-.268-.707 0-.979.268-.27.701-.27.969 0l7.83 7.908c.268.271.268.709 0 .979l-7.83 7.908c-.268.271-.701.27-.969 0-.268-.269-.268-.707 0-.979L13.25 10z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="large-arrow-down">
+      <path d="M17.418 6.109c.272-.268.709-.268.979 0s.271.701 0 .969l-7.908 7.83c-.27.268-.707.268-.979 0l-7.908-7.83c-.27-.268-.27-.701 0-.969.271-.268.709-.268.979 0L10 13.25l7.418-7.141z"/>
+    </symbol>
+
+
+    <symbol viewBox="0 0 24 24" id="jump-to">
+      <path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 24 24" id="expand">
+      <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+<div id="swagger-ui"></div>
+
+<script src="./swagger-ui-bundle.js"> </script>
+<script src="./swagger-ui-standalone-preset.js"> </script>
+<script src="./swagger-ui-init.js"> </script>
+
+
+
+<style>
+  .swagger-ui .topbar .download-url-wrapper { display: none } undefined
+</style>
+</body>
+
 </html>
 "
 `;

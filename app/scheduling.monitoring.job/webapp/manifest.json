@@ -133,7 +133,7 @@
                   }
                 }
               },
-              "initialLoad": true,
+              "liveMode": true,
               "controlConfiguration": {
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
@@ -207,5 +207,9 @@
   "sap.fiori": {
     "registrationIds": [],
     "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "scheduling.monitoring.job"
   }
 }
