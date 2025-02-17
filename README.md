@@ -456,6 +456,8 @@ BTP offers different deployment options, depending on the target environment (Cl
   - Terminal: `cds add mta`
 - Build MTA
   - Terminal: `mbt build`
+- Deploy MTA
+  - Terminal: `cf deploy mta_archives/<mta>.mtar`
 - Follow Guide for [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
 
 #### Kyma
@@ -464,9 +466,9 @@ BTP offers different deployment options, depending on the target environment (Cl
   - Terminal: `cds add helm`
 - Containerize
   - Terminal: `ctz containerize.yaml --push`
-- Upgrade chart
+- Upgrade
   - Terminal: `helm upgrade --install <name> ./gen/chart -n <namespace>`
-- Rollout and restart deployment
+- Deploy
   - Terminal: `kubectl rollout restart deployment -n <namespace>`
 - Follow Guide for [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
 
