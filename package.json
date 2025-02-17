@@ -64,6 +64,7 @@
     "verror": "^1.10.1"
   },
   "devDependencies": {
+    "cds-launchpad-plugin": "^2.2.0",
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/sqlite": "^1.8.0",
     "@sap/cds": "^8.7.1",
@@ -173,7 +174,6 @@
     }
   },
   "sapux": [
-    "app/admin-books",
-    "app/browse"
+    "app/scheduling.monitoring.job"
   ]
 }
