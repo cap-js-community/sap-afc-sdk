@@ -81,6 +81,9 @@
     "ws": "^8.18.0"
   },
   "cds": {
+    "server": {
+      "index": true
+    },
     "websocket": {
       "kind": "ws",
       "[production]": {
