@@ -6,7 +6,9 @@ const path = require("path");
 
 module.exports = () => {
   try {
-    fs.cpSync(path.join(__dirname, "../../http"), path.join(process.cwd(), "http"), { recursive: true });
+    const httpPath = path.join(process.cwd(), "http");
+    fs.cpSync(path.join(__dirname, "../../http"), httpPath, { recursive: true });
+    console.log(`Folder '${httpPath}' written.`);
   } catch (err) {
     console.error(err.message);
   }

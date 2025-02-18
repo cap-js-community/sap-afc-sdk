@@ -1,0 +1,31 @@
+{
+  "paths": {
+    "broker": "./srv/broker.json",
+    "catalog": "./srv/catalog.json",
+    "launchpad": "launchpad.html",
+    "swaggerUi": "/api-docs"
+  },
+  "apps": {
+    "scheduling.monitoring.job": {}
+  },
+  "services": {
+    "SchedulingProcessingService": {
+      "outbox": true
+    },
+    "SchedulingWebsocketService": {
+      "outbox": true
+    }
+  },
+  "toggles": {
+    "eventQueue": {
+      "isEventQueueActive": "eventQueue/active",
+      "instanceLoadLimit": "eventQueue/instanceLoadLimit"
+    }
+  },
+  "extensions": {
+    "openapi": "openapi3.json"
+  },
+  "endpoints": {
+    "authentication": "https://authentication.sap.hana.ondemand.com"
+  }
+}

@@ -2,23 +2,29 @@
 
 exports[`CDS Plugin GET App Config 1`] = `
 {
-  "bootstrapPlugins": {},
   "services": {
     "ClientSideTargetResolution": {
       "adapter": {
         "config": {
           "inbounds": {
-            "scheduling.monitoring.job-Job-monitor": {
+            "JobMonitor": {
               "action": "monitor",
               "resolutionResult": {
                 "additionalInformation": "SAPUI5.Component=scheduling.monitoring.job",
                 "applicationType": "SAPUI5",
-                "url": "/scheduling.monitoring.job/webapp",
+                "url": "/custom/./scheduling.monitoring.job/webapp",
               },
               "semanticObject": "Job",
               "signature": {
                 "additionalParameters": "allowed",
-                "parameters": {},
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID",
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID",
+                  },
+                },
               },
               "title": "Monitor Scheduling Jobs",
             },
@@ -32,22 +38,38 @@ exports[`CDS Plugin GET App Config 1`] = `
           "catalogs": [],
           "groups": [
             {
-              "id": "Home",
+              "id": "Scheduling",
               "isGroupLocked": false,
               "isPreset": true,
               "isVisible": true,
               "tiles": [
                 {
-                  "id": "scheduling.monitoring.job-Job-monitor",
+                  "id": "JobMonitor",
                   "properties": {
                     "targetURL": "#Job-monitor",
                     "title": "Monitor Scheduling Jobs",
                   },
-                  "serviceRefreshInterval": 10000,
                   "tileType": "sap.ushell.ui.tile.StaticTile",
                 },
               ],
-              "title": "Home",
+              "title": "Scheduling",
+            },
+            {
+              "id": "Scheduling",
+              "isGroupLocked": false,
+              "isPreset": true,
+              "isVisible": true,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "properties": {
+                    "targetURL": "#Job-monitor",
+                    "title": "Monitor Scheduling Jobs",
+                  },
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                },
+              ],
+              "title": "Scheduling",
             },
           ],
         },

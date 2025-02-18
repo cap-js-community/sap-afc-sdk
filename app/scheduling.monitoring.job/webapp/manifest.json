@@ -30,7 +30,7 @@
         "Job-monitor": {
           "semanticObject": "Job",
           "action": "monitor",
-          "title": "{{flpTitle}}",
+          "title": "{{appTitle}}",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"

@@ -6,12 +6,12 @@ const cds = require("@sap/cds");
 const Broker = require("@sap/sbf");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
-const { config } = require("@cap-js-community/event-queue");
+const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 const toggles = require("@cap-js-community/feature-toggle-library");
 
 const { mergeDeep } = require("./src/util/helper");
 
-const SWAGGER_UI_PATH = "/api-docs";
+const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
@@ -49,19 +49,24 @@ function serveBroker() {
   if (!cds.env.requires?.["sap-afc-sdk"]?.broker) {
     return;
   }
-  let brokerConfig;
-  let catalogPath;
-  const brokerPath = path.join(cds.root, "./srv/broker.json");
+  let brokerConfig = {};
+  const envBrokerConfig = typeof cds.env.requires?.["sap-afc-sdk"]?.broker;
+  if (envBrokerConfig && typeof envBrokerConfig === "object") {
+    brokerConfig = envBrokerConfig;
+  }
+  const brokerPath = path.join(cds.root, config.paths.broker);
   try {
-    brokerConfig = require(brokerPath);
-    catalogPath = brokerConfig.catalog ?? "./srv/catalog.json";
-    for (const key in brokerConfig) {
-      if (key.startsWith("SBF_")) {
-        process.env[key] ??= JSON.stringify(brokerConfig[key]);
-      }
-    }
+    brokerConfig = mergeDeep(require(brokerPath), brokerConfig);
   } catch (err) {
-    cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+    if (Object.keys(brokerConfig).length === 0) {
+      cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+    }
+  }
+  const catalogPath = brokerConfig.catalog ?? config.paths.catalog;
+  for (const key in brokerConfig) {
+    if (key.startsWith("SBF_")) {
+      process.env[key] ??= JSON.stringify(brokerConfig[key]);
+    }
   }
   try {
     const router = express.Router();
@@ -84,34 +89,36 @@ function serveUIs() {
     return;
   }
   const uiPath = cds.env.requires?.["sap-afc-sdk"]?.ui?.path;
-  let uiShowFlp = cds.env.requires?.["sap-afc-sdk"]?.ui?.flp;
-  if (uiShowFlp) {
+  let uiShowLaunchpad = cds.env.requires?.["sap-afc-sdk"]?.ui?.launchpad;
+  if (uiShowLaunchpad) {
     const packageRoot = cds.utils.path.resolve(
       require.resolve(path.join(process.env.CDS_PLUGIN_PACKAGE, "package.json"), { paths: [cds.root] }),
       "..",
     );
-    if (!fs.existsSync(`${cds.root}/app/appconfig/fioriSandboxConfig.json`)) {
-      cds.app.serve(`${uiPath}/launchpad.html`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/launchpad.html");
+    if (!fs.existsSync(`${cds.root}/${cds.env.folders.app}appconfig/fioriSandboxConfig.json`)) {
+      cds.app.serve(`${uiPath}/${config.paths.launchpad}`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/launchpad.html");
       cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     } else {
       serveAppConfig(packageRoot, uiPath);
-      uiShowFlp = false;
+      uiShowLaunchpad = false;
     }
   }
-  const uiShowSchedulingMonitoringJob = cds.env.requires?.["sap-afc-sdk"]?.ui?.["scheduling.monitoring.job"];
-  if (uiShowFlp || uiShowSchedulingMonitoringJob) {
-    cds.app
-      .serve(`${uiPath}/scheduling.monitoring.job`)
-      .from(process.env.CDS_PLUGIN_PACKAGE, "/app/scheduling.monitoring.job/webapp");
-    cds.app
-      .serve(`${uiPath}/scheduling.monitoring.job/webapp`)
-      .from(process.env.CDS_PLUGIN_PACKAGE, "/app/scheduling.monitoring.job/webapp");
+  for (const app in config.apps) {
+    const uiShowApp = cds.env.requires?.["sap-afc-sdk"]?.ui?.app;
+    if ((uiShowLaunchpad || uiShowApp) && !fs.existsSync(`${cds.root}/${cds.env.folders.app}${app}`)) {
+      cds.app
+        .serve(`${uiPath}/${app}`)
+        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+      cds.app
+        .serve(`${uiPath}/${app}/webapp`)
+        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+    }
   }
 }
 
 function serveAppConfig(packageRoot, uiPath) {
   cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
-    const projectFioriSandboxConfig = require(`${cds.root}/app/appconfig/fioriSandboxConfig.json`);
+    const projectFioriSandboxConfig = require(`${cds.root}/${cds.env.folders.app}appconfig/fioriSandboxConfig.json`);
     const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);
     if (uiPath) {
       for (const name in packageFioriSandboxConfig.applications ?? {}) {
@@ -134,7 +141,7 @@ function serveSwaggerUI() {
   cds.on("serving", (service) => {
     const openAPI = service.definition?.["@openapi"];
     if (openAPI) {
-      const apiPath = SWAGGER_UI_PATH + service.path;
+      const apiPath = config.paths.swaggerUi + service.path;
       cds.log("/swagger").info("Serving Swagger UI for ", { service: service.name, at: apiPath });
       router.use(
         apiPath,
@@ -166,7 +173,7 @@ function serveSwaggerUI() {
 const openAPICache = new Map();
 
 function toOpenApiDoc(req, service, name) {
-  const filePath = `${name === true ? service.name : name}.openapi3.json`;
+  const filePath = `${name === true ? service.name : name}.${config.extensions.openapi}`;
   if (openAPICache.has(filePath)) {
     return openAPICache.get(filePath);
   }
@@ -201,15 +208,15 @@ function toOpenApiDoc(req, service, name) {
 }
 
 function serverUrl() {
-  // TODO: K8S?
+  // TODO: K8S
   return process.env.VCAP_APPLICATION
     ? "https://" + JSON.parse(process.env.VCAP_APPLICATION).uris?.[0]
     : cds.server.url;
 }
 
 function authorizationUrl() {
-  // TODO: IAS?
-  return cds.env.requires?.auth?.credentials?.url ?? "https://authentication.sap.hana.ondemand.com";
+  // TODO: IAS
+  return cds.env.requires?.auth?.credentials?.url ?? config.endpoints.authentication;
 }
 
 function addLinkToIndexHtml(service, apiPath) {
@@ -220,23 +227,21 @@ function addLinkToIndexHtml(service, apiPath) {
 }
 
 function outboxServices() {
-  if (cds.services.SchedulingProcessingService && cds.requires.SchedulingProcessingService.outbox) {
-    cds.services.SchedulingProcessingService.options.outbox = cds.requires.SchedulingProcessingService.outbox;
-    cds.services.SchedulingProcessingService = cds.outboxed(cds.services.SchedulingProcessingService);
-  }
-  if (cds.services.SchedulingWebsocketService && cds.requires.SchedulingWebsocketService.outbox) {
-    cds.services.SchedulingWebsocketService.options.outbox = cds.requires.SchedulingWebsocketService.outbox;
-    cds.services.SchedulingWebsocketService = cds.outboxed(cds.services.SchedulingWebsocketService);
+  for (const service in config.services) {
+    if (cds.services[service] && cds.requires[service]?.outbox && config.services[service].outbox) {
+      cds.services[service].options.outbox = cds.requires[service].outbox;
+      cds.services[service] = cds.outboxed(cds.services[service]);
+    }
   }
 }
 
 function handleFeatureToggles() {
-  config.isEventQueueActive = toggles.getFeatureValue("eventQueue/active");
-  toggles.registerFeatureValueChangeHandler("eventQueue/active", (value) => {
-    config.isEventQueueActive = value;
-  });
-  config.instanceLoadLimit = toggles.getFeatureValue("eventQueue/instanceLoadLimit");
-  toggles.registerFeatureValueChangeHandler("eventQueue/instanceLoadLimit", (value) => {
-    config.instanceLoadLimit = value;
-  });
+  // event-queue
+  for (const name in config.toggles.eventQueue) {
+    const toggle = config.toggles.eventQueue[name];
+    eventQueueConfig[name] = toggles.getFeatureValue(toggle);
+    toggles.registerFeatureValueChangeHandler(toggle, (value) => {
+      eventQueueConfig[name] = value;
+    });
+  }
 }

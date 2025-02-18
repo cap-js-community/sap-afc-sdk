@@ -3,6 +3,7 @@
 const cds = require("@sap/cds");
 
 const { authorization, clearEventQueue } = require("./helper");
+const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
 const log = cds.test.log();
 
@@ -44,11 +45,13 @@ describe("CDS Plugin", () => {
       value: false,
     });
     expect(response.status).toBe(204);
+    eventQueueConfig.isEventQueueActive = true;
     response = await POST("/rest/feature/redisUpdate", {
       key: "eventQueue/instanceLoadLimit",
       value: 11,
     });
     expect(response.status).toBe(204);
+    eventQueueConfig.instanceLoadLimit = 11;
     response = await GET("/rest/feature/state()");
     expect(response.data).toMatchSnapshot();
   });
@@ -62,6 +65,7 @@ describe("CDS Plugin", () => {
       },
     });
     expect(response.status).toBe(204);
+    eventQueueConfig.isEventQueueActive = false;
     response = await POST("/rest/feature/redisUpdate", {
       key: "eventQueue/instanceLoadLimit",
       value: null,
@@ -70,6 +74,7 @@ describe("CDS Plugin", () => {
       },
     });
     expect(response.status).toBe(204);
+    eventQueueConfig.instanceLoadLimit = 5;
     response = await GET("/rest/feature/state()");
     expect(response.data).toMatchSnapshot();
   });

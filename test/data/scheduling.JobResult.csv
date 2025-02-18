@@ -1,4 +1,4 @@
 ID;job_ID;name;type_code;link;mimeType;filename;data
-a2eb590f-9505-4fd6-a5e2-511a1b2ff47f;5a89dfec-59f9-4a91-90fe-3c7ca7407103;Link;link;https://sap.com;
+a2eb590f-9505-4fd6-a5e2-511a1b2ff47f;5a89dfec-59f9-4a91-90fe-3c7ca7407103;Link;link;https://sap.com;;;
 b2eb590f-9505-4fd6-a5e2-511a1b2ff47f;5a89dfec-59f9-4a91-90fe-3c7ca7407103;Data;data;;plain/text;test.txt;VGhpcyBpcyBhIHRlc3Q=
 c2eb590f-9505-4fd6-a5e2-511a1b2ff47f;5a89dfec-59f9-4a91-90fe-3c7ca7407103;Message;message;;;;

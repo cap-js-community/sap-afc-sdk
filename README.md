@@ -143,14 +143,14 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 ### Options
 
-Options can be passed to the SDK via CDS environment via `cds.rerquires.sap-sfc-dk` section:
+Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk` section:
 
 - `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default `{}`
   - `ui.path: String`: Path to the served UI5 application. Default `''`
-  - `ui.flp: Boolean`: Serve an FLP. Default `true`
+  - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
   - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job. Default `true`
   - `ui.api.scheduling.job.swagger: Boolean`: Serve Scheduling Provider Swagger UI. Default `true`
-- `broker: Boolean`: Serve the Broker endpoint. Default `true` in `production`
+- `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
@@ -160,6 +160,7 @@ Options can be passed to the SDK via CDS environment via `cds.rerquires.sap-sfc-
     - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
+- `config: Object`: SDK configuration
 
 ### Implementation
 

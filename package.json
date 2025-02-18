@@ -28,6 +28,7 @@
     "test/data",
     "CHANGELOG.md",
     "cds-plugin.js",
+    "config.json",
     "index.cds"
   ],
   "main": "index.js",
@@ -64,7 +65,6 @@
     "verror": "^1.10.1"
   },
   "devDependencies": {
-    "cds-launchpad-plugin": "^2.2.0",
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/sqlite": "^1.8.0",
     "@sap/cds": "^8.7.1",
@@ -127,7 +127,7 @@
         "model": "@cap-js-community/sap-afc-sdk",
         "ui": {
           "path": "",
-          "flp": true,
+          "launchpad": true,
           "scheduling.monitoring.job": true,
           "api.scheduling.job.swagger": true
         },
@@ -142,6 +142,7 @@
           "mockProcessing": {
             "min": 0,
             "max": 30,
+            "default": "completed",
             "status": {
               "completed": 0.5,
               "completedWithWarning": 0.2,

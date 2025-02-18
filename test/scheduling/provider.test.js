@@ -23,9 +23,24 @@ describe("API", () => {
       let response = await GET("/api-docs/api/job-scheduling/v1/");
       expect(response.status).toEqual(200);
       expect(response.data).toBeDefined();
-      await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("Request failed with status code 404");
-      expect(response.status).toEqual(200);
       expect(response.data).toMatchSnapshot();
+      response = await GET("/api-docs/api/job-scheduling/v1/");
+      expect(response.status).toEqual(200);
+      expect(response.data).toBeDefined();
+      expect(response.data).toMatchSnapshot();
+    });
+
+    it("GET API Docs - not auth", async () => {
+      cds.env.requires.auth.restrict_all_services = true;
+      axios.defaults.headers = {
+        Authorization: "",
+      };
+      await expect(GET("/api-docs/api/job-scheduling/v1/")).rejects.toThrow("Request failed with status code 401");
+      cds.env.requires.auth.restrict_all_services = false;
+    });
+
+    it("GET API Docs - not found", async () => {
+      await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("Request failed with status code 404");
     });
   });
 
