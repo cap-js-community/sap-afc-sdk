@@ -4,7 +4,7 @@ const cds = require("@sap/cds");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 
-const { JobStatus, JobResultType, MessageSeverity } = require("./common/codelist");
+const { JobStatus, ResultType, MessageSeverity } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
 
 const STATUS_TRANSITIONS = {
@@ -116,7 +116,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         return req.reject(JobSchedulingError.resultTypeMissing());
       }
       switch (result.type) {
-        case JobResultType.link:
+        case ResultType.link:
           if (!result.link) {
             return req.reject(JobSchedulingError.linkMissing());
           }
@@ -133,7 +133,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             return req.reject(JobSchedulingError.messagesNotAllowed(result.type));
           }
           break;
-        case JobResultType.data:
+        case ResultType.data:
           if (!result.mimeType) {
             return req.reject(JobSchedulingError.mimeTypeMissing());
           }
@@ -150,7 +150,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             return req.reject(JobSchedulingError.messagesNotAllowed(result.type));
           }
           break;
-        case JobResultType.message:
+        case ResultType.message:
           if (!(result?.messages?.length > 0)) {
             return req.reject(JobSchedulingError.messagesMissing());
           }
@@ -226,12 +226,12 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       case JobStatus.completed:
         results.push(
           {
-            type: JobResultType.link,
+            type: ResultType.link,
             name: "Link",
             link: "https://sap.com",
           },
           {
-            type: JobResultType.message,
+            type: ResultType.message,
             name: "Result",
             messages: [
               {
@@ -244,7 +244,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         break;
       case JobStatus.completedWithWarning:
         results.push({
-          type: JobResultType.message,
+          type: ResultType.message,
           name: "Result",
           messages: [
             {
@@ -256,7 +256,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         break;
       case JobStatus.completedWithError:
         results.push({
-          type: JobResultType.message,
+          type: ResultType.message,
           name: "Result",
           messages: [
             {

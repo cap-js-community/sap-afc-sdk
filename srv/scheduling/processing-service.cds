@@ -1,5 +1,5 @@
 using scheduling.JobStatusCode from '../../db/scheduling';
-using scheduling.JobResultTypeCode from '../../db/scheduling';
+using scheduling.ResultTypeCode from '../../db/scheduling';
 using scheduling.MessageSeverityCode from '../../db/scheduling';
 
 @protocol: 'none'
@@ -8,7 +8,7 @@ service SchedulingProcessingService {
 
   type JobResult {
     name     :      String not null;
-    type     :      JobResultTypeCode not null;
+    type     :      ResultTypeCode not null;
     link     :      String;
     mimeType :      String;
     filename :      String;

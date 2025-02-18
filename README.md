@@ -282,7 +282,7 @@ As part of the custom scheduling process service implementation, the following o
 The Job Results signature is defined as follows:
 
 ```cds
-type JobResultTypeCode   : String enum {
+type ResultTypeCode   : String enum {
   link;
   data;
   message;
@@ -296,7 +296,7 @@ type MessageSeverityCode : String enum {
 
 type JobResult {
   name     :      String not null;
-  type     :      JobResultTypeCode not null;
+  type     :      ResultTypeCode not null;
   link     :      String;
   mimeType :      String;
   filename :      String;

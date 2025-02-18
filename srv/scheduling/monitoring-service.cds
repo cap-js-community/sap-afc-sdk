@@ -19,7 +19,7 @@ service SchedulingMonitoringService {
                                                criticality asc;
 
   entity JobStatus @readonly              as projection on scheduling.JobStatus;
-  entity JobResultType @readonly          as projection on scheduling.JobResultType;
+  entity ResultType @readonly             as projection on scheduling.ResultType;
   entity ParameterType @readonly          as projection on scheduling.ParameterType;
   entity DataType @readonly               as projection on scheduling.DataType;
   entity MappingType @readonly            as projection on scheduling.MappingType;

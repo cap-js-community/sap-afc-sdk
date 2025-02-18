@@ -53,7 +53,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </EntitySet>
         <EntitySet Name="JobResult" EntityType="SchedulingMonitoringService.JobResult">
           <NavigationPropertyBinding Path="job" Target="Job"/>
-          <NavigationPropertyBinding Path="type" Target="JobResultType"/>
+          <NavigationPropertyBinding Path="type" Target="ResultType"/>
           <NavigationPropertyBinding Path="messages" Target="JobResultMessage"/>
         </EntitySet>
         <EntitySet Name="JobResultMessage" EntityType="SchedulingMonitoringService.JobResultMessage">
@@ -64,9 +64,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <NavigationPropertyBinding Path="texts" Target="JobStatus_texts"/>
           <NavigationPropertyBinding Path="localized" Target="JobStatus_texts"/>
         </EntitySet>
-        <EntitySet Name="JobResultType" EntityType="SchedulingMonitoringService.JobResultType">
-          <NavigationPropertyBinding Path="texts" Target="JobResultType_texts"/>
-          <NavigationPropertyBinding Path="localized" Target="JobResultType_texts"/>
+        <EntitySet Name="ResultType" EntityType="SchedulingMonitoringService.ResultType">
+          <NavigationPropertyBinding Path="texts" Target="ResultType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="ResultType_texts"/>
         </EntitySet>
         <EntitySet Name="ParameterType" EntityType="SchedulingMonitoringService.ParameterType">
           <NavigationPropertyBinding Path="texts" Target="ParameterType_texts"/>
@@ -85,7 +85,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <NavigationPropertyBinding Path="localized" Target="MessageSeverity_texts"/>
         </EntitySet>
         <EntitySet Name="JobStatus_texts" EntityType="SchedulingMonitoringService.JobStatus_texts"/>
-        <EntitySet Name="JobResultType_texts" EntityType="SchedulingMonitoringService.JobResultType_texts"/>
+        <EntitySet Name="ResultType_texts" EntityType="SchedulingMonitoringService.ResultType_texts"/>
         <EntitySet Name="ParameterType_texts" EntityType="SchedulingMonitoringService.ParameterType_texts"/>
         <EntitySet Name="DataType_texts" EntityType="SchedulingMonitoringService.DataType_texts"/>
         <EntitySet Name="MappingType_texts" EntityType="SchedulingMonitoringService.MappingType_texts"/>
@@ -183,7 +183,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </NavigationProperty>
         <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
         <Property Name="name" Type="Edm.String" Nullable="false"/>
-        <NavigationProperty Name="type" Type="SchedulingMonitoringService.JobResultType" Nullable="false">
+        <NavigationProperty Name="type" Type="SchedulingMonitoringService.ResultType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="type_code" Type="Edm.String" Nullable="false"/>
@@ -226,17 +226,17 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
-      <EntityType Name="JobResultType">
+      <EntityType Name="ResultType">
         <Key>
           <PropertyRef Name="code"/>
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobResultType_texts)">
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ResultType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobResultType_texts">
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.ResultType_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -306,7 +306,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" Nullable="false"/>
       </EntityType>
-      <EntityType Name="JobResultType_texts">
+      <EntityType Name="ResultType_texts">
         <Key>
           <PropertyRef Name="locale"/>
           <PropertyRef Name="code"/>
@@ -1181,7 +1181,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.ValueList">
           <Record Type="Common.ValueListType">
             <PropertyValue Property="Label" String="Type"/>
-            <PropertyValue Property="CollectionPath" String="JobResultType"/>
+            <PropertyValue Property="CollectionPath" String="ResultType"/>
             <PropertyValue Property="Parameters">
               <Collection>
                 <Record Type="Common.ValueListParameterInOut">
@@ -1439,7 +1439,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType">
+      <Annotations Target="SchedulingMonitoringService.ResultType">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -1448,7 +1448,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResultType">
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/ResultType">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -1465,14 +1465,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType/name">
+      <Annotations Target="SchedulingMonitoringService.ResultType/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType/descr">
+      <Annotations Target="SchedulingMonitoringService.ResultType/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType/code">
-        <Annotation Term="Common.Label" String="Job Result Type"/>
+      <Annotations Target="SchedulingMonitoringService.ResultType/code">
+        <Annotation Term="Common.Label" String="Result Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
             <Record Type="Validation.AllowedValue">
@@ -1826,17 +1826,17 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType_texts/locale">
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType_texts/name">
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType_texts/descr">
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultType_texts/code">
-        <Annotation Term="Common.Label" String="Job Result Type"/>
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/code">
+        <Annotation Term="Common.Label" String="Result Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
             <Record Type="Validation.AllowedValue">

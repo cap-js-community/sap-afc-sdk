@@ -111,7 +111,7 @@ entity JobResult : cuid, {
   name     : String not null;
 
   @title: '{i18n>Type}'
-  type     : Association to JobResultType not null;
+  type     : Association to ResultType not null;
 
   @title: '{i18n>Link}'
   link     : String;
@@ -212,15 +212,15 @@ entity MappingType : CodeList {
   key code : MappingTypeCode;
 };
 
-type JobResultTypeCode   : String enum {
+type ResultTypeCode      : String enum {
   link;
   data;
   message;
 };
 
-entity JobResultType : CodeList {
-      @title: '{i18n>JobResultType}'
-  key code : JobResultTypeCode;
+entity ResultType : CodeList {
+      @title: '{i18n>ResultType}'
+  key code : ResultTypeCode;
 };
 
 type MessageSeverityCode : String enum {

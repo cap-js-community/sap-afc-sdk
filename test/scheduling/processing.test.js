@@ -6,7 +6,7 @@ const util = require("util");
 const { Readable } = require("stream");
 
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
-const { JobStatus, JobResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
+const { JobStatus, ResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
 
 const { test } = cds.test(__dirname + "/../..");
 
@@ -217,19 +217,19 @@ describe("Processing Service", () => {
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
-          type: JobResultType.link,
+          type: ResultType.link,
           name: "Link",
           link: "https://sap.com",
         },
         {
-          type: JobResultType.data,
+          type: ResultType.data,
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
           data: btoa("This is a test"),
         },
         {
-          type: JobResultType.message,
+          type: ResultType.message,
           name: "Result",
           messages: [
             {
@@ -251,7 +251,7 @@ describe("Processing Service", () => {
     const result = await SELECT.one
       .from("scheduling.JobResult")
       .columns("data")
-      .where({ job_ID: ID, type: JobResultType.data });
+      .where({ job_ID: ID, type: ResultType.data });
     const data = await text(result.data);
     expect(data).toEqual("This is a test");
   });
@@ -265,7 +265,7 @@ describe("Processing Service", () => {
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
-          type: JobResultType.data,
+          type: ResultType.data,
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
@@ -284,7 +284,7 @@ describe("Processing Service", () => {
     const result = await SELECT.one
       .from("scheduling.JobResult")
       .columns("data")
-      .where({ job_ID: ID, type: JobResultType.data });
+      .where({ job_ID: ID, type: ResultType.data });
     const data = await text(result.data);
     expect(data).toEqual("���r�^i֛�");
   });
@@ -296,7 +296,7 @@ describe("Processing Service", () => {
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
-          type: JobResultType.data,
+          type: ResultType.data,
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
@@ -420,7 +420,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Link",
-            type: JobResultType.link,
+            type: ResultType.link,
           },
         ]),
       ).resolves.not.toThrow();
@@ -436,7 +436,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Link",
-            type: JobResultType.link,
+            type: ResultType.link,
             link: "https://sap.com",
             mimeType: "plain/text",
           },
@@ -454,7 +454,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Link",
-            type: JobResultType.link,
+            type: ResultType.link,
             link: "https://sap.com",
             filename: "test.txt",
           },
@@ -472,7 +472,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Link",
-            type: JobResultType.link,
+            type: ResultType.link,
             link: "https://sap.com",
             data: "xxx",
           },
@@ -490,7 +490,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Link",
-            type: JobResultType.link,
+            type: ResultType.link,
             link: "https://sap.com",
             messages: [],
           },
@@ -517,7 +517,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Data",
-            type: JobResultType.data,
+            type: ResultType.data,
           },
         ]),
       ).resolves.not.toThrow();
@@ -533,7 +533,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Data",
-            type: JobResultType.data,
+            type: ResultType.data,
             mimeType: "plain/text",
           },
         ]),
@@ -550,7 +550,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Data",
-            type: JobResultType.data,
+            type: ResultType.data,
             mimeType: "plain/text",
             filename: "test.txt",
           },
@@ -568,7 +568,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Data",
-            type: JobResultType.data,
+            type: ResultType.data,
             mimeType: "plain/text",
             filename: "test.txt",
             data: btoa("This is a test"),
@@ -588,7 +588,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Data",
-            type: JobResultType.data,
+            type: ResultType.data,
             mimeType: "plain/text",
             filename: "test.txt",
             data: btoa("This is a test"),
@@ -608,7 +608,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
           },
         ]),
       ).resolves.not.toThrow();
@@ -624,7 +624,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: {},
           },
         ]),
@@ -641,7 +641,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [],
           },
         ]),
@@ -658,7 +658,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{}],
           },
         ]),
@@ -675,7 +675,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message" }],
           },
         ]),
@@ -692,7 +692,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message", severity: "X" }],
           },
         ]),
@@ -709,7 +709,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message", severity: MessageSeverity.error }],
             link: "https://sap.com",
           },
@@ -727,7 +727,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message", severity: MessageSeverity.error }],
             mimeType: "text/plain",
           },
@@ -745,7 +745,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message", severity: MessageSeverity.error }],
             filename: "test.txt",
           },
@@ -763,7 +763,7 @@ describe("Processing Service", () => {
         processingService.updateJob(ID, JobStatus.running, [
           {
             name: "Message",
-            type: JobResultType.message,
+            type: ResultType.message,
             messages: [{ text: "This is a message", severity: MessageSeverity.error }],
             data: btoa("This is a test"),
           },

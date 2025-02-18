@@ -47,7 +47,7 @@ module.exports = {
     customField2: "customField2",
     customField3: "customField3",
   },
-  JobResultType: {
+  ResultType: {
     link: "link",
     data: "data",
     message: "message",
