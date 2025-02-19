@@ -44,6 +44,25 @@ describe("API", () => {
     });
   });
 
+  describe("Security", () => {
+    it("GET CSP", async () => {
+      let response = await GET("/api/job-scheduling/v1/JobDefinition");
+      expect(response.headers).toMatchObject({
+        "content-security-policy":
+          "default-src 'self' https://authentication.sap.hana.ondemand.com http://localhost:0;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+      });
+    });
+
+    it("GET CORS", async () => {
+      let response = await GET("/api/job-scheduling/v1/JobDefinition");
+      expect(response.headers).toMatchObject({
+        "access-control-allow-origin": "*",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+      });
+    });
+  });
+
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
     expect(response.data).toHaveLength(3);

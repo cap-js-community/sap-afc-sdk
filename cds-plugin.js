@@ -5,9 +5,12 @@ const path = require("path");
 const cds = require("@sap/cds");
 const Broker = require("@sap/sbf");
 const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
+const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 const toggles = require("@cap-js-community/feature-toggle-library");
+const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
 const { mergeDeep } = require("./src/util/helper");
 
@@ -16,6 +19,7 @@ const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
 cds.on("bootstrap", () => {
+  secureRoutes();
   addErrorMiddleware();
   serveBroker();
   serveUIs();
@@ -27,6 +31,27 @@ cds.on("listening", () => {
   handleFeatureToggles();
 });
 
+function secureRoutes() {
+  if (cds.env.requires?.["sap-afc-sdk"]?.csp) {
+    const csp = toObject(cds.env.requires?.["sap-afc-sdk"]?.csp);
+    cds.app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            "default-src": ["'self'", authorizationUrl(), serverUrl()],
+            ...csp,
+          },
+        },
+      }),
+    );
+  }
+  if (cds.env.requires?.["sap-afc-sdk"]?.cors) {
+    const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.cors);
+    cds.app.use(cors(corsOptions));
+  }
+}
+
 function addErrorMiddleware() {
   cds.middlewares.after.unshift(handleError);
 }
@@ -36,24 +61,31 @@ function handleError(err, req, res, next) {
     return next(err);
   }
   if (req.baseUrl?.startsWith("/api/")) {
-    res.status(err.statusCode || 500).send({
-      code: err.code || "500",
-      message: err.message || "Internal Server Error",
-    });
-    return;
+    return handleAPIError(err, req, res);
   }
   next(err);
+}
+
+function handleAPIError(err, req, res) {
+  let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+  const codes = [err.statusCode, err.status, err.code, err];
+  for (const code of codes) {
+    if (!isNaN(code) && StatusCodes[String(code)]) {
+      statusCode = parseInt(err.statusCode);
+      break;
+    }
+  }
+  res.status(statusCode).send({
+    code: String(err.code || statusCode),
+    message: err.message || getReasonPhrase(statusCode),
+  });
 }
 
 function serveBroker() {
   if (!cds.env.requires?.["sap-afc-sdk"]?.broker) {
     return;
   }
-  let brokerConfig = {};
-  const envBrokerConfig = typeof cds.env.requires?.["sap-afc-sdk"]?.broker;
-  if (envBrokerConfig && typeof envBrokerConfig === "object") {
-    brokerConfig = envBrokerConfig;
-  }
+  let brokerConfig = toObject(cds.env.requires?.["sap-afc-sdk"]?.broker);
   const brokerPath = path.join(cds.root, config.paths.broker);
   try {
     brokerConfig = mergeDeep(require(brokerPath), brokerConfig);
@@ -208,10 +240,10 @@ function toOpenApiDoc(req, service, name) {
 }
 
 function serverUrl() {
-  // TODO: K8S
+  // TODO: Kyma
   return process.env.VCAP_APPLICATION
     ? "https://" + JSON.parse(process.env.VCAP_APPLICATION).uris?.[0]
-    : cds.server.url;
+    : (cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`);
 }
 
 function authorizationUrl() {
@@ -244,4 +276,12 @@ function handleFeatureToggles() {
       eventQueueConfig[name] = value;
     });
   }
+}
+
+function isObject(value) {
+  return value !== undefined && value !== null && typeof value === "object";
+}
+
+function toObject(value) {
+  return isObject(value) ? value : {};
 }

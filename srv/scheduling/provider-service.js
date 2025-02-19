@@ -225,7 +225,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       );
     });
 
-    // TODO: Implement with CDS 8.8
+    // TODO: CDS 8.8
     this.on(JobResult.actions.data, JobResult, async (req) => {
       const ID = req.params[0];
       const jobResult = await SELECT.one(JobResult).where({ ID });

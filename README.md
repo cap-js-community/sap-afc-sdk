@@ -150,7 +150,7 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
   - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
   - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job. Default `true`
   - `ui.api.scheduling.job.swagger: Boolean`: Serve Scheduling Provider Swagger UI. Default `true`
-- `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `true` in `production`
+- `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `false` and `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
@@ -161,6 +161,8 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
 - `config: Object`: SDK configuration
+- `csp: Object | Boolean`: Content Security Policy (CSP). Default `true`
+- `cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration. Default `true`
 
 ### Implementation
 

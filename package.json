@@ -60,7 +60,10 @@
     "@cap-js-community/websocket": "^1.6.0",
     "@sap/sbf": "^6.8.2",
     "commander": "^13.1.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "http-status-codes": "^2.3.0",
     "swagger-ui-express": "^5.0.1",
     "verror": "^1.10.1"
   },
@@ -134,6 +137,7 @@
           "scheduling.monitoring.job": true,
           "api.scheduling.job.swagger": true
         },
+        "broker": false,
         "[production]": {
           "broker": true
         },
@@ -153,7 +157,9 @@
               "failed": 0.1
             }
           }
-        }
+        },
+        "csp": true,
+        "cors": true
       },
       "afc": {
         "kind": "odata-v4",

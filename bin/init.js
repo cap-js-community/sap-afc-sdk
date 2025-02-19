@@ -25,7 +25,9 @@ module.exports = (target) => {
         fs.rmSync(appPath, { recursive: true, force: true });
       }
     }
+    // CF
     adjustText("mta.yaml", (content) => {
+      content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
       for (const app of appStubs) {
         const part = `path: app/${app}`;
         const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
@@ -34,7 +36,19 @@ module.exports = (target) => {
       }
       return content;
     });
-    // TODO: K8S
+    // Kyma
+    adjustText("chart/values.yaml", (content) => {
+      content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
+      // TODO: replace app stub paths in containerize
+      return content;
+    });
+    // Approuter
+    adjustJSON("app/router/xs-app.json", (json) => {
+      json.routes = json.routes.filter((route) => {
+        return !route.localDir;
+      });
+      json.websockets = { enabled: true };
+    });
   } catch (err) {
     console.error(err.message);
   }
@@ -58,7 +72,6 @@ function replaceTextPart(content, part, replacement, positionPart) {
   return content.slice(0, index) + replacement + content.slice(index + part.length);
 }
 
-// eslint-disable-next-line no-unused-vars
 function adjustJSON(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
