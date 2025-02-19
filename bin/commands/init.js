@@ -6,60 +6,104 @@ const path = require("path");
 const shelljs = require("shelljs");
 
 const config = require("../config.json");
+const commander = require("commander");
 
-module.exports = (target) => {
-  try {
-    target ||= config.defaultTarget;
-    // TODO: Detect that app already exists
-    // Create app stubs
-    const appStubs = [];
-    for (const app of config.apps) {
-      const appPath = path.join(process.cwd(), config.appRoot, app);
-      if (!fs.existsSync(appPath)) {
-        fs.mkdirSync(appPath, { recursive: true });
-        appStubs.push(app);
-      }
+module.exports = {
+  register: function (program) {
+    return program
+      .command("init")
+      .description("Initialize project for target platform")
+      .addArgument(
+        new commander.Argument("[target]", "Initialize project for target platform (cf, kyma)").choices(["cf", "kyma"]),
+      )
+      .addOption(
+        new commander.Option(
+          "-a, --add <features>",
+          "Add one or more features to the project (comma-separated list)",
+        ).choices(["broker", "sample", "http", "add"]),
+      )
+      .addHelpText(
+        "afterAll",
+        `
+Features: 
+  broker \t\t - expose a broker service
+  sample \t\t - add sample data
+  http \t\t\t - add .http files
+  add \t\t\t - add app files
+
+Examples:
+  afc init cf
+  afc init kyma
+  afc init cf --add broker,sample,http
+  afc init kyma --add broker,sample,http
+`,
+      );
+  },
+  handle: function (target) {
+    console.log(`Initializing project`);
+    module.exports.process(target);
+    const options = this.opts();
+    if (options.add) {
+      const features = options.add.split(",").map((f) => f.trim());
+      const addCommand = require("./add");
+      addCommand.process(features);
     }
-    shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} --for production`);
-    // Cleanup app stubs
-    for (const app of appStubs) {
-      const appPath = path.join(process.cwd(), config.appRoot, app);
-      if (fs.existsSync(appPath)) {
-        fs.rmSync(appPath, { recursive: true, force: true });
+    console.log("Successfully initialized project.");
+  },
+  process: function (target) {
+    try {
+      target ||= config.defaultTarget;
+      // TODO: Detect that app already exists
+      // Create app stubs
+      const appStubs = [];
+      for (const app of config.apps) {
+        const appPath = path.join(process.cwd(), config.appRoot, app);
+        if (!fs.existsSync(appPath)) {
+          fs.mkdirSync(appPath, { recursive: true });
+          appStubs.push(app);
+        }
       }
-    }
-    // CF
-    adjustText("mta.yaml", (content) => {
-      content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
+      shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} --for production`);
+      // Cleanup app stubs
       for (const app of appStubs) {
-        const part = `path: app/${app}`;
-        const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
-        content = replaceTextPart(content, part, replacement);
-        content = replaceTextPart(content, `- npm ci`, `- npm i`, replacement);
+        const appPath = path.join(process.cwd(), config.appRoot, app);
+        if (fs.existsSync(appPath)) {
+          fs.rmSync(appPath, { recursive: true, force: true });
+        }
       }
-      return content;
-    });
-    // Kyma
-    adjustText("chart/values.yaml", (content) => {
-      content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
-      // TODO: replace app stub paths in containerize
-      return content;
-    });
-    // Approuter
-    adjustJSON("app/router/package.json", (json) => {
-      if (!json.scripts.start.includes("COOKIE_BACKWARD_COMPATIBILITY")) {
-        json.scripts.start = `COOKIE_BACKWARD_COMPATIBILITY=true ${json.scripts.start}`;
-      }
-    });
-    adjustJSON("app/router/xs-app.json", (json) => {
-      json.routes = json.routes.filter((route) => {
-        return !route.localDir;
+      // CF
+      adjustText("mta.yaml", (content) => {
+        content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
+        for (const app of appStubs) {
+          const part = `path: app/${app}`;
+          const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
+          content = replaceTextPart(content, part, replacement);
+          content = replaceTextPart(content, `- npm ci`, `- npm i`, replacement);
+        }
+        return content;
       });
-      json.websockets = { enabled: true };
-    });
-  } catch (err) {
-    console.error(err.message);
-  }
+      // Kyma
+      adjustText("chart/values.yaml", (content) => {
+        content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
+        // TODO: replace app stub paths in containerize
+        return content;
+      });
+      // Approuter
+      adjustJSON("app/router/package.json", (json) => {
+        if (!json.scripts.start.includes("COOKIE_BACKWARD_COMPATIBILITY")) {
+          json.scripts.start = `COOKIE_BACKWARD_COMPATIBILITY=true ${json.scripts.start}`;
+        }
+      });
+      adjustJSON("app/router/xs-app.json", (json) => {
+        json.routes = json.routes.filter((route) => {
+          return !route.localDir;
+        });
+        json.websockets = { enabled: true };
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  },
 };
 
 function adjustText(file, callback) {
