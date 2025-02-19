@@ -7,6 +7,10 @@ const { JobStatus } = require("../../srv/scheduling/common/codelist");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
+process.env.VCAP_APPLICATION = JSON.stringify({
+  uris: ["sap-afc-sdk.sap.com"],
+});
+
 process.env.PORT = 0; // Random
 
 describe("API", () => {
@@ -47,16 +51,17 @@ describe("API", () => {
   describe("Security", () => {
     it("GET CSP", async () => {
       let response = await GET("/api/job-scheduling/v1/JobDefinition");
-      const csp = response.headers["content-security-policy"].replace(/localhost:\d+/, "localhost");
-      expect(csp).toMatchSnapshot();
+      expect(response.headers["content-security-policy"]).toMatchSnapshot();
+      expect(response.headers).toMatchObject({
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+      });
     });
 
     it("GET CORS", async () => {
       let response = await GET("/api/job-scheduling/v1/JobDefinition");
       expect(response.headers).toMatchObject({
         "access-control-allow-origin": "*",
-        "cross-origin-opener-policy": "same-origin",
-        "cross-origin-resource-policy": "same-origin",
       });
     });
   });

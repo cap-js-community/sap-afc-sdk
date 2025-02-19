@@ -67,6 +67,7 @@ program
   .description("Manage API")
   .addArgument(new commander.Argument("<action>", "Manage API keys").choices(["key"]))
   .option("-n, --new", "Create new API key")
+  .option("-p, --password", "Broker password")
   .action(manageAPI)
   .addHelpText(
     "afterAll",
@@ -108,6 +109,6 @@ async function addFeature(argument) {
 async function manageAPI(action) {
   const options = this.opts();
   const apiFn = require("./commands/api");
-  await apiFn(action, !!options.new);
+  await apiFn(action, { isNew: options.new, password: options.password });
   console.log("Successfully managed API keys.");
 }
