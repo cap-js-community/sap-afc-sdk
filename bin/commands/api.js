@@ -20,11 +20,26 @@ function manageKey(isNew, password) {
     return;
   }
   const broker = require(brokerPath);
-  const name = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
-  if (!name) {
+  const serviceName = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
+  if (!serviceName) {
     console.log(`No service found in broker configuration. Call 'afc add broker'`);
   }
+  // TODO
+  const mtaPath = path.join(process.cwd(), "mta.yaml");
+  if (!fs.existsSync(brokerPath)) {
+    console.log(`mta.yaml not found at '$mtaPath}'. Call 'cds add mta'`);
+  }
+  const mta = fs.readFileSync(mtaPath, "utf8");
+  const appName = /- name: (.*)\n\s*type: nodejs\n\s*path: gen\/srv/s.exec(mta)?.[1];
+  const result = shelljs.exec(`cf app ${appName}`, { silent: true }).stdout;
+  const route = /routes:\s*(.*)/.exec(result)?.[1];
+  if (!password) {
+    // prompt for password
+  }
+  console.log(
+    `cf create-service-broker ${serviceName}-broker broker-user '${password}' https://${route}/broker --space-scoped`,
+  );
   shelljs.exec(
-    `cf create-service-broker ${name}-broker broker-user '${password}' https://${isNew}.cfapps.sap.hana.ondemand.com/broker --space-scoped`,
+    `cf create-service-broker ${serviceName}-broker broker-user '${password}' https://${route}/broker --space-scoped`,
   );
 }
