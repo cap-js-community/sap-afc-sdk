@@ -348,7 +348,7 @@ annotate service.JobResultMessage with @(
   UI.LineItem           : [
     {
       $Type                    : 'UI.DataField',
-      Value                    : severity_code,
+      Value                    : severity.numericCode,
       Criticality              : criticality,
       CriticalityRepresentation: #WithIcon,
     },
@@ -367,13 +367,24 @@ annotate service.JobResultMessage with @(
     },
     Description   : {Value: severity.code}
   },
-  UI.PresentationVariant: {Visualizations: ['@UI.LineItem'], },
+  UI.PresentationVariant: {
+    Visualizations: ['@UI.LineItem'],
+    SortOrder     : [{
+      $Type     : 'Common.SortOrderType',
+      Property  : severity.numericCode,
+      Descending: true
+    }]
+  },
   UI.SelectionFields    : [],
 );
 
 annotate service.JobResultMessage {
   result    @UI.Hidden;
   severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
+};
+
+annotate service.MessageSeverity {
+  numericCode  @Common.ValueListWithFixedValues: true  @Common.Text: name  @Common.TextArrangement: #TextFirst;
 };
 
 annotate service.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );

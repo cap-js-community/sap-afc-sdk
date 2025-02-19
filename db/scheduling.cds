@@ -142,7 +142,7 @@ entity JobResultMessage : cuid, {
   severity : Association to MessageSeverity not null default 'info'; // #info
 };
 
-type JobStatusCode       : String enum {
+type JobStatusCode              : String enum {
   requested;
   running;
   completed;
@@ -158,7 +158,7 @@ entity JobStatus : CodeList {
   key code : JobStatusCode;
 };
 
-type ParameterTypeCode   : String enum {
+type ParameterTypeCode          : String enum {
   readOnlyValue;
   writableValue;
   mapping;
@@ -169,7 +169,7 @@ entity ParameterType : CodeList {
   key code : ParameterTypeCode;
 };
 
-type DataTypeCode        : String enum {
+type DataTypeCode               : String enum {
   string;
   number;
   datetime;
@@ -181,7 +181,7 @@ entity DataType : CodeList {
   key code : DataTypeCode;
 };
 
-type MappingTypeCode     : String enum {
+type MappingTypeCode            : String enum {
   accountingPrinciple;
   companyCode;
   plant;
@@ -212,7 +212,7 @@ entity MappingType : CodeList {
   key code : MappingTypeCode;
 };
 
-type ResultTypeCode      : String enum {
+type ResultTypeCode             : String enum {
   link;
   data;
   message;
@@ -223,13 +223,24 @@ entity ResultType : CodeList {
   key code : ResultTypeCode;
 };
 
-type MessageSeverityCode : String enum {
-  error;
-  warning;
+type MessageSeverityCode        : String enum {
+  success;
   info;
+  warning;
+  error;
+};
+
+type MessageSeverityNumericCode : Integer enum {
+  success = 1;
+  info    = 2;
+  warning = 3;
+  error   = 4;
 };
 
 entity MessageSeverity : CodeList {
-      @title: '{i18n>MessageSeverityType}'
-  key code : MessageSeverityCode;
+      @title: '{i18n>MessageSeverity}'
+  key code        : MessageSeverityCode;
+
+      @title: '{i18n>MessageSeverity}'
+      numericCode : MessageSeverityNumericCode;
 };

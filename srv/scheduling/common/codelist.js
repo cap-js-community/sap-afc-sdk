@@ -53,8 +53,15 @@ module.exports = {
     message: "message",
   },
   MessageSeverity: {
-    error: "error",
-    warning: "warning",
+    success: "success",
     info: "info",
+    warning: "warning",
+    error: "error",
+  },
+  MessageNumericSeverity: {
+    success: 1,
+    info: 2,
+    warning: 3,
+    error: 4,
   },
 };

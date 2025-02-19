@@ -18,6 +18,16 @@ function mergeDeep(...objects) {
   }, {});
 }
 
+function isObject(value) {
+  return value !== undefined && value !== null && typeof value === "object";
+}
+
+function toObject(value) {
+  return isObject(value) ? value : {};
+}
+
 module.exports = {
   mergeDeep,
+  isObject,
+  toObject
 };

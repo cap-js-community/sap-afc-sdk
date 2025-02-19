@@ -12,11 +12,13 @@ const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 const toggles = require("@cap-js-community/feature-toggle-library");
 const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
-const { mergeDeep } = require("./src/util/helper");
+const { mergeDeep, toObject } = require("./src/util/helper");
 
 const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
+
+const SAPUI5_URL = "https://ui5.sap.com";
 
 cds.on("bootstrap", () => {
   secureRoutes();
@@ -34,12 +36,22 @@ cds.on("listening", () => {
 function secureRoutes() {
   if (cds.env.requires?.["sap-afc-sdk"]?.csp) {
     const csp = toObject(cds.env.requires?.["sap-afc-sdk"]?.csp);
+    const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
     cds.app.use(
       helmet({
         contentSecurityPolicy: {
           directives: {
-            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-            "default-src": ["'self'", authorizationUrl(), serverUrl()],
+            ...defaultDirectives,
+            "default-src": [...(defaultDirectives["default-src"] || []), SAPUI5_URL],
+            "script-src": [...(defaultDirectives["script-src"] || []), "'unsafe-inline'", "'unsafe-eval'", SAPUI5_URL],
+            "connect-src": [
+              ...(defaultDirectives["connect-src"] || []),
+              "wss:",
+              SAPUI5_URL,
+              authorizationUrl(),
+              serverUrl,
+            ],
+            "img-src": [...(defaultDirectives["img-src"] || []), "blob:", SAPUI5_URL],
             ...csp,
           },
         },
@@ -278,10 +290,3 @@ function handleFeatureToggles() {
   }
 }
 
-function isObject(value) {
-  return value !== undefined && value !== null && typeof value === "object";
-}
-
-function toObject(value) {
-  return isObject(value) ? value : {};
-}

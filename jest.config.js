@@ -6,7 +6,7 @@ module.exports = {
   bail: false,
   clearMocks: false,
   collectCoverage: true,
-  collectCoverageFrom: ["cds-plugin.js", "**/srv/**/*.js"],
+  collectCoverageFrom: ["cds-plugin.js", "**/src/**/*.js", "**/srv/**/*.js"],
   coverageDirectory: "reports/coverage/unit/",
   coverageReporters: ["lcov", "text"],
   coverageThreshold: {

@@ -10,6 +10,8 @@ const config = require("./config");
 module.exports = (target) => {
   try {
     target ||= config.defaultTarget;
+    // TODO: Detect that app already exists
+    // Create app stubs
     const appStubs = [];
     for (const app of config.apps) {
       const appPath = path.join(process.cwd(), config.appRoot, app);
@@ -19,6 +21,7 @@ module.exports = (target) => {
       }
     }
     shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} --for production`);
+    // Cleanup app stubs
     for (const app of appStubs) {
       const appPath = path.join(process.cwd(), config.appRoot, app);
       if (fs.existsSync(appPath)) {
@@ -43,6 +46,11 @@ module.exports = (target) => {
       return content;
     });
     // Approuter
+    adjustJSON("app/router/package.json", (json) => {
+      if (!json.scripts.start.includes("COOKIE_BACKWARD_COMPATIBILITY")) {
+        json.scripts.start = `COOKIE_BACKWARD_COMPATIBILITY=true ${json.scripts.start}`;
+      }
+    });
     adjustJSON("app/router/xs-app.json", (json) => {
       json.routes = json.routes.filter((route) => {
         return !route.localDir;

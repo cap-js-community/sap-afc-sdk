@@ -13,11 +13,7 @@ service SchedulingMonitoringService {
 
   entity JobParameter @readonly           as projection on scheduling.JobParameter;
   entity JobResult @readonly              as projection on scheduling.JobResult;
-
-  entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage
-                                             order by
-                                               criticality asc;
-
+  entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage;
   entity JobStatus @readonly              as projection on scheduling.JobStatus;
   entity ResultType @readonly             as projection on scheduling.ResultType;
   entity ParameterType @readonly          as projection on scheduling.ParameterType;

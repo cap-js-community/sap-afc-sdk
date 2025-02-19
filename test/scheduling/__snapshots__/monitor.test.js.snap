@@ -289,6 +289,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="numericCode" Type="Edm.Int32"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MessageSeverity_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -1277,6 +1278,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <AnnotationPath>@UI.LineItem</AnnotationPath>
               </Collection>
             </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="severity/numericCode"/>
+                  <PropertyValue Property="Descending" Bool="true"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
           </Record>
         </Annotation>
         <Annotation Term="UI.SelectionFields">
@@ -1285,7 +1294,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.LineItem">
           <Collection>
             <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="severity_code"/>
+              <PropertyValue Property="Value" Path="severity/numericCode"/>
               <PropertyValue Property="Criticality" Path="criticality"/>
               <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
             </Record>
@@ -1303,6 +1312,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="Visualizations">
               <Collection>
                 <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="severity/numericCode"/>
+                  <PropertyValue Property="Descending" Bool="true"/>
+                </Record>
               </Collection>
             </PropertyValue>
           </Record>
@@ -1760,20 +1777,51 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.MessageSeverity/code">
-        <Annotation Term="Common.Label" String="MessageSeverityType"/>
+        <Annotation Term="Common.Label" String="Message Severity"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="error"/>
-              <PropertyValue Property="Value" String="error"/>
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" String="success"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="info"/>
+              <PropertyValue Property="Value" String="info"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="warning"/>
               <PropertyValue Property="Value" String="warning"/>
             </Record>
             <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" String="error"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity/numericCode">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="Message Severity"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" Int="1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="info"/>
-              <PropertyValue Property="Value" String="info"/>
+              <PropertyValue Property="Value" Int="2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="warning"/>
+              <PropertyValue Property="Value" Int="3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" Int="4"/>
             </Record>
           </Collection>
         </Annotation>
@@ -2032,20 +2080,24 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/code">
-        <Annotation Term="Common.Label" String="MessageSeverityType"/>
+        <Annotation Term="Common.Label" String="Message Severity"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="error"/>
-              <PropertyValue Property="Value" String="error"/>
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" String="success"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="info"/>
+              <PropertyValue Property="Value" String="info"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="warning"/>
               <PropertyValue Property="Value" String="warning"/>
             </Record>
             <Record Type="Validation.AllowedValue">
-              <Annotation Term="Core.SymbolicName" String="info"/>
-              <PropertyValue Property="Value" String="info"/>
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" String="error"/>
             </Record>
           </Collection>
         </Annotation>

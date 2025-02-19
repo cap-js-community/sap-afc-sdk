@@ -97,7 +97,13 @@
       }
     },
     "eventQueue": {
-      "useAsCAPOutbox": true
+      "useAsCAPOutbox": true,
+      "periodicEvents": {
+        "Job/Sync": {
+          "cron": "*/5 * * * *",
+          "impl": "./node_modules/@cap-js-community/sap-afc-sdk/src/periodicEvents/SyncJob.js"
+        }
+      }
     },
     "featureToggles": {
       "config": {

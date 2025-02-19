@@ -1,4 +1,5 @@
-code;name;descr
-error;Error;Error
-warning;Warning;Warning
-info;Information;Information
+code;name;descr;numericCode
+success;Success;Success;1
+info;Information;Information;2
+warning;Warning;Warning;3
+error;Error;Error;4
