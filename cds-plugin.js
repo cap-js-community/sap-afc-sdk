@@ -34,7 +34,7 @@ cds.on("listening", () => {
 });
 
 function secureRoutes() {
-  if (cds.env.requires?.["sap-afc-sdk"]?.csp) {
+  if (cds.env.requires?.["sap-afc-sdk"]?.csp && !serverUrl().startsWith("http://localhost")) {
     const csp = toObject(cds.env.requires?.["sap-afc-sdk"]?.csp);
     const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
     cds.app.use(
@@ -49,7 +49,7 @@ function secureRoutes() {
               "wss:",
               SAPUI5_URL,
               authorizationUrl(),
-              serverUrl,
+              serverUrl(),
             ],
             "img-src": [...(defaultDirectives["img-src"] || []), "blob:", SAPUI5_URL],
             ...csp,
