@@ -13,6 +13,7 @@ Provides an SDK for SAP Advanced Financial Closing to be consumed with SAP Cloud
 ## Table of Contents
 
 - [Requirements and Setup](#requirements-and-setup)
+- [Getting Started](#getting-started)
 - [Architecture](#architecture)
 - [Usage](#usage)
   - [Options](#options)
@@ -22,8 +23,18 @@ Provides an SDK for SAP Advanced Financial Closing to be consumed with SAP Cloud
   - [Add Features](#add-features)
   - [Deployment](#deployment)
   - [Advanced Setup](#advanced-setup)
+- [Support, Feedback, Contributing](#support-feedback-contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Licensing](#licensing)
 
 ## Requirements and Setup
+
+To develop and test applications build with this SDK you will need:
+
+- Access to a working instance of [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing)
+- A working Node.js runtime environment
+
+## Getting Started
 
 - Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` project
 - Execute `cds-serve` to start server
