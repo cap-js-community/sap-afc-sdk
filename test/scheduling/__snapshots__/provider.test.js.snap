@@ -407,4 +407,4 @@ exports[`API Open API GET API Docs Root 2`] = `
 "
 `;
 
-exports[`API Security GET CSP 1`] = `"default-src 'self' https://ui5.sap.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data: blob: https://ui5.sap.com;object-src 'none';script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ui5.sap.com;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;connect-src wss: https://ui5.sap.com https://authentication.sap.hana.ondemand.com http://localhost:56161"`;
+exports[`API Security GET CSP 1`] = `"default-src 'self' https://ui5.sap.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data: blob: https://ui5.sap.com;object-src 'none';script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ui5.sap.com;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;connect-src wss: https://ui5.sap.com https://authentication.sap.hana.ondemand.com http://localhost"`;

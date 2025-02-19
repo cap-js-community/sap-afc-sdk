@@ -47,7 +47,8 @@ describe("API", () => {
   describe("Security", () => {
     it("GET CSP", async () => {
       let response = await GET("/api/job-scheduling/v1/JobDefinition");
-      expect(response.headers["content-security-policy"]).toMatchSnapshot();
+      const csp = response.headers["content-security-policy"].replace(/localhost:\d+/, "localhost");
+      expect(csp).toMatchSnapshot();
     });
 
     it("GET CORS", async () => {
