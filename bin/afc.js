@@ -41,7 +41,10 @@ program
   .command("add")
   .description("Add features to project")
   .addArgument(
-    new commander.Argument("<features>", "Add one or more features to an existing project (comma-separated list)"),
+    new commander.Argument(
+      "<features>",
+      "Add one or more features to an existing project (comma-separated list)",
+    ).choices(["broker", "sample", "http", "app"]),
   )
   .action(addFeature)
   .addHelpText(
@@ -59,36 +62,52 @@ Examples:
 `,
   );
 
+program
+  .command("api")
+  .description("Manage API")
+  .addArgument(new commander.Argument("<action>", "Manage API keys").choices(["key"]))
+  .option("-n, --new", "Create new API key")
+  .action(manageAPI)
+  .addHelpText(
+    "afterAll",
+    `
+Actions:
+  key \t\t - manage service keys
+
+Examples:
+  afc api key
+  afc api key --new
+  afc api key -n
+`,
+  );
+
 program.unknownOption = function () {};
 
 program.parse(process.argv);
 
 async function initProject(target) {
   console.log(`Initializing project`);
-  const initFn = require(`./init`);
+  const initFn = require("./commands/init");
   await initFn(target);
   const options = this.opts();
   if (options.add) {
     const features = options.add.split(",").map((f) => f.trim());
-    await applyFeatures(features);
+    const addFn = require("./commands/add");
+    await addFn(features);
   }
   console.log("Successfully initialized project.");
 }
 
 async function addFeature(argument) {
   const features = (argument ?? "").split(",").map((f) => f.trim());
-  await applyFeatures(features);
+  const addFn = require("./commands/add");
+  await addFn(features);
+  console.log("Successfully added features to your project.");
 }
 
-async function applyFeatures(features) {
-  for (const feature of features) {
-    try {
-      const featureFn = require(`./features/${feature}`);
-      console.log(`Adding feature '${feature}'`);
-      await featureFn();
-    } catch (err) {
-      console.log(`Unknown feature '${feature}'`);
-    }
-  }
-  console.log("Successfully added features to your project.");
+async function manageAPI(action) {
+  const options = this.opts();
+  const apiFn = require("./commands/api");
+  await apiFn(action, !!options.new);
+  console.log("Successfully managed API keys.");
 }

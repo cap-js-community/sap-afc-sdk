@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 
-const config = require("./config");
+const config = require("../config.json");
 
 module.exports = (target) => {
   try {

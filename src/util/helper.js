@@ -29,5 +29,5 @@ function toObject(value) {
 module.exports = {
   mergeDeep,
   isObject,
-  toObject
+  toObject,
 };

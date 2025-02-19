@@ -1,4 +1,4 @@
-# @cap-js-community/sap-afc-sdk
+# SAP Advanced Financial Closing SDK for CDS
 
 [![npm version](https://img.shields.io/npm/v/@cap-js-community/sap-afc-sdk)](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)
 [![monthly downloads](https://img.shields.io/npm/dm/@cap-js-community/sap-afc-sdk)](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)

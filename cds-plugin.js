@@ -83,7 +83,7 @@ function handleAPIError(err, req, res) {
   const codes = [err.statusCode, err.status, err.code, err];
   for (const code of codes) {
     if (!isNaN(code) && StatusCodes[String(code)]) {
-      statusCode = parseInt(err.statusCode);
+      statusCode = parseInt(code);
       break;
     }
   }
@@ -148,7 +148,7 @@ function serveUIs() {
     }
   }
   for (const app in config.apps) {
-    const uiShowApp = cds.env.requires?.["sap-afc-sdk"]?.ui?.app;
+    const uiShowApp = cds.env.requires?.["sap-afc-sdk"]?.ui?.[app];
     if ((uiShowLaunchpad || uiShowApp) && !fs.existsSync(`${cds.root}/${cds.env.folders.app}${app}`)) {
       cds.app
         .serve(`${uiPath}/${app}`)
@@ -289,4 +289,3 @@ function handleFeatureToggles() {
     });
   }
 }
-
