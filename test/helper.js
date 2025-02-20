@@ -17,8 +17,8 @@ function cleanData(data) {
     for (const field of FIELDS_TO_CLEAN) {
       delete row[field];
     }
-    if (row.link && row.link.startsWith("http://localhost:")) {
-      row.link = row.link.replace(/http:\/\/localhost:.*/, "http://localhost:4004/<ID>");
+    if (row.link && /^https?:\/\/.*launchpad\.html.*/.test(row.link)) {
+      row.link = row.link.replace(/^https?:\/\/.*/, "http://localhost:4004/<ID>");
     }
     for (const key in row) {
       if (typeof row[key] === "object") {

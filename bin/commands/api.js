@@ -143,10 +143,15 @@ function manageKey(options) {
   result = shelljs.exec(cfServiceKeyCommand, { silent: true }).stdout;
   const cfServiceKeyClientId = /"clientid": "(.*?)"/.exec(result)?.[1];
   const cfServiceKeyClientSecret = /"clientsecret": "(.*?)"/.exec(result)?.[1];
-  if (cfServiceKeyClientId && cfServiceKeyClientSecret) {
+  const cfServiceKeyAuthorizationUrl = /"url": "(.*?)"/.exec(result)?.[1];
+  const cfServiceKeyApiUrl = /"api": "(.*?)"/.exec(result)?.[1];
+  if (cfServiceKeyClientId && cfServiceKeyClientSecret && cfServiceKeyAuthorizationUrl && cfServiceKeyApiUrl) {
+    console.log(`service: ${serviceName}`);
     console.log(`name: ${serviceKeyName}`);
     console.log(`clientid: ${cfServiceKeyClientId}`);
     console.log(`clientsecret: ${cfServiceKeyClientSecret}`);
+    console.log(`authorization-url: ${cfServiceKeyAuthorizationUrl}/oauth/token`);
+    console.log(`api-url: ${cfServiceKeyApiUrl}`);
     console.log();
     console.log("Successfully managed API keys.");
   } else {

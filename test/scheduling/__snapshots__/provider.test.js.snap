@@ -2,7 +2,7 @@
 
 exports[`API Create Job 1`] = `
 {
-  "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(8010ce4c-f83c-4a7e-85f8-f095ee788d72)",
+  "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -13,7 +13,7 @@ exports[`API Create Job 1`] = `
 
 exports[`API Create Job 2`] = `
 {
-  "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(8010ce4c-f83c-4a7e-85f8-f095ee788d72)",
+  "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -46,7 +46,7 @@ exports[`API Create Job 3`] = `
 exports[`API GET Job 1`] = `
 [
   {
-    "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)",
+    "link": "http://localhost:4004/<ID>",
     "name": "JOB_1",
     "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-01T12:00:00Z",
@@ -54,7 +54,7 @@ exports[`API GET Job 1`] = `
     "version": "1",
   },
   {
-    "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(4a89dfec-59f9-4a91-90fe-3c7ca7407103)",
+    "link": "http://localhost:4004/<ID>",
     "name": "JOB_2",
     "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-02T12:00:00Z",
@@ -62,7 +62,7 @@ exports[`API GET Job 1`] = `
     "version": "1",
   },
   {
-    "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)",
+    "link": "http://localhost:4004/<ID>",
     "name": "JOB_3",
     "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-02T12:00:00Z",
@@ -74,7 +74,7 @@ exports[`API GET Job 1`] = `
 
 exports[`API GET Job 2`] = `
 {
-  "link": "https://sap-afc-sdk.sap.com/launchpad.html#Job-monitor&/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)",
+  "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
   "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
   "startDateTime": "2025-01-01T12:00:00Z",
@@ -407,4 +407,4 @@ exports[`API Open API GET API Docs Root 2`] = `
 "
 `;
 
-exports[`API Security GET CSP 1`] = `"default-src 'self' https://sap-afc-sdk.sap.com https://authentication.sap.hana.ondemand.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"`;
+exports[`API Security GET CSP 1`] = `"default-src 'self' https://sap-afc-sdk-srv.sap.com https://sap-afc-sdk.sap.com https://authentication.sap.hana.ondemand.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"`;

@@ -157,6 +157,9 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk` section:
 
+- `endpoints: Object`: Endpoint configuration. Default `{}`
+  - `approuter: String`: Url of approuter. Default `null` (derived from conventions)
+  - `server: String`: Url of server. Default `null` (derived from environment, e.g. CF)
 - `api: Object`: API configuration. Default `{}`
   - `csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default `true` for default configuration
   - `cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `true` for default configuration

@@ -16,6 +16,8 @@ const { mergeDeep, toObject } = require("./src/util/helper");
 
 const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
+const APPROUTER_SUFFIX = "srv";
+
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
 cds.on("bootstrap", () => {
@@ -54,7 +56,12 @@ function secureRoutes() {
         contentSecurityPolicy: {
           directives: {
             ...defaultDirectives,
-            "default-src": [...(defaultDirectives["default-src"] || []), serverUrl, authorizationUrl],
+            "default-src": [
+              ...(defaultDirectives["default-src"] || []),
+              approuterUrl(),
+              serverUrl(),
+              authorizationUrl(),
+            ],
             ...csp,
           },
         },
@@ -105,13 +112,21 @@ function serveBroker() {
       cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
     }
   }
-  const catalogPath = brokerConfig.catalog ?? config.paths.catalog;
+  for (const service in brokerConfig?.SBF_SERVICE_CONFIG ?? {}) {
+    const endpoints = brokerConfig?.SBF_SERVICE_CONFIG[service]?.extend_credentials?.shared?.endpoints ?? {};
+    for (const endpoint in endpoints) {
+      if (!/https?:\/\//.test(endpoints[endpoint])) {
+        endpoints[endpoint] = `${serverUrl()}${endpoints[endpoint]}`;
+      }
+    }
+  }
   for (const key in brokerConfig) {
     if (key.startsWith("SBF_")) {
       process.env[key] ??= JSON.stringify(brokerConfig[key]);
     }
   }
   try {
+    const catalogPath = brokerConfig.catalog ?? config.paths.catalog;
     const router = express.Router();
     const broker = new Broker({
       enableAuditLog: false,
@@ -250,11 +265,25 @@ function toOpenApiDoc(req, service, name) {
   return openAPI;
 }
 
+function approuterUrl() {
+  if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
+    return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter;
+  }
+  return serverUrl().replace(/(https?:\/\/)(.*?)(\..*)/, `$1$2-${APPROUTER_SUFFIX}$3`);
+}
+
 function serverUrl() {
+  if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server) {
+    return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server;
+  }
   // TODO: Kyma
-  return process.env.VCAP_APPLICATION
-    ? "https://" + JSON.parse(process.env.VCAP_APPLICATION).uris?.[0]
-    : (cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`);
+  if (process.env.VCAP_APPLICATION) {
+    const url = JSON.parse(process.env.VCAP_APPLICATION).uris?.[0];
+    if (url) {
+      return `https://${url}`;
+    }
+  }
+  return cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`;
 }
 
 function authorizationUrl() {
@@ -300,7 +329,7 @@ function registerAfterJobReadFillLink(db) {
     result = Array.isArray(result) ? result : [result];
     for (const row of result) {
       if (row.ID && row.link === null) {
-        row.link = `${serverUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
+        row.link = `${approuterUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
       }
     }
   });
