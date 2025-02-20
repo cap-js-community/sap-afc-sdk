@@ -100,6 +100,11 @@ Examples:
         });
         json.websockets = { enabled: true };
       });
+      // Install @cap-js-community packages
+      shelljs.exec(
+        `npm install --save @cap-js-community/event-queue @cap-js-community/websocket @cap-js-community/feature-toggle-library`,
+        { silent: true },
+      );
     } catch (err) {
       console.error(err.message);
     }

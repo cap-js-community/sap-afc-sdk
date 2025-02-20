@@ -97,9 +97,6 @@ module.exports = () => {
   writeFile(CATALOG_PATH, CATALOG);
   if (brokerWritten) {
     console.log("Broker Password (keep it safe to create broker):", brokerPassword.clear);
-    console.log("\nCreate Broker in Cloud Foundry:");
-    console.log(
-      `> cf create-service-broker <name>-broker broker-user '${brokerPassword.clear}' https://<domain>/broker --space-scoped`,
-    );
+    console.log(`\nAfter deployment fetch API key: afc api key -p '${brokerPassword.clear}`);
   }
 };

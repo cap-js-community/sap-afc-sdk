@@ -7,8 +7,11 @@ module.exports = {
   BaseApplicationService: require("./srv/common/BaseApplicationService"),
   // Code-lists
   ...require("./srv/scheduling/common/codelist"),
-  // Scheduling
+  // Errors
   JobSchedulingError: require("./srv/scheduling/common/JobSchedulingError"),
+  // Periodic Events
+  PeriodicSchedulingJobSync: require("./srv/scheduling/periodic/SchedulingJobSync"),
+  // Services
   SchedulingProviderService: require("./srv/scheduling/provider-service"),
   SchedulingProcessingService: require("./srv/scheduling/processing-service"),
   SchedulingMonitoringService: require("./srv/scheduling/monitoring-service"),

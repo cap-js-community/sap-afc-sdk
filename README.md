@@ -79,7 +79,7 @@ Scheduling Provider service
 to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
 
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
-- **Event-Queue**: Provides an event queue to process Jobs asynchronously and resiliently (circuit breaker, retry,
+- **Event-Queue**: Provides an Event Queue to process and aync Jobs (periodically) asynchronously and resiliently (circuit breaker, retry,
   load-balancing, etc.)
 - **Websocket**: Provides websocket connection support to monitor Job processing live
 - **Feature-Toggle**: Provides a feature toggle library to control the execution of the Event Queue
@@ -157,7 +157,11 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk` section:
 
+- `api: Object`: API configuration. Default `{}`
+  - `csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default `true` for default configuration
+  - `cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `true` for default configuration
 - `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default `{}`
+  - `ui.link: String`: Fill link of jobs to served UI5 launchpad, if `null`. Default `true`
   - `ui.path: String`: Path to the served UI5 application. Default `''`
   - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
   - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job. Default `true`
@@ -172,9 +176,7 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
     - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
-- `config: Object`: SDK configuration
-- `csp: Object | Boolean`: Content Security Policy (CSP). Default `true`
-- `cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration. Default `true`
+- `config: Object`: Advanced SDK configuration
 
 ### Implementation
 
@@ -198,6 +200,7 @@ options (as described in [options](#options)):
         "mockProcessing": {
           "min": 0,
           "max": 30,
+          "default": "completed",
           "status": {
             "completed": 0.5,
             "completedWithWarning": 0.2,
@@ -223,46 +226,44 @@ To implement a custom Job processing extend the Job processing service definitio
 
 - CDS file: `/srv/scheduling-processing-service.cds`
 
-  ```cds
-  using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
-  annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
-  ```
+```cds
+using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+```
 
 Service can be restricted for authorization adding `@requires` annotation.
 
 - Implementation file: `/srv/scheduling-processing-service.js`
 
-  ```js
-  "use strict";
+```js
+const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
 
-  const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+class CustomSchedulingProcessingService extends SchedulingProcessingService {
+  async init() {
+    const { processJob, updateJob, cancelJob } = this.operations;
 
-  class CustomSchedulingProcessingService extends SchedulingProcessingService {
-    async init() {
-      const { processJob, updateJob, cancelJob } = this.operations;
+    this.on(processJob, async (req, next) => {
+      // Your logic goes here
+      // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
+      await next();
+    });
 
-      this.on(processJob, async (req, next) => {
-        // Your logic goes here
-        // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
-        await next();
-      });
+    this.on(updateJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
 
-      this.on(updateJob, async (req, next) => {
-        // Your logic goes here
-        await next();
-      });
+    this.on(cancelJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
 
-      this.on(cancelJob, async (req, next) => {
-        // Your logic goes here
-        await next();
-      });
-
-      super.init();
-    }
+    super.init();
   }
+}
 
-  module.exports = CustomSchedulingProcessingService;
-  ```
+module.exports = CustomSchedulingProcessingService;
+```
 
 As part of the custom scheduling process service implementation, the following operations can be implemented:
 
@@ -274,7 +275,7 @@ As part of the custom scheduling process service implementation, the following o
   - Call `await next()` to perform default implementation (set status to `running`)
   - Job update can be performed via `this.processJobUpdate()` providing the new status and Job results
     - e.g. `await this.processJobUpdate(req, JobStatus.completed, [{...}])`
-  - Throwing exceptions will automatically trigger the retry process in event queue
+  - Throwing exceptions will automatically trigger the retry process in Event Queue
   - Disable mocked Job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `on(updateJob)`:
   - A job status update is requested and the Job results are stored
@@ -364,8 +365,6 @@ Service can be restricted for authorization adding `@requires` annotation.
 - Implementation file: `/srv/scheduling-provider-service.js`
 
 ```js
-"use strict";
-
 const { SchedulingProviderService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
 
 class CustomSchedulingProviderService extends SchedulingProviderService {
@@ -412,7 +411,54 @@ In addition, to overwriting the default implementation via an `on`-handler, also
 
 #### Implement Periodic Job Sync
 
-- wip
+A periodic scheduling job synchronization event named `SchedulingJob/Sync` is running per default every **1 minute** in the Event Queue,
+to perform job synchronization from an external source. The default implementation is a no-op.
+
+To implement a custom Job sync extend the Job sync configuration in CDS env as follows:
+
+```json
+{
+  "cds": {
+    "requires": {
+      "eventQueue": {
+        "periodicEvents": {
+          "SchedulingJob/Sync": {
+            "cron": "*/1 * * * *",
+            "impl": "/srv/SchedulingJobSync.js"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The `cron` interval option defines the periodicity of the scheduling job synchronization.
+
+- Implementation file: `/srv/SchedulingJobSync.js`
+
+```js
+const { PeriodicSchedulingJobSync } = require("@cap-js-community/sap-afc-sdk");
+
+class CustomPeriodicSchedulingJobSync extends PeriodicSchedulingJobSync {
+  constructor(context, eventType, eventSubType, config) {
+    super(context, eventType, eventSubType, config);
+  }
+
+  async processPeriodicEvent(processContext, key, eventEntry) {
+    try {
+      // Your logic goes here
+    } catch (err) {
+      this.logger.error("Error during processing periodic event!", err);
+    }
+  }
+}
+
+module.exports = CustomPeriodicSchedulingJobSync;
+```
+
+Details on how to implement periodic event via Event Queue can be found in
+[Event-Queue documentation on Periodic Events](https://cap-js-community.github.io/event-queue/configure-event/#periodic-events).
 
 ## Documentation
 
@@ -444,7 +490,7 @@ CAP application.
 
 ### Add Features
 
-**AFC initialize**:
+**AFC Initialize**:
 
 - Add AFC SDK
   - Terminal `npm install @cap-js-community/sap-afc-sdk`
@@ -512,16 +558,20 @@ The broker is used to manage service key management to the API.
 
 - Terminal: `afc add broker`
 - Deploy (see above)
-- Create broker:
-  - Terminal: `cf create-service-broker <name>-broker broker-user '<broker-password>' https://<domain>/broker --space-scoped`
-- Create a service from broker: `cf cs <service-name> standard <name>`
-- Create a service key: `cf create-service-key <name> <name>-key`
-- Display service key: `cf service-key <name> <name>-key`
-- Perform OAuth token request using service key credentials
-  - See [uaa.http](./http/auth/uaa.http) for obtaining an OAuth token
-- Call API using OAuth token
-  - See `.http` files in [/http](./http) to call API endpoints
-  - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
+- Get API key credentials
+  - Terminal: `afc api key`
+  - Terminal: `afc api key --new` (new key)
+- Use API key credentials
+  - Swagger UI
+    - Open URL: `https://<server-url>/api-docs/api/job-scheduling/v1/`
+    - Click `Authorize` and provide key credentials for `client_id` and `client_secret`
+    - Try out endpoints
+  - HTTP Client
+    - Perform OAuth token request using key credentials (clientId, clientSecret)
+      - See [uaa.http](./http/auth/uaa.http) for obtaining an OAuth token
+    - Call API using OAuth token
+      - See `.http` files in [/http](./http) to call API endpoints
+      - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
 
 #### Authentication
 
@@ -552,7 +602,7 @@ Approuter is added in folder `/app/router`. It can be deployed as separate appli
 
 Add Work Zone integration to display UIs in a launchpad:
 
-- Terminal: `cds add workzone-standard`
+- Terminal: `cds add workzone`
 
 #### HTML5 Repo
 

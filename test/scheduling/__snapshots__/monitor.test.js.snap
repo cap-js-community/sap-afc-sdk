@@ -2636,7 +2636,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
   "value": [
     {
       "definition_name": "JOB_1",
-      "link": "https://sap.com",
+      "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
           "definition_job_name": "JOB_1",
@@ -2671,7 +2671,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
     },
     {
       "definition_name": "JOB_2",
-      "link": "https://sap.com",
+      "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
           "definition_job_name": "JOB_2",
@@ -2706,7 +2706,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
     },
     {
       "definition_name": "JOB_3",
-      "link": "https://sap.com",
+      "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
           "definition_job_name": "JOB_3",
@@ -2747,7 +2747,7 @@ exports[`Monitoring Service Get Jobs 2`] = `
 {
   "@odata.context": "$metadata#Job/$entity",
   "definition_name": "JOB_1",
-  "link": "https://sap.com",
+  "link": "http://localhost:4004/<ID>",
   "parameters": [
     {
       "definition_job_name": "JOB_1",

@@ -100,9 +100,9 @@
     "eventQueue": {
       "useAsCAPOutbox": true,
       "periodicEvents": {
-        "Job/Sync": {
-          "cron": "*/5 * * * *",
-          "impl": "./node_modules/@cap-js-community/sap-afc-sdk/src/periodicEvents/SyncJob.js"
+        "SchedulingJob/Sync": {
+          "cron": "*/1 * * * *",
+          "impl": "./node_modules/@cap-js-community/sap-afc-sdk/srv/scheduling/periodic/SchedulingJobSync.js"
         }
       }
     },
@@ -138,7 +138,12 @@
       },
       "sap-afc-sdk": {
         "model": "@cap-js-community/sap-afc-sdk",
+        "api": {
+          "cors": true,
+          "csp": true
+        },
         "ui": {
+          "link": true,
           "path": "",
           "launchpad": true,
           "scheduling.monitoring.job": true,
@@ -164,9 +169,7 @@
               "failed": 0.1
             }
           }
-        },
-        "csp": true,
-        "cors": true
+        }
       },
       "afc": {
         "kind": "odata-v4",

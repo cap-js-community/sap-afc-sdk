@@ -18,8 +18,6 @@ const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
-const SAPUI5_URL = "https://ui5.sap.com";
-
 cds.on("bootstrap", () => {
   secureRoutes();
   addErrorMiddleware();
@@ -28,39 +26,40 @@ cds.on("bootstrap", () => {
   serveSwaggerUI();
 });
 
+cds.on("connect", (srv) => {
+  if (srv.name === "db") {
+    registerAfterJobReadFillLink(srv);
+  }
+});
+
 cds.on("listening", () => {
   outboxServices();
   handleFeatureToggles();
 });
 
 function secureRoutes() {
-  if (cds.env.requires?.["sap-afc-sdk"]?.csp && !serverUrl().startsWith("http://localhost")) {
-    const csp = toObject(cds.env.requires?.["sap-afc-sdk"]?.csp);
+  if (cds.env.requires?.["sap-afc-sdk"]?.api?.cors) {
+    const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.api?.cors);
+    cds.app.use("/api", cors(corsOptions));
+  }
+  if (serverUrl().startsWith("http://localhost")) {
+    return;
+  }
+  if (cds.env.requires?.["sap-afc-sdk"]?.api?.csp) {
+    const csp = toObject(cds.env.requires?.["sap-afc-sdk"]?.api?.csp);
     const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
     cds.app.use(
+      "/api",
       helmet({
         contentSecurityPolicy: {
           directives: {
             ...defaultDirectives,
-            "default-src": [...(defaultDirectives["default-src"] || []), SAPUI5_URL],
-            "script-src": [...(defaultDirectives["script-src"] || []), "'unsafe-inline'", "'unsafe-eval'", SAPUI5_URL],
-            "connect-src": [
-              ...(defaultDirectives["connect-src"] || []),
-              "wss:",
-              SAPUI5_URL,
-              authorizationUrl(),
-              serverUrl(),
-            ],
-            "img-src": [...(defaultDirectives["img-src"] || []), "blob:", SAPUI5_URL],
+            "default-src": [...(defaultDirectives["default-src"] || []), serverUrl, authorizationUrl],
             ...csp,
           },
         },
       }),
     );
-  }
-  if (cds.env.requires?.["sap-afc-sdk"]?.cors) {
-    const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.cors);
-    cds.app.use(cors(corsOptions));
   }
 }
 
@@ -288,4 +287,21 @@ function handleFeatureToggles() {
       eventQueueConfig[name] = value;
     });
   }
+}
+
+function registerAfterJobReadFillLink(db) {
+  if (!cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
+    return;
+  }
+  db.after("READ", async (result, req) => {
+    if (req.target.name.split(".").pop() !== "Job") {
+      return;
+    }
+    result = Array.isArray(result) ? result : [result];
+    for (const row of result) {
+      if (row.ID && row.link === null) {
+        row.link = `${serverUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
+      }
+    }
+  });
 }
