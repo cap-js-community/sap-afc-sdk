@@ -1,6 +1,8 @@
 "use strict";
 
 const cds = require("@sap/cds");
+const { Readable } = require("stream");
+const { text }  = require("node:stream/consumers");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 
@@ -31,11 +33,15 @@ const STATUS_TRANSITIONS = {
 };
 
 module.exports = class SchedulingProcessingService extends BaseApplicationService {
+
+  constructor(...args) {
+    super(...args);
+    this.statusTransitions = STATUS_TRANSITIONS;
+  }
+
   async init() {
     const { Job } = this.entities("scheduling");
     const { processJob, updateJob, cancelJob } = this.operations;
-
-    this.statusTransitions = STATUS_TRANSITIONS;
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
@@ -74,11 +80,11 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (!JobStatus[status]) {
       return req.reject(JobSchedulingError.invalidJobStatus(status));
     }
-    if (req.job.status_code === status) {
+    if (job.status_code === status) {
       return;
     }
-    if (!(await this.checkStatusTransition(req, req.job.status_code, status))) {
-      return req.reject(JobSchedulingError.statusTransitionNotAllowed(req.job.status_code, status));
+    if (!(await this.checkStatusTransition(req, job.status_code, status))) {
+      return req.reject(JobSchedulingError.statusTransitionNotAllowed(job.status_code, status));
     }
     await UPDATE.entity(Job)
       .set({
@@ -86,6 +92,15 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       })
       .where({ ID: job.ID });
     if (results && results.length > 0) {
+      for (const result of results) {
+        if (result.data) {
+          if (Buffer.isBuffer(result.data)) {
+            result.data = btoa(result.data);
+          } else if (result.data instanceof Readable) {
+            result.data = btoa(await text(result.data));
+          }
+        }
+      }
       const insertResults = await this.checkJobResults(req, results);
       await INSERT.into(JobResult).entries(insertResults);
     }

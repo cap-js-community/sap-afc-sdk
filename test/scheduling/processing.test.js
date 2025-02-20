@@ -7,6 +7,7 @@ const { Readable } = require("stream");
 
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
 const { JobStatus, ResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
+const SchedulingProcessingService = require("../../srv/scheduling/processing-service");
 
 const { test } = cds.test(__dirname + "/../..");
 
@@ -306,6 +307,56 @@ describe("Processing Service", () => {
     ).resolves.not.toThrow();
     await processOutbox();
     expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary { type: 'cds.LargeBinary' }/s));
+  });
+
+  it("updateJob - processJobUpdate", async () => {
+    const schedulingProcessingService = new SchedulingProcessingService();
+    Object.defineProperty(schedulingProcessingService, "entities", {
+      writable: true,
+    });
+    const Job = cds.model.definitions["scheduling.Job"];
+    const JobResult = cds.model.definitions["scheduling.JobResult"];
+    schedulingProcessingService.entities = () => {
+      return {
+        Job,
+        JobResult,
+      };
+    };
+    const req = {
+      job: {
+        ID,
+        status_code: JobStatus.running,
+      },
+    };
+    const result = await schedulingProcessingService.processJobUpdate(req, JobStatus.completed, [
+      {
+        type: ResultType.data,
+        name: "Buffer",
+        filename: "test.txt",
+        mimeType: "text/plain",
+        data: Buffer.from("This is a test"),
+      },
+      {
+        type: ResultType.data,
+        name: "Stream",
+        filename: "test.txt",
+        mimeType: "text/plain",
+        data: Readable.from("This is a test"),
+      },
+    ]);
+    expect(result).toBeUndefined();
+    const tx = cds.tx(req);
+    const results = await tx.run(SELECT.from(JobResult).where({ job_ID: ID }));
+    expect(results).toHaveLength(2);
+    const data = [];
+    for (const entry of results) {
+      const jobResult = await tx.run(SELECT.one.from(JobResult).columns("data").where({ ID: entry.ID }));
+      data.push(await text(jobResult.data));
+    }
+    await tx.rollback();
+    for (const record of data) {
+      expect(record).toEqual("This is a test");
+    }
   });
 
   it("cancelJob", async () => {
