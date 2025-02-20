@@ -53,7 +53,12 @@ Examples:
   process: function (target) {
     try {
       target ||= config.defaultTarget;
-      // TODO: Detect that app already exists
+      // Remove replacements
+      adjustText("mta.yaml", (content) => {
+        content = content.replace(/path: node_modules\/@cap-js-community\/sap-afc-sdk\/app\//g, "path: app/");
+        content = content.replace(/- npm i/g, "- npm ci");
+        return content;
+      });
       // Create app stubs
       const appStubs = [];
       for (const app of config.apps) {
@@ -78,7 +83,7 @@ Examples:
           const part = `path: app/${app}`;
           const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
           content = replaceTextPart(content, part, replacement);
-          content = replaceTextPart(content, `- npm ci`, `- npm i`, replacement);
+          content = replaceTextPart(content, "- npm ci", "- npm i", replacement);
         }
         return content;
       });
@@ -120,8 +125,11 @@ function adjustText(file, callback) {
   }
 }
 
-function replaceTextPart(content, part, replacement, positionPart) {
+function replaceTextPart(content, part, replacement, positionPart, restriction) {
   const position = Math.max(positionPart ? content.indexOf(positionPart) : 0, 0);
+  if (restriction >= 0 && !content.slice(position, position + restriction).includes(part)) {
+    return content;
+  }
   const index = content.indexOf(part, position);
   if (index < 0) {
     return content;

@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 const { Readable } = require("stream");
-const { text }  = require("node:stream/consumers");
+const { text } = require("node:stream/consumers");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 
@@ -33,7 +33,6 @@ const STATUS_TRANSITIONS = {
 };
 
 module.exports = class SchedulingProcessingService extends BaseApplicationService {
-
   constructor(...args) {
     super(...args);
     this.statusTransitions = STATUS_TRANSITIONS;
