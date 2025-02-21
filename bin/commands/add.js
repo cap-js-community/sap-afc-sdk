@@ -11,7 +11,7 @@ module.exports = {
         new commander.Argument(
           "<features>",
           "Add one or more features to an existing project (comma-separated list)",
-        ).choices(["broker", "sample", "http", "app"]),
+        ),
       )
       .addHelpText(
         "afterAll",
