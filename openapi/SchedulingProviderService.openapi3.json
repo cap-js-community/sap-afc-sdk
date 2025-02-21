@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "SAP Advanced Financial Closing Scheduling Service Provider Interface",
-    "description": "The Scheduling Service Provider Interface allows the integration of third-party scheduling jobs with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
+    "description": "The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
     "version": "1.0.0"
   },
   "servers": [
@@ -109,7 +109,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of job based on the provided parameters."
       },
       "post": {
         "summary": "Creates a single job.",
@@ -175,7 +176,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to create a single job based on the provided parameters."
       }
     },
     "/Job/{ID}": {
@@ -245,7 +247,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a single job based on the provided parameters."
       }
     },
     "/Job/{ID}/parameters": {
@@ -319,7 +322,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of parameters of a job based on the provided parameters."
       }
     },
     "/Job/{ID}/results": {
@@ -393,7 +397,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of results of a job based on the provided parameters."
       }
     },
     "/JobDefinition": {
@@ -474,7 +479,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of job definition based on the provided parameters."
       }
     },
     "/JobDefinition/{name}": {
@@ -543,7 +549,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a single job definition based on the provided parameters."
       }
     },
     "/JobDefinition/{name}/parameters": {
@@ -616,7 +623,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of parameters of a job definition based on the provided parameters."
       }
     },
     "/JobResult/{ID}": {
@@ -686,7 +694,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a single job result based on the provided parameters."
       }
     },
     "/JobResult/{ID}/messages": {
@@ -760,7 +769,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve a list of messages of a job result based on the provided parameters."
       }
     },
     "/JobResult/{ID}/data": {
@@ -831,7 +841,8 @@
           "503": {
             "$ref": "#/components/responses/503"
           }
-        }
+        },
+        "description": "The operation allows you to retrieve data of a job result based on the provided parameters."
       }
     },
     "/Job/{ID}/cancel": {
@@ -893,7 +904,8 @@
               "maxLength": 500
             }
           }
-        ]
+        ],
+        "description": "The operation allows you to invoke action cancel based on the provided parameters."
       }
     }
   },
@@ -1139,7 +1151,7 @@
           },
           "severity": {
             "type": "string",
-            "enum": ["error", "warning", "info"]
+            "enum": ["success", "info", "warning", "error"]
           },
           "text": {
             "type": "string"

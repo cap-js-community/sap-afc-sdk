@@ -8,6 +8,8 @@ const shelljs = require("shelljs");
 const config = require("../config.json");
 const commander = require("commander");
 
+const { adjustJSON, adjustText, replaceTextPart } = require("../common/util");
+
 module.exports = {
   register: function (program) {
     return program
@@ -53,12 +55,14 @@ Examples:
   process: function (target) {
     try {
       target ||= config.defaultTarget;
-      // Remove replacements
+
+      // Remove previous replacements
       adjustText("mta.yaml", (content) => {
         content = content.replace(/path: node_modules\/@cap-js-community\/sap-afc-sdk\/app\//g, "path: app/");
         content = content.replace(/- npm i/g, "- npm ci");
         return content;
       });
+
       // Create app stubs
       const appStubs = [];
       for (const app of config.apps) {
@@ -69,6 +73,7 @@ Examples:
         }
       }
       shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} --for production`);
+
       // Cleanup app stubs
       for (const app of appStubs) {
         const appPath = path.join(process.cwd(), config.appRoot, app);
@@ -76,6 +81,7 @@ Examples:
           fs.rmSync(appPath, { recursive: true, force: true });
         }
       }
+
       // CF
       adjustText("mta.yaml", (content) => {
         content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
@@ -87,12 +93,14 @@ Examples:
         }
         return content;
       });
+
       // Kyma
       adjustText("chart/values.yaml", (content) => {
         content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
-        // TODO: replace app stub paths in containerize
+        // TODO: Containerize
         return content;
       });
+
       // Approuter
       adjustJSON("app/router/package.json", (json) => {
         if (!json.scripts.start.includes("COOKIE_BACKWARD_COMPATIBILITY")) {
@@ -105,6 +113,7 @@ Examples:
         });
         json.websockets = { enabled: true };
       });
+
       // Install @cap-js-community packages
       shelljs.exec(
         `npm install --save @cap-js-community/event-queue @cap-js-community/websocket @cap-js-community/feature-toggle-library`,
@@ -115,34 +124,3 @@ Examples:
     }
   },
 };
-
-function adjustText(file, callback) {
-  const filePath = path.join(process.cwd(), file);
-  if (fs.existsSync(filePath)) {
-    let content = fs.readFileSync(filePath, "utf8");
-    content = callback(content);
-    fs.writeFileSync(filePath, content);
-  }
-}
-
-function replaceTextPart(content, part, replacement, positionPart, restriction) {
-  const position = Math.max(positionPart ? content.indexOf(positionPart) : 0, 0);
-  if (restriction >= 0 && !content.slice(position, position + restriction).includes(part)) {
-    return content;
-  }
-  const index = content.indexOf(part, position);
-  if (index < 0) {
-    return content;
-  }
-  return content.slice(0, index) + replacement + content.slice(index + part.length);
-}
-
-function adjustJSON(file, callback) {
-  const filePath = path.join(process.cwd(), file);
-  if (fs.existsSync(filePath)) {
-    const content = fs.readFileSync(filePath, "utf8");
-    const json = JSON.parse(content);
-    callback(json);
-    fs.writeFileSync(filePath, JSON.stringify(json, null, 2));
-  }
-}

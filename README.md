@@ -16,34 +16,37 @@ be consumed with [SAP Cloud Application Programming Model (Node.js)](https://www
 - [Requirements and Setup](#requirements-and-setup)
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
+  - [Concept](#concept)
+  - [Design](#design)
 - [Usage](#usage)
   - [Options](#options)
+  - [Bootstrap](#bootstrap)
+  - [Features](#features)
   - [Implementation](#implementation)
-- [Documentation](#documentation)
-  - [Boostrap Project](#bootstrap-project)
-  - [Add Features](#add-features)
+    - [Mock Job Processing](#mock-job-processing)
+    - [Implement Job Processing](#implement-job-processing)
+    - [Implement Job Provider](#implement-job-provider)
+    - [Implement Periodic Job Sync](#implement-periodic-job-sync)
+  - [Test](#test)
   - [Deployment](#deployment)
-  - [Advanced Setup](#advanced-setup)
+- [Advanced Setup](#advanced-setup)
 - [Support, Feedback, Contributing](#support-feedback-contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Licensing](#licensing)
 
 ## Requirements and Setup
 
-To develop and test applications build with this SDK you will need:
-
-- Access to an instance of [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing)
-- A [CAP Node.js](https://www.npmjs.com/package/@sap/cds) project
+- To develop and test applications build with this SDK you need a [CAP Node.js](https://www.npmjs.com/package/@sap/cds) project
+- To integrate you need access to an instance of [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing)
 
 ## Getting Started
 
 - Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` project
-- Execute `cds-serve` to start server
+- Execute `npm start` to start server
   - Access welcome page at http://localhost:4004
-  - Access UIs
+  - Access Applications
     - [/launchpad.html](http://localhost:4004/launchpad.html): Sandbox Launchpad
-    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone
-      Scheduling Monitoring Job UI
+    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
   - Access Service Endpoints
     - Public API
       - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider
@@ -55,7 +58,7 @@ To develop and test applications build with this SDK you will need:
       - [/ws/job-scheduling](http://localhost:4004/ws/job-scheduling): Scheduling WebSocket endpoint
     - REST API
       - [/rest/feature](http://localhost:4004/rest/feature): Feature Toggle API
-    - Internal API
+    - CDS Internal API
       - `SchedulingProcessingService`: Scheduling Processing service
         ```js
         const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
@@ -180,6 +183,48 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
 - `config: Object`: Advanced SDK configuration
+
+### Bootstrap
+
+A new CDS project can be initialized using [SAP Build Code](https://help.sap.com/docs/build_code)
+tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to boostrap a new
+CAP application.
+
+**SAP Build Code**:
+
+- Open SAP Build Code Lobby
+- Press `Create`
+- Select `Build an Application`
+  - Choose `SAP Build Code`
+  - Choose `Full-Stack Application`
+- Provide Project Name
+- Select Development Stack: `Node.js`
+- Press `Create`
+- Continue with `cds` CLI, [adding features](#add-features)
+
+**CDS Command-Line-Interface**:
+
+- Terminal: `npm install -g @sap/cds-dk`
+- Init a new CDS project:
+  - Terminal: `cds init <name>`
+- Switch to project folder:
+  - Terminal: `cd <name>`
+
+### Features
+
+- Add AFC SDK
+  - Terminal `npm install @cap-js-community/sap-afc-sdk`
+- Init Target Environment
+  - Cloud Foundry:
+    - Terminal: `afc init cf`
+  - Kyma:
+    - Terminal: `afc init kyma`
+- Add AFC SDK features
+  - Terminal: `afc add broker,sample,http`
+- Install: `npm install`
+- Test
+  - Terminal: `npm start`
+  - Browser: `http://localhost:4004`
 
 ### Implementation
 
@@ -463,60 +508,39 @@ module.exports = CustomPeriodicSchedulingJobSync;
 Details on how to implement periodic event via Event Queue can be found in
 [Event-Queue documentation on Periodic Events](https://cap-js-community.github.io/event-queue/configure-event/#periodic-events).
 
-## Documentation
+### Test
 
-### Bootstrap Project
+The application can be tested locally using the following steps:
 
-A new CDS project can be initialized using [SAP Build Code](https://help.sap.com/docs/build_code)
-tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to boostrap a new
-CAP application.
-
-**SAP Build Code**:
-
-- Open SAP Build Code Lobby
-- Press `Create`
-- Select `Build an Application`
-  - Choose `SAP Build Code`
-  - Choose `Full-Stack Application`
-- Provide Project Name
-- Select Development Stack: `Node.js`
-- Press `Create`
-- Continue with `cds` CLI, [adding features](#add-features)
-
-**CDS Command-Line-Interface**:
-
-- Terminal: `npm install -g @sap/cds-dk`
-- Init a new CDS project:
-  - Terminal: `cds init <name>`
-- Switch to project folder:
-  - Terminal: `cd <name>`
-
-### Add Features
-
-**AFC Initialize**:
-
-- Add AFC SDK
-  - Terminal `npm install @cap-js-community/sap-afc-sdk`
-- Init Target Environment:
-  - Cloud Foundry:
-    - Terminal: `afc init cf`
-  - Kyma:
-    - Terminal: `afc init kyma`
-- Add AFC SDK features:
-  - Terminal: `afc add broker,sample,http`
-- Install: `npm install`
-- Test
+- Start application
   - Terminal: `npm start`
+- Open welcome page
   - Browser: `http://localhost:4004`
+
+#### Add sample data
+
+To add sample Job definitions and Job instances run:
+
+- Terminal: `afc add sample`
+
+Test data will be placed at `/db/data`
+
+#### Add .http files
+
+To add `.http` files for testing the API endpoints run
+
+- Terminal: `afc add http`
+
+HTTP files will be placed at `/http`.
 
 ### Deployment
 
-To fully test the application, also accessing API from external a deployment needs to be performed.
+To fully test the application, also accessing APIs from external, a deployment needs to be performed.
 BTP offers different deployment options, depending on the target environment (Cloud Foundry or Kyma).
 
 #### Cloud Foundry
 
-- Add MTA feature
+- Add MTA feature (already part of [Boostrap](#bootstrap))
   - Terminal: `cds add mta`
 - Build MTA
   - Terminal: `mbt build`
@@ -526,7 +550,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 #### Kyma
 
-- Add helm feature
+- Add helm feature (already part of [Boostrap](#bootstrap))
   - Terminal: `cds add helm`
 - Containerize
   - Terminal: `ctz containerize.yaml --push`
@@ -536,97 +560,62 @@ BTP offers different deployment options, depending on the target environment (Cl
   - Terminal: `kubectl rollout restart deployment -n <namespace>`
 - Follow Guide for [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
 
-### Advanced Setup
-
-#### Add sample data
-
-To add sample Job definitions and Job instances run:
-
-- Terminal: `afc add sample`
-
-Test data will be placed at `/db/data`.
-
-#### Add .http files
-
-To add `.http` files for testing the API endpoints run:
-
-- Terminal: `afc add http`
-
-HTTP files will be placed at `/http`.
-
-#### Broker (Cloud Foundry)
+### Broker (Cloud Foundry)
 
 An Open Service Broker compliant broker implementation can be added to the CAP project.
 The broker is used to manage service key management to the API.
 
-- Terminal: `afc add broker`
-- Deploy (see above)
+- Add broker and service configuration (already part of [Boostrap](#bootstrap))
+  - Terminal: `afc add broker`
+- Deploy to CF (see [Deployment](#deployment) to [Cloud Foundry](#cloud-foundry))
 - Get API key credentials
   - Terminal: `afc api key`
-  - Terminal: `afc api key --new` (new key)
 - Use API key credentials
-  - Swagger UI
+  - Swagger UI:
     - Open URL: `https://<server-url>/api-docs/api/job-scheduling/v1/`
     - Click `Authorize` and provide key credentials for `client_id` and `client_secret`
     - Try out endpoints
-  - HTTP Client
+  - HTTP Client:
+    - Add [.http](#add-http-files) files
+    - Update .http files placeholders
+      - Terminal: `afc api key --h`
     - Perform OAuth token request using key credentials (clientId, clientSecret)
-      - See [uaa.http](./http/auth/uaa.http) for obtaining an OAuth token
+      - See [http/auth/uaa.cloud.http](./http/auth/uaa.cloud.http) for obtaining an OAuth token
+      - Via CLI:
+        - Terminal: `afc api key --t`
     - Call API using OAuth token
       - See `.http` files in [/http](./http) to call API endpoints
       - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
 
-#### Authentication
+## Advanced Setup
 
-Authentication can be performed omn BTP using XSUAA or IAS.
-
-##### XSUAA
-
-Add XSUAA based authentication:
-
-- Terminal: `cds add xsuaa --for production`
-- Change XSUAA service plan `servicePlanName` (helm) / `service-plan` (mta) from `application` to `broker`
-
-##### Identify Services (IAS)
-
-Add IAS based authentication:
-
-- Terminal: `cds add ias`
-
-#### Approuter
-
-To serve UIs and provided authentication mechanisms via browser, and approuter needs to be added to project:
-
-- Terminal: `cds add approuter`
-
-Approuter is added in folder `/app/router`. It can be deployed as separate application.
-
-#### Work Zone (Standard)
-
-Add Work Zone integration to display UIs in a launchpad:
-
-- Terminal: `cds add workzone`
-
-#### HTML5 Repo
+### HTML5 Repo
 
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Terminal: `cds add html5-repo`
+- Add HTML5 repo feature (already part of [Boostrap](#bootstrap))
+  - Terminal: `cds add html5-repo`
 - Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
-- Apps from AFC SDK can be included into project at `/app` via (necessary for Kyma deployment):
+- (Optional): Apps from AFC SDK can be copied over into project at `/app` via:
   - Terminal: `afc add app`
 
-#### Redis
+### Workzone
+
+tbd
+
+### Redis
 
 You can scale the application by adding a Redis cache to distribute workload across application instances:
+
+Add Redis to the project (already part of [Boostrap](#bootstrap)):
 
 - Terminal: `cds add redis`
 
 Redis is used by `event-queue`, `websocket` and `feature-toggle-library` modules
-to process events, distribute websocket messages and store feature toggles.
+to process events, distribute websocket messages and store and distribute feature toggles values.
 
-#### Feature Toggles
+### Feature Toggles
 
 The Feature Toggle Library is used to control the execution of the Event Queue. It exposes endpoints to manage feature
 toggles.
@@ -635,13 +624,17 @@ toggles.
 `POST /rest/feature/redisUpdate`: Update feature toggle state
 
 See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
+An internal OAuth token can be fetched via [/http/auth/uaa.internal.cloud.http](./http/auth/uaa.internal.cloud.http)
+providing credentials from XSUAA instance or via calling:
 
-#### Multi-tenancy
+- Terminal: `afc api key --h --i`
+
+### Multi-tenancy
 
 The project can be enabled for multi-tenancy by following the guide:
 https://cap.cloud.sap/docs/guides/multitenancy/#enable-multitenancy
 
-##### MTX Tool (CF only)
+#### MTX Tool (CF only)
 
 The MTX Tool is used to manage the application lifecycle. It can be used to manage the application in Cloud Foundry.
 Details can be found at https://github.com/cap-js-community/mtx-tool.

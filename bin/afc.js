@@ -16,8 +16,8 @@ program.version(packageJSON.version, "-v, --version").usage("[command] [options]
 
 for (const command of COMMANDS) {
   const commandFn = require(`./commands/${command}`);
-  commandFn.register(program).action(function () {
-    commandFn.handle.apply(this, arguments);
+  commandFn.register(program).action(async function () {
+    await commandFn.handle.apply(this, arguments);
   });
 }
 

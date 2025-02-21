@@ -1,13 +1,13 @@
-@hostname=<add your own hostname from cloud deployment>
-@token=<add your token from xsuaa>
+@host=<server host from cloud deployment>
+@internalToken=<xsuaa internal token>
 
 ### Feature Toggles state
-GET https://{{hostname}}/rest/feature/state
-Authorization: Bearer {{token}}
+GET https://{{host}}/rest/feature/state
+Authorization: Bearer {{internalToken}}
 
 ### Event Queue active
-POST https://{{hostname}}/rest/feature/redisUpdate
-Authorization: Bearer {{token}}
+POST https://{{host}}/rest/feature/redisUpdate
+Authorization: Bearer {{internalToken}}
 Content-Type: application/json
 
 {
@@ -16,8 +16,8 @@ Content-Type: application/json
 }
 
 ### Event Queue instance load limit
-POST https://{{hostname}}/rest/feature/redisUpdate
-Authorization: Bearer {{token}}
+POST https://{{host}}/rest/feature/redisUpdate
+Authorization: Bearer {{internalToken}}
 Content-Type: application/json
 
 {
@@ -26,8 +26,8 @@ Content-Type: application/json
 }
 
 ### Remove: Event Queue active
-POST https://{{hostname}}/rest/feature/redisUpdate
-Authorization: Bearer {{token}}
+POST https://{{host}}/rest/feature/redisUpdate
+Authorization: Bearer {{internalToken}}
 Content-Type: application/json
 
 {
@@ -39,8 +39,8 @@ Content-Type: application/json
 }
 
 ### Remove: Event Queue instance load limit
-POST https://{{hostname}}/rest/feature/redisUpdate
-Authorization: Bearer {{token}}
+POST https://{{host}}/rest/feature/redisUpdate
+Authorization: Bearer {{internalToken}}
 Content-Type: application/json
 
 {

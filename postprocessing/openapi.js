@@ -136,6 +136,9 @@ function processSchedulingProviderService(file) {
           return result;
         }, {}),
       };
+      pathMethod.description = `The operation allows you to ${includeInSentence(
+        pathMethod.summary,
+      )} based on the provided parameters.`;
     }
   }
 
@@ -168,4 +171,16 @@ function processSchedulingProviderService(file) {
   }
 
   fs.writeFileSync(filePath, JSON.stringify(input, null, 2));
+}
+
+function includeInSentence(text) {
+  text = text.charAt(0).toLowerCase() + text.slice(1);
+  if (text.endsWith(".")) {
+    text = text.substring(0, text.length - 1);
+  }
+  const words = text.split(" ");
+  if (words[0].endsWith("s")) {
+    words[0] = words[0].substring(0, words[0].length - 1);
+  }
+  return words.join(" ");
 }

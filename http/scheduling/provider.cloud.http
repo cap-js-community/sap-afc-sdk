@@ -1,36 +1,36 @@
-@hostname=<add your own hostname from cloud deployment>
-@token=<add your token from xsuaa>
+@api=<api endpoint from cloud deployment>
+@token=<xsuaa token>
 
 ### Job Definition
-GET https://{{hostname}}/api/job-scheduling/v1/JobDefinition
+GET https://{{api}}/job-scheduling/v1/JobDefinition
 Authorization: Bearer {{token}}
 
 ### Job Definition Parameters
-GET https://{{hostname}}/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
+GET https://{{api}}/job-scheduling/v1/JobDefinition/JOB_1/parameters
 Authorization: Bearer {{token}}
 
 ### Job
-GET https://{{hostname}}/api/job-scheduling/v1/Job
+GET https://{{api}}/job-scheduling/v1/Job
 Authorization: Bearer {{token}}
 
 ### Job Parameters
-GET https://{{hostname}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+GET https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
 Authorization: Bearer {{token}}
 
 ### Job Results
-GET http://{{hostname}}/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+GET http://{{api}}/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
 Authorization: Bearer {{token}}
 
 ### Job Result Messages
-GET http://{{hostname}}/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+GET http://{{api}}/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
 Authorization: Bearer {{token}}
 
 ### Job Result Message Data
-GET http://{{hostname}}/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+GET http://{{api}}/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
 Authorization: Bearer {{token}}
 
 ### Create Job
-POST https://{{hostname}}/api/job-scheduling/v1/Job
+POST https://{{api}}/job-scheduling/v1/Job
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -62,6 +62,6 @@ Content-Type: application/json
 }
 
 ### Cancel Job
-POST https://{{hostname}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
