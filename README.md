@@ -7,8 +7,7 @@
 
 ## About this Project
 
-[SAP Advanced Financial Closing SDK for CDS](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk)
-Provides an SDK for [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing) to
+[SAP Advanced Financial Closing SDK for CDS](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk) provides an SDK for [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing) to
 be consumed with [SAP Cloud Application Programming Model (Node.js)](https://www.npmjs.com/package/@sap/cds).
 
 ## Table of Contents
