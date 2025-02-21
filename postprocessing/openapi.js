@@ -12,6 +12,10 @@ const DEFAULT_RESPONSES = require("./default-responses");
 function processSchedulingProviderService(file) {
   const filePath = path.join(process.cwd(), file);
   const input = require(filePath);
+  input.externalDocs = {
+    description: "SAP Advanced Financial Closing SDK for CDS",
+    url: "https://github.com/cap-js-community/sap-afc-sdk",
+  };
   input.components.parameters = {};
   input.components.responses = DEFAULT_RESPONSES;
   input.components.schemas.error = {
@@ -32,7 +36,6 @@ function processSchedulingProviderService(file) {
 
   delete input["x-sap-api-type"];
   delete input["x-odata-version"];
-  delete input["x-sap-shortText"];
   input.info.version = "1.0.0";
 
   input.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
