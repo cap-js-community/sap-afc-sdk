@@ -104,11 +104,6 @@ Examples:
       });
 
       // Approuter
-      adjustJSON("app/router/package.json", (json) => {
-        if (!json.scripts.start.includes("COOKIE_BACKWARD_COMPATIBILITY")) {
-          json.scripts.start = `COOKIE_BACKWARD_COMPATIBILITY=true ${json.scripts.start}`;
-        }
-      });
       adjustJSON("app/router/xs-app.json", (json) => {
         json.routes = json.routes.filter((route) => {
           return !route.localDir;
