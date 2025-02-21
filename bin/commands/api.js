@@ -19,7 +19,7 @@ module.exports = {
       .command("api")
       .description("Manage API")
       .addArgument(new commander.Argument("<action>", "Manage API keys").choices(["key"]))
-      .option("-n, --new", "Create new API key")
+      .option("-n, --new [name]", "Create new API key with optional name")
       .option("-p, --password <password>", "Broker password")
       .option("-s, --server <password>", "Server URL")
       .option("-t, --token", "Fetch OAuth token")
@@ -37,7 +37,7 @@ Actions:
 Examples:
   afc api key
   afc api key --new
-  afc api key -n
+  afc api key -n test
   afc api key --server <server-url>
   afc api key -s <server-url>
   afc api key -h
@@ -135,7 +135,9 @@ async function manageKey(options) {
   }
 
   // Service Key
-  const serviceKeyName = `${serviceInstanceName}-${SERVICE_KEY_SUFFIX}` + (options.new ? `-${Date.now()}` : "");
+  const serviceKeyName =
+    `${serviceInstanceName}-${SERVICE_KEY_SUFFIX}` +
+    (options.new ? `-${options.new === true ? Date.now() : options.new}` : "");
   const regexServiceKey = new RegExp(`(${serviceKeyName})`);
   const cfCreateServiceKeysCommand = `cf service-keys ${serviceInstanceName}`;
   result = shelljs.exec(cfCreateServiceKeysCommand, { silent: true }).stdout;

@@ -16,7 +16,9 @@ module.exports = {
       .command("init")
       .description("Initialize project for target platform")
       .addArgument(
-        new commander.Argument("[target]", "Initialize project for target platform (cf, kyma)").choices(["cf", "kyma"]),
+        new commander.Argument("[target]", "Initialize project for target platform (cf, kyma)")
+          .choices(["cf", "kyma"])
+          .default("cf"),
       )
       .addOption(
         new commander.Option(
