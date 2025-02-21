@@ -8,10 +8,7 @@ module.exports = {
       .command("add")
       .description("Add features to project")
       .addArgument(
-        new commander.Argument(
-          "<features>",
-          "Add one or more features to an existing project (comma-separated list)",
-        ),
+        new commander.Argument("<features>", "Add one or more features to an existing project (comma-separated list)"),
       )
       .addHelpText(
         "afterAll",
