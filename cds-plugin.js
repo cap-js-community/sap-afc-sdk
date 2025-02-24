@@ -30,7 +30,7 @@ cds.on("bootstrap", () => {
 
 cds.on("connect", (srv) => {
   if (srv.name === "db") {
-    registerAfterJobReadFillLink(srv);
+    registerAfterReadJobFillLink(srv);
   }
 });
 
@@ -195,10 +195,17 @@ function serveAppConfig(packageRoot, uiPath) {
 }
 
 function serveSwaggerUI() {
+  const swaggerConfig = cds.env.requires?.["sap-afc-sdk"]?.ui?.swagger;
+  if (!swaggerConfig) {
+    return;
+  }
   const router = express.Router();
   cds.on("serving", (service) => {
     const openAPI = service.definition?.["@openapi"];
     if (openAPI) {
+      if (!(swaggerConfig === true || swaggerConfig[service.name])) {
+        return;
+      }
       const apiPath = config.paths.swaggerUi + service.path;
       cds.log("/swagger").info("Serving Swagger UI for ", { service: service.name, at: apiPath });
       router.use(
@@ -318,7 +325,7 @@ function handleFeatureToggles() {
   }
 }
 
-function registerAfterJobReadFillLink(db) {
+function registerAfterReadJobFillLink(db) {
   if (!cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
     return;
   }

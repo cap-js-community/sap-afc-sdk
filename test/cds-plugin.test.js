@@ -13,6 +13,33 @@ process.env.PORT = 0; // Random
 
 cds.env.requires["sap-afc-sdk"].broker = true;
 cds.env.requires["sap-afc-sdk"].ui.path = "/custom";
+cds.env.requires["sap-afc-sdk"].broker = {
+  SBF_SERVICE_CONFIG: {
+    service: {
+      extend_credentials: {
+        shared: {
+          endpoints: {
+            api: "/api",
+            "job-scheduling-v1": "/api/job-scheduling/v1",
+          },
+          "oauth2-configuration": {
+            "credential-types": ["binding-secret", "x509"],
+          },
+        },
+      },
+      extend_xssecurity: {
+        shared: {
+          "oauth2-configuration": {
+            "credential-types": ["binding-secret", "x509"],
+          },
+        },
+      },
+    },
+  },
+  SBF_BROKER_CREDENTIALS_HASH: {
+    "broker-user": "sha256:E/VwOIZC2ZKPY+VTPCg1Mfu/bFDlxgkk9AgyrzhgpHs=:WNlnGu7jfxHGwy14BoVEiFXzp9RcwGiInauL4iOTe5E=",
+  },
+};
 
 describe("CDS Plugin", () => {
   beforeEach(async () => {
@@ -25,8 +52,15 @@ describe("CDS Plugin", () => {
 
   it("Boostrap", async () => {
     expect(log.output).toEqual(
-      expect.stringMatching(/broker.json not found at '.*srv\/broker.json'. Call 'afc add broker'/s),
+      expect.stringMatching(
+        /\[\/broker] - Failed to start broker AssertionError \[ERR_ASSERTION]: Could not find credentials service/s,
+      ),
     );
+  });
+
+  it("GET Welcome Page", async () => {
+    const response = await GET("/");
+    expect(response.data).toMatchSnapshot();
   });
 
   it("GET App Config", async () => {

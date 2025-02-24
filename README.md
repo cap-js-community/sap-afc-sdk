@@ -160,17 +160,18 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk` section:
 
 - `endpoints: Object`: Endpoint configuration. Default `{}`
-  - `approuter: String`: Url of approuter. Default `null` (derived from conventions)
-  - `server: String`: Url of server. Default `null` (derived from environment, e.g. CF)
+  - `endpoints.approuter: String`: Url of approuter. Default `null` (derived from conventions `<app>-srv`)
+  - `endpoints.server: String`: Url of server. Default `null` (derived from environment, e.g. CF)
 - `api: Object`: API configuration. Default `{}`
-  - `csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default `true` for default configuration
-  - `cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `true` for default configuration
+  - `api.csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default `true` for default configuration
+  - `api.cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `true` for default configuration
 - `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default `{}`
-  - `ui.link: String`: Fill link of jobs to served UI5 launchpad, if `null`. Default `true`
   - `ui.path: String`: Path to the served UI5 application. Default `''`
+  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default `true`
+  - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default `true`
+    - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
-  - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job. Default `true`
-  - `ui.api.scheduling.job.swagger: Boolean`: Serve Scheduling Provider Swagger UI. Default `true`
+  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job. Default `true`
 - `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `false` and `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
@@ -181,7 +182,7 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
     - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
     - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
     - `mockProcessing.status.failed: Number`: Failed status distribution value
-- `config: Object`: Advanced SDK configuration
+- `config: Object`: Advanced SDK configuration. See [config.json](./config.json)
 
 ### Bootstrap
 
@@ -271,16 +272,14 @@ custpm processing logic, and the processing status update handling.
 
 To implement a custom Job processing extend the Job processing service definition as follows:
 
-- CDS file: `/srv/scheduling-processing-service.cds`
+**CDS file:** `/srv/scheduling-processing-service.cds`
 
 ```cds
 using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
 annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
 ```
 
-Service can be restricted for authorization adding `@requires` annotation.
-
-- Implementation file: `/srv/scheduling-processing-service.js`
+**Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
 const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
@@ -400,16 +399,14 @@ Focus can be put on additional custom provider logic, e.g. streaming of data fro
 
 To implement a custom Job provider extend the Job provider service definition as follows:
 
-- CDS file: `/srv/scheduling-provider-service.cds`
+**CDS file:** `/srv/scheduling-provider-service.cds`
 
-  ```cds
-  using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
-  annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';
-  ```
+```cds
+using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';
+```
 
-Service can be restricted for authorization adding `@requires` annotation.
-
-- Implementation file: `/srv/scheduling-provider-service.js`
+**Implementation file:** `/srv/scheduling-provider-service.js`
 
 ```js
 const { SchedulingProviderService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
@@ -456,6 +453,17 @@ As part of the custom scheduling provider service implementation, the following 
 
 In addition, to overwriting the default implementation via an `on`-handler, also additional `before` and `after` handlers can be registered.
 
+##### Authorization
+
+Scheudling Provider Service can be restricted for authorization adding `@requires` annotation:
+
+```cds
+using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+annotate SchedulingProviderService with @requires: 'JobProcessing';
+```
+
+Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/guides/security/authorization).
+
 #### Implement Periodic Job Sync
 
 A periodic scheduling job synchronization event named `SchedulingJob/Sync` is running per default every **1 minute** in the Event Queue,
@@ -482,7 +490,7 @@ To implement a custom Job sync extend the Job sync configuration in CDS env as f
 
 The `cron` interval option defines the periodicity of the scheduling job synchronization.
 
-- Implementation file: `/srv/SchedulingJobSync.js`
+**Implementation file:** `/srv/SchedulingJobSync.js`
 
 ```js
 const { PeriodicSchedulingJobSync } = require("@cap-js-community/sap-afc-sdk");

@@ -7,13 +7,17 @@ function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
     let content = fs.readFileSync(filePath, "utf8");
-    content = callback(content);
-    fs.writeFileSync(filePath, content);
+    const newContent = callback(content);
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent);
+      return true;
+    }
   }
+  return false;
 }
 
 function adjustLines(file, callback) {
-  adjustText(file, (content) => {
+  return adjustText(file, (content) => {
     const newLines = [];
     for (const line of content.split("\n")) {
       const adjustedLine = callback(line);
@@ -47,8 +51,13 @@ function adjustJSON(file, callback) {
     const content = fs.readFileSync(filePath, "utf8");
     const json = JSON.parse(content);
     callback(json);
-    fs.writeFileSync(filePath, JSON.stringify(json, null, 2));
+    const newContent = JSON.stringify(json);
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent, null, 2);
+      return true;
+    }
   }
+  return false;
 }
 
 module.exports = {

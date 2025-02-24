@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 const commander = require("commander");
+const { open } = require("openurl");
 const prompt = require("prompt-sync")();
 
 const { adjustLines } = require("../common/util");
@@ -12,6 +13,45 @@ const { adjustLines } = require("../common/util");
 const PLAN_NAME = "standard";
 const SERVICE_SUFFIX = "api";
 const SERVICE_KEY_SUFFIX = "key";
+
+const PLACEHOLDERS = {
+  host: {
+    default: "<server host from cloud deployment>",
+    url: true,
+  },
+  api: {
+    default: "<api endpoint from cloud deployment>",
+    url: true,
+  },
+  auth: {
+    default: "<auth endpoint from cloud deployment>",
+    url: true,
+  },
+  clientId: {
+    default: "<xsuaa client id>",
+    variable: "cfServiceKeyClientId",
+  },
+  clientSecret: {
+    default: "<xsuaa client secret>",
+    variable: "cfServiceKeyClientSecret",
+  },
+  token: {
+    default: "<xsuaa token>",
+    variable: "oauthToken",
+  },
+  internalClientId: {
+    default: "<xsuaa internal client id>",
+    variable: "internalClientId",
+  },
+  internalClientSecret: {
+    default: "<xsuaa internal client secret>",
+    variable: "internalClientSecret",
+  },
+  internalToken: {
+    default: "<xsuaa intenral token>",
+    variable: "oauthToken",
+  },
+};
 
 module.exports = {
   register: function (program) {
@@ -22,12 +62,14 @@ module.exports = {
       .option("-n, --new [name]", "Create new API key with optional name")
       .option("-p, --password <password>", "Broker password")
       .option("-s, --server <password>", "Server URL")
-      .option("-t, --token", "Fetch OAuth token")
+      .option("-a, --passcode", "Request temporary authentication code")
+      .option("-i, --internal", "Fetch internal credentials")
+      .option("-t, --token", "Fetch oauth token")
       .option("-b, --bearer", "Generate authorization bearer header")
       .option("-d, --destination", "Generate destination import file")
       .option("-h, --http", "Fill .http files")
-      .option("-i, --internal", "Fill .http files with internals (use with -h)")
-      .option("-c, --clear", "Clear .http files placeholders (use with -h)")
+      .option("-c, --clear", "Clear .http files placeholders")
+      .option("-r, --reset", "Reset API management")
       .addHelpText(
         "afterAll",
         `
@@ -53,42 +95,155 @@ Examples:
   process: async function (action, options) {
     switch (action) {
       case "key":
-        await manageKey(options);
+        if (options.passcode) {
+          managePasscode(options);
+        } else if (options.reset) {
+          manageClear(options);
+          manageReset(options);
+        } else if (options.clear) {
+          manageClear(options);
+        } else if (options.internal) {
+          await manageInternal(options);
+        } else {
+          await manageKey(options);
+        }
         break;
     }
   },
 };
 
+function managePasscode(options) {
+  const config = fetchAppInfo(options);
+  const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
+  config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
+  open(`${config.authUrl}/passcode`);
+}
+
+async function manageInternal(options) {
+  const config = fetchAppInfo(options);
+  const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
+  config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
+  config.auth = stripHTTPS(config.authUrl);
+  config.tokenUrl = `${config.authUrl}/oauth/token`;
+  config.internalClientId = /"xsuaa": \[.*"credentials": \{.*"clientid": "(.*?)"/s.exec(result)?.[1];
+  config.internalClientSecret = /"xsuaa": \[.*"credentials": \{.*"clientsecret": "(.*?)"/s.exec(result)?.[1];
+  if (!(config.auth && config.internalClientId && config.internalClientSecret)) {
+    console.log(`Failed to retrieve internal credentials`);
+    return;
+  }
+  if (!options.token && !options.bearer && !options.http && !options.destination) {
+    console.log(`url: ${config.tokenUrl}`);
+    console.log(`clientId (internal): ${config.internalClientId}`);
+    console.log(`clientSecret (internal): ${config.internalClientSecret}`);
+  }
+  if (options.destination) {
+    createDestination(config.app, config.url, config.tokenUrl, config.internalClientId, config.internalClientSecret);
+  }
+  if (options.token || options.bearer || options.http) {
+    config.internalToken = await fetchOAuthToken(config.authUrl, config.internalClientId, config.internalClientSecret);
+    if (!config.internalToken) {
+      return;
+    }
+    if (options.token) {
+      console.log(config.internalToken);
+    }
+    if (options.bearer) {
+      console.log(`Authorization: Bearer ${config.internalToken}`);
+    }
+    if (options.http) {
+      fillHTTPFiles(options, config);
+    }
+  }
+}
+
 async function manageKey(options) {
-  // Check
-  const brokerPath = path.join(process.cwd(), "srv/broker.json");
-  if (!fs.existsSync(brokerPath)) {
-    console.log(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+  if (!cfLogin()) {
     return;
   }
-
-  // Config
-  const broker = require(brokerPath);
-  const serviceName = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
-  if (!serviceName) {
-    console.log(`No service found in broker configuration. Call 'afc add broker'`);
-  }
-
-  // Login
-  let result = shelljs.exec("cf apps", { silent: true }).stdout;
-  if (result.trim().endsWith("FAILED")) {
-    console.log("Not logged in to Cloud Foundry. Call 'cf login' and try again.");
+  const service = cfService();
+  if (!service) {
     return;
   }
+  const config = fetchAppInfo(options, service);
+  const broker = cfBroker(options, config);
+  if (!broker) {
+    return;
+  }
+  config.broker = broker;
+  const serviceInstance = cfServiceInstance(options, config);
+  if (!serviceInstance) {
+    return;
+  }
+  config.serviceInstance = serviceInstance;
+  const serviceKey = cfServiceKey(options, config);
+  if (!serviceKey) {
+    return;
+  }
+  config.serviceKey = serviceKey;
+  if (!cfServiceCredentials(options, config)) {
+    return;
+  }
+  if (!options.token && !options.bearer && !options.http && !options.destination) {
+    console.log(`url: ${config.tokenUrl}`);
+    console.log(`clientId: ${config.clientId}`);
+    console.log(`clientSecret: ${config.clientSecret}`);
+  }
+  if (options.destination) {
+    createDestination(`${config.app}-api`, config.api, config.tokenUrl, config.clientId, config.clientSecret);
+  }
+  if (options.token || options.bearer || options.http) {
+    config.token = await fetchOAuthToken(config.authUrl, config.clientId, config.clientSecret);
+    if (!config.token) {
+      return;
+    }
+    if (options.token) {
+      console.log(config.token);
+    }
+    if (options.bearer) {
+      console.log(`Authorization: Bearer ${config.token}`);
+    }
+    if (options.http) {
+      fillHTTPFiles(options, config);
+    }
+  }
+}
 
-  // Server
+function manageClear(options) {
+  fillHTTPFiles(options, {});
+}
+
+function manageReset(options) {
+  if (!cfLogin()) {
+    return;
+  }
+  const service = cfService();
+  if (!service) {
+    return;
+  }
+  const config = fetchAppInfo(options, service);
+  const broker = cfBroker(options, config, true);
+  if (!broker) {
+    return;
+  }
+  config.broker = broker;
+  const serviceInstance = cfServiceInstance(options, config, true);
+  if (serviceInstance) {
+    config.serviceInstance = serviceInstance;
+    cfDeleteServiceKeys(options, config);
+    cfDeleteService(options, config);
+  }
+  cfDeleteBroker(options, config);
+}
+
+function fetchAppInfo(options, service) {
   let serverUrl = options.server;
-  let appName = serviceName;
+  let app = service;
+  // MTA
   const mtaPath = path.join(process.cwd(), "mta.yaml");
   if (fs.existsSync(mtaPath)) {
     const mta = fs.readFileSync(mtaPath, "utf8");
-    appName = /- name: (.*)\n\s*type: nodejs\n\s*path: gen\/srv/s.exec(mta)?.[1];
-    const result = shelljs.exec(`cf app ${appName}`, { silent: true }).stdout;
+    app = /- name: (.*)\n\s*type: nodejs\n\s*path: gen\/srv/s.exec(mta)?.[1];
+    const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
     serverUrl = /routes:\s*(.*)/.exec(result)?.[1];
   }
   // TODO: Kyma
@@ -96,226 +251,212 @@ async function manageKey(options) {
     serverUrl = prompt("Server URL: ");
   }
   serverUrl = serverUrl.startsWith("https://") ? serverUrl : `https://${serverUrl}`;
+  return {
+    app,
+    service,
+    host: stripHTTPS(serverUrl),
+    url: serverUrl,
+  };
+}
 
-  // Broker
-  const brokerName = `${serviceName}-broker`;
-  const regexBroker = new RegExp(`${serviceName}.*(${brokerName})`);
-  const cfMarketplaceCommand = `cf marketplace -b ${brokerName}`;
-  result = shelljs.exec(cfMarketplaceCommand, { silent: true }).stdout;
+function cfLogin() {
+  const result = shelljs.exec("cf apps", { silent: true }).stdout;
+  if (!result.trim().endsWith("FAILED")) {
+    return true;
+  }
+  console.log("Not logged in to Cloud Foundry. Call 'cf login' and try again.");
+  return false;
+}
+
+function cfService() {
+  const brokerPath = path.join(process.cwd(), "srv/broker.json");
+  if (!fs.existsSync(brokerPath)) {
+    console.log(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+    return false;
+  }
+  const broker = require(brokerPath);
+  const service = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
+  if (service) {
+    return service;
+  }
+  console.log(`No service found in broker configuration. Call 'afc add broker'`);
+}
+
+function cfBroker(options, config, optional) {
+  const brokerName = `${config.service}-broker`;
+  const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
+  const cfBrokersCommand = `cf service-brokers`;
+  let cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
+  let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
   let cfBroker = regexBroker.exec(result)?.[1];
-  if (!cfBroker) {
+  if (!cfBroker && !optional) {
     if (!options.password) {
       options.password = prompt.hide("Broker password: ");
     }
-    const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${serverUrl}/broker --space-scoped`;
+    cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${config.url}/broker --space-scoped`;
     shelljs.exec(cfCreateBrokerCommand, { silent: true });
-    result = shelljs.exec(cfMarketplaceCommand, { silent: true }).stdout;
+    result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
     cfBroker = regexBroker.exec(result)?.[1];
-    if (!cfBroker) {
-      console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
-      return;
-    }
   }
+  if (cfBroker) {
+    return brokerName;
+  }
+  if (!optional) {
+    console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
+  }
+}
 
-  // Service
-  const serviceInstanceName = `${serviceName}-${SERVICE_SUFFIX}`;
-  const regexService = new RegExp(`${serviceInstanceName}.*${serviceName}.*${PLAN_NAME}.*(${brokerName})`);
+function cfServiceInstance(options, config, optional) {
+  const serviceInstanceName = `${config.service}-${SERVICE_SUFFIX}`;
+  const regexService = new RegExp(`${serviceInstanceName}.*${config.service}.*${PLAN_NAME}.*(${config.broker})`);
   const cfCreateServicesCommand = `cf services`;
-  result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
+  const cfServiceCommand = `cf create-service -b ${config.broker} ${config.service} ${PLAN_NAME} ${serviceInstanceName}`;
+  let result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
   let cfService = regexService.exec(result)?.[1];
-  if (!cfService) {
-    const cfServiceCommand = `cf create-service -b ${brokerName} ${serviceName} ${PLAN_NAME} ${serviceInstanceName}`;
+  if (!cfService && !optional) {
     shelljs.exec(cfServiceCommand, { silent: true });
     result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
     cfService = regexService.exec(result)?.[1];
-    if (!cfService) {
-      console.log(`Failed to create service via command: '${cfServiceCommand}'`);
-      return;
-    }
   }
+  if (cfService) {
+    return serviceInstanceName;
+  }
+  if (!optional) {
+    console.log(`Failed to create service via command: '${cfServiceCommand}'`);
+  }
+}
 
-  // Service Key
+function cfServiceKey(options, config, optional) {
   const serviceKeyName =
-    `${serviceInstanceName}-${SERVICE_KEY_SUFFIX}` +
+    `${config.serviceInstance}-${SERVICE_KEY_SUFFIX}` +
     (options.new ? `-${options.new === true ? Date.now() : options.new}` : "");
   const regexServiceKey = new RegExp(`(${serviceKeyName})`);
-  const cfCreateServiceKeysCommand = `cf service-keys ${serviceInstanceName}`;
-  result = shelljs.exec(cfCreateServiceKeysCommand, { silent: true }).stdout;
+  const cfCreateServiceKeyCommand = `cf service-keys ${config.serviceInstance}`;
+  const cfServiceKeyCommand = `cf create-service-key ${config.serviceInstance} ${serviceKeyName}`;
+  let result = shelljs.exec(cfCreateServiceKeyCommand, { silent: true }).stdout;
   let cfServiceKey = regexServiceKey.exec(result)?.[1];
-  if (!cfServiceKey) {
-    const cfServiceKeyCommand = `cf create-service-key ${serviceInstanceName} ${serviceKeyName}`;
+  if (!cfServiceKey && !optional) {
     shelljs.exec(cfServiceKeyCommand, { silent: true });
-    result = shelljs.exec(cfCreateServiceKeysCommand, { silent: true }).stdout;
+    result = shelljs.exec(cfCreateServiceKeyCommand, { silent: true }).stdout;
     cfServiceKey = regexServiceKey.exec(result)?.[1];
-    if (!cfServiceKey) {
-      console.log(`Failed to create service key via command: '${cfServiceKeyCommand}'`);
-      return;
+  }
+  if (cfServiceKey) {
+    return serviceKeyName;
+  }
+  if (!optional) {
+    console.log(`Failed to create service key via command: '${cfServiceKeyCommand}'`);
+  }
+}
+
+function cfServiceCredentials(options, config) {
+  const cfServiceKeyCommand = `cf service-key ${config.serviceInstance} ${config.serviceKey}`;
+  const result = shelljs.exec(cfServiceKeyCommand, { silent: true }).stdout;
+  config.authUrl = /"url": "(.*?)"/.exec(result)?.[1];
+  config.auth = stripHTTPS(config.authUrl);
+  config.tokenUrl = `${config.authUrl}/oauth/token`;
+  config.clientId = /"clientid": "(.*?)"/.exec(result)?.[1];
+  config.clientSecret = /"clientsecret": "(.*?)"/.exec(result)?.[1];
+  config.api = /"api": "(.*?)"/.exec(result)?.[1];
+  if (config.auth && config.clientId && config.clientSecret) {
+    return true;
+  }
+  console.log(`Failed to retrieve service key via command: '${cfServiceKeyCommand}'`);
+}
+
+function cfDeleteServiceKeys(options, config) {
+  const serviceKeyPrefix = `${config.serviceInstance}-${SERVICE_KEY_SUFFIX}`;
+  const cfCreateServiceKeysCommand = `cf service-keys ${config.serviceInstance}`;
+  let result = shelljs.exec(cfCreateServiceKeysCommand, { silent: true }).stdout;
+  const lines = result.split("\n");
+  for (const line of lines) {
+    if (line.trim().startsWith(serviceKeyPrefix)) {
+      const serviceKey = line.trim().split(" ")[0];
+      const cfDeleteServiceKeyCommand = `cf delete-service-key -f ${config.serviceInstance} ${serviceKey}`;
+      shelljs.exec(cfDeleteServiceKeyCommand, { silent: true }).stdout;
     }
   }
+}
 
-  // Credentials
-  const cfServiceKeyCommand = `cf service-key ${serviceInstanceName} ${serviceKeyName}`;
-  result = shelljs.exec(cfServiceKeyCommand, { silent: true }).stdout;
-  const cfServiceKeyClientId = /"clientid": "(.*?)"/.exec(result)?.[1];
-  const cfServiceKeyClientSecret = /"clientsecret": "(.*?)"/.exec(result)?.[1];
-  const cfServiceKeyAuthorizationUrl = /"url": "(.*?)"/.exec(result)?.[1];
-  const cfServiceKeyOAuthTokenUrl = `${cfServiceKeyAuthorizationUrl}/oauth/token`;
-  const cfServiceKeyApiUrl = /"api": "(.*?)"/.exec(result)?.[1];
-  if (cfServiceKeyClientId && cfServiceKeyClientSecret && cfServiceKeyAuthorizationUrl && cfServiceKeyApiUrl) {
-    console.log(`service: ${serviceName}`);
-    console.log(`key: ${serviceKeyName}`);
-    console.log(`apiUrl: ${cfServiceKeyApiUrl}`);
-    console.log(`authorizationUrl: ${cfServiceKeyOAuthTokenUrl}`);
-    console.log(`clientId: ${cfServiceKeyClientId}`);
-    console.log(`clientSecret: ${cfServiceKeyClientSecret}`);
-  } else {
-    console.log(`Failed to retrieve service key via command: '${cfServiceKeyCommand}'`);
-    return;
-  }
+function cfDeleteService(options, config) {
+  const cfDeleteServiceCommand = `cf delete-service -f ${config.serviceInstance}`;
+  shelljs.exec(cfDeleteServiceCommand, { silent: true }).stdout;
+}
 
-  // Internal
-  let cfInternalClientId = "";
-  let cfInternalClientSecret = "";
-  if (options.http && options.internal) {
-    const result = shelljs.exec(`cf env ${appName}`, { silent: true }).stdout;
-    cfInternalClientId = /"xsuaa": \[.*"credentials": \{.*"clientid": "(.*?)"/s.exec(result)?.[1];
-    cfInternalClientSecret = /"xsuaa": \[.*"credentials": \{.*"clientsecret": "(.*?)"/s.exec(result)?.[1];
-    console.log(`clientId (internal): ${cfInternalClientId}`);
-    console.log(`clientSecret (internal): ${cfInternalClientSecret}`);
-  }
+function cfDeleteBroker(options, config) {
+  const cfDeleteServiceCommand = `cf delete-service-broker -f ${config.broker}`;
+  shelljs.exec(cfDeleteServiceCommand, { silent: true }).stdout;
+}
 
-  // OAuth
-  let oauthToken = "";
-  if (options.token || options.bearer || options.http) {
-    const result = await fetch(`${cfServiceKeyOAuthTokenUrl}?grant_type=client_credentials`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${btoa(cfServiceKeyClientId + ":" + cfServiceKeyClientSecret)}`,
-      },
-    });
-    if (!result.ok) {
-      console.log(`Failed to fetch OAuth token`);
-      return;
-    }
-    const data = await result.json();
-    oauthToken = data.access_token;
-    if (!oauthToken) {
-      console.log(`Failed to fetch OAuth token`);
-      return;
-    }
-  }
-  let cfInternalToken = "";
-  if (cfInternalClientId && cfInternalClientSecret) {
-    const result = await fetch(`${cfServiceKeyOAuthTokenUrl}?grant_type=client_credentials`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Basic ${btoa(cfInternalClientId + ":" + cfInternalClientSecret)}`,
-      },
-    });
-    if (!result.ok) {
-      console.log(`Failed to fetch internal OAuth token`);
-      return;
-    }
-    const data = await result.json();
-    cfInternalToken = data.access_token;
-    if (!cfInternalToken) {
-      console.log(`Failed to fetch internal OAuth token`);
-      return;
-    }
-  }
-
-  // Token
-  if (options.token) {
-    console.log(`token: ${oauthToken}`);
-  }
-
-  // Bearer
-  if (options.bearer) {
-    console.log(`Authorization: Bearer ${oauthToken}`);
-  }
-
-  // .http
-  if (options.http) {
-    const httpPath = path.join(process.cwd(), "http");
-    const files = await fs.promises.readdir(httpPath, { recursive: true });
-    for (let file of files) {
-      if (file.endsWith(".cloud.http")) {
-        file = path.join("http", file);
+function fillHTTPFiles(options, config) {
+  const httpPath = path.join(process.cwd(), "http");
+  const files = fs.readdirSync(httpPath, { recursive: true });
+  for (let file of files) {
+    if (file.endsWith(".cloud.http")) {
+      file = path.join("http", file);
+      if (
         adjustLines(file, (line) => {
-          if (line.startsWith("@")) {
-            if (line.startsWith("@api=")) {
-              return options.clear
-                ? `@api=<api endpoint from cloud deployment>`
-                : `@api=${stripHTTPS(cfServiceKeyApiUrl)}`;
-            } else if (line.startsWith("@host")) {
-              return options.clear ? `@host=<server host from cloud deployment>` : `@host=${stripHTTPS(serverUrl)}`;
-            } else if (line.startsWith("@auth")) {
-              return options.clear
-                ? `@auth=<auth endpoint from cloud deployment>`
-                : `@auth=${stripHTTPS(cfServiceKeyAuthorizationUrl)}`;
-            } else if (line.startsWith("@token")) {
-              return options.clear ? `@token=<xsuaa token>` : `@token=${oauthToken}`;
-            } else if (line.startsWith("@clientId")) {
-              return options.clear ? `@clientId=<xsuaa client id>` : `@clientId=${cfServiceKeyClientId}`;
-            } else if (line.startsWith("@clientSecret")) {
-              return options.clear
-                ? `@clientSecret=<xsuaa client secret>`
-                : `@clientSecret=${cfServiceKeyClientSecret}`;
-            } else if (line.startsWith("@internalClientId")) {
+          for (const name in PLACEHOLDERS) {
+            const placeholder = PLACEHOLDERS[name];
+            if (line.startsWith("#")) {
+              if (config[name] !== undefined) {
+                line = line.replace(`{{${name}}}`, config[name]);
+              }
+            }
+            if (line.startsWith(`@${name}=`)) {
               if (options.clear) {
-                return `@internalClientId=<xsuaa internal client id>`;
-              }
-              if (cfInternalClientId) {
-                return `@internalClientId=${cfInternalClientId}`;
-              }
-            } else if (line.startsWith("@internalClientSecret")) {
-              if (options.clear) {
-                return `@internalClientSecret=<xsuaa internal client secret>`;
-              }
-              if (cfInternalClientSecret) {
-                return `@internalClientSecret=${cfInternalClientSecret}`;
-              }
-            } else if (line.startsWith("@internalToken")) {
-              if (options.clear) {
-                return `@internalToken=<xsuaa internal token>`;
-              }
-              if (cfInternalToken) {
-                return `@internalToken=${cfInternalToken}`;
+                return `@${name}=${placeholder.default}`;
+              } else if (config[name] !== undefined) {
+                return `@${name}=${config[name]}`;
               }
             }
           }
           return line;
-        });
+        })
+      ) {
         console.log(`File '${file}' written.`);
       }
     }
   }
+}
 
-  // Destination
-  if (options.destination) {
-    const destination = {
-      destination: {
-        Name: serviceKeyName,
-        tokenServiceURLType: "Dedicated",
-        Type: "HTTP",
-        clientId: cfServiceKeyClientId,
-        Authentication: "OAuth2ClientCredentials",
-        clientSecret: cfServiceKeyClientSecret,
-        tokenServiceURL: cfServiceKeyOAuthTokenUrl,
-        ProxyType: "Internet",
-        URL: cfServiceKeyApiUrl,
-      },
-    };
-    const destinationPath = path.join(process.cwd(), `default-${serviceKeyName}.json`);
-    fs.writeFileSync(destinationPath, JSON.stringify(destination, null, 2));
-    console.log(`File '${destinationPath}' written.`);
+function createDestination(name, serverUrl, authUrl, clientId, clientSecret) {
+  const destination = {
+    destination: {
+      Name: name,
+      tokenServiceURLType: "Dedicated",
+      Type: "HTTP",
+      clientId: clientId,
+      Authentication: "OAuth2ClientCredentials",
+      clientSecret: clientSecret,
+      tokenServiceURL: authUrl,
+      ProxyType: "Internet",
+      URL: serverUrl,
+    },
+  };
+  const destinationPath = path.join(process.cwd(), `default-${name}.json`);
+  fs.writeFileSync(destinationPath, JSON.stringify(destination, null, 2));
+  console.log(`File '${destinationPath}' written.`);
+}
+
+async function fetchOAuthToken(url, clientId, clientSecret) {
+  const result = await fetch(`${url}/oauth/token?grant_type=client_credentials`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+    },
+  });
+  if (result.ok) {
+    const data = await result.json();
+    if (data.access_token) {
+      return data.access_token;
+    }
   }
+  console.log("Failed to fetch OAuth token");
 }
 
 function stripHTTPS(url) {
-  if (url.startsWith("https://")) {
+  if (url?.startsWith("https://")) {
     return url.substring(8);
   }
   return url;
