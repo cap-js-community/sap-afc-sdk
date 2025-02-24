@@ -5,7 +5,7 @@
     "description": "The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
     "version": "1.0.0"
   },
-  "x-sap-shortText": "Defines how an application can integrate with SAP Advanced Financial Closing scheduling service",
+  "x-sap-shortText": "Defines how an application can integrate with job scheduling service",
   "servers": [
     {
       "url": "/api/job-scheduling/v1"
