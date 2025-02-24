@@ -585,31 +585,34 @@ The broker is used to manage service key management to the API.
   - HTTP Client:
     - Add [.http](#add-http-files) files
     - Update .http files placeholders
-      - Terminal: `afc api key --h`
+      - Terminal: `afc api key -h`
     - Perform OAuth token request using key credentials (clientId, clientSecret)
       - See [http/auth/uaa.cloud.http](./http/auth/uaa.cloud.http) for obtaining an OAuth token
       - Via CLI:
-        - Terminal: `afc api key --t`
+        - Terminal: `afc api key -t`
     - Call API using OAuth token
       - See `.http` files in [/http](./http) to call API endpoints
       - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
+    - Clear credentials in .http files via
+      - Terminal: `afc api key -c`
+- Reset API management in CF
+  - Terminal: `afc api key -r`
 
 ## Advanced Setup
 
-### HTML5 Repo
+### WorkZone & HTML5 Repo
 
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Add HTML5 repo feature (already part of [Boostrap](#bootstrap))
-  - Terminal: `cds add html5-repo`
-- Disable UI serving in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
-- (Optional): Apps from AFC SDK can be copied over into project at `/app` via:
+- Add WorkZone and HTML5 Repo features (already part of [Boostrap](#bootstrap))
+  - Terminal: `cds add workzone,html5-repo`
+- Setup and configure SAP WorkZone instance using HTML5 Apps Content Channel
+  - Add `Monitor Scheduling Jobs` app to Content Explorer
+  - Assign app to a group, role and site to be accessible
+- Disable UI served in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
+- (Optional): Apps from AFC SDK can also be copied over into project at `/app` for further adjustments:
   - Terminal: `afc add app`
-
-### Workzone
-
-tbd
 
 ### Redis
 
@@ -624,21 +627,21 @@ to process events, distribute websocket messages and store and distribute featur
 
 ### Feature Toggles
 
-The Feature Toggle Library is used to control the execution of the Event Queue. It exposes endpoints to manage feature
-toggles.
+The Feature Toggle Library is used to control the execution of the Event Queue.
+It exposes endpoints to manage feature toggles.
 
 `GET /rest/feature/state()`: Read current feature toggle state
 `POST /rest/feature/redisUpdate`: Update feature toggle state
 
 See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
-An internal OAuth token can be fetched via [/http/auth/uaa.internal.cloud.http](./http/auth/uaa.internal.cloud.http)
+An internal OAuth token needs to be fetched via [/http/auth/uaa.internal.cloud.http](./http/auth/uaa.internal.cloud.http)
 providing credentials from XSUAA instance or via calling:
 
-- Terminal: `afc api key --h --i`
+- Terminal: `afc api key -i`
 
-### Multi-tenancy
+### Multitenancy
 
-The project can be enabled for multi-tenancy by following the guide:
+The project can be enabled for multitenancy by following the guide:
 https://cap.cloud.sap/docs/guides/multitenancy/#enable-multitenancy
 
 #### MTX Tool (CF only)
