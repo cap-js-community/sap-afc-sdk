@@ -315,11 +315,7 @@ function approuterUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
     return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter;
   }
-  const url = serverUrl();
-  if (url.startsWith(`https://${url}-${SERVER_SUFFIX}`)) {
-    return url.replace(`https://${url}-${SERVER_SUFFIX}`, `https://${url}`);
-  }
-  return url;
+  return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(\\..*)`), `$1$2`);
 }
 
 function serverUrl() {

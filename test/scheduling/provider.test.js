@@ -8,7 +8,7 @@ const { JobStatus } = require("../../srv/scheduling/common/codelist");
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
 process.env.VCAP_APPLICATION = JSON.stringify({
-  uris: ["sap-afc-sdk.sap.com"],
+  uris: ["sap-afc-sdk-srv.sap.com"],
 });
 
 process.env.PORT = 0; // Random
