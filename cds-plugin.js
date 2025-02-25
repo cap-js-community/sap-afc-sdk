@@ -169,30 +169,33 @@ function serveUIs() {
       (uiShowLaunchpad || uiShowApp) &&
       (!fs.existsSync(`${cds.root}/${cds.env.folders.app}${app}`) || process.env.NODE_ENV === "test")
     ) {
-      cds.app
-        .serve(`${uiPath}/${app}/webapp`)
-        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-      cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
-        res.redirect(
-          308,
-          url.format({
-            pathname: "/srv/" + req.params[0],
-            query: req.query,
-          }),
-        );
-      });
-      cds.app
-        .serve(`${uiPath}/${app}`)
-        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-      cds.app.use(`/${app}/srv/*`, (req, res) => {
-        res.redirect(
-          308,
-          url.format({
-            pathname: "/srv/" + req.params[0],
-            query: req.query,
-          }),
-        );
-      });
+      if (uiShowLaunchpad) {
+        cds.app
+          .serve(`${uiPath}/${app}/webapp`)
+          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+        cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
+          res.redirect(
+            308,
+            url.format({
+              pathname: "/srv/" + req.params[0],
+              query: req.query,
+            }),
+          );
+        });
+      } else if (uiShowApp) {
+        cds.app
+          .serve(`${uiPath}/${app}`)
+          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+        cds.app.use(`/${app}/srv/*`, (req, res) => {
+          res.redirect(
+            308,
+            url.format({
+              pathname: "/srv/" + req.params[0],
+              query: req.query,
+            }),
+          );
+        });
+      }
     }
   }
 }
