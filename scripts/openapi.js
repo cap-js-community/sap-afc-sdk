@@ -11,14 +11,24 @@ const DEFAULT_RESPONSES = require("./default-responses");
 
 function processSchedulingProviderService(file) {
   const filePath = path.join(process.cwd(), file);
-  const input = require(filePath);
-  input.externalDocs = {
+  const data = require(filePath);
+
+  // Details
+  data.info.version = "1.0.0";
+  delete data["x-sap-api-type"];
+  delete data["x-odata-version"];
+  data.externalDocs = {
     description: "SAP Advanced Financial Closing SDK for CDS",
     url: "https://github.com/cap-js-community/sap-afc-sdk",
   };
-  input.components.parameters = {};
-  input.components.responses = DEFAULT_RESPONSES;
-  input.components.schemas.error = {
+
+  // Tags
+  data.tags = [{ name: "Job Definition" }, { name: "Job" }, { name: "Job Result" }];
+
+  // Components
+  data.components.parameters = {};
+  data.components.responses = DEFAULT_RESPONSES;
+  data.components.schemas.error = {
     type: "object",
     required: ["code", "message"],
     properties: {
@@ -30,39 +40,33 @@ function processSchedulingProviderService(file) {
       },
     },
   };
-  delete input.components.schemas.count;
-
-  const ORDER_BY_TAG = ["JobDefinition", "Job", "JobResult"];
-
-  delete input["x-sap-api-type"];
-  delete input["x-odata-version"];
-  input.info.version = "1.0.0";
-
-  input.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
-  input.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
-  input.components.schemas["SchedulingProviderService.Job"].required = [
+  delete data.components.schemas.count;
+  data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
+  data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
+  data.components.schemas["SchedulingProviderService.Job"].required = [
     "ID",
     "name",
     "referenceID",
     "version",
     "status",
   ];
-  input.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
-  input.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = [
+  data.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
+  data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = [
     "name",
     "dataType",
     "type",
     "mappingType",
   ];
-  input.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
-  delete input.components.schemas["SchedulingProviderService.JobResult"].properties.data;
-  delete input.components.schemas["SchedulingProviderService.JobResult-create"];
-  delete input.components.schemas["SchedulingProviderService.JobResultMessage-create"];
-  delete input.components.schemas["SchedulingProviderService.Job-create"].properties.results;
+  data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
+  delete data.components.schemas["SchedulingProviderService.JobResult"].properties.data;
+  delete data.components.schemas["SchedulingProviderService.JobResult-create"];
+  delete data.components.schemas["SchedulingProviderService.JobResultMessage-create"];
+  delete data.components.schemas["SchedulingProviderService.Job-create"].properties.results;
 
-  delete input.paths["/JobResult"];
-  delete input.paths["/JobResult/{ID}/SchedulingProviderService.data"];
-  input.paths["/JobResult/{ID}/data"] = {
+  // Paths
+  delete data.paths["/JobResult"];
+  delete data.paths["/JobResult/{ID}/SchedulingProviderService.data"];
+  data.paths["/JobResult/{ID}/data"] = {
     parameters: [
       {
         description: "key: ID",
@@ -94,12 +98,12 @@ function processSchedulingProviderService(file) {
       },
     },
   };
-
-  const visitedTags = {};
-  for (let pathKey in input.paths) {
+  for (let pathKey in data.paths) {
     const [entity] = pathKey.substring(1, pathKey.length).split("/");
-    if (!ORDER_BY_TAG.includes(entity)) {
-      delete input.paths[pathKey];
+    const tag = camelCaseToWords(entity);
+    if (!data.tags.find((t) => t.name === tag)) {
+      delete data.paths[pathKey];
+      continue;
     }
     const keyParts = pathKey.split("/");
     const lastKeyPart = keyParts.pop();
@@ -107,15 +111,14 @@ function processSchedulingProviderService(file) {
       const [, action] = lastKeyPart.split(".");
       keyParts.push(action);
       const newKey = keyParts.join("/");
-      input.paths[newKey] = input.paths[pathKey];
-      delete input.paths[pathKey];
+      data.paths[newKey] = data.paths[pathKey];
+      delete data.paths[pathKey];
       pathKey = newKey;
     }
-    const path = input.paths[pathKey];
+    const path = data.paths[pathKey];
     for (const method in path) {
       const pathMethod = path[method];
-      pathMethod.tags = [entity];
-      visitedTags[entity] = 1;
+      pathMethod.tags = [tag];
       if (!pathMethod.responses) {
         continue;
       }
@@ -145,25 +148,9 @@ function processSchedulingProviderService(file) {
     }
   }
 
-  input.tags = input.tags
-    .map(({ name }) => name)
-    .reduce(
-      (result, tag) => {
-        if (!visitedTags[tag]) {
-          return result;
-        }
-
-        if (!result.includes(tag)) {
-          result.push(tag);
-        }
-        return result;
-      },
-      [...ORDER_BY_TAG],
-    )
-    .map((tag) => ({ name: tag }));
-
-  for (const schemaKey in input.components.schemas) {
-    const schema = input.components.schemas[schemaKey];
+  // Schema
+  for (const schemaKey in data.components.schemas) {
+    const schema = data.components.schemas[schemaKey];
     for (const propertyName in schema.properties) {
       const property = schema.properties[propertyName];
       delete property.nullable;
@@ -173,7 +160,7 @@ function processSchedulingProviderService(file) {
     }
   }
 
-  fs.writeFileSync(filePath, JSON.stringify(input, null, 2));
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
 function includeInSentence(text) {
@@ -186,4 +173,9 @@ function includeInSentence(text) {
     words[0] = words[0].substring(0, words[0].length - 1);
   }
   return words.join(" ");
+}
+
+function camelCaseToWords(text) {
+  const result = text.replace(/([A-Z])/g, " $1");
+  return (result.charAt(0).toUpperCase() + result.slice(1)).trim();
 }

@@ -166,12 +166,15 @@ function serveUIs() {
   for (const app in config.apps) {
     const uiShowApp = cds.env.requires?.["sap-afc-sdk"]?.ui?.[app];
     if ((uiShowLaunchpad || uiShowApp) && !fs.existsSync(`${cds.root}/${cds.env.folders.app}${app}`)) {
-      cds.app
-        .serve(`${uiPath}/${app}`)
-        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-      cds.app
-        .serve(`${uiPath}/${app}/webapp`)
-        .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+      if (uiShowLaunchpad) {
+        cds.app
+          .serve(`${uiPath}/${app}/webapp`)
+          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+      } else {
+        cds.app
+          .serve(`${uiPath}/${app}`)
+          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+      }
       cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
         res.redirect(
           308,

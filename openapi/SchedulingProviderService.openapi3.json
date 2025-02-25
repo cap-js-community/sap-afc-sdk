@@ -5,7 +5,7 @@
     "description": "The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
     "version": "1.0.0"
   },
-  "x-sap-shortText": "Defines how an application can integrate with job scheduling service",
+  "x-sap-shortText": "Defines how an application can integrate with job scheduling provider service",
   "servers": [
     {
       "url": "/api/job-scheduling/v1"
@@ -13,13 +13,13 @@
   ],
   "tags": [
     {
-      "name": "JobDefinition"
+      "name": "Job Definition"
     },
     {
       "name": "Job"
     },
     {
-      "name": "JobResult"
+      "name": "Job Result"
     }
   ],
   "paths": {
@@ -405,7 +405,7 @@
     "/JobDefinition": {
       "get": {
         "summary": "Retrieves a list of job definition.",
-        "tags": ["JobDefinition"],
+        "tags": ["Job Definition"],
         "parameters": [
           {
             "name": "skip",
@@ -498,7 +498,7 @@
       ],
       "get": {
         "summary": "Retrieves a single job definition.",
-        "tags": ["JobDefinition"],
+        "tags": ["Job Definition"],
         "parameters": [],
         "responses": {
           "200": {
@@ -568,7 +568,7 @@
       ],
       "get": {
         "summary": "Retrieves a list of parameters of a job definition.",
-        "tags": ["JobDefinition"],
+        "tags": ["Job Definition"],
         "parameters": [],
         "responses": {
           "200": {
@@ -643,7 +643,7 @@
       ],
       "get": {
         "summary": "Retrieves a single job result.",
-        "tags": ["JobResult"],
+        "tags": ["Job Result"],
         "parameters": [],
         "responses": {
           "200": {
@@ -714,7 +714,7 @@
       ],
       "get": {
         "summary": "Retrieves a list of messages of a job result.",
-        "tags": ["JobResult"],
+        "tags": ["Job Result"],
         "parameters": [],
         "responses": {
           "200": {
@@ -789,7 +789,7 @@
       ],
       "get": {
         "summary": "Retrieves data of a job result.",
-        "tags": ["JobResult"],
+        "tags": ["Job Result"],
         "parameters": [],
         "responses": {
           "200": {
