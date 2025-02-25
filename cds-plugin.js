@@ -159,8 +159,7 @@ function serveUIs() {
       cds.app.serve(`${uiPath}/${config.paths.launchpad}`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/launchpad.html");
       cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     } else {
-      serveAppConfig(packageRoot, uiPath);
-      uiShowLaunchpad = false;
+      serveMergedAppConfig(packageRoot, uiPath);
     }
   }
   for (const app in config.apps) {
@@ -173,29 +172,29 @@ function serveUIs() {
         cds.app
           .serve(`${uiPath}/${app}/webapp`)
           .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-        cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
-          res.redirect(
-            308,
-            url.format({
-              pathname: "/srv/" + req.params[0],
-              query: req.query,
-            }),
-          );
-        });
       } else if (uiShowApp) {
         cds.app
           .serve(`${uiPath}/${app}`)
           .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-        cds.app.use(`/${app}/srv/*`, (req, res) => {
-          res.redirect(
-            308,
-            url.format({
-              pathname: "/srv/" + req.params[0],
-              query: req.query,
-            }),
-          );
-        });
       }
+      cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
+        res.redirect(
+          308,
+          url.format({
+            pathname: "/srv/" + req.params[0],
+            query: req.query,
+          }),
+        );
+      });
+      cds.app.use(`/${app}/srv/*`, (req, res) => {
+        res.redirect(
+          308,
+          url.format({
+            pathname: "/srv/" + req.params[0],
+            query: req.query,
+          }),
+        );
+      });
     }
   }
 }
@@ -214,7 +213,7 @@ function rerouteWebsocket() {
   });
 }
 
-function serveAppConfig(packageRoot, uiPath) {
+function serveMergedAppConfig(packageRoot, uiPath) {
   cds.app.use(`/appconfig/fioriSandboxConfig.json`, (req, res) => {
     const projectFioriSandboxConfig = require(`${cds.root}/${cds.env.folders.app}appconfig/fioriSandboxConfig.json`);
     const packageFioriSandboxConfig = require(`${packageRoot}/app/appconfig/fioriSandboxConfig.json`);

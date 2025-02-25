@@ -171,7 +171,7 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
   - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default `true`
     - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
-  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job. Default `true`
+  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately, if no Launchpad is served. Default `true`
 - `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `false` and `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
