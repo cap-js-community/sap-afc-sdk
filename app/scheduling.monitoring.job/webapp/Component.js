@@ -8,7 +8,7 @@ sap.ui.define(["sap/fe/core/AppComponent", "sap/ui/core/ws/WebSocket"], function
 
     constructor: function () {
       Component.prototype.constructor.apply(this, arguments);
-      window.socket = new WebSocket("/ws/job-scheduling");
+      window.socket = new WebSocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
     },
   });
 });

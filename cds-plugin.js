@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const url = require("url");
 const cds = require("@sap/cds");
 const Broker = require("@sap/sbf");
 const express = require("express");
@@ -35,6 +36,7 @@ cds.on("connect", (srv) => {
 });
 
 cds.on("listening", () => {
+  rerouteWebsocket();
   outboxServices();
   handleFeatureToggles();
 });
@@ -170,8 +172,40 @@ function serveUIs() {
       cds.app
         .serve(`${uiPath}/${app}/webapp`)
         .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+      cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
+        res.redirect(
+          308,
+          url.format({
+            pathname: "/srv/" + req.params[0],
+            query: req.query,
+          }),
+        );
+      });
+      cds.app.use(`/${app}/srv/*`, (req, res) => {
+        res.redirect(
+          308,
+          url.format({
+            pathname: "/srv/" + req.params[0],
+            query: req.query,
+          }),
+        );
+      });
     }
   }
+}
+
+function rerouteWebsocket() {
+  cds.app.server.on("upgrade", function (req) {
+    for (const app in config.apps) {
+      if (req.url.startsWith(`/${app}/webapp/ws`)) {
+        req.url = req.url.replace(`/${app}/webapp/ws`, "/ws");
+        return;
+      } else if (req.url.startsWith(`/${app}/ws`)) {
+        req.url = req.url.replace(`/${app}/ws`, "/ws");
+        return;
+      }
+    }
+  });
 }
 
 function serveAppConfig(packageRoot, uiPath) {

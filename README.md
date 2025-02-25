@@ -455,11 +455,11 @@ In addition, to overwriting the default implementation via an `on`-handler, also
 
 ##### Authorization
 
-Scheudling Provider Service can be restricted for authorization adding `@requires` annotation:
+Scheduling Provider Service can be restricted for authorization adding `@requires` annotation:
 
 ```cds
 using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
-annotate SchedulingProviderService with @requires: 'JobProcessing';
+annotate SchedulingProviderService with @requires: 'JobScheduling';
 ```
 
 Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/guides/security/authorization).
@@ -469,7 +469,9 @@ Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/gui
 A periodic scheduling job synchronization event named `SchedulingJob/Sync` is running per default every **1 minute** in the Event Queue,
 to perform job synchronization from an external source. The default implementation is a no-op.
 
-To implement a custom Job sync extend the Job sync configuration in CDS env as follows:
+To implement a custom Job sync extend the Job sync configuration in CDS env as follows.
+
+**CDS Env:**
 
 ```json
 {

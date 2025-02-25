@@ -51,7 +51,7 @@
     "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
     "prepareRelease": "npm prune --production",
     "openapi": "npm run openapi:sspi && npm run lint",
-    "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi -o openapi && node postprocessing/openapi",
+    "openapi:sspi": "cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi -o openapi && node scripts/openapi",
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
