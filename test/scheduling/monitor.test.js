@@ -29,6 +29,12 @@ describe("Monitoring Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/srv/job-scheduling/monitoring/JobDefinition('JOB_1')?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/scheduling.monitoring.job/webapp/srv/job-scheduling/monitoring/JobDefinition?$expand=parameters",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/scheduling.monitoring.job/srv/job-scheduling/monitoring/JobDefinition?$expand=parameters");
+    expect(cleanData(response.data)).toMatchSnapshot();
   });
 
   it("Get Jobs", async () => {

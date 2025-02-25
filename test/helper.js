@@ -61,10 +61,10 @@ async function eventQueueEntry(scope, referenceEntityKey, payload) {
   });
 }
 
-async function connectToWS(service, ID) {
+async function connectToWS(service, ID, options) {
   const url = cds.server.url.replace("http://", "ws://");
   const socket = await new Promise((resolve) => {
-    const socket = new WebSocket(`${url}/ws/${service}`, {
+    const socket = new WebSocket(`${url}${options?.base || ""}/ws/${service}`, {
       headers: {
         // authorization: module.exports.authorization.default
       },

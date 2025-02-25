@@ -30,4 +30,44 @@ describe("Websocket Service", () => {
 
     ws.close();
   });
+
+  it("Job Status Changed (via app route)", async () => {
+    const ws = await connectToWS("job-scheduling", undefined, {
+      base: "/scheduling.monitoring.job",
+    });
+    let message = ws.message("jobStatusChanged");
+
+    const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+    await schedulingWebsocketService.emit("jobStatusChanged", {
+      ID: "XXX",
+      status: "running",
+    });
+
+    await processOutbox("websocket");
+    let event = await message;
+    expect(event.ID).toBe("XXX");
+    expect(event.status).toBe("running");
+
+    ws.close();
+  });
+
+  it("Job Status Changed (via webapp route)", async () => {
+    const ws = await connectToWS("job-scheduling", undefined, {
+      base: "/scheduling.monitoring.job/webapp",
+    });
+    let message = ws.message("jobStatusChanged");
+
+    const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+    await schedulingWebsocketService.emit("jobStatusChanged", {
+      ID: "XXX",
+      status: "running",
+    });
+
+    await processOutbox("websocket");
+    let event = await message;
+    expect(event.ID).toBe("XXX");
+    expect(event.status).toBe("running");
+
+    ws.close();
+  });
 });

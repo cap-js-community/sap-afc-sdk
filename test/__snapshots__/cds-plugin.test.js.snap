@@ -255,6 +255,7 @@ footer {
             <ul>
                 <li><a href="launchpad.html"><span>/launchpad.html</span></a></li>
 <li><a href="scheduling.monitoring.job/webapp/index.html"><span>/scheduling.monitoring.job/webapp</span></a></li>
+<li><a href="/custom/scheduling.monitoring.job"><span>/custom/scheduling.monitoring.job</span></a></li>
             </ul>
 
             <h2> Service Endpoints: </h2>
