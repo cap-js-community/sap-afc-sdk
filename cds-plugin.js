@@ -17,7 +17,7 @@ const { mergeDeep, toObject } = require("./src/util/helper");
 
 const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
-const APPROUTER_SUFFIX = "srv";
+const SERVER_SUFFIX = "srv";
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
@@ -315,7 +315,11 @@ function approuterUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
     return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter;
   }
-  return serverUrl().replace(/(https?:\/\/)(.*?)(\..*)/, `$1$2-${APPROUTER_SUFFIX}$3`);
+  const url = serverUrl();
+  if (url.startsWith(`https://${url}-${SERVER_SUFFIX}`)) {
+    return url.replace(`https://${url}-${SERVER_SUFFIX}`, `https://${url}`);
+  }
+  return url;
 }
 
 function serverUrl() {
