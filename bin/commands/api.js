@@ -286,14 +286,13 @@ function cfBroker(options, config, optional) {
   const brokerName = `${config.service}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
-  let cfCreateBrokerCommand = "";
   let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
   let cfBroker = regexBroker.exec(result)?.[1];
   if (!cfBroker && !optional) {
     if (!options.password) {
       options.password = prompt.hide("Broker password: ");
     }
-    cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${config.url}/broker --space-scoped`;
+    const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${config.url}/broker --space-scoped`;
     shelljs.exec(cfCreateBrokerCommand, { silent: true });
     result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
     cfBroker = regexBroker.exec(result)?.[1];
@@ -302,9 +301,8 @@ function cfBroker(options, config, optional) {
     return brokerName;
   }
   if (!optional) {
-    console.log(
-      `Failed to create service broker via command: '${cfCreateBrokerCommand.replace(`'${options.password}'`, "'***'")}'`,
-    );
+    const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
+    console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
   }
 }
 
