@@ -51,8 +51,8 @@ be consumed with [SAP Cloud Application Programming Model (Node.js)](https://www
       - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider
         API ([OpenAPI](http://localhost:4004/api-docs/api/job-scheduling/v1))
     - OData API (UI)
-      - [/srv/job-scheduling/monitoring](http://localhost:4004/srv/job-scheduling/monitoring): Feature Toggle
-        API ([$metadata](http://localhost:4004/srv/job-scheduling/monitoring/$metadata))
+      - [/odata/v4/job-scheduling/monitoring](http://localhost:4004/odata/v4/job-scheduling/monitoring): Feature Toggle
+        API ([$metadata](http://localhost:4004/odata/v4/job-scheduling/monitoring/$metadata))
     - WebSocket API
       - [/ws/job-scheduling](http://localhost:4004/ws/job-scheduling): Scheduling WebSocket endpoint
     - REST API

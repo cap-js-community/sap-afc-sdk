@@ -286,78 +286,78 @@ footer {
   
       <div id="schedulingmonitoringservice-odata">
         <h3 class="header">
-          <a href="/srv/job-scheduling/monitoring"><span>/srv/job-scheduling/monitoring</span></a><span>/</span> <a href="/srv/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
+          <a href="/odata/v4/job-scheduling/monitoring"><span>/odata/v4/job-scheduling/monitoring</span></a><span>/</span> <a href="/odata/v4/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
         </h3>
         <ul>
           <li id="schedulingmonitoringservice-odata-jobdefinition">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-jobparameterdefinition">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-job">
             <div>
-              <a href="/srv/job-scheduling/monitoring/Job"><span>Job</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/Job"><span>Job</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-jobparameter">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-jobresult">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-jobresultmessage">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-jobstatus">
             <div>
-              <a href="/srv/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-resulttype">
             <div>
-              <a href="/srv/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-parametertype">
             <div>
-              <a href="/srv/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-datatype">
             <div>
-              <a href="/srv/job-scheduling/monitoring/DataType"><span>DataType</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/DataType"><span>DataType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-mappingtype">
             <div>
-              <a href="/srv/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-messageseverity">
             <div>
-              <a href="/srv/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
+              <a href="/odata/v4/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>

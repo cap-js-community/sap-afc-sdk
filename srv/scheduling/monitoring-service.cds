@@ -1,6 +1,6 @@
 using scheduling from '../../db/scheduling';
 
-@path: '/srv/job-scheduling/monitoring'
+@path: '/odata/v4/job-scheduling/monitoring'
 @impl: '@cap-js-community/sap-afc-sdk/srv/scheduling/monitoring-service.js'
 service SchedulingMonitoringService {
   entity JobDefinition @readonly          as projection on scheduling.JobDefinition;
@@ -33,7 +33,7 @@ extend SchedulingMonitoringService.JobResult with columns {
     when
       'data'
     then
-      '/srv/job-scheduling/monitoring/JobResult(' || ID || ')/data'
+      'odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
     else
       null
   end as dataLink : String

@@ -51,9 +51,9 @@ function adjustJSON(file, callback) {
     const content = fs.readFileSync(filePath, "utf8");
     const json = JSON.parse(content);
     callback(json);
-    const newContent = JSON.stringify(json);
+    const newContent = JSON.stringify(json, null, 2);
     if (newContent !== content) {
-      fs.writeFileSync(filePath, newContent, null, 2);
+      fs.writeFileSync(filePath, newContent);
       return true;
     }
   }

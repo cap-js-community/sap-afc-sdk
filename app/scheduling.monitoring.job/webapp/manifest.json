@@ -17,7 +17,7 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "srv/job-scheduling/monitoring/",
+        "uri": "odata/v4/job-scheduling/monitoring/",
         "type": "OData",
         "settings": {
           "annotations": [],

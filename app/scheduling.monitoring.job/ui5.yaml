@@ -34,3 +34,11 @@ builder:
         archiveName: scheduling.monitoring.job
         additionalFiles:
           - xs-app.json
+---
+specVersion: "3.1"
+kind: extension
+type: task
+metadata:
+  name: ui5-afc-sdk
+task:
+  path: ui5-afc-sdk.js

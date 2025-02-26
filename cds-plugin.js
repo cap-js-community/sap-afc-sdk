@@ -177,20 +177,20 @@ function serveUIs() {
           .serve(`${uiPath}/${app}`)
           .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
       }
-      cds.app.use(`/${app}/webapp/srv/*`, (req, res) => {
+      cds.app.use(`/${app}/webapp/odata/v4/*`, (req, res) => {
         res.redirect(
           308,
           url.format({
-            pathname: "/srv/" + req.params[0],
+            pathname: "/odata/v4/" + req.params[0],
             query: req.query,
           }),
         );
       });
-      cds.app.use(`/${app}/srv/*`, (req, res) => {
+      cds.app.use(`/${app}/odata/v4/*`, (req, res) => {
         res.redirect(
           308,
           url.format({
-            pathname: "/srv/" + req.params[0],
+            pathname: "/odata/v4/" + req.params[0],
             query: req.query,
           }),
         );

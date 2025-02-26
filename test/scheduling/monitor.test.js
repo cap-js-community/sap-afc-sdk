@@ -18,29 +18,33 @@ describe("Monitoring Service", () => {
   });
 
   it("Get $metadata", async () => {
-    const response = await GET("/srv/job-scheduling/monitoring/$metadata");
+    const response = await GET("/odata/v4/job-scheduling/monitoring/$metadata");
     expect(response.data).toMatchSnapshot();
   });
 
   it("Get Job Definitions", async () => {
-    let response = await GET("/srv/job-scheduling/monitoring/JobDefinition?$expand=parameters");
+    let response = await GET("/odata/v4/job-scheduling/monitoring/JobDefinition?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/JobDefinition/JOB_1?$expand=parameters");
+    response = await GET("/odata/v4/job-scheduling/monitoring/JobDefinition/JOB_1?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/JobDefinition('JOB_1')?$expand=parameters");
+    response = await GET("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(
-      "/scheduling.monitoring.job/webapp/srv/job-scheduling/monitoring/JobDefinition?$expand=parameters",
+      "/scheduling.monitoring.job/webapp/odata/v4/job-scheduling/monitoring/JobDefinition?$expand=parameters",
     );
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/scheduling.monitoring.job/srv/job-scheduling/monitoring/JobDefinition?$expand=parameters");
+    response = await GET(
+      "/scheduling.monitoring.job/odata/v4/job-scheduling/monitoring/JobDefinition?$expand=parameters",
+    );
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
   it("Get Jobs", async () => {
-    let response = await GET("/srv/job-scheduling/monitoring/Job?$expand=parameters");
+    let response = await GET("/odata/v4/job-scheduling/monitoring/Job?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103?$expand=parameters");
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103?$expand=parameters",
+    );
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
@@ -48,7 +52,7 @@ describe("Monitoring Service", () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);
 
-    let response = await POST(`/srv/job-scheduling/monitoring/Job('${ID}')/cancel`, {});
+    let response = await POST(`/odata/v4/job-scheduling/monitoring/Job('${ID}')/cancel`, {});
     expect(response.status).toBe(200);
     expect(response.data.status_code).toBe("cancelRequested");
 
@@ -64,40 +68,40 @@ describe("Monitoring Service", () => {
     expect(event.ID).toBe(ID);
     expect(event.status).toBe("canceled");
 
-    response = await GET(`/srv/job-scheduling/monitoring/Job/${ID}`);
+    response = await GET(`/odata/v4/job-scheduling/monitoring/Job/${ID}`);
     expect(response.data.status_code).toBe("canceled");
 
     ws.close();
   });
 
   it("Get Codelists", async () => {
-    let response = await GET("/srv/job-scheduling/monitoring/JobStatus");
+    let response = await GET("/odata/v4/job-scheduling/monitoring/JobStatus");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/ParameterType");
+    response = await GET("/odata/v4/job-scheduling/monitoring/ParameterType");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/DataType");
+    response = await GET("/odata/v4/job-scheduling/monitoring/DataType");
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET("/srv/job-scheduling/monitoring/MappingType");
+    response = await GET("/odata/v4/job-scheduling/monitoring/MappingType");
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
   describe("Error Situations", () => {
     it("POST Job Definitions", async () => {
-      await expect(POST("/srv/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowAPIError(
+      await expect(POST("/odata/v4/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowAPIError(
         405,
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
     it("PUT Job Definitions", async () => {
-      await expect(PUT("/srv/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowAPIError(
+      await expect(PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowAPIError(
         405,
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
     it("DELETE Job Definitions", async () => {
-      await expect(DELETE("/srv/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowAPIError(
+      await expect(DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowAPIError(
         405,
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
@@ -105,45 +109,45 @@ describe("Monitoring Service", () => {
 
     it("POST Job Parameter Definitions", async () => {
       await expect(
-        POST("/srv/job-scheduling/monitoring/JobDefinition('JOB_1')/parameters", {}),
+        POST("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')/parameters", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
     });
 
     it("PUT Job Job Parameter Definitions", async () => {
       await expect(
-        PUT("/srv/job-scheduling/monitoring/JobDefinition/('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
+        PUT("/odata/v4/job-scheduling/monitoring/JobDefinition/('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
     });
 
     it("DELETE Job Job Parameter Definitions", async () => {
       await expect(
-        DELETE("/srv/job-scheduling/monitoring/JobDefinition/JOB_1/parameters(name='A',jobName='JOB_1')", {}),
+        DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition/JOB_1/parameters(name='A',jobName='JOB_1')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
     });
 
     it("PUT Job", async () => {
       await expect(
-        PUT("/srv/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
+        PUT("/odata/v4/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
     it("DELETE Job", async () => {
       await expect(
-        DELETE("/srv/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
+        DELETE("/odata/v4/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
     it("Cancel Job", async () => {
-      await expect(POST(`/srv/job-scheduling/monitoring/Job/XXX/cancel`, {})).rejects.toThrowAPIError(
+      await expect(POST(`/odata/v4/job-scheduling/monitoring/Job/XXX/cancel`, {})).rejects.toThrowAPIError(
         404,
         "jobNotFound",
         ["XXX"],
       );
 
       const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
-      await POST(`/srv/job-scheduling/monitoring/Job/${ID}/cancel`, {});
+      await POST(`/odata/v4/job-scheduling/monitoring/Job/${ID}/cancel`, {});
 
-      await expect(POST(`/srv/job-scheduling/monitoring/Job/${ID}/cancel`, {})).rejects.toThrowAPIError(
+      await expect(POST(`/odata/v4/job-scheduling/monitoring/Job/${ID}/cancel`, {})).rejects.toThrowAPIError(
         400,
         "jobCannotBeCanceled",
         ["cancelRequested"],
@@ -154,7 +158,9 @@ describe("Monitoring Service", () => {
         throw new Error("Unexpected error");
       });
 
-      await expect(POST(`/srv/job-scheduling/monitoring/Job/${ID}/cancel`, {})).rejects.toThrowAPIUnexpectedError();
+      await expect(
+        POST(`/odata/v4/job-scheduling/monitoring/Job/${ID}/cancel`, {}),
+      ).rejects.toThrowAPIUnexpectedError();
     });
   });
 });
