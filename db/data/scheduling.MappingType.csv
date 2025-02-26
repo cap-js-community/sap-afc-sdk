@@ -22,3 +22,7 @@ executionID;Execution ID;Execution ID
 customField1;Custom Field 1;Custom Field 1
 customField2;Custom Field 2;Custom Field 2
 customField3;Custom Field 3;Custom Field 3
+taskListID;Task List ID;Task List ID
+taskListDescription;Task List Description;Task List Description
+taskID;Task ID;Task ID
+taskDescription;Task Description;Task Description

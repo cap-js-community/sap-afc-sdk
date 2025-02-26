@@ -75,10 +75,8 @@ process, and monitor the entity close for your organization.
 The SAP Advanced Financial Closing SDK for CDS provides a plugin
 for [SAP Cloud Application Programming Model (CAP)](https://cap.cloud.sap) (Node.js)
 to extend and integrate with SAP Advanced Financial Closing (AFC). Specifically, it provides an out-of-the-box
-implementation
-of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderService.openapi3.json) to expose a
-Scheduling Provider service
-to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
+implementation of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderService.openapi3.json) 
+to expose a Scheduling Provider service to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
 
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
 - **Event-Queue**: Provides an Event Queue to process and aync Jobs (periodically) asynchronously and resiliently (circuit breaker, retry,
@@ -394,8 +392,12 @@ In addition, to overwriting the default implementation via an `on` handler, also
 
 #### Implement Job Provider
 
-The default implementation of the Job provider is already provided by the SDK.
-Focus can be put on additional custom provider logic, e.g. streaming of data from a remote location.
+A Job provider service is already provided per default by the SDK, implementing 
+the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderService.openapi3.json).
+Therefore, focus can be put on additional custom provider logic (e.g. streaming of data from a remote location).
+
+The **SAP Advanced Financial Closing Scheduling Service Provider Interface** is published on SAP Business Accelerator Hub 
+under package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
 
 To implement a custom Job provider extend the Job provider service definition as follows:
 
