@@ -2311,6 +2311,26 @@ exports[`Monitoring Service Get Codelists 4`] = `
       "name": "Processing User Email",
     },
     {
+      "code": "taskDescription",
+      "descr": "Task Description",
+      "name": "Task Description",
+    },
+    {
+      "code": "taskID",
+      "descr": "Task ID",
+      "name": "Task ID",
+    },
+    {
+      "code": "taskListDescription",
+      "descr": "Task List Description",
+      "name": "Task List Description",
+    },
+    {
+      "code": "taskListID",
+      "descr": "Task List ID",
+      "name": "Task List ID",
+    },
+    {
       "code": "testRun",
       "descr": "Test Run",
       "name": "Test Run",
