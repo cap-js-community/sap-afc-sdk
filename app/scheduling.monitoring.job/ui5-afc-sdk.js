@@ -5,7 +5,7 @@ const path = require("path");
 const { adjustJSON } = require("../../bin/common/util");
 
 module.exports = async function () {
-  const packageJson = require(path.join(process.cwd(), "../../../../package.json"));
+  const packageJson = require(path.join(process.cwd(), "../../../../../package.json"));
   adjustJSON("./webapp/manifest.json", (manifest) => {
     if (manifest["sap.app"]?.id && !manifest["sap.app"].id.startsWith(`${packageJson.name}.`)) {
       manifest["sap.app"] ??= {};
