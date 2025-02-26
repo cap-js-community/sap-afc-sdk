@@ -286,7 +286,7 @@ function cfBroker(options, config, optional) {
   const brokerName = `${config.service}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
-  let cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
+  let cfCreateBrokerCommand = "";
   let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
   let cfBroker = regexBroker.exec(result)?.[1];
   if (!cfBroker && !optional) {
@@ -302,7 +302,9 @@ function cfBroker(options, config, optional) {
     return brokerName;
   }
   if (!optional) {
-    console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
+    console.log(
+      `Failed to create service broker via command: '${cfCreateBrokerCommand.replace(`'${options.password}'`, "'***'")}'`,
+    );
   }
 }
 
