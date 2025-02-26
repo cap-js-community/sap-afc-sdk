@@ -28,6 +28,8 @@ builder:
       - /test/**
       - /localService/**
   customTasks:
+    - name: ui5-afc-sdk
+      beforeTask: escapeNonAsciiCharacters
     - name: ui5-task-zipper
       afterTask: generateVersionInfo
       configuration:
