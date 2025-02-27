@@ -207,6 +207,8 @@ CAP application.
   - Terminal: `cds init <name>`
 - Switch to project folder:
   - Terminal: `cd <name>`
+- Install
+  - Terminal: `npm install`
 
 ### Features
 
@@ -219,7 +221,6 @@ CAP application.
     - Terminal: `afc init kyma`
 - Add AFC SDK features
   - Terminal: `afc add broker,sample,http`
-- Install: `npm install`
 - Test
   - Terminal: `npm start`
   - Browser: `http://localhost:4004`

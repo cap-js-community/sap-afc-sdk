@@ -88,14 +88,26 @@ function generateHashBrokerPassword() {
 }
 
 module.exports = () => {
-  let brokerPassword = {};
-  if (!fileExists(CATALOG_PATH)) {
-    brokerPassword = generateHashBrokerPassword();
-    BROKER.SBF_BROKER_CREDENTIALS_HASH["broker-user"] = brokerPassword.hash;
+  // catalog
+  if (process.env.BROKER_SERVICE_ID) {
+    CATALOG.services[0].id = process.env.BROKER_SERVICE_ID;
   }
-  const brokerWritten = writeFile(BROKER_PATH, BROKER);
+  if (process.env.BROKER_SERVICE_PLAN_ID) {
+    CATALOG.services[0].plans[0].id = process.env.BROKER_SERVICE_PLAN_ID;
+  }
   writeFile(CATALOG_PATH, CATALOG);
-  if (brokerWritten) {
+
+  // broker
+  let brokerPassword = {};
+  if (!fileExists(BROKER_PATH)) {
+    if (process.env.BROKER_PASSWORD_HASH) {
+      BROKER.SBF_BROKER_CREDENTIALS_HASH["broker-user"] = process.env.BROKER_PASSWORD_HASH;
+    } else {
+      brokerPassword = generateHashBrokerPassword();
+      BROKER.SBF_BROKER_CREDENTIALS_HASH["broker-user"] = brokerPassword.hash;
+    }
+  }
+  if (writeFile(BROKER_PATH, BROKER) && brokerPassword.clear) {
     console.log("Broker Password (keep it safe to create broker):", brokerPassword.clear);
     console.log(`\nAfter deployment fetch API key: afc api key -p '${brokerPassword.clear}`);
   }

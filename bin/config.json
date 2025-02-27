@@ -8,7 +8,7 @@
       "sqlite",
       "hana",
       "xsuaa",
-      "application-logs",
+      "application-logging",
       "approuter",
       "connectivity",
       "destination",
