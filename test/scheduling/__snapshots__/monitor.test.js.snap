@@ -1741,6 +1741,22 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <Annotation Term="Core.SymbolicName" String="customField3"/>
               <PropertyValue Property="Value" String="customField3"/>
             </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListID"/>
+              <PropertyValue Property="Value" String="taskListID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
+              <PropertyValue Property="Value" String="taskListDescription"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskID"/>
+              <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskDescription"/>
+              <PropertyValue Property="Value" String="taskDescription"/>
+            </Record>
           </Collection>
         </Annotation>
       </Annotations>
@@ -2066,6 +2082,22 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="customField3"/>
               <PropertyValue Property="Value" String="customField3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListID"/>
+              <PropertyValue Property="Value" String="taskListID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
+              <PropertyValue Property="Value" String="taskListDescription"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskID"/>
+              <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskDescription"/>
+              <PropertyValue Property="Value" String="taskDescription"/>
             </Record>
           </Collection>
         </Annotation>

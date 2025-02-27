@@ -205,6 +205,10 @@ type MappingTypeCode            : String enum {
   customField1;
   customField2;
   customField3;
+  taskListID;
+  taskListDescription;
+  taskID;
+  taskDescription;
 };
 
 entity MappingType : CodeList {
