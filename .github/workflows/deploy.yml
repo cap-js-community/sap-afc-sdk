@@ -21,7 +21,7 @@ jobs:
       - name: Setup CDS project
         run: npx cds init afcsdk && cd afcsdk && npm i
       - name: Install SDK
-        run: npm i @cap-js-community/sap-afc-sdk
+        run: npm i github:cap-js-community/sap-afc-sdk
         working-directory: ./afcsdk
       - name: Boostrap SDK
         run: npx afc init cf
