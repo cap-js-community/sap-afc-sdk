@@ -37,6 +37,7 @@ cds.on("connect", (srv) => {
 
 cds.on("listening", () => {
   rerouteWebsocket();
+  serveApiRoot();
   outboxServices();
   handleFeatureToggles();
 });
@@ -99,6 +100,24 @@ function handleAPIError(err, req, res) {
     code: String(err.code || statusCode),
     message: err.message || getReasonPhrase(statusCode),
   });
+}
+
+function serveApiRoot() {
+  const result = Object.keys(cds.services).reduce((result, name) => {
+    const service = cds.services[name];
+    if (service?.definition?.["@openapi"] && service?.path) {
+      result[service?.path] = `${serverUrl()}${service.path}`;
+    }
+    return result;
+  }, {});
+  cds.app.get(
+    "/api",
+    ...cds.middlewares.before,
+    (req, res) => {
+      res.json(200, result);
+    },
+    ...cds.middlewares.after,
+  );
 }
 
 function serveBroker() {

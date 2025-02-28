@@ -184,7 +184,8 @@ async function manageKey(options) {
     return;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
-    console.log(`url: ${config.tokenUrl}`);
+    console.log(`api: ${config.api}`);
+    console.log(`auth: ${config.tokenUrl}`);
     console.log(`clientId: ${config.clientId}`);
     console.log(`clientSecret: ${config.clientSecret}`);
   }
@@ -200,6 +201,7 @@ async function manageKey(options) {
       console.log(config.token);
     }
     if (options.bearer) {
+      console.log(config.api);
       console.log(`Authorization: Bearer ${config.token}`);
     }
     if (options.http) {
