@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ runner.temp }}
+        working-directory: ${{ RUNNER_TEMP }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,10 +20,13 @@ jobs:
         run: npx cds init afcsdk && cd afcsdk && npm i
       - name: Install SDK
         run: npm i @cap-js-community/sap-afc-sdk
+        working-directory: ./afcsdk
       - name: Boostrap SDK
         run: npx afc init cf
+        working-directory: ./afcsdk
       - name: Add SDK features
         run: npx afc add broker,sample,http
+        working-directory: ./afcsdk
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
@@ -41,7 +44,10 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
       - name: Install MBT
         run: npm i mbt
+        working-directory: ./afcsdk
       - name: Build MTA
         run: npx mbt build
+        working-directory: ./afcsdk
       - name: CF deploy
         run: cf deploy ./afcsdk/mta_archives/afcsdk_1.0.0.mtar
+        working-directory: ./afcsdk
