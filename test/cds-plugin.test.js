@@ -61,16 +61,28 @@ describe("CDS Plugin", () => {
   it("GET Welcome Page", async () => {
     const response = await GET("/");
     response.data = response.data.replace(/>@cap-js-community\/sap-afc-sdk (.*?)</, ">@cap-js-community/sap-afc-sdk<");
+    expect(response.status).toBe(200);
+    expect(response.data).toMatchSnapshot();
+  });
+
+  it("GET API Root", async () => {
+    const response = await GET("/api");
+    expect(response.status).toBe(200);
+    for (const name in response.data) {
+      response.data[name] = response.data[name].replace(/localhost:\d+/, "localhost:4004");
+    }
     expect(response.data).toMatchSnapshot();
   });
 
   it("GET App Config", async () => {
     const response = await GET("/appconfig/fioriSandboxConfig.json");
+    expect(response.status).toBe(200);
     expect(response.data).toMatchSnapshot();
   });
 
   it("GET Feature Toggles", async () => {
     const response = await GET("/rest/feature/state()");
+    expect(response.status).toBe(200);
     expect(response.data).toMatchSnapshot();
   });
 

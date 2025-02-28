@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CDS Plugin GET API Root 1`] = `
+{
+  "/api/job-scheduling/v1": "http://localhost:4004/api/job-scheduling/v1",
+}
+`;
+
 exports[`CDS Plugin GET App Config 1`] = `
 {
   "services": {
