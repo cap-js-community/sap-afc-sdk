@@ -185,7 +185,7 @@ Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk`
 ### Bootstrap
 
 A new CDS project can be initialized using [SAP Build Code](https://help.sap.com/docs/build_code)
-tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to boostrap a new
+tools on SAP Business Technology Platform (BTP) or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new
 CAP application.
 
 **SAP Build Code**:
@@ -552,7 +552,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 #### Cloud Foundry
 
-- Add MTA feature (already part of [Boostrap](#bootstrap))
+- Add MTA feature (already part of [Bootstrap](#bootstrap))
   - Terminal: `cds add mta`
 - Build MTA
   - Terminal: `mbt build`
@@ -562,7 +562,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 #### Kyma
 
-- Add helm feature (already part of [Boostrap](#bootstrap))
+- Add helm feature (already part of [Bootstrap](#bootstrap))
   - Terminal: `cds add helm`
 - Containerize
   - Terminal: `ctz containerize.yaml --push`
@@ -577,7 +577,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 An Open Service Broker compliant broker implementation can be added to the CAP project.
 The broker is used to manage service key management to the API.
 
-- Add broker and service configuration (already part of [Boostrap](#bootstrap))
+- Add broker and service configuration (already part of [Bootstrap](#bootstrap))
   - Terminal: `afc add broker`
 - Deploy to CF (see [Deployment](#deployment) to [Cloud Foundry](#cloud-foundry))
 - Get API key credentials
@@ -610,7 +610,7 @@ The broker is used to manage service key management to the API.
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Add WorkZone and HTML5 Repo features (already part of [Boostrap](#bootstrap))
+- Add WorkZone and HTML5 Repo features (already part of [Bootstrap](#bootstrap))
   - Terminal: `cds add workzone,html5-repo`
 - Setup and configure SAP WorkZone instance using HTML5 Apps Content Channel
   - Add `Monitor Scheduling Jobs` app to Content Explorer
@@ -623,7 +623,7 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
 You can scale the application by adding a Redis cache to distribute workload across application instances:
 
-Add Redis to the project (already part of [Boostrap](#bootstrap)):
+Add Redis to the project (already part of [Bootstrap](#bootstrap)):
 
 - Terminal: `cds add redis`
 
