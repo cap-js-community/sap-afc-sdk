@@ -18,6 +18,9 @@
     ],
     "cf": ["mta"],
     "kyma": ["helm", "containerize"],
-    "afc": ["broker", "sample", "http", "add"]
+    "afc": ["broker", "mock", "sample", "http"]
+  },
+  "options": {
+    "cds": "--plan broker --for production"
   }
 }

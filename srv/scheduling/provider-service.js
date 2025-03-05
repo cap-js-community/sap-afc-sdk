@@ -6,10 +6,11 @@ const BaseApplicationService = require("../common/BaseApplicationService");
 
 const { JobStatus } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
+const { wildcard } = require("../../src/util/helper");
 
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
-    const { Job, JobParameter, JobResult } = this.entities;
+    const { JobDefinition, Job, JobParameter, JobResult } = this.entities;
     const { JobDefinition: DBJobDefinition, Job: DBJob, JobResult: DBJobResult } = this.entities("scheduling");
 
     this.before("READ", "*", (req) => {
@@ -28,13 +29,29 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
-    this.before("READ", [Job], (req) => {
-      if (req.req?.query?.referenceID) {
-        req.query.where({ referenceID: req.req.query.referenceID });
+    this.before("READ", JobDefinition, (req) => {
+      if (req.req?.query?.name) {
+        req.query.where(`name like '${wildcard(req.req.query.name)}'`);
+      }
+      if (req.req?.query?.search) {
+        const search = wildcard(req.req.query.search);
+        req.query
+          .where(`lower(name) like lower('${search}')`)
+          .or(`lower(description) like lower('${search}')`)
+          .or(`lower(longDescription) like lower('${search}')`);
       }
     });
 
-    this.before("READ", [JobParameter], (req) => {
+    this.before("READ", Job, (req) => {
+      if (req.req?.query?.referenceID) {
+        req.query.where({ referenceID: req.req.query.referenceID });
+      }
+      if (req.req?.query?.name) {
+        req.query.where({ name: req.req.query.name });
+      }
+    });
+
+    this.before("READ", JobParameter, (req) => {
       req.query.orderBy("jobID asc", "name asc");
     });
 
@@ -44,6 +61,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
         jobDefinition.name,
           jobDefinition.version,
+          jobDefinition.supportsStartDateTime,
           jobDefinition.parameters((jobParameterDefinition) => {
             jobParameterDefinition.name,
               jobParameterDefinition.type,
@@ -62,6 +80,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       // Results
       if (req.data.results) {
         return req.reject(JobSchedulingError.jobResultsReadOnly());
+      }
+
+      // Start Date & TIme
+      if (req.data.startDateTime && !jobDefinition.supportsStartDateTime) {
+        return req.reject(JobSchedulingError.startDateTimeNotSupported(jobDefinition.name));
       }
 
       // Header
@@ -225,7 +248,6 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       );
     });
 
-    // TODO: CDS 8.8
     this.on(JobResult.actions.data, JobResult, async (req) => {
       const ID = req.params[0];
       const jobResult = await SELECT.one(JobResult).where({ ID });

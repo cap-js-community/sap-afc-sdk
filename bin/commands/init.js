@@ -74,7 +74,7 @@ Examples:
           appStubs.push(app);
         }
       }
-      shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} --for production`);
+      shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
 
       // Cleanup app stubs
       for (const app of appStubs) {
@@ -86,7 +86,6 @@ Examples:
 
       // CF
       adjustText("mta.yaml", (content) => {
-        content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
         for (const app of appStubs) {
           const part = `path: app/${app}`;
           const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
@@ -98,16 +97,12 @@ Examples:
 
       // Kyma
       adjustText("chart/values.yaml", (content) => {
-        content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
         // TODO: Containerize
         return content;
       });
 
       // Approuter
       adjustJSON("app/router/xs-app.json", (json) => {
-        json.routes = json.routes.filter((route) => {
-          return !route.localDir;
-        });
         json.websockets = { enabled: true };
       });
 

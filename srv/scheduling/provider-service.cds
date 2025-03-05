@@ -23,7 +23,25 @@ using scheduling from '../../db/scheduling';
 @impl                : '@cap-js-community/sap-afc-sdk/srv/scheduling/provider-service.js'
 service SchedulingProviderService {
 
-  @title: null
+  @Capabilities.ReadRestrictions.CustomQueryOptions: [
+    {
+      Name       : 'skip',
+      Description: 'The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10'
+    },
+    {
+      Name       : 'top',
+      Description: 'Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10'
+    },
+    {
+      Name       : 'name',
+      Description: 'Allows case-sensitive filtering of query results by search on name. Wildcard support at start and end via *. Example: ?name=JOB* (optional)'
+    },
+    {
+      Name       : 'search',
+      Description: 'Allows case-insensitive filtering of query results by search on name, description and long description. Wildcard support at start and end via *. Example: ?search=Job* (optional)'
+    }
+  ]
+  @title                                           : null
   entity JobDefinition @readonly                            as
     projection on scheduling.JobDefinition {
       *,
@@ -58,6 +76,10 @@ service SchedulingProviderService {
     {
       Name       : 'referenceID',
       Description: 'Allows filtering of query results by referenceID. Example: ?referenceID=01234567-89ab-cdef-0123-456789abcdef'
+    },
+    {
+      Name       : 'name',
+      Description: 'Allows filtering of query results by name. Example: ?name=JOB_1 (optional)'
     }
   ]
   @title                                           : null
@@ -157,7 +179,6 @@ service SchedulingProviderService {
   }
   aspect definition {};
 
-  @Capabilities.ReadRestrictions.CustomQueryOptions: []
   aspect compositionDefinition : definition {};
 }
 

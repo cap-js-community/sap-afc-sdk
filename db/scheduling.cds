@@ -9,18 +9,24 @@ using {
 @title: '{i18n>JobDefinition}'
 entity JobDefinition {
       @title: '{i18n>Name}'
-  key name        : String not null;
+  key name                  : String not null;
 
       @title: '{i18n>Description}'
-      description : String;
+      description           : String;
+
+      @title: '{i18n>LongDescription}'
+      longDescription       : String;
+
+      @title: '{i18n>SupportsStartDateTime}'
+      supportsStartDateTime : Boolean;
 
       @title: '{i18n>Version}'
-      version     : String not null;
+      version               : String not null;
 
       @readonly
       @title: '{i18n>Parameters}'
-      parameters  : Composition of many JobParameterDefinition
-                      on parameters.job = $self;
+      parameters            : Composition of many JobParameterDefinition
+                                on parameters.job = $self;
 };
 
 @title: '{i18n>JobParameterDefinition}'
@@ -71,7 +77,7 @@ entity Job : cuid, managed {
 
   @readonly
   @title: '{i18n>Status}'
-  status        : Association to JobStatus not null default 'requested'; // #requested
+  status        : Association to JobStatus not null default #requested;
 
   @title: '{i18n>Parameters}'
   parameters    : Composition of many JobParameter
@@ -139,7 +145,7 @@ entity JobResultMessage : cuid, {
   text     : String not null;
 
   @title: '{i18n>Severity}'
-  severity : Association to MessageSeverity not null default 'info'; // #info
+  severity : Association to MessageSeverity not null default #info;
 };
 
 type JobStatusCode              : String enum {

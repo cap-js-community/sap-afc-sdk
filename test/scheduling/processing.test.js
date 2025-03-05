@@ -489,7 +489,7 @@ describe("Processing Service", () => {
             name: "Link",
             type: ResultType.link,
             link: "https://sap.com",
-            mimeType: "plain/text",
+            mimeType: "text/plain",
           },
         ]),
       ).resolves.not.toThrow();
@@ -585,7 +585,7 @@ describe("Processing Service", () => {
           {
             name: "Data",
             type: ResultType.data,
-            mimeType: "plain/text",
+            mimeType: "text/plain",
           },
         ]),
       ).resolves.not.toThrow();
@@ -602,7 +602,7 @@ describe("Processing Service", () => {
           {
             name: "Data",
             type: ResultType.data,
-            mimeType: "plain/text",
+            mimeType: "text/plain",
             filename: "test.txt",
           },
         ]),
@@ -620,7 +620,7 @@ describe("Processing Service", () => {
           {
             name: "Data",
             type: ResultType.data,
-            mimeType: "plain/text",
+            mimeType: "text/plain",
             filename: "test.txt",
             data: btoa("This is a test"),
             link: "https://sap.com",
@@ -640,7 +640,7 @@ describe("Processing Service", () => {
           {
             name: "Data",
             type: ResultType.data,
-            mimeType: "plain/text",
+            mimeType: "text/plain",
             filename: "test.txt",
             data: btoa("This is a test"),
             messages: [],

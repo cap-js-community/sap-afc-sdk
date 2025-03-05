@@ -68,7 +68,7 @@ describe("API", () => {
 
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
-    expect(response.data).toHaveLength(3);
+    expect(response.data).toHaveLength(5);
     expect(response.data[0].name).toBe("JOB_1");
     expect(response.data[1].name).toBe("JOB_2");
     expect(response.data[2].name).toBe("JOB_3");
@@ -86,12 +86,61 @@ describe("API", () => {
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=-1&top=4");
-    expect(response.data).toHaveLength(3);
+    expect(response.data).toHaveLength(4);
+  });
+
+  it("GET Job Definitions (name)", async () => {
+    let response = await GET("/api/job-scheduling/v1/JobDefinition?name=JOB_1");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?name=JOB_*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?name=*OB_2");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?name=*OB*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?name=*O*B*");
+    expect(response.data).toHaveLength(0);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?name=job_1");
+    expect(response.data).toHaveLength(1); // sqlite case-insensitive
+  });
+
+  it("GET Job Definitions (search)", async () => {
+    let response = await GET("/api/job-scheduling/v1/JobDefinition?search=JOB_1");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=JoB_*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*Ob_2");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*OB*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*O*B*");
+    expect(response.data).toHaveLength(0);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=job_1");
+    expect(response.data).toHaveLength(1);
+
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job definition 1");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job def*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob definition 1");
+    expect(response.data).toHaveLength(1);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob def*");
+    expect(response.data).toHaveLength(5);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob*def*");
+    expect(response.data).toHaveLength(0);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=job definition 1");
+    expect(response.data).toHaveLength(1);
   });
 
   it("GET Job Parameter Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].name).toBe("A");
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].name).toBe("B");
   });
 
   it("GET Job", async () => {
@@ -115,26 +164,54 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/Job?skip=-1&top=4");
     expect(response.data).toHaveLength(3);
+  });
 
-    response = await GET("/api/job-scheduling/v1/Job?referenceID=8158cbab-a42b-4cb9-9656-8db72521d13d");
+  it("GET Job (referencedID)", async () => {
+    const response = await GET("/api/job-scheduling/v1/Job?referenceID=8158cbab-a42b-4cb9-9656-8db72521d13d");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("JOB_2");
     expect(response.data[0].referenceID).toBe("8158cbab-a42b-4cb9-9656-8db72521d13d");
   });
 
+  it("GET Job (name)", async () => {
+    const response = await GET("/api/job-scheduling/v1/Job?name=JOB_2");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].name).toBe("JOB_2");
+  });
+
   it("GET Job Parameters", async () => {
-    const response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters");
+    let response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].name).toBe("A");
+    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].name).toBe("B");
   });
 
   it("GET Job Results", async () => {
-    const response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results");
+    let response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].type).toBe("link");
+    response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].type).toBe("data");
   });
 
   it("GET Job Result Messages", async () => {
     let response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].text).toBe("This is an error");
+    expect(response.data[0].severity).toBe("error");
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].text).toBe("This is a warning");
+    expect(response.data[0].severity).toBe("warning");
     response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(response.data).toEqual([]);
   });
@@ -143,20 +220,17 @@ describe("API", () => {
     await expect(
       GET("/api/job-scheduling/v1/JobResult/x2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data"),
     ).rejects.toThrowAPIError(404, "jobResultNotFound", ["x2eb590f-9505-4fd6-a5e2-511a1b2ff47f"]);
-    // CDS 8.8
-    await expect(
-      GET("/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data"),
-    ).rejects.toThrowAPIError(
-      500,
-      "Failed to validate return value of type 'cds.LargeBinary' for custom function 'data': Value [object Object] is invalid.",
-    );
-    // const response = await ;
-    // expect(response.data).toEqual("This is a test");
+    const response = await GET("/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data");
+    expect(response.data).toEqual("This is a test");
+    expect(response.headers).toMatchObject({
+      "content-type": "text/plain; charset=utf-8",
+      "content-disposition": 'attachment; filename="test.txt"',
+    });
   });
 
   it("Create Job", async () => {
     let response = await POST("/api/job-scheduling/v1/Job", {
-      name: "JOB_1",
+      name: "JOB_2",
       referenceID: "4711",
       startDateTime: "2025-01-01T12:00:00Z",
       parameters: [
@@ -360,10 +434,17 @@ describe("API", () => {
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",
           referenceID: "4711",
-          startDateTime: new Date().toISOString(),
+          startDateTime: new Date().toISOString().split(".")[0] + "Z",
           parameters: "test",
         }),
-      ).rejects.toThrowAPIError(400, `Property "0" does not exist in parameters`);
+      ).rejects.toThrowAPIError(400, `Value test is not a valid SchedulingProviderService.JobParameter`);
+      await expect(
+        POST("/api/job-scheduling/v1/Job", {
+          name: "JOB_1",
+          referenceID: "4711",
+          startDateTime: new Date().toISOString().split(".")[0] + "Z",
+        }),
+      ).rejects.toThrowAPIError(400, "startDateTimeNotSupported", ["JOB_1"]);
       await expect(
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",

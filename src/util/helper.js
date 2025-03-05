@@ -26,8 +26,15 @@ function toObject(value) {
   return isObject(value) ? value : {};
 }
 
+function wildcard(value) {
+  return value.replace(/^(\*?)(.*?)(\*?)$/, (match, starStart, token, starEnd) => {
+    return `${starStart ? "%" : ""}${token}${starEnd ? "%" : ""}`;
+  });
+}
+
 module.exports = {
   mergeDeep,
   isObject,
   toObject,
+  wildcard,
 };

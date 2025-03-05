@@ -14,3 +14,8 @@ B;JOB_3;Parameter B;readOnlyValue;number;23;false;
 C;JOB_3;Parameter C;mapping;boolean;false;true;testRun
 D;JOB_3;Parameter D;writableValue;number;24;false;
 E;JOB_3;Parameter E;writableValue;datetime;2025-01-01T00:00:00Z;false;
+A;JOB_4;Parameter A;mapping;string;;true;companyCode
+B;JOB_4;Parameter B;mapping;datetime;;true;keyDate
+C;JOB_4;Parameter C;mapping;string;;true;processingUser
+D;JOB_4;Parameter D;mapping;boolean;;true;testRun
+E;JOB_4;Parameter E;mapping;number;;true;fiscalYear

@@ -11,5 +11,5 @@ cds init afcsdk
 cd afcsdk
 npm install @cap-js-community/sap-afc-sdk
 afc init cf
-afc add broker,sample,http
+afc add -a broker,mock,sample,http
 mbt build

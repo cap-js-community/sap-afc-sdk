@@ -1,14 +1,14 @@
 using SchedulingMonitoringService as service from '../../srv/scheduling/monitoring-service';
 
 annotate service.Job with @(
-  UI.Identification     : [{
+  UI.Identification          : [{
     $Type             : 'UI.DataFieldForAction',
     Label             : '{i18n>Cancel}',
     Action            : 'SchedulingMonitoringService.cancel',
     InvocationGrouping: #Isolated,
     Criticality       : #Negative
   }],
-  UI.FieldGroup #Details: {
+  UI.FieldGroup #Details     : {
     $Type: 'UI.FieldGroupType',
     Data : [
       {
@@ -18,6 +18,10 @@ annotate service.Job with @(
       {
         $Type: 'UI.DataField',
         Value: definition_name,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.longDescription,
       },
       {
         $Type: 'UI.DataField',
@@ -42,12 +46,24 @@ annotate service.Job with @(
       },
     ],
   },
-  UI.HeaderFacets       : [{
+  UI.FieldGroup #Capabilities: {
+    $Type: 'UI.FieldGroupType',
+    Data : [{
+      $Type: 'UI.DataField',
+      Value: definition.supportsStartDateTime,
+    }]
+  },
+  UI.HeaderFacets            : [{
     $Type : 'UI.ReferenceFacet',
     Label : '{i18n>Details}',
     Target: '@UI.FieldGroup#Details',
-  }, ],
-  UI.Facets             : [
+  }],
+  UI.Facets                  : [
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>Capabilities}',
+      Target: '@UI.FieldGroup#Capabilities',
+    },
     {
       $Type : 'UI.ReferenceFacet',
       Label : '{i18n>Parameters}',
@@ -59,7 +75,7 @@ annotate service.Job with @(
       Target: 'results/@UI.PresentationVariant'
     }
   ],
-  UI.LineItem           : [
+  UI.LineItem                : [
     {
       $Type: 'UI.DataField',
       Value: ID,
@@ -85,7 +101,7 @@ annotate service.Job with @(
       Value: createdAt,
     },
   ],
-  UI.HeaderInfo         : {
+  UI.HeaderInfo              : {
     $Type         : 'UI.HeaderInfoType',
     TypeName      : '{i18n>Job}',
     TypeNamePlural: '{i18n>Jobs}',
@@ -95,7 +111,7 @@ annotate service.Job with @(
     },
     Description   : {Value: definition.name}
   },
-  UI.PresentationVariant: {
+  UI.PresentationVariant     : {
     Visualizations: ['@UI.LineItem'],
     SortOrder     : [{
       $Type     : 'Common.SortOrderType',
@@ -103,7 +119,7 @@ annotate service.Job with @(
       Descending: true
     }]
   },
-  UI.SelectionFields    : [
+  UI.SelectionFields         : [
     definition_name,
     status_code,
   ],

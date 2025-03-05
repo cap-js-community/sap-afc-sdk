@@ -31,7 +31,7 @@ extend SchedulingMonitoringService.JobResult with columns {
   @title: '{i18n>DataLink}'
   case type.code
     when
-      'data'
+      #data
     then
       'odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
     else
@@ -43,15 +43,15 @@ extend SchedulingMonitoringService.JobResultMessage with columns {
   @title: '{i18n>Criticality}'
   case severity.code
     when
-      'error'
+      #error
     then
       1
     when
-      'warning'
+      #warning
     then
       2
     when
-      'info'
+      #info
     then
       5
   end as criticality : Integer

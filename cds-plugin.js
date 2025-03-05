@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 const cds = require("@sap/cds");
-const Broker = require("@sap/sbf");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -149,6 +148,7 @@ function serveBroker() {
   try {
     const catalogPath = brokerConfig.catalog ?? config.paths.catalog;
     const router = express.Router();
+    const Broker = require("@sap/sbf");
     const broker = new Broker({
       enableAuditLog: false,
       catalog: catalogPath,

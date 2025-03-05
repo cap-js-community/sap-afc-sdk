@@ -3,7 +3,7 @@
 exports[`API Create Job 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
-  "name": "JOB_1",
+  "name": "JOB_2",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
@@ -14,7 +14,7 @@ exports[`API Create Job 1`] = `
 exports[`API Create Job 2`] = `
 {
   "link": "http://localhost:4004/<ID>",
-  "name": "JOB_1",
+  "name": "JOB_2",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
@@ -87,17 +87,37 @@ exports[`API GET Job Definitions 1`] = `
 [
   {
     "description": "Job Definition 1",
+    "longDescription": "Job Definition 1",
     "name": "JOB_1",
+    "supportsStartDateTime": false,
     "version": "1",
   },
   {
     "description": "Job Definition 2",
+    "longDescription": "Job Definition 2",
     "name": "JOB_2",
+    "supportsStartDateTime": true,
     "version": "1",
   },
   {
     "description": "Job Definition 3",
+    "longDescription": "Job Definition 3",
     "name": "JOB_3",
+    "supportsStartDateTime": false,
+    "version": "1",
+  },
+  {
+    "description": "Job Definition 4",
+    "longDescription": "Job Definition 4",
+    "name": "JOB_4",
+    "supportsStartDateTime": false,
+    "version": "1",
+  },
+  {
+    "description": "Job Definition 5",
+    "longDescription": "Job Definition 5",
+    "name": "JOB_5",
+    "supportsStartDateTime": false,
     "version": "1",
   },
 ]
@@ -106,7 +126,9 @@ exports[`API GET Job Definitions 1`] = `
 exports[`API GET Job Definitions 2`] = `
 {
   "description": "Job Definition 1",
+  "longDescription": "Job Definition 1",
   "name": "JOB_1",
+  "supportsStartDateTime": false,
   "version": "1",
 }
 `;
@@ -223,7 +245,7 @@ exports[`API GET Job Results 1`] = `
   {
     "filename": "test.txt",
     "link": null,
-    "mimeType": "plain/text",
+    "mimeType": "text/plain",
     "name": "Data",
     "type": "data",
   },

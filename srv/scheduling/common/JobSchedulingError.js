@@ -66,6 +66,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static startDateTimeNotSupported(name) {
+    return new JobSchedulingError("startDateTimeNotSupported", {
+      args: [name],
+      httpStatus: 400,
+    });
+  }
+
   static jobParameterNameMissing() {
     return new JobSchedulingError("jobParameterNameMissing", {
       args: [],

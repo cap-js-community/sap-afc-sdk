@@ -1,9 +1,10 @@
 # This workflow will set up a test project based on SDK and deploy to Cloud Foundry
 name: Test Deploy
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Main CI"]
+    types:
+      - completed
   workflow_dispatch:
 
 env:
@@ -27,7 +28,7 @@ jobs:
         run: npx afc init cf
         working-directory: ./afcsdk
       - name: Add SDK features
-        run: npx afc add broker,sample,http
+        run: npx afc add -a broker,mock,sample,http
         working-directory: ./afcsdk
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}

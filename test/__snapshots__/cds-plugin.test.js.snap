@@ -284,7 +284,7 @@ footer {
         <ul>
           <li id="featureservice-rest-state" class="operation">
             <div>
-              <a href="/rest/feature/state()" title="/rest/feature/state()"><span>state()</span></a>
+              <a href="/rest/feature/state" title="/rest/feature/state"><span>state ()</span></a>
             </div>
           </li>
         </ul>

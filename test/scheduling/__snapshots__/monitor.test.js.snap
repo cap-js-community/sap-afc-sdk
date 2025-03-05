@@ -97,6 +97,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" Nullable="false"/>
         <Property Name="description" Type="Edm.String"/>
+        <Property Name="longDescription" Type="Edm.String"/>
+        <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
         <Property Name="version" Type="Edm.String" Nullable="false"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
           <OnDelete Action="Cascade"/>
@@ -387,6 +389,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobDefinition/description">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/longDescription">
+        <Annotation Term="Common.Label" String="Long Description"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
+        <Annotation Term="Common.Label" String="Supports Start Date &amp; Time"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
         <Annotation Term="Common.Label" String="Version"/>
       </Annotations>
@@ -534,6 +542,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <PropertyValue Property="Value" Path="definition_name"/>
                 </Record>
                 <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/longDescription"/>
+                </Record>
+                <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="version"/>
                 </Record>
                 <Record Type="UI.DataFieldWithUrl">
@@ -553,6 +564,17 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </PropertyValue>
           </Record>
         </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Capabilities">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/supportsStartDateTime"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
         <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
@@ -563,6 +585,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="UI.Facets">
           <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="Capabilities"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Capabilities"/>
+            </Record>
             <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Parameters"/>
               <PropertyValue Property="Target" AnnotationPath="parameters/@UI.PresentationVariant"/>
@@ -727,6 +753,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 </Record>
                 <Record Type="Common.ValueListParameterDisplayOnly">
                   <PropertyValue Property="ValueListProperty" String="description"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="longDescription"/>
                 </Record>
                 <Record Type="Common.ValueListParameterDisplayOnly">
                   <PropertyValue Property="ValueListProperty" String="version"/>
@@ -2387,6 +2416,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
   "value": [
     {
       "description": "Job Definition 1",
+      "longDescription": "Job Definition 1",
       "name": "JOB_1",
       "parameters": [
         {
@@ -2440,10 +2470,12 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
       "version": "1",
     },
     {
       "description": "Job Definition 2",
+      "longDescription": "Job Definition 2",
       "name": "JOB_2",
       "parameters": [
         {
@@ -2497,10 +2529,12 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": true,
       "version": "1",
     },
     {
       "description": "Job Definition 3",
+      "longDescription": "Job Definition 3",
       "name": "JOB_3",
       "parameters": [
         {
@@ -2554,6 +2588,74 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 4",
+      "longDescription": "Job Definition 4",
+      "name": "JOB_4",
+      "parameters": [
+        {
+          "dataType_code": "string",
+          "description": "Parameter A",
+          "job_name": "JOB_4",
+          "mappingType_code": "companyCode",
+          "name": "A",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "datetime",
+          "description": "Parameter B",
+          "job_name": "JOB_4",
+          "mappingType_code": "keyDate",
+          "name": "B",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "string",
+          "description": "Parameter C",
+          "job_name": "JOB_4",
+          "mappingType_code": "processingUser",
+          "name": "C",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "boolean",
+          "description": "Parameter D",
+          "job_name": "JOB_4",
+          "mappingType_code": "testRun",
+          "name": "D",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "number",
+          "description": "Parameter E",
+          "job_name": "JOB_4",
+          "mappingType_code": "fiscalYear",
+          "name": "E",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+      ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 5",
+      "longDescription": "Job Definition 5",
+      "name": "JOB_5",
+      "parameters": [],
+      "supportsStartDateTime": false,
       "version": "1",
     },
   ],
@@ -2564,6 +2666,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
 {
   "@odata.context": "$metadata#JobDefinition/$entity",
   "description": "Job Definition 1",
+  "longDescription": "Job Definition 1",
   "name": "JOB_1",
   "parameters": [
     {
@@ -2617,6 +2720,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
       "value": "2025-01-01T00:00:00Z",
     },
   ],
+  "supportsStartDateTime": false,
   "version": "1",
 }
 `;
@@ -2625,6 +2729,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
 {
   "@odata.context": "$metadata#JobDefinition/$entity",
   "description": "Job Definition 1",
+  "longDescription": "Job Definition 1",
   "name": "JOB_1",
   "parameters": [
     {
@@ -2678,6 +2783,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
       "value": "2025-01-01T00:00:00Z",
     },
   ],
+  "supportsStartDateTime": false,
   "version": "1",
 }
 `;
@@ -2688,6 +2794,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
   "value": [
     {
       "description": "Job Definition 1",
+      "longDescription": "Job Definition 1",
       "name": "JOB_1",
       "parameters": [
         {
@@ -2741,10 +2848,12 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
       "version": "1",
     },
     {
       "description": "Job Definition 2",
+      "longDescription": "Job Definition 2",
       "name": "JOB_2",
       "parameters": [
         {
@@ -2798,10 +2907,12 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": true,
       "version": "1",
     },
     {
       "description": "Job Definition 3",
+      "longDescription": "Job Definition 3",
       "name": "JOB_3",
       "parameters": [
         {
@@ -2855,6 +2966,74 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 4",
+      "longDescription": "Job Definition 4",
+      "name": "JOB_4",
+      "parameters": [
+        {
+          "dataType_code": "string",
+          "description": "Parameter A",
+          "job_name": "JOB_4",
+          "mappingType_code": "companyCode",
+          "name": "A",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "datetime",
+          "description": "Parameter B",
+          "job_name": "JOB_4",
+          "mappingType_code": "keyDate",
+          "name": "B",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "string",
+          "description": "Parameter C",
+          "job_name": "JOB_4",
+          "mappingType_code": "processingUser",
+          "name": "C",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "boolean",
+          "description": "Parameter D",
+          "job_name": "JOB_4",
+          "mappingType_code": "testRun",
+          "name": "D",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "number",
+          "description": "Parameter E",
+          "job_name": "JOB_4",
+          "mappingType_code": "fiscalYear",
+          "name": "E",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+      ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 5",
+      "longDescription": "Job Definition 5",
+      "name": "JOB_5",
+      "parameters": [],
+      "supportsStartDateTime": false,
       "version": "1",
     },
   ],
@@ -2867,6 +3046,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
   "value": [
     {
       "description": "Job Definition 1",
+      "longDescription": "Job Definition 1",
       "name": "JOB_1",
       "parameters": [
         {
@@ -2920,10 +3100,12 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
       "version": "1",
     },
     {
       "description": "Job Definition 2",
+      "longDescription": "Job Definition 2",
       "name": "JOB_2",
       "parameters": [
         {
@@ -2977,10 +3159,12 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": true,
       "version": "1",
     },
     {
       "description": "Job Definition 3",
+      "longDescription": "Job Definition 3",
       "name": "JOB_3",
       "parameters": [
         {
@@ -3034,6 +3218,74 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 4",
+      "longDescription": "Job Definition 4",
+      "name": "JOB_4",
+      "parameters": [
+        {
+          "dataType_code": "string",
+          "description": "Parameter A",
+          "job_name": "JOB_4",
+          "mappingType_code": "companyCode",
+          "name": "A",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "datetime",
+          "description": "Parameter B",
+          "job_name": "JOB_4",
+          "mappingType_code": "keyDate",
+          "name": "B",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "string",
+          "description": "Parameter C",
+          "job_name": "JOB_4",
+          "mappingType_code": "processingUser",
+          "name": "C",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "boolean",
+          "description": "Parameter D",
+          "job_name": "JOB_4",
+          "mappingType_code": "testRun",
+          "name": "D",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+        {
+          "dataType_code": "number",
+          "description": "Parameter E",
+          "job_name": "JOB_4",
+          "mappingType_code": "fiscalYear",
+          "name": "E",
+          "required": true,
+          "type_code": "mapping",
+          "value": null,
+        },
+      ],
+      "supportsStartDateTime": false,
+      "version": "1",
+    },
+    {
+      "description": "Job Definition 5",
+      "longDescription": "Job Definition 5",
+      "name": "JOB_5",
+      "parameters": [],
+      "supportsStartDateTime": false,
       "version": "1",
     },
   ],

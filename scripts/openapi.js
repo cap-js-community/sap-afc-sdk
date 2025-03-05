@@ -2,16 +2,24 @@
 
 const fs = require("fs");
 const path = require("path");
+const shelljs = require("shelljs");
 
 const DEFAULT_RESPONSES = require("./default-responses");
 
 (() => {
-  processSchedulingProviderService("./openapi/SchedulingProviderService.openapi3.json");
+  const check = ["--check", "-c"].includes(process.argv?.[2]);
+  processSchedulingProviderService(check);
 })();
 
-function processSchedulingProviderService(file) {
-  const filePath = path.join(process.cwd(), file);
-  const data = require(filePath);
+function processSchedulingProviderService(check) {
+  // Load
+  const filePath = path.join(process.cwd(), "./openapi/SchedulingProviderService.openapi3.json");
+  const jsonBefore = fs.existsSync(filePath) ? JSON.stringify(JSON.parse(fs.readFileSync(filePath)), null, 2) : "";
+  const data = JSON.parse(
+    shelljs.exec("cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi", {
+      silent: true,
+    }).stdout,
+  );
 
   // Details
   data.info.version = "1.0.0";
@@ -160,7 +168,15 @@ function processSchedulingProviderService(file) {
     }
   }
 
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  // Check or write
+  const jsonAfter = JSON.stringify(data, null, 2);
+  if (check) {
+    if (jsonAfter !== jsonBefore) {
+      throw new Error(`OpenAPI definition at ${filePath} is not up-to-date.`);
+    }
+  } else {
+    fs.writeFileSync(filePath, jsonAfter);
+  }
 }
 
 function includeInSentence(text) {

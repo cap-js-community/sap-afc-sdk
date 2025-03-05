@@ -54,6 +54,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Allows filtering of query results by name. Example: ?name=JOB_1 (optional)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -268,7 +277,26 @@
       "get": {
         "summary": "Retrieves a list of parameters of a job.",
         "tags": ["Job"],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retrieved parameters",
@@ -343,7 +371,26 @@
       "get": {
         "summary": "Retrieves a list of results of a job.",
         "tags": ["Job"],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retrieved results",
@@ -421,6 +468,24 @@
             "in": "query",
             "required": false,
             "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Allows case-sensitive filtering of query results by search on name. Wildcard support at start and end via *. Example: ?name=JOB* (optional)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Allows case-insensitive filtering of query results by search on name, description and long description. Wildcard support at start and end via *. Example: ?search=Job* (optional)",
             "schema": {
               "type": "string"
             }
@@ -569,7 +634,26 @@
       "get": {
         "summary": "Retrieves a list of parameters of a job definition.",
         "tags": ["Job Definition"],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retrieved parameters",
@@ -715,7 +799,26 @@
       "get": {
         "summary": "Retrieves a list of messages of a job result.",
         "tags": ["Job Result"],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Retrieved messages",
@@ -1009,6 +1112,12 @@
           "description": {
             "type": "string"
           },
+          "longDescription": {
+            "type": "string"
+          },
+          "supportsStartDateTime": {
+            "type": "boolean"
+          },
           "version": {
             "type": "string"
           }
@@ -1095,7 +1204,11 @@
               "executionID",
               "customField1",
               "customField2",
-              "customField3"
+              "customField3",
+              "taskListID",
+              "taskListDescription",
+              "taskID",
+              "taskDescription"
             ]
           },
           "value": {
