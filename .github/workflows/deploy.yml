@@ -5,6 +5,9 @@ on:
     workflows: ["Main CI"]
     types:
       - completed
+    branches:
+      - main
+    conclusion: success
   workflow_dispatch:
 
 env:
