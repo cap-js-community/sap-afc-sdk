@@ -9,8 +9,8 @@ sap.ui.define(
           this.base.onInit();
           window.socket.attachMessage("message", (event) => {
             const message = JSON.parse(event.getParameter("data"));
-            if (message.event === "jobStatusChanged") {
-              if (message.status === "requested") {
+            if (message?.event === "jobStatusChanged") {
+              if (message.data?.status === "requested") {
                 this.refreshForAll();
               } else {
                 this.refreshForContext(message);
@@ -18,30 +18,30 @@ sap.ui.define(
             }
           });
         },
+      },
 
-        refreshForContext(message) {
-          const table = this.getView().byId("scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table");
-          const contexts = table.tableBindingInfo.binding.getAllCurrentContexts();
-          for (const context of contexts) {
-            if (context.getObject().ID === message?.data?.ID) {
-              this.base.getExtensionAPI().refresh();
-              const router = this.base.getAppComponent().getRouter();
-              if (router && !router.getHashChanger().getHash().startsWith("Job")) {
-                const toast = this.base
-                  .getExtensionAPI()
-                  .getModel("i18n")
-                  .getResourceBundle()
-                  .getText("listReportRefresh");
-                MessageToast.show(toast);
-              }
-              break;
+      refreshForContext(message) {
+        const table = this.getView().byId("scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table");
+        const contexts = table.tableBindingInfo?.binding?.getAllCurrentContexts();
+        for (const context of contexts ?? []) {
+          if (context.getObject().ID === message.data?.ID) {
+            this.base.getExtensionAPI().refresh();
+            const router = this.base.getAppComponent().getRouter();
+            if (router && !router.getHashChanger().getHash().startsWith("Job")) {
+              const toast = this.base
+                .getExtensionAPI()
+                .getModel("i18n")
+                .getResourceBundle()
+                .getText("listReportRefresh");
+              MessageToast.show(toast);
             }
+            break;
           }
-        },
+        }
+      },
 
-        refreshForAll() {
-          this.base.getExtensionAPI().refresh();
-        },
+      refreshForAll() {
+        this.base.getExtensionAPI().refresh();
       },
     });
   },
