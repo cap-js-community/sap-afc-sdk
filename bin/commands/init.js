@@ -86,6 +86,7 @@ Examples:
 
       // CF
       adjustText("mta.yaml", (content) => {
+        content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
         for (const app of appStubs) {
           const part = `path: app/${app}`;
           const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
@@ -97,7 +98,8 @@ Examples:
 
       // Kyma
       adjustText("chart/values.yaml", (content) => {
-        // TODO: Containerize
+        content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
+        // TODO: Containerize (CDS 8.8)
         return content;
       });
 

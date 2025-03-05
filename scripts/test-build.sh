@@ -9,7 +9,7 @@ mkdir -p temp
 cd temp
 cds init afcsdk
 cd afcsdk
-npm install @cap-js-community/sap-afc-sdk
+npm install github:cap-js-community/sap-afc-sdk
 afc init cf
 afc add -a broker,mock,sample,http
 mbt build
