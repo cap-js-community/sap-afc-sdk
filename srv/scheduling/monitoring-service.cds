@@ -39,6 +39,44 @@ extend SchedulingMonitoringService.JobResult with columns {
   end as dataLink : String
 };
 
+extend SchedulingMonitoringService.Job with columns {
+  @title: '{i18n>Criticality}'
+  case status.code
+    when
+      #requested
+    then
+      5
+    when
+      #running
+    then
+      5
+    when
+      #completed
+    then
+      3
+    when
+      #completedWithWarning
+    then
+      2
+    when
+      #completedWithError
+    then
+      2
+    when
+      #failed
+    then
+      1
+    when
+      #cancelRequested
+    then
+      0
+    when
+      #canceled
+    then
+      0
+  end as criticality : Integer
+}
+
 extend SchedulingMonitoringService.JobResultMessage with columns {
   @title: '{i18n>Criticality}'
   case severity.code

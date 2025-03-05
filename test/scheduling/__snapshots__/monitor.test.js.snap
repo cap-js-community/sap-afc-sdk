@@ -157,6 +157,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <NavigationProperty Name="results" Type="Collection(SchedulingMonitoringService.JobResult)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
+        <Property Name="criticality" Type="Edm.Int32"/>
       </EntityType>
       <EntityType Name="JobParameter">
         <Key>
@@ -599,28 +600,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.LineItem">
-          <Collection>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="ID"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="definition_name"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="version"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="status_code"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="modifiedAt"/>
-            </Record>
-            <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="createdAt"/>
-            </Record>
-          </Collection>
-        </Annotation>
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job"/>
@@ -660,6 +639,29 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyPath>definition_name</PropertyPath>
             <PropertyPath>status_code</PropertyPath>
           </Collection>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="ID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition_name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="version"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="status_code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="modifiedAt"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="createdAt"/>
+            </Record>
+          </Collection>
+          <Annotation Term="UI.Criticality" Path="criticality"/>
         </Annotation>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
@@ -808,6 +810,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/results">
         <Annotation Term="Common.Label" String="Results"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/criticality">
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="Criticality"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.cancel(SchedulingMonitoringService.Job)">
         <Annotation Term="Common.IsActionCritical" Bool="true"/>
@@ -3297,6 +3303,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
   "@odata.context": "$metadata#Job",
   "value": [
     {
+      "criticality": 5,
       "definition_name": "JOB_1",
       "link": "http://localhost:4004/<ID>",
       "parameters": [
@@ -3332,6 +3339,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
       "version": "1",
     },
     {
+      "criticality": 5,
       "definition_name": "JOB_2",
       "link": "http://localhost:4004/<ID>",
       "parameters": [
@@ -3367,6 +3375,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
       "version": "1",
     },
     {
+      "criticality": 2,
       "definition_name": "JOB_3",
       "link": "http://localhost:4004/<ID>",
       "parameters": [
@@ -3408,6 +3417,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
 exports[`Monitoring Service Get Jobs 2`] = `
 {
   "@odata.context": "$metadata#Job/$entity",
+  "criticality": 5,
   "definition_name": "JOB_1",
   "link": "http://localhost:4004/<ID>",
   "parameters": [

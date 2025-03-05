@@ -147,6 +147,8 @@ annotate service.Job actions {
   ]}}
 };
 
+annotate service.Job with @(UI.LineItem.@UI.Criticality: criticality, );
+
 annotate service.JobParameter with @(
   UI.FieldGroup #Details: {
     $Type: 'UI.FieldGroupType',
