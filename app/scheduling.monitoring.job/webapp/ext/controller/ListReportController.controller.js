@@ -42,6 +42,12 @@ sap.ui.define(
 
       refreshForAll() {
         this.base.getExtensionAPI().refresh();
+        const toast = this.base
+          .getExtensionAPI()
+          .getModel("i18n")
+          .getResourceBundle()
+          .getText("listReportRefresh");
+        MessageToast.show(toast);
       },
     });
   },

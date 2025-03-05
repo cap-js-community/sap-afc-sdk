@@ -133,7 +133,7 @@
                   }
                 }
               },
-              "liveMode": true,
+              "initialLoad": true,
               "controlConfiguration": {
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
