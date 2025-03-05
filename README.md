@@ -235,8 +235,9 @@ The library includes a mocked processing for jump-start development, which is di
 Setting option `cds.requires.sap-afc-sdk.mockProcessing: true` a basic mocked job processing completes
 jobs based on a random time value between `0-30` seconds.
 
-The project can be adjusted to use basic mock processing automatically via command: 
-- Terminal: `afc add -b mock` 
+The project can be adjusted to use basic mock processing automatically via command:
+
+- Terminal: `afc add -b mock`
 
 A more advanced mocked Job processing can be configured by setting the
 following [CDS env](https://cap.cloud.sap/docs/node.js/cds-env)
@@ -268,6 +269,7 @@ This default advanced mocked Job processing can be also configured by using CDS 
 `CDS_ENV=mock`.
 
 The project can be adjusted to use advanced mock processing (without `mock` profile) automatically via command:
+
 - Terminal: `afc add -a mock`
 
 #### Implement Job Processing
