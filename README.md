@@ -233,7 +233,7 @@ The library includes a mocked processing for jump-start development, which is di
 `cds.requires.sap-afc-sdk.mockProcessing: false`
 
 Setting option `cds.requires.sap-afc-sdk.mockProcessing: true` a basic mocked job processing completes
-jobs based on a random time value between `0-30` seconds.
+jobs based on a random time value between `0-10` seconds.
 
 The project can be adjusted to use basic mock processing automatically via command:
 
@@ -250,7 +250,7 @@ options (as described in [options](#options)):
       "sap-afc-sdk": {
         "mockProcessing": {
           "min": 0,
-          "max": 30,
+          "max": 10,
           "default": "completed",
           "status": {
             "completed": 0.5,
@@ -268,16 +268,22 @@ options (as described in [options](#options)):
 This default advanced mocked Job processing can be also configured by using CDS profile `mock` via `--profile mock` or
 `CDS_ENV=mock`.
 
-The project can be adjusted to use advanced mock processing (without `mock` profile) automatically via command:
+The project can be adjusted to use advanced mock processing (without additional `mock` profile) automatically via command:
 
 - Terminal: `afc add -a mock`
 
+Mock configuration can be adjusted in `package.json` afterwards.
+
+To disable mock processing remove CDS env `cds.requires.sap-afc-sdk.mockProcessing`, e.g. for command:
+
+- Terminal: `afc add -x mock`
+
 #### Implement Job Processing
 
-The default implementation of the Job processing is already provided by the SDK. Focus can be put on
+The default implementation of the job processing is already provided by the SDK. Focus can be put on
 custpm processing logic, and the processing status update handling.
 
-To implement a custom Job processing extend the Job processing service definition as follows:
+To implement a custom job processing extend the job processing service definition as follows:
 
 **CDS file:** `/srv/scheduling-processing-service.cds`
 
@@ -296,7 +302,7 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     const { processJob, updateJob, cancelJob } = this.operations;
 
     this.on(processJob, async (req, next) => {
-      // Your logic goes here
+      // Your logic goes here. Check req.data.testRun
       // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
       await next();
     });
@@ -321,33 +327,41 @@ module.exports = CustomSchedulingProcessingService;
 As part of the custom scheduling process service implementation, the following operations can be implemented:
 
 - `on(processJob)`:
-  - A new Job instance was created and needs to be processed
-  - The Job is due (start date time is reached), and the Job is ready for processing
-  - Implement your custom logic, how the Job should be processed
-  - Job data can be retrieved via `req.job`
+  - A new job instance was created and needs to be processed
+  - The job is due (start date time is reached), and the job is ready for processing
+  - Implement your custom logic, how the job should be processed
+  - Job ID is accessible via `req.data.ID` and job data can be accessed via `req.job`
+  - Test run can be identified via flag `req.data.testRun` (if job definition supports test mode)
   - Call `await next()` to perform default implementation (set status to `running`)
-  - Job update can be performed via `this.processJobUpdate()` providing the new status and Job results
+  - Job update can be performed via `this.processJobUpdate()` providing the new status and job results
     - e.g. `await this.processJobUpdate(req, JobStatus.completed, [{...}])`
+  - `processJobUpdate` will materialize job results (incl. binaries) per default in memory
+  - For larger result sets and binary data, consider inserting direct modification of entity `scheduling.JobResult`
+    - Insert instance for `scheduling.JobResult`
+    - Updating `data` element of instance with binary data stream in CDS QL:
+      ```cds
+      UPDATE.entity("scheduling.JobResult").set({ data: stream }).where({ ID: jobResultID });
+      ```
   - Throwing exceptions will automatically trigger the retry process in Event Queue
-  - Disable mocked Job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
+  - Disable mocked job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `on(updateJob)`:
-  - A job status update is requested and the Job results are stored
-  - Implement your custom logic, how the Job status should be updated
+  - A job status update is requested and the job results are stored
+  - Implement your custom logic, how the job status should be updated
   - Job data can be retrieved via `req.job`
   - Job status transition is validated via `async checkStatusTransition(req, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
   - Job results are checked and processed via `async checkJobResults(req, results)`
-    - Valid results are valid according to Job Results signature constraints (see below)
-    - Returns the processed Job Results to be inserted
+    - Valid results are valid according to job results signature constraints (see below)
+    - Returns the processed job results to be inserted
   - Call `await next()` to perform default implementation (update status to requested status)
 - `on(cancelJob)`:
   - A job cancellation is requested
-  - Implement your custom logic, how the Job should be canceled
+  - Implement your custom logic, how the job should be canceled
   - Job data can be retrieved via `req.job`
   - Call `await next()` to perform default implementation (update status to `canceled`)
 
-The Job Results signature is defined as follows:
+The job results signature is defined as follows:
 
 ```cds
 type ResultTypeCode   : String enum {
@@ -378,8 +392,8 @@ type JobResultMessage {
 };
 ```
 
-Multiple Job Results can be passed for Job update.
-The following constraints apply for each Job result type:
+Multiple job results can be passed for job update.
+The following constraints apply for each job result type:
 
 - `link`:
   - Properties `name` and `link` need to be provided
@@ -390,7 +404,7 @@ The following constraints apply for each Job result type:
   - Other properties are not allowed
 - `message`:
   - Properties `name` and `messages` need to be provided
-  - Messages need to be provided as array of Job result messages
+  - Messages need to be provided as array of job result messages
   - Other properties are not allowed
 
 Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
@@ -401,14 +415,14 @@ In addition, to overwriting the default implementation via an `on` handler, also
 
 #### Implement Job Provider
 
-A Job provider service is already provided per default by the SDK, implementing
+A job provider service is already provided per default by the SDK, implementing
 the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderService.openapi3.json).
 Therefore, focus can be put on additional custom provider logic (e.g. streaming of data from a remote location).
 
 The **SAP Advanced Financial Closing Scheduling Service Provider Interface** is published on SAP Business Accelerator Hub
 under package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
 
-To implement a custom Job provider extend the Job provider service definition as follows:
+To implement a custom job provider extend the job provider service definition as follows:
 
 **CDS file:** `/srv/scheduling-provider-service.cds`
 
@@ -451,7 +465,7 @@ module.exports = CustomSchedulingProviderService;
 As part of the custom scheduling provider service implementation, the following operations can be implemented:
 
 - `on("CREATE", Job)`:
-  - Validates and creates a new Job instance
+  - Validates and creates a new job instance
   - Call `await next()` to perform default implementation
   - `after`: Calls scheduling processing service function `processJob`
 - `on(Job.actions.cancel, Job)`:
@@ -480,7 +494,7 @@ Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/gui
 A periodic scheduling job synchronization event named `SchedulingJob/Sync` is running per default every **1 minute** in the Event Queue,
 to perform job synchronization from an external source. The default implementation is a no-op.
 
-To implement a custom Job sync extend the Job sync configuration in CDS env as follows.
+To implement a custom job sync extend the job sync configuration in CDS env as follows.
 
 **CDS Env:**
 
@@ -539,7 +553,7 @@ The application can be tested locally using the following steps:
 
 #### Add sample data
 
-To add sample Job definitions and Job instances run:
+To add sample job definitions and job instances run:
 
 - Terminal: `afc add sample`
 

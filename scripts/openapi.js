@@ -49,8 +49,6 @@ function processSchedulingProviderService(check) {
     },
   };
   delete data.components.schemas.count;
-  data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
-  data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
   data.components.schemas["SchedulingProviderService.Job"].required = [
     "ID",
     "name",
@@ -59,17 +57,38 @@ function processSchedulingProviderService(check) {
     "status",
   ];
   data.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.type;
+  data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.oneOf = [
+    { type: "string" },
+    { type: "boolean" },
+    { type: "number" },
+  ];
   data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = [
     "name",
     "dataType",
     "type",
     "mappingType",
   ];
+  data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
   data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
+  delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.type;
+  data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.oneOf = [
+    { type: "string" },
+    { type: "boolean" },
+    { type: "number" },
+  ];
+  data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
+  delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.type;
+  data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.oneOf = [
+    { type: "string" },
+    { type: "boolean" },
+    { type: "number" },
+  ];
+
+  delete data.components.schemas["SchedulingProviderService.Job-create"].properties.results;
   delete data.components.schemas["SchedulingProviderService.JobResult"].properties.data;
   delete data.components.schemas["SchedulingProviderService.JobResult-create"];
   delete data.components.schemas["SchedulingProviderService.JobResultMessage-create"];
-  delete data.components.schemas["SchedulingProviderService.Job-create"].properties.results;
 
   // Paths
   delete data.paths["/JobResult"];

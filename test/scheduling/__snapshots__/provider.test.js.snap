@@ -1,28 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`API Create Job 1`] = `
+exports[`API Create Job (JSON data types) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
+  "testRun": true,
   "version": "1",
 }
 `;
 
-exports[`API Create Job 2`] = `
+exports[`API Create Job (JSON data types) 2`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "4711",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
+  "testRun": true,
   "version": "1",
 }
 `;
 
-exports[`API Create Job 3`] = `
+exports[`API Create Job (JSON data types) 3`] = `
 [
   {
     "name": "A",
@@ -30,15 +32,103 @@ exports[`API Create Job 3`] = `
   },
   {
     "name": "C",
-    "value": "true",
+    "value": true,
   },
   {
     "name": "D",
-    "value": "32",
+    "value": 32,
   },
   {
     "name": "E",
     "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API Create Job (advanced) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (advanced) 2`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (advanced) 3`] = `
+[
+  {
+    "name": "A",
+    "value": "abc",
+  },
+  {
+    "name": "C",
+    "value": true,
+  },
+  {
+    "name": "D",
+    "value": 32,
+  },
+  {
+    "name": "E",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API Create Job (simple) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_1",
+  "referenceID": "4711",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (test run) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (test run) 2`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Test Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (test run) 3`] = `
+[
+  {
+    "severity": "info",
+    "text": "Job is running in test mode",
   },
 ]
 `;
@@ -51,6 +141,7 @@ exports[`API GET Job 1`] = `
     "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-01T12:00:00Z",
     "status": "requested",
+    "testRun": false,
     "version": "1",
   },
   {
@@ -59,6 +150,7 @@ exports[`API GET Job 1`] = `
     "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-02T12:00:00Z",
     "status": "running",
+    "testRun": true,
     "version": "1",
   },
   {
@@ -67,6 +159,7 @@ exports[`API GET Job 1`] = `
     "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
     "startDateTime": "2025-01-02T12:00:00Z",
     "status": "completedWithError",
+    "testRun": false,
     "version": "1",
   },
 ]
@@ -79,6 +172,7 @@ exports[`API GET Job 2`] = `
   "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
+  "testRun": false,
   "version": "1",
 }
 `;
@@ -90,6 +184,7 @@ exports[`API GET Job Definitions 1`] = `
     "longDescription": "Job Definition 1",
     "name": "JOB_1",
     "supportsStartDateTime": false,
+    "supportsTestRun": false,
     "version": "1",
   },
   {
@@ -97,6 +192,7 @@ exports[`API GET Job Definitions 1`] = `
     "longDescription": "Job Definition 2",
     "name": "JOB_2",
     "supportsStartDateTime": true,
+    "supportsTestRun": true,
     "version": "1",
   },
   {
@@ -104,6 +200,7 @@ exports[`API GET Job Definitions 1`] = `
     "longDescription": "Job Definition 3",
     "name": "JOB_3",
     "supportsStartDateTime": false,
+    "supportsTestRun": true,
     "version": "1",
   },
   {
@@ -111,6 +208,7 @@ exports[`API GET Job Definitions 1`] = `
     "longDescription": "Job Definition 4",
     "name": "JOB_4",
     "supportsStartDateTime": false,
+    "supportsTestRun": false,
     "version": "1",
   },
   {
@@ -118,6 +216,7 @@ exports[`API GET Job Definitions 1`] = `
     "longDescription": "Job Definition 5",
     "name": "JOB_5",
     "supportsStartDateTime": false,
+    "supportsTestRun": false,
     "version": "1",
   },
 ]
@@ -129,6 +228,7 @@ exports[`API GET Job Definitions 2`] = `
   "longDescription": "Job Definition 1",
   "name": "JOB_1",
   "supportsStartDateTime": false,
+  "supportsTestRun": false,
   "version": "1",
 }
 `;
@@ -153,17 +253,17 @@ exports[`API GET Job Parameter Definitions 1`] = `
     "name": "B",
     "required": false,
     "type": "readOnlyValue",
-    "value": "21",
+    "value": 21,
   },
   {
     "dataType": "boolean",
     "description": "Parameter C",
     "jobName": "JOB_1",
-    "mappingType": "testRun",
+    "mappingType": null,
     "name": "C",
     "required": true,
-    "type": "mapping",
-    "value": "0",
+    "type": "writableValue",
+    "value": false,
   },
   {
     "dataType": "number",
@@ -173,7 +273,7 @@ exports[`API GET Job Parameter Definitions 1`] = `
     "name": "D",
     "required": false,
     "type": "writableValue",
-    "value": "22",
+    "value": 22,
   },
   {
     "dataType": "datetime",
@@ -196,15 +296,15 @@ exports[`API GET Job Parameters 1`] = `
   },
   {
     "name": "B",
-    "value": "11",
+    "value": 11,
   },
   {
     "name": "C",
-    "value": "true",
+    "value": true,
   },
   {
     "name": "D",
-    "value": "12",
+    "value": 12,
   },
   {
     "name": "E",
@@ -216,17 +316,14 @@ exports[`API GET Job Parameters 1`] = `
 exports[`API GET Job Result Messages 1`] = `
 [
   {
-    "resultID": "c2eb590f-9505-4fd6-a5e2-511a1b2ff47f",
     "severity": "error",
     "text": "This is an error",
   },
   {
-    "resultID": "c2eb590f-9505-4fd6-a5e2-511a1b2ff47f",
     "severity": "warning",
     "text": "This is a warning",
   },
   {
-    "resultID": "c2eb590f-9505-4fd6-a5e2-511a1b2ff47f",
     "severity": "info",
     "text": "This is an information",
   },

@@ -87,6 +87,9 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=-1&top=4");
     expect(response.data).toHaveLength(4);
+
+    response = await GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters");
+    expect(response.data[0].parameters).toBeUndefined();
   });
 
   it("GET Job Definitions (name)", async () => {
@@ -164,6 +167,9 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/Job?skip=-1&top=4");
     expect(response.data).toHaveLength(3);
+
+    response = await GET("/api/job-scheduling/v1/Job?$expand=parameters");
+    expect(response.data[0].parameters).toBeUndefined();
   });
 
   it("GET Job (referencedID)", async () => {
@@ -214,6 +220,9 @@ describe("API", () => {
     expect(response.data[0].severity).toBe("warning");
     response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(response.data).toEqual([]);
+
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages");
+    expect(response.data.messages).toBeUndefined();
   });
 
   it("GET Job Result Message Data", async () => {
@@ -228,7 +237,27 @@ describe("API", () => {
     });
   });
 
-  it("Create Job", async () => {
+  it("Create Job (simple)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_1",
+      referenceID: "4711",
+      parameters: [
+        {
+          name: "A",
+          value: "abc",
+        },
+        {
+          name: "C",
+          value: "true",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+  });
+
+  it("Create Job (advanced)", async () => {
     let response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_2",
       referenceID: "4711",
@@ -236,7 +265,7 @@ describe("API", () => {
       parameters: [
         {
           name: "A",
-          value: "abcd",
+          value: "abc",
         },
         {
           name: "C",
@@ -284,6 +313,83 @@ describe("API", () => {
     ws.close();
   });
 
+  it("Create Job (JSON data types)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "4711",
+      startDateTime: "2025-01-01T12:00:00Z",
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 32.0,
+        },
+        {
+          name: "E",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+
+    const ID = response.data.ID;
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+    expect(response.data.status).toEqual("requested");
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/parameters`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
+  it("Create Job (test run)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "4711",
+      startDateTime: "2025-01-01T12:00:00Z",
+      testRun: false,
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 32.0,
+        },
+        {
+          name: "E",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    const ID = response.data.ID;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await processOutbox();
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+    const entry = await eventQueueEntry();
+    expect(entry).toBeDefined();
+    expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
+    expect(entry.referenceEntityKey).toBe(ID);
+    expect(entry.payload).toMatch(/"testRun":true/);
+
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
+    const resultID = response.data[0].ID;
+    expect(cleanData(response.data[0])).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);
@@ -312,6 +418,29 @@ describe("API", () => {
   });
 
   describe("Error Situations", () => {
+    it("GET Job Parameter Definition", async () => {
+      await expect(GET("/api/job-scheduling/v1/JobParameterDefinition", {})).rejects.toThrowAPIError(
+        400,
+        "accessOnlyViaParent",
+      );
+      await expect(GET("/api/job-scheduling/v1/JobDefinition/XXX/parameters", {})).rejects.toThrowAPIError(
+        404,
+        "Not Found",
+      );
+    });
+
+    it("GET Job Parameter", async () => {
+      await expect(GET("/api/job-scheduling/v1/JobParameter", {})).rejects.toThrowAPIError(400, "accessOnlyViaParent");
+      await expect(GET("/api/job-scheduling/v1/Job/XXX/parameters", {})).rejects.toThrowAPIError(404, "Not Found");
+    });
+
+    it("GET Job Result Message", async () => {
+      await expect(GET("/api/job-scheduling/v1/JobResultMessage", {})).rejects.toThrowAPIError(
+        400,
+        "accessOnlyViaParent",
+      );
+    });
+
     it("POST Job Definitions", async () => {
       await expect(POST("/api/job-scheduling/v1/JobDefinition", {})).rejects.toThrowAPIError(
         405,
@@ -472,9 +601,13 @@ describe("API", () => {
               name: "A",
               value: 1,
             },
+            {
+              name: "C",
+              value: "true",
+            },
           ],
         }),
-      ).rejects.toThrowAPIError(400, "Value 1 is not a valid String");
+      ).rejects.toThrowAPIError(400, "jobParameterValueInvalidType", ["1", "A", "string"]);
       await expect(
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",
@@ -487,6 +620,10 @@ describe("API", () => {
             {
               name: "B",
               value: "2",
+            },
+            {
+              name: "C",
+              value: "true",
             },
           ],
         }),

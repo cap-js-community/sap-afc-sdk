@@ -94,7 +94,6 @@ service SchedulingProviderService {
           *,
           parameters : redirected to JobParameter
         on parameters.jobID = $self.ID,
-          // @readonly
           results    : redirected to JobResult
         on results.jobID = $self.ID,
     }
@@ -111,6 +110,7 @@ service SchedulingProviderService {
       key ID                       : String(500) @readonly,
           job.ID          as jobID : String(500) @readonly,
           definition.name as name,
+          @cds.validate: false
           value,
           *
     }
@@ -126,7 +126,6 @@ service SchedulingProviderService {
           job.ID    as jobID : String(500) @readonly,
           type.code as type,
           *,
-          // @readonly
           messages           : redirected to JobResultMessage
         on messages.resultID = $self.ID,
     }

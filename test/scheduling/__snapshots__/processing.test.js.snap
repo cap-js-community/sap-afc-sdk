@@ -19,6 +19,8 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
 ]
 `;
 
+exports[`Processing Service processJob - simple mock - completed 2`] = `[]`;
+
 exports[`Processing Service processJob - simple mock - completed with error 1`] = `
 [
   {
@@ -27,6 +29,15 @@ exports[`Processing Service processJob - simple mock - completed with error 1`] 
     "mimeType": null,
     "name": "Result",
     "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - completed with error 2`] = `
+[
+  {
+    "severity_code": "error",
+    "text": "An error occurred during job processing",
   },
 ]
 `;
@@ -43,7 +54,35 @@ exports[`Processing Service processJob - simple mock - completed with warning 1`
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - failed 1`] = `[]`;
+exports[`Processing Service processJob - simple mock - completed with warning 2`] = `
+[
+  {
+    "severity_code": "warning",
+    "text": "A warning occurred during job processing",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - failed 1`] = `
+[
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Failure",
+    "type_code": "message",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - failed 2`] = `
+[
+  {
+    "severity_code": "error",
+    "text": "An error occurred during job processing",
+  },
+]
+`;
 
 exports[`Processing Service updateJob - results - base64 1`] = `
 [

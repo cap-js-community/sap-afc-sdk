@@ -1,23 +1,27 @@
 using SchedulingMonitoringService as service from '../../srv/scheduling/monitoring-service';
 
 annotate service.Job with @(
-  UI.Identification          : [{
+  UI.Identification            : [{
     $Type             : 'UI.DataFieldForAction',
     Label             : '{i18n>Cancel}',
     Action            : 'SchedulingMonitoringService.cancel',
     InvocationGrouping: #Isolated,
     Criticality       : #Negative
   }],
-  UI.FieldGroup #Details     : {
+  UI.FieldGroup #General       : {
     $Type: 'UI.FieldGroupType',
     Data : [
       {
         $Type: 'UI.DataField',
-        Value: ID,
+        Value: definition_name,
       },
       {
         $Type: 'UI.DataField',
-        Value: definition_name,
+        Value: version,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.description,
       },
       {
         $Type: 'UI.DataField',
@@ -25,7 +29,16 @@ annotate service.Job with @(
       },
       {
         $Type: 'UI.DataField',
-        Value: version,
+        Value: referenceID,
+      },
+    ],
+  },
+  UI.FieldGroup #Details       : {
+    $Type: 'UI.FieldGroupType',
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: status_code,
       },
       {
         $Type: 'UI.DataFieldWithUrl',
@@ -34,31 +47,62 @@ annotate service.Job with @(
       },
       {
         $Type: 'UI.DataField',
-        Value: status_code,
+        Value: testRun,
       },
+    ],
+  },
+  UI.FieldGroup #Administrative: {
+    $Type: 'UI.FieldGroupType',
+    Data : [
       {
         $Type: 'UI.DataField',
         Value: modifiedAt,
       },
       {
         $Type: 'UI.DataField',
+        Value: modifiedBy,
+      },
+      {
+        $Type: 'UI.DataField',
         Value: createdAt,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: createdBy,
       },
     ],
   },
-  UI.FieldGroup #Capabilities: {
+  UI.FieldGroup #Capabilities  : {
     $Type: 'UI.FieldGroupType',
-    Data : [{
-      $Type: 'UI.DataField',
-      Value: definition.supportsStartDateTime,
-    }]
+    Data : [
+      {
+        $Type: 'UI.DataField',
+        Value: definition.supportsStartDateTime,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.supportsTestRun,
+      }
+    ]
   },
-  UI.HeaderFacets            : [{
-    $Type : 'UI.ReferenceFacet',
-    Label : '{i18n>Details}',
-    Target: '@UI.FieldGroup#Details',
-  }],
-  UI.Facets                  : [
+  UI.HeaderFacets              : [
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>General}',
+      Target: '@UI.FieldGroup#General',
+    },
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>Details}',
+      Target: '@UI.FieldGroup#Details',
+    },
+    {
+      $Type : 'UI.ReferenceFacet',
+      Label : '{i18n>Administrative}',
+      Target: '@UI.FieldGroup#Administrative',
+    }
+  ],
+  UI.Facets                    : [
     {
       $Type : 'UI.ReferenceFacet',
       Label : '{i18n>Capabilities}',
@@ -75,10 +119,14 @@ annotate service.Job with @(
       Target: 'results/@UI.PresentationVariant'
     }
   ],
-  UI.LineItem                : [
+  UI.LineItem                  : [
     {
       $Type: 'UI.DataField',
       Value: ID,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: referenceID,
     },
     {
       $Type: 'UI.DataField',
@@ -100,8 +148,12 @@ annotate service.Job with @(
       $Type: 'UI.DataField',
       Value: createdAt,
     },
+    {
+      $Type: 'UI.DataField',
+      Value: testRun,
+    },
   ],
-  UI.HeaderInfo              : {
+  UI.HeaderInfo                : {
     $Type         : 'UI.HeaderInfoType',
     TypeName      : '{i18n>Job}',
     TypeNamePlural: '{i18n>Jobs}',
@@ -111,7 +163,7 @@ annotate service.Job with @(
     },
     Description   : {Value: definition.name}
   },
-  UI.PresentationVariant     : {
+  UI.PresentationVariant       : {
     Visualizations: ['@UI.LineItem'],
     SortOrder     : [{
       $Type     : 'Common.SortOrderType',
@@ -119,9 +171,11 @@ annotate service.Job with @(
       Descending: true
     }]
   },
-  UI.SelectionFields         : [
+  UI.SelectionFields           : [
+    referenceID,
     definition_name,
     status_code,
+    testRun
   ],
 );
 

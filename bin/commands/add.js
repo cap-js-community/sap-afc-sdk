@@ -12,6 +12,7 @@ module.exports = {
       )
       .option("-b, --basic", "Basic mock support (default)")
       .option("-a, --advanced", "Advanced mock support")
+      .option("-x, --xremove", "Remove feature (supported for mock)")
       .addHelpText(
         "afterAll",
         `
@@ -25,6 +26,7 @@ Features:
 Examples:
   afc add broker
   afc add broker,sample,http
+  afc add -x mock
 `,
       );
   },
@@ -32,14 +34,24 @@ Examples:
     const features = (argument ?? "").split(",").map((f) => f.trim());
     const options = this.opts();
     module.exports.process(features, options);
-    console.log("Successfully added features to your project.");
+    if (!options.xremove) {
+      console.log("Successfully added features to your project.");
+    }
   },
   process: function (features, options) {
     for (const feature of features) {
       try {
+        if (options.xremove && !["mock"].includes(feature)) {
+          console.log("Feature removal is only supported for 'mock'");
+          continue;
+        }
         const featureFn = require(`../features/${feature}`);
-        console.log(`Adding feature '${feature}'`);
         featureFn(options);
+        if (!options.xremove) {
+          console.log(`Adding feature '${feature}'`);
+        } else {
+          console.log(`Removing feature '${feature}'`);
+        }
       } catch (err) {
         console.log(`Unknown feature '${feature}'`);
       }

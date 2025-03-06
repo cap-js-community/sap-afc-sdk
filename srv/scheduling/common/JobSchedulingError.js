@@ -3,6 +3,13 @@
 const BaseError = require("../../common/BaseError");
 
 class JobSchedulingError extends BaseError {
+  static accessOnlyViaParent() {
+    return new JobSchedulingError("accessOnlyViaParent", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
   static jobNotFound(ID) {
     return new JobSchedulingError("jobNotFound", {
       args: [ID],

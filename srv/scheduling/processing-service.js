@@ -52,11 +52,12 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     });
 
     this.on(processJob, async (req, next) => {
-      await this.processJobUpdate(req, JobStatus.running);
       const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
+      let results = [];
       if (processingConfig) {
-        await this.mockJobProcessing(req, processingConfig);
+        results = await this.mockJobProcessing(req, processingConfig);
       }
+      await this.processJobUpdate(req, JobStatus.running, results);
     });
 
     this.on(updateJob, async (req, next) => {
@@ -215,7 +216,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
   async mockJobProcessing(req, config) {
     let min = config.min ?? 0;
-    let max = config.max ?? 30;
+    let max = config.max ?? 10;
     const processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
     let processingStatus = config.default ?? JobStatus.completed;
     if (config.status && Object.keys(config.status).length > 0) {
@@ -227,18 +228,17 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const statusValue = Math.random() * (max - min) + min;
       let value = 0;
       for (const status of statuses) {
-        processingStatus = status;
-        value += config.status[status];
-        if (statusValue <= value) {
-          break;
+        if (value <= statusValue) {
+          processingStatus = status;
         }
+        value += config.status[status];
       }
     }
     const ID = req.data.ID;
-    const results = [];
+    const updateResults = [];
     switch (processingStatus) {
       case JobStatus.completed:
-        results.push(
+        updateResults.push(
           {
             type: ResultType.link,
             name: "Link",
@@ -257,7 +257,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         );
         break;
       case JobStatus.completedWithWarning:
-        results.push({
+        updateResults.push({
           type: ResultType.message,
           name: "Result",
           messages: [
@@ -269,7 +269,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         });
         break;
       case JobStatus.completedWithError:
-        results.push({
+        updateResults.push({
           type: ResultType.message,
           name: "Result",
           messages: [
@@ -281,21 +281,44 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         });
         break;
       case JobStatus.failed:
+        updateResults.push({
+          type: ResultType.message,
+          name: "Failure",
+          messages: [
+            {
+              text: "An error occurred during job processing",
+              severity: MessageSeverity.error,
+            },
+          ],
+        });
         break;
     }
-    const srv = cds.outboxed(this);
-    return await srv.send(
+    await cds.outboxed(this).send(
       "updateJob",
       {
         ID,
         status: processingStatus,
-        results,
+        results: updateResults,
       },
       {
         "x-eventQueue-referenceEntityKey": ID,
         "x-eventQueue-startAfter": new Date(Date.now() + processingTime),
       },
     );
+    const mockResults = [];
+    if (req.data.testRun) {
+      mockResults.push({
+        type: ResultType.message,
+        name: "Test Run",
+        messages: [
+          {
+            text: "Job is running in test mode",
+            severity: MessageSeverity.info,
+          },
+        ],
+      });
+    }
+    return mockResults;
   }
 
   /*async reportStatus(req, status) {

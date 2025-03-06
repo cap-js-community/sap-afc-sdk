@@ -4,14 +4,33 @@ const cds = require("@sap/cds");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 
-const { JobStatus } = require("./common/codelist");
+const { JobStatus, MappingType, DataType } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
-const { wildcard } = require("../../src/util/helper");
+const { wildcard, toMap } = require("../../src/util/helper");
 
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
-    const { JobDefinition, Job, JobParameter, JobResult } = this.entities;
+    const { JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } = this.entities;
     const { JobDefinition: DBJobDefinition, Job: DBJob, JobResult: DBJobResult } = this.entities("scheduling");
+
+    this.before("READ", [JobParameterDefinition, JobParameter, JobResultMessage], (req) => {
+      if (req.subject?.ref?.length <= 1) {
+        return req.reject(JobSchedulingError.accessOnlyViaParent());
+      }
+    });
+
+    this.before("READ", (req) => {
+      if (
+        req.query.SELECT.columns?.find((column) => {
+          return !column.expand;
+        })
+      ) {
+        req.query.SELECT.columns = req.query.SELECT.columns?.filter((column) => {
+          return !column.expand;
+        });
+        req.query.SELECT.__proto__.columns = req.query.SELECT.columns;
+      }
+    });
 
     this.before("READ", "*", (req) => {
       delete req.query.SELECT.where;
@@ -55,6 +74,39 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       req.query.orderBy("jobID asc", "name asc");
     });
 
+    this.on("READ", [JobParameterDefinition, JobParameter], async (req, next) => {
+      const data = await next();
+      let parameters = {};
+      if (req.data.jobName) {
+        const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
+          jobDefinition.name,
+            jobDefinition.parameters((jobParameterDefinition) => {
+              jobParameterDefinition.name, jobParameterDefinition.dataType;
+            });
+        }).where({ name: req.data.jobName });
+        parameters = toMap(jobDefinition.parameters);
+      }
+      if (req.data.jobID) {
+        const job = await SELECT.one(DBJob, (job) => {
+          job.ID,
+            job.definition((jobDefinition) => {
+              jobDefinition.name,
+                jobDefinition.parameters((jobParameterDefinition) => {
+                  jobParameterDefinition.name, jobParameterDefinition.dataType;
+                });
+            });
+        }).where({ ID: req.data.jobID });
+        parameters = toMap(job.definition.parameters);
+      }
+      for (const row of data) {
+        if (parameters[row.name]?.dataType_code === DataType.boolean) {
+          row.value = row.value === "true";
+        } else if (parameters[row.name]?.dataType_code === DataType.number) {
+          row.value = parseFloat(row.value);
+        }
+      }
+    });
+
     this.on("CREATE", Job, async (req) => {
       // Definition
       const definitionName = req.data.name;
@@ -62,10 +114,12 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         jobDefinition.name,
           jobDefinition.version,
           jobDefinition.supportsStartDateTime,
+          jobDefinition.supportsTestRun,
           jobDefinition.parameters((jobParameterDefinition) => {
             jobParameterDefinition.name,
               jobParameterDefinition.type,
               jobParameterDefinition.dataType,
+              jobParameterDefinition.mappingType,
               jobParameterDefinition.value,
               jobParameterDefinition.required;
           });
@@ -73,6 +127,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       if (!jobDefinition) {
         return req.reject(JobSchedulingError.jobDefinitionNotFound(definitionName));
       }
+      // Reference ID
       if (!req.data.referenceID) {
         return req.reject(JobSchedulingError.referenceIDMissing());
       }
@@ -82,7 +137,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         return req.reject(JobSchedulingError.jobResultsReadOnly());
       }
 
-      // Start Date & TIme
+      // Start Date & Time
       if (req.data.startDateTime && !jobDefinition.supportsStartDateTime) {
         return req.reject(JobSchedulingError.startDateTimeNotSupported(jobDefinition.name));
       }
@@ -132,16 +187,25 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
             parameter.value = jobParameterDefinition.value;
           }
         }
-        if (parameter.value === undefined && jobParameterDefinition.required) {
+        if ((parameter.value === null || parameter.value === undefined) && jobParameterDefinition.required) {
           return req.reject(JobSchedulingError.jobParameterValueRequired(parameter.name));
         }
         if (parameter.value !== null) {
           switch (jobParameterDefinition.dataType_code) {
             case "string":
             default:
+              if (typeof parameter.value !== "string") {
+                return req.reject(
+                  JobSchedulingError.jobParameterValueInvalidType(
+                    parameter.value,
+                    parameter.name,
+                    jobParameterDefinition.dataType_code,
+                  ),
+                );
+              }
               break;
             case "number":
-              if (String(parseFloat(parameter.value)) !== parameter.value) {
+              if (String(parseFloat(parameter.value)) !== String(parameter.value)) {
                 return req.reject(
                   JobSchedulingError.jobParameterValueInvalidType(
                     parameter.value,
@@ -163,7 +227,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
               }
               break;
             case "boolean":
-              if (!["true", "false"].includes(parameter.value)) {
+              if (!["true", "false"].includes(String(parameter.value))) {
                 return req.reject(
                   JobSchedulingError.jobParameterValueInvalidType(
                     parameter.value,
@@ -177,34 +241,47 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           job.parameters.push({
             definition_name: parameter.name,
             definition_job_name: job.definition_name,
-            value: parameter.value,
+            value: String(parameter.value),
           });
         }
       }
+
+      if (jobDefinition.supportsTestRun) {
+        const testRunParameterDefinition = jobDefinition.parameters.find((parameter) => {
+          return parameter.mappingType_code === MappingType.testRun;
+        });
+        const testRunParameter = job.parameters.find((parameter) => {
+          return parameter.definition_name === testRunParameterDefinition?.name;
+        });
+        job.testRun = testRunParameter?.value === "true";
+      }
+
+      req.jobDefinition = jobDefinition;
+      req.job = job;
 
       await INSERT.into(DBJob).entries(job);
       return await this.read(Job, job.ID);
     });
 
     this.after("CREATE", Job, async (data, req) => {
-      delete data.parameters;
       const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
       await schedulingWebsocketService.tx(req).emit("jobStatusChanged", {
         ID: data.ID,
         status: data.status,
       });
-
       const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
       await schedulingProcessingService.tx(req).send(
         "processJob",
         {
           ID: data.ID,
+          testRun: data.testRun,
         },
         {
           "x-eventQueue-startAfter": data.startDateTime,
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
+      delete data.parameters;
     });
 
     this.on(Job.actions.cancel, Job, async (req) => {

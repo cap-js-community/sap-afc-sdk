@@ -20,10 +20,12 @@ entity JobDefinition {
       @title: '{i18n>SupportsStartDateTime}'
       supportsStartDateTime : Boolean;
 
+      @title: '{i18n>SupportsTestRun}'
+      supportsTestRun       : Boolean;
+
       @title: '{i18n>Version}'
       version               : String not null;
 
-      @readonly
       @title: '{i18n>Parameters}'
       parameters            : Composition of many JobParameterDefinition
                                 on parameters.job = $self;
@@ -56,7 +58,14 @@ entity JobParameterDefinition {
       required    : Boolean not null default false;
 };
 
-@title: '{i18n>Job}'
+@title     : '{i18n>Job}'
+@cds.search: {
+  ID             : true,
+  referenceID    : true,
+  definition.name: true,
+  version        : true,
+  link           : true
+}
 entity Job : cuid, managed {
   @title: '{i18n>ReferenceID}'
   referenceID   : UUID not null;
@@ -78,6 +87,10 @@ entity Job : cuid, managed {
   @readonly
   @title: '{i18n>Status}'
   status        : Association to JobStatus not null default #requested;
+
+  @readonly
+  @title: '{i18n>TestRun}'
+  testRun       : Boolean;
 
   @title: '{i18n>Parameters}'
   parameters    : Composition of many JobParameter

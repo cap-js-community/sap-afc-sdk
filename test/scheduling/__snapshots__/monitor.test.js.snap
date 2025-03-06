@@ -99,6 +99,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="description" Type="Edm.String"/>
         <Property Name="longDescription" Type="Edm.String"/>
         <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
+        <Property Name="supportsTestRun" Type="Edm.Boolean"/>
         <Property Name="version" Type="Edm.String" Nullable="false"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
           <OnDelete Action="Cascade"/>
@@ -151,6 +152,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="status_code" Type="Edm.String" Nullable="false" DefaultValue="requested"/>
+        <Property Name="testRun" Type="Edm.Boolean"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameter)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -396,6 +398,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
         <Annotation Term="Common.Label" String="Supports Start Date &amp; Time"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsTestRun">
+        <Annotation Term="Common.Label" String="Supports Test Run"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
         <Annotation Term="Common.Label" String="Version"/>
       </Annotations>
@@ -532,34 +537,62 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
-        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+        <Annotation Term="UI.FieldGroup" Qualifier="General">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
               <Collection>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="ID"/>
+                  <PropertyValue Property="Value" Path="definition_name"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="definition_name"/>
+                  <PropertyValue Property="Value" Path="version"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/description"/>
                 </Record>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="definition/longDescription"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="version"/>
+                  <PropertyValue Property="Value" Path="referenceID"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="status_code"/>
                 </Record>
                 <Record Type="UI.DataFieldWithUrl">
                   <PropertyValue Property="Value" Path="link"/>
                   <PropertyValue Property="Url" Path="link"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="status_code"/>
+                  <PropertyValue Property="Value" Path="testRun"/>
                 </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Administrative">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="modifiedAt"/>
                 </Record>
                 <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="modifiedBy"/>
+                </Record>
+                <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="createdAt"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="createdBy"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -572,6 +605,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="definition/supportsStartDateTime"/>
                 </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/supportsTestRun"/>
+                </Record>
               </Collection>
             </PropertyValue>
           </Record>
@@ -579,8 +615,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="General"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
               <PropertyValue Property="Label" String="Details"/>
               <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="Administrative"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Administrative"/>
             </Record>
           </Collection>
         </Annotation>
@@ -636,14 +680,19 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="UI.SelectionFields">
           <Collection>
+            <PropertyPath>referenceID</PropertyPath>
             <PropertyPath>definition_name</PropertyPath>
             <PropertyPath>status_code</PropertyPath>
+            <PropertyPath>testRun</PropertyPath>
           </Collection>
         </Annotation>
         <Annotation Term="UI.LineItem">
           <Collection>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="ID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="referenceID"/>
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="definition_name"/>
@@ -659,6 +708,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
             <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="createdAt"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="testRun"/>
             </Record>
           </Collection>
           <Annotation Term="UI.Criticality" Path="criticality"/>
@@ -803,6 +855,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </PropertyValue>
           </Record>
         </Annotation>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/testRun">
+        <Annotation Term="Common.Label" String="Test Run"/>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/parameters">
@@ -2449,11 +2505,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "dataType_code": "boolean",
           "description": "Parameter C",
           "job_name": "JOB_1",
-          "mappingType_code": "testRun",
+          "mappingType_code": null,
           "name": "C",
           "required": true,
-          "type_code": "mapping",
-          "value": "0",
+          "type_code": "writableValue",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2477,6 +2533,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -2512,7 +2569,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2536,6 +2593,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         },
       ],
       "supportsStartDateTime": true,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -2571,7 +2629,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2595,6 +2653,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -2654,6 +2713,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -2662,6 +2722,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
       "name": "JOB_5",
       "parameters": [],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
   ],
@@ -2699,11 +2760,11 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
       "dataType_code": "boolean",
       "description": "Parameter C",
       "job_name": "JOB_1",
-      "mappingType_code": "testRun",
+      "mappingType_code": null,
       "name": "C",
       "required": true,
-      "type_code": "mapping",
-      "value": "0",
+      "type_code": "writableValue",
+      "value": null,
     },
     {
       "dataType_code": "number",
@@ -2727,6 +2788,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     },
   ],
   "supportsStartDateTime": false,
+  "supportsTestRun": false,
   "version": "1",
 }
 `;
@@ -2762,11 +2824,11 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
       "dataType_code": "boolean",
       "description": "Parameter C",
       "job_name": "JOB_1",
-      "mappingType_code": "testRun",
+      "mappingType_code": null,
       "name": "C",
       "required": true,
-      "type_code": "mapping",
-      "value": "0",
+      "type_code": "writableValue",
+      "value": null,
     },
     {
       "dataType_code": "number",
@@ -2790,6 +2852,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     },
   ],
   "supportsStartDateTime": false,
+  "supportsTestRun": false,
   "version": "1",
 }
 `;
@@ -2827,11 +2890,11 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "dataType_code": "boolean",
           "description": "Parameter C",
           "job_name": "JOB_1",
-          "mappingType_code": "testRun",
+          "mappingType_code": null,
           "name": "C",
           "required": true,
-          "type_code": "mapping",
-          "value": "0",
+          "type_code": "writableValue",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2855,6 +2918,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -2890,7 +2954,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2914,6 +2978,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
         },
       ],
       "supportsStartDateTime": true,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -2949,7 +3014,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -2973,6 +3038,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -3032,6 +3098,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -3040,6 +3107,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
       "name": "JOB_5",
       "parameters": [],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
   ],
@@ -3079,11 +3147,11 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "dataType_code": "boolean",
           "description": "Parameter C",
           "job_name": "JOB_1",
-          "mappingType_code": "testRun",
+          "mappingType_code": null,
           "name": "C",
           "required": true,
-          "type_code": "mapping",
-          "value": "0",
+          "type_code": "writableValue",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -3107,6 +3175,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -3142,7 +3211,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -3166,6 +3235,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
         },
       ],
       "supportsStartDateTime": true,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -3201,7 +3271,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "name": "C",
           "required": true,
           "type_code": "mapping",
-          "value": "0",
+          "value": null,
         },
         {
           "dataType_code": "number",
@@ -3225,6 +3295,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": true,
       "version": "1",
     },
     {
@@ -3284,6 +3355,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
         },
       ],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
     {
@@ -3292,6 +3364,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
       "name": "JOB_5",
       "parameters": [],
       "supportsStartDateTime": false,
+      "supportsTestRun": false,
       "version": "1",
     },
   ],
@@ -3336,6 +3409,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
       "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
       "startDateTime": "2025-01-01T12:00:00Z",
       "status_code": "requested",
+      "testRun": false,
       "version": "1",
     },
     {
@@ -3372,6 +3446,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
       "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
       "startDateTime": "2025-01-02T12:00:00Z",
       "status_code": "running",
+      "testRun": true,
       "version": "1",
     },
     {
@@ -3408,6 +3483,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
       "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
       "startDateTime": "2025-01-02T12:00:00Z",
       "status_code": "completedWithError",
+      "testRun": false,
       "version": "1",
     },
   ],
@@ -3450,6 +3526,7 @@ exports[`Monitoring Service Get Jobs 2`] = `
   "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status_code": "requested",
+  "testRun": false,
   "version": "1",
 }
 `;

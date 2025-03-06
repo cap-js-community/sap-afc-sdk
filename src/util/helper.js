@@ -32,9 +32,17 @@ function wildcard(value) {
   });
 }
 
+function toMap(array, key = "name") {
+  return array.reduce((map, item) => {
+    map[item[key]] = item;
+    return map;
+  }, {});
+}
+
 module.exports = {
   mergeDeep,
   isObject,
   toObject,
   wildcard,
+  toMap,
 };

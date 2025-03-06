@@ -71,7 +71,10 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const jobResultID = jobResult[0].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
+    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
   it("processJob - simple mock - completed with warning", async () => {
@@ -98,7 +101,10 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithWarning);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const jobResultID = jobResult[0].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
+    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
   it("processJob - simple mock - completed with error", async () => {
@@ -125,7 +131,10 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithError);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const jobResultID = jobResult[0].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
+    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
   it("processJob - simple mock - failed", async () => {
@@ -152,7 +161,10 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.failed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const jobResultID = jobResult[0].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
+    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
   it("processJob - advanced mock", async () => {

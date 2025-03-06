@@ -21,7 +21,7 @@ service SchedulingProcessingService {
     severity : MessageSeverityCode not null;
   };
 
-  action processJob(ID : String);
+  action processJob(ID : String, testRun : Boolean);
   action updateJob(ID : String, status : JobStatusCode, results : many JobResult);
   action cancelJob(ID : String);
 }
