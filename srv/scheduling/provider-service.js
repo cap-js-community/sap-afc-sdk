@@ -11,7 +11,7 @@ const { wildcard, toMap } = require("../../src/util/helper");
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
     const { JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } = this.entities;
-    const { JobDefinition: DBJobDefinition, Job: DBJob, JobResult: DBJobResult } = this.entities("scheduling");
+    const { JobDefinition: DBJobDefinition, Job: DBJob } = this.entities("scheduling");
 
     this.before("READ", [JobParameterDefinition, JobParameter, JobResultMessage], (req) => {
       if (req.subject?.ref?.length <= 1) {
@@ -19,23 +19,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
-    this.before("READ", (req) => {
-      if (
-        req.query.SELECT.columns?.find((column) => {
-          return !column.expand;
-        })
-      ) {
-        req.query.SELECT.columns = req.query.SELECT.columns?.filter((column) => {
-          return !column.expand;
-        });
-        req.query.SELECT.__proto__.columns = req.query.SELECT.columns;
-      }
-    });
-
     this.before("READ", "*", (req) => {
       delete req.query.SELECT.where;
       delete req.query.SELECT.orderBy;
       delete req.query.SELECT.columns;
+      delete req.query.SELECT.__proto__.columns;
       delete req.query.SELECT.limit;
       if (req.req?.query?.skip && isNaN(req.req?.query?.skip)) {
         return req.reject(JobSchedulingError.invalidOptionSkip(req.req.query.skip));
@@ -183,14 +171,14 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           ) {
             return req.reject(JobSchedulingError.jobParameterReadOnly(jobParameterDefinition.name));
           }
-          if (parameter.value === undefined) {
-            parameter.value = jobParameterDefinition.value;
-          }
+        }
+        if (parameter.value === undefined) {
+          parameter.value = jobParameterDefinition.value;
         }
         if ((parameter.value === null || parameter.value === undefined) && jobParameterDefinition.required) {
           return req.reject(JobSchedulingError.jobParameterValueRequired(parameter.name));
         }
-        if (parameter.value !== null) {
+        if (parameter.value !== null && parameter.value !== undefined) {
           switch (jobParameterDefinition.dataType_code) {
             case "string":
             default:
@@ -203,6 +191,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
+              parameter.value = String(parameter.value);
               break;
             case "number":
               if (String(parseFloat(parameter.value)) !== String(parameter.value)) {
@@ -214,6 +203,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
+              parameter.value = parseFloat(parameter.value);
               break;
             case "datetime":
               if (isNaN(new Date(parameter.value).getTime())) {
@@ -225,6 +215,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
+              parameter.value = new Date(parameter.value).toISOString();
               break;
             case "boolean":
               if (!["true", "false"].includes(String(parameter.value))) {
@@ -236,14 +227,15 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
+              parameter.value = String(parameter.value) === "true";
               break;
           }
-          job.parameters.push({
-            definition_name: parameter.name,
-            definition_job_name: job.definition_name,
-            value: String(parameter.value),
-          });
         }
+        job.parameters.push({
+          definition_name: parameter.name,
+          definition_job_name: job.definition_name,
+          value: parameter.value,
+        });
       }
 
       if (jobDefinition.supportsTestRun) {
@@ -253,13 +245,13 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         const testRunParameter = job.parameters.find((parameter) => {
           return parameter.definition_name === testRunParameterDefinition?.name;
         });
-        job.testRun = testRunParameter?.value === "true";
+        job.testRun = !!testRunParameter?.value;
       }
 
       req.jobDefinition = jobDefinition;
       req.job = job;
 
-      await INSERT.into(DBJob).entries(job);
+      await this.createJob(req, job);
       return await this.read(Job, job.ID);
     });
 
@@ -325,21 +317,41 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       );
     });
 
-    this.on(JobResult.actions.data, JobResult, async (req) => {
+    this.before(JobResult.actions.data, JobResult, async (req) => {
       const ID = req.params[0];
       const jobResult = await SELECT.one(JobResult).where({ ID });
       if (!jobResult) {
         return req.reject(JobSchedulingError.jobResultNotFound(ID));
       }
-      const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
-      return {
-        value: data,
-        $mediaContentType: jobResult.mimeType,
-        $mediaContentDispositionFilename: jobResult.filename,
-        $mediaContentDispositionType: "attachment",
-      };
+      req.jobResult = jobResult;
+    });
+
+    this.on(JobResult.actions.data, JobResult, async (req) => {
+      const ID = req.params[0];
+      return await this.downloadData(req, ID);
     });
 
     return super.init();
+  }
+
+  async createJob(req, job) {
+    const { Job: DBJob } = this.entities("scheduling");
+    for (const parameter of job.parameters) {
+      if (parameter.value !== null) {
+        parameter.value = String(parameter.value);
+      }
+    }
+    await INSERT.into(DBJob).entries(job);
+  }
+
+  async downloadData(req, ID) {
+    const { JobResult: DBJobResult } = this.entities("scheduling");
+    const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
+    return {
+      value: data,
+      $mediaContentType: req.jobResult.mimeType,
+      $mediaContentDispositionFilename: req.jobResult.filename,
+      $mediaContentDispositionType: DBJobResult.elements.data?.["@Core.ContentDisposition.Type"] ?? "attachment",
+    };
   }
 };

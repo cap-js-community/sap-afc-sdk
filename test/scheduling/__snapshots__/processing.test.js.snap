@@ -4,6 +4,13 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
 [
   {
     "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Basic Mocked Run",
+    "type_code": "message",
+  },
+  {
+    "filename": null,
     "link": "https://sap.com",
     "mimeType": null,
     "name": "Link",
@@ -19,10 +26,35 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed 2`] = `[]`;
+exports[`Processing Service processJob - simple mock - completed 2`] = `
+[
+  {
+    "severity_code": "info",
+    "text": "Job is running in basic mock mode",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - completed 3`] = `[]`;
+
+exports[`Processing Service processJob - simple mock - completed 4`] = `
+[
+  {
+    "severity_code": "info",
+    "text": "Job completed successfully",
+  },
+]
+`;
 
 exports[`Processing Service processJob - simple mock - completed with error 1`] = `
 [
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Basic Mocked Run",
+    "type_code": "message",
+  },
   {
     "filename": null,
     "link": null,
@@ -36,14 +68,30 @@ exports[`Processing Service processJob - simple mock - completed with error 1`] 
 exports[`Processing Service processJob - simple mock - completed with error 2`] = `
 [
   {
+    "severity_code": "info",
+    "text": "Job is running in basic mock mode",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - completed with error 3`] = `
+[
+  {
     "severity_code": "error",
-    "text": "An error occurred during job processing",
+    "text": "Job completed. An error occurred during job processing",
   },
 ]
 `;
 
 exports[`Processing Service processJob - simple mock - completed with warning 1`] = `
 [
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Basic Mocked Run",
+    "type_code": "message",
+  },
   {
     "filename": null,
     "link": null,
@@ -57,14 +105,30 @@ exports[`Processing Service processJob - simple mock - completed with warning 1`
 exports[`Processing Service processJob - simple mock - completed with warning 2`] = `
 [
   {
+    "severity_code": "info",
+    "text": "Job is running in basic mock mode",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - completed with warning 3`] = `
+[
+  {
     "severity_code": "warning",
-    "text": "A warning occurred during job processing",
+    "text": "Job completed. A warning occurred during job processing",
   },
 ]
 `;
 
 exports[`Processing Service processJob - simple mock - failed 1`] = `
 [
+  {
+    "filename": null,
+    "link": null,
+    "mimeType": null,
+    "name": "Basic Mocked Run",
+    "type_code": "message",
+  },
   {
     "filename": null,
     "link": null,
@@ -78,8 +142,17 @@ exports[`Processing Service processJob - simple mock - failed 1`] = `
 exports[`Processing Service processJob - simple mock - failed 2`] = `
 [
   {
+    "severity_code": "info",
+    "text": "Job is running in basic mock mode",
+  },
+]
+`;
+
+exports[`Processing Service processJob - simple mock - failed 3`] = `
+[
+  {
     "severity_code": "error",
-    "text": "An error occurred during job processing",
+    "text": "Job failed. An error occurred during job processing",
   },
 ]
 `;

@@ -79,7 +79,7 @@
     "@sap/cds-dk": "^8.8.0",
     "@sap/cds-lsp": "^8.8.0",
     "eslint": "^9.20.1",
-    "eslint-config-prettier": "^10.0.2",
+    "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-n": "^17.16.2",
     "globals": "^16.0.0",
@@ -199,6 +199,18 @@
             ]
           }
         }
+      },
+      "i18n": {
+        "preserved_locales": [
+          "zh_CN",
+          "zh_TW"
+        ],
+        "folders": [
+          "i18n",
+          "_i18n",
+          "/node_modules/@cap-js-community/sap-afc-sdk/srv/i18n",
+          "/node_modules/@cap-js-community/sap-afc-sdk/srv/scheduling/i18n"
+        ]
       }
     }
   },

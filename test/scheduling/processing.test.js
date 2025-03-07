@@ -71,9 +71,15 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID = jobResult[0].ID;
+    const jobResultID1 = jobResult[0].ID;
+    const jobResultID2 = jobResult[1].ID;
+    const jobResultID3 = jobResult[2].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
-    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID3 });
     expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
@@ -101,9 +107,12 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithWarning);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID = jobResult[0].ID;
+    const jobResultID1 = jobResult[0].ID;
+    const jobResultID2 = jobResult[1].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
-    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
     expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
@@ -131,9 +140,12 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithError);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID = jobResult[0].ID;
+    const jobResultID1 = jobResult[0].ID;
+    const jobResultID2 = jobResult[1].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
-    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
     expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 
@@ -161,9 +173,12 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.failed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID = jobResult[0].ID;
+    const jobResultID1 = jobResult[0].ID;
+    const jobResultID2 = jobResult[1].ID;
     expect(cleanData(jobResult)).toMatchSnapshot();
-    const jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID });
+    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
+    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
     expect(cleanData(jobResultMessages)).toMatchSnapshot();
   });
 

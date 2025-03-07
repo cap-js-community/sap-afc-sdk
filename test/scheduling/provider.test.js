@@ -250,6 +250,10 @@ describe("API", () => {
           name: "C",
           value: "true",
         },
+        {
+          name: "E",
+          value: null,
+        },
       ],
     });
     expect(response.status).toBe(201);
@@ -384,9 +388,13 @@ describe("API", () => {
     expect(entry.payload).toMatch(/"testRun":true/);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
-    const resultID = response.data[0].ID;
+    const resultID1 = response.data[0].ID;
+    const resultID2 = response.data[1].ID;
     expect(cleanData(response.data[0])).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID}/messages`);
+    expect(cleanData(response.data[1])).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 

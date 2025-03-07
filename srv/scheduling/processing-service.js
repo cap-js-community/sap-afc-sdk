@@ -219,6 +219,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     let max = config.max ?? 10;
     const processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
     let processingStatus = config.default ?? JobStatus.completed;
+    let advancedMock = false;
     if (config.status && Object.keys(config.status).length > 0) {
       const statuses = Object.keys(config.status);
       min = 0;
@@ -233,17 +234,13 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         }
         value += config.status[status];
       }
+      advancedMock = true;
     }
     const ID = req.data.ID;
     const updateResults = [];
     switch (processingStatus) {
       case JobStatus.completed:
         updateResults.push(
-          {
-            type: ResultType.link,
-            name: "Link",
-            link: "https://sap.com",
-          },
           {
             type: ResultType.message,
             name: "Result",
@@ -254,6 +251,11 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
               },
             ],
           },
+          {
+            type: ResultType.link,
+            name: "Link",
+            link: "https://sap.com",
+          },
         );
         break;
       case JobStatus.completedWithWarning:
@@ -262,7 +264,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           name: "Result",
           messages: [
             {
-              text: "A warning occurred during job processing",
+              text: "Job completed. A warning occurred during job processing",
               severity: MessageSeverity.warning,
             },
           ],
@@ -274,7 +276,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           name: "Result",
           messages: [
             {
-              text: "An error occurred during job processing",
+              text: "Job completed. An error occurred during job processing",
               severity: MessageSeverity.error,
             },
           ],
@@ -286,7 +288,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           name: "Failure",
           messages: [
             {
-              text: "An error occurred during job processing",
+              text: "Job failed. An error occurred during job processing",
               severity: MessageSeverity.error,
             },
           ],
@@ -306,6 +308,29 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       },
     );
     const mockResults = [];
+    if (advancedMock) {
+      mockResults.push({
+        type: ResultType.message,
+        name: "Advanced Mocked Run",
+        messages: [
+          {
+            text: "Job is running in advanced mock mode",
+            severity: MessageSeverity.info,
+          },
+        ],
+      });
+    } else {
+      mockResults.push({
+        type: ResultType.message,
+        name: "Basic Mocked Run",
+        messages: [
+          {
+            text: "Job is running in basic mock mode",
+            severity: MessageSeverity.info,
+          },
+        ],
+      });
+    }
     if (req.data.testRun) {
       mockResults.push({
         type: ResultType.message,

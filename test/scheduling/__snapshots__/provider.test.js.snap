@@ -40,7 +40,7 @@ exports[`API Create Job (JSON data types) 3`] = `
   },
   {
     "name": "E",
-    "value": "2025-01-01T00:00:00Z",
+    "value": "2025-01-01T00:00:00.000Z",
   },
 ]
 `;
@@ -85,7 +85,7 @@ exports[`API Create Job (advanced) 3`] = `
   },
   {
     "name": "E",
-    "value": "2025-01-01T00:00:00Z",
+    "value": "2025-01-01T00:00:00.000Z",
   },
 ]
 `;
@@ -119,12 +119,31 @@ exports[`API Create Job (test run) 2`] = `
   "filename": null,
   "link": null,
   "mimeType": null,
-  "name": "Test Run",
+  "name": "Basic Mocked Run",
   "type": "message",
 }
 `;
 
 exports[`API Create Job (test run) 3`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Test Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (test run) 4`] = `
+[
+  {
+    "severity": "info",
+    "text": "Job is running in basic mock mode",
+  },
+]
+`;
+
+exports[`API Create Job (test run) 5`] = `
 [
   {
     "severity": "info",
