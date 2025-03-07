@@ -94,7 +94,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
-    this.on("CREATE", Job, async (req) => {
+    this.before("CREATE", Job, async (req) => {
       // Definition
       const definitionName = req.data.name;
       const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
@@ -166,7 +166,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           if (
             jobParameterDefinition.type_code === "readOnlyValue" &&
             parameter.value !== undefined &&
-            parameter.value !== jobParameterDefinition.value
+            String(parameter.value) !== String(jobParameterDefinition.value)
           ) {
             return req.reject(JobSchedulingError.jobParameterReadOnly(jobParameterDefinition.name));
           }
@@ -249,9 +249,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
       req.jobDefinition = jobDefinition;
       req.job = job;
+    });
 
-      await this.createJob(req, job);
-      return await this.read(Job, job.ID);
+    this.on("CREATE", Job, async (req) => {
+      await this.createJob(req, req.job);
+      return await this.read(Job, req.job.ID);
     });
 
     this.after("CREATE", Job, async (data, req) => {

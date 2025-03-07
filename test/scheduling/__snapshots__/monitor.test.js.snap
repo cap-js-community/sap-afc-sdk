@@ -2619,7 +2619,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "name": "B",
           "required": false,
           "type_code": "readOnlyValue",
-          "value": "23",
+          "value": "25",
         },
         {
           "dataType_code": "boolean",
@@ -3004,7 +3004,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "name": "B",
           "required": false,
           "type_code": "readOnlyValue",
-          "value": "23",
+          "value": "25",
         },
         {
           "dataType_code": "boolean",
@@ -3261,7 +3261,7 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "name": "B",
           "required": false,
           "type_code": "readOnlyValue",
-          "value": "23",
+          "value": "25",
         },
         {
           "dataType_code": "boolean",

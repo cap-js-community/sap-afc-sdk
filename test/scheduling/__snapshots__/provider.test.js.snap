@@ -31,6 +31,10 @@ exports[`API Create Job (JSON data types) 3`] = `
     "value": "abcd",
   },
   {
+    "name": "B",
+    "value": 23,
+  },
+  {
     "name": "C",
     "value": true,
   },

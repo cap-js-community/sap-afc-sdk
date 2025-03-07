@@ -328,6 +328,10 @@ describe("API", () => {
           value: "abcd",
         },
         {
+          name: "B",
+          value: 23,
+        },
+        {
           name: "C",
           value: true,
         },
