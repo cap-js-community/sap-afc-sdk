@@ -92,6 +92,14 @@
     "server": {
       "index": true
     },
+    "i18n": {
+      "folders": [
+        "i18n",
+        "_i18n",
+        "/node_modules/@cap-js-community/sap-afc-sdk/srv/i18n",
+        "/node_modules/@cap-js-community/sap-afc-sdk/srv/scheduling/i18n"
+      ]
+    },
     "websocket": {
       "kind": "ws",
       "[production]": {
@@ -199,18 +207,6 @@
             ]
           }
         }
-      },
-      "i18n": {
-        "preserved_locales": [
-          "zh_CN",
-          "zh_TW"
-        ],
-        "folders": [
-          "i18n",
-          "_i18n",
-          "/node_modules/@cap-js-community/sap-afc-sdk/srv/i18n",
-          "/node_modules/@cap-js-community/sap-afc-sdk/srv/scheduling/i18n"
-        ]
       }
     }
   },

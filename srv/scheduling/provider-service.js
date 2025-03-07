@@ -22,8 +22,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     this.before("READ", "*", (req) => {
       delete req.query.SELECT.where;
       delete req.query.SELECT.orderBy;
-      delete req.query.SELECT.columns;
-      delete req.query.SELECT.__proto__.columns;
+      req.query.SELECT.columns = ["*"];
       delete req.query.SELECT.limit;
       if (req.req?.query?.skip && isNaN(req.req?.query?.skip)) {
         return req.reject(JobSchedulingError.invalidOptionSkip(req.req.query.skip));
