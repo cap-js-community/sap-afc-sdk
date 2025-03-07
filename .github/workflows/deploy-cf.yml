@@ -1,5 +1,9 @@
 # This workflow will set up a test project based on SDK and deploy to Cloud Foundry
 name: Test Deploy CF
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   workflow_run:
     workflows: ["Main CI"]
