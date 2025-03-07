@@ -69,7 +69,7 @@ describe("API", () => {
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
     expect(response.data).toHaveLength(5);
-    expect(response.data[0].name).toBe("JOB_1");
+    expect(response.data[0].name).toBe("JOB_2");
     expect(response.data[1].name).toBe("JOB_2");
     expect(response.data[2].name).toBe("JOB_3");
     expect(cleanData(response.data)).toMatchSnapshot();

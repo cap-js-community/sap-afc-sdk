@@ -7,13 +7,13 @@ on:
       - completed
     branches:
       - main
-    conclusion: success
   workflow_dispatch:
 
 env:
   NODE_OPTIONS: --use-openssl-ca
 jobs:
   default:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
