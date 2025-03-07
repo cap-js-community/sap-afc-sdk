@@ -7,7 +7,7 @@ on:
       - completed
     branches:
       - main
-  conclusion: success
+    conclusion: success
   workflow_dispatch:
 
 env:
