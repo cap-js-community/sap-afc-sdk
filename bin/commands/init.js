@@ -113,7 +113,11 @@ Examples:
         return content;
       });
       adjustText("containerize.yaml", (content) => {
-        content = replaceTextPart(content, "<your-container-registry>", process.env.CONTAINER_REPOSITORY || "docker.io/abc123");
+        content = replaceTextPart(
+          content,
+          "<your-container-registry>",
+          process.env.CONTAINER_REPOSITORY || "docker.io/abc123",
+        );
         for (const app of appStubs) {
           let part = `--prefix app/${app}`;
           let replacement = `--prefix node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;

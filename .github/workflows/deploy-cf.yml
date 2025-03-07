@@ -1,5 +1,5 @@
 # This workflow will set up a test project based on SDK and deploy to Cloud Foundry
-name: Test Deploy
+name: Test Deploy CF
 on:
   workflow_run:
     workflows: ["Main CI"]
@@ -7,7 +7,7 @@ on:
       - completed
     branches:
       - main
-    conclusion: success
+  conclusion: success
   workflow_dispatch:
 
 env:

@@ -396,7 +396,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Long Description"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
-        <Annotation Term="Common.Label" String="Supports Start Date &amp; Time"/>
+        <Annotation Term="Common.Label" String="Supports Start Date and Time"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsTestRun">
         <Annotation Term="Common.Label" String="Supports Test Run"/>
