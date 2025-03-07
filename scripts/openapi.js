@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 
-const DEFAULT_RESPONSES = require("./default-responses");
+const DEFAULT_RESPONSES = require("./assets/default-responses");
 
 (() => {
   const check = ["--check", "-c"].includes(process.argv?.[2]);

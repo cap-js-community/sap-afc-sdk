@@ -21,6 +21,6 @@
     "afc": ["broker", "mock", "sample", "http"]
   },
   "options": {
-    "cds": "--for production"
+    "cds": "--for production --y"
   }
 }

@@ -74,6 +74,17 @@ Examples:
           appStubs.push(app);
         }
       }
+      // Project
+      adjustJSON("package.json", (json) => {
+        json.sapux ??= [];
+        for (const app of config.apps) {
+          if (!json.sapux.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
+            json.sapux.push(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
+          }
+        }
+      });
+
+      // cds add
       shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
 
       // Cleanup app stubs
@@ -99,7 +110,19 @@ Examples:
       // Kyma
       adjustText("chart/values.yaml", (content) => {
         content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
-        // TODO: Containerize (CDS 8.8)
+        return content;
+      });
+      adjustText("containerize.yaml", (content) => {
+        content = replaceTextPart(content, "<your-container-registry>", process.env.CONTAINER_REPOSITORY || "docker.io/abc123");
+        for (const app of appStubs) {
+          let part = `--prefix app/${app}`;
+          let replacement = `--prefix node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
+          content = replaceTextPart(content, part, replacement);
+          content = replaceTextPart(content, part, replacement);
+          part = `cp -f app/${app}`;
+          replacement = `cp -f node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
+          content = replaceTextPart(content, part, replacement);
+        }
         return content;
       });
 
