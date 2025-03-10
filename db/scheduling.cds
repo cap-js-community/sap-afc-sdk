@@ -7,6 +7,7 @@ using {
 } from '@sap/cds/common';
 
 @title: '{i18n>JobDefinition}'
+@cds.replicate
 entity JobDefinition {
       @title: '{i18n>Name}'
   key name                  : String not null;
@@ -32,6 +33,7 @@ entity JobDefinition {
 };
 
 @title: '{i18n>JobParameterDefinition}'
+@cds.replicate
 entity JobParameterDefinition {
       @title: '{i18n>Name}'
   key name        : String;

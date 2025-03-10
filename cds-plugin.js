@@ -13,6 +13,7 @@ const toggles = require("@cap-js-community/feature-toggle-library");
 const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
 const { mergeDeep, toObject } = require("./src/util/helper");
+const ReplicationCache = require("./src/util/replicationCache");
 
 const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
@@ -30,6 +31,7 @@ cds.on("bootstrap", () => {
 
 cds.on("connect", (srv) => {
   if (srv.name === "db") {
+    new ReplicationCache(srv);
     registerAfterReadJobFillLink(srv);
   }
 });
