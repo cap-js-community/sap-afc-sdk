@@ -615,7 +615,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.HeaderFacets">
           <Collection>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="Label" String="General"/>
+              <PropertyValue Property="Label" String="General Information"/>
               <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
             </Record>
             <Record Type="UI.ReferenceFacet">
@@ -623,7 +623,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
             </Record>
             <Record Type="UI.ReferenceFacet">
-              <PropertyValue Property="Label" String="Administrative"/>
+              <PropertyValue Property="Label" String="Administrative Information"/>
               <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Administrative"/>
             </Record>
           </Collection>

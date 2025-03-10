@@ -335,13 +335,7 @@ As part of the custom scheduling process service implementation, the following o
   - Call `await next()` to perform default implementation (set status to `running`)
   - Job update can be performed via `this.processJobUpdate()` providing the new status and job results
     - e.g. `await this.processJobUpdate(req, JobStatus.completed, [{...}])`
-  - `processJobUpdate` will materialize job results (incl. binaries) per default in memory
-  - For larger result sets and binary data, consider inserting direct modification of entity `scheduling.JobResult`
-    - Insert instance for `scheduling.JobResult`
-    - Updating `data` element of instance with binary data stream in CDS QL:
-      ```cds
-      UPDATE.entity("scheduling.JobResult").set({ data: stream }).where({ ID: jobResultID });
-      ```
+  - `processJobUpdate` result `data` property shall contain stream objects to prevent data materialization
   - Throwing exceptions will automatically trigger the retry process in Event Queue
   - Disable mocked job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
 - `on(updateJob)`:
