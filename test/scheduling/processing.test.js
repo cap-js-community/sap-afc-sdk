@@ -368,7 +368,7 @@ describe("Processing Service", () => {
         name: "Stream",
         filename: "test.txt",
         mimeType: "text/plain",
-        data: Readable.from("This is a test"),
+        data: Readable.from("This is a test", { objectMode: false }),
       },
     ]);
     expect(result).toBeUndefined();
