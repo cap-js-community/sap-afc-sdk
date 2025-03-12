@@ -192,6 +192,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static codeMissing() {
+    return new JobSchedulingError("codeMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
   static textMissing() {
     return new JobSchedulingError("textMissing", {
       args: [],

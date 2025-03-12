@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Helper labelLocales 1`] = `
+[
+  "ar",
+  "bg",
+  "cs",
+  "da",
+  "de",
+  "el",
+  "en",
+  "en_US_saptrc",
+  "es",
+  "es_MX",
+  "fi",
+  "fr",
+  "he",
+  "hr",
+  "hu",
+  "it",
+  "ja",
+  "kk",
+  "ko",
+  "ms",
+  "nl",
+  "no",
+  "pl",
+  "pt",
+  "ro",
+  "ru",
+  "sh",
+  "sk",
+  "sl",
+  "sv",
+  "th",
+  "tr",
+  "uk",
+  "zh_CN",
+  "zh_TW",
+]
+`;
+
+exports[`Helper messageLocales 1`] = `
+[
+  "en",
+]
+`;

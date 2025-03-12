@@ -1,11 +1,12 @@
 "use strict";
 
 const cds = require("@sap/cds");
+const { Readable } = require("stream");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
-
-const { JobStatus, ResultType, MessageSeverity } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
+const { JobStatus, ResultType, MessageSeverity } = require("./common/codelist");
+const { messageLocales } = require("../../src/util/helper");
 
 const STATUS_TRANSITIONS = {
   [JobStatus.requested]: [JobStatus.running, JobStatus.cancelRequested, JobStatus.canceled],
@@ -111,6 +112,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async checkJobResults(req, results) {
+    const locales = messageLocales();
     const job = req.job;
     return results.map((result) => {
       if (!result.name) {
@@ -159,14 +161,32 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             return req.reject(JobSchedulingError.messagesMissing());
           }
           for (const message of result.messages) {
+            if (!message.code) {
+              return req.reject(JobSchedulingError.codeMissing());
+            }
             if (!message.text) {
-              return req.reject(JobSchedulingError.textMissing());
+              const text = cds.i18n.messages.at(message.code);
+              if (!text) {
+                return req.reject(JobSchedulingError.textMissing());
+              }
+              message.text = text;
+            }
+            if (!message.texts) {
+              message.texts = locales.map((locale) => {
+                return {
+                  locale,
+                  text: cds.i18n.messages.at(message.code, locale),
+                };
+              });
             }
             if (!message.severity) {
               return req.reject(JobSchedulingError.severityMissing());
             }
             if (!MessageSeverity[message.severity]) {
               return req.reject(JobSchedulingError.invalidMessageSeverity(message.severity));
+            }
+            if (!message.createdAt) {
+              message.createdAt = new Date().toISOString();
             }
           }
           if (result.link) {
@@ -195,8 +215,16 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         data: result.data,
         messages: (result.messages || []).map((message) => {
           return {
+            code: message.code,
             text: message.text,
             severity_code: message.severity,
+            createdAt: message.createdAt,
+            texts: message.texts.map((text) => {
+              return {
+                locale: text.locale,
+                text: text.text,
+              };
+            }),
           };
         }),
       };
@@ -232,10 +260,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         updateResults.push(
           {
             type: ResultType.message,
-            name: "Result",
+            name: "Message",
             messages: [
               {
-                text: "Job completed successfully",
+                code: "jobCompleted",
                 severity: MessageSeverity.info,
               },
             ],
@@ -245,16 +273,24 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             name: "Link",
             link: "https://sap.com",
           },
+          {
+            type: ResultType.data,
+            name: "Data",
+            filename: "log.txt",
+            mimeType: "text/plain",
+            data: Readable.from(cds.i18n.messages.at("jobCompleted"), { objectMode: false }),
+          },
         );
         break;
       case JobStatus.completedWithWarning:
         updateResults.push({
           type: ResultType.message,
-          name: "Result",
+          name: "Message",
           messages: [
             {
-              text: "Job completed. A warning occurred during job processing",
+              code: "jobCompletedWithWarning",
               severity: MessageSeverity.warning,
+              createdAt: new Date().toISOString(),
             },
           ],
         });
@@ -262,10 +298,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       case JobStatus.completedWithError:
         updateResults.push({
           type: ResultType.message,
-          name: "Result",
+          name: "Message",
           messages: [
             {
-              text: "Job completed. An error occurred during job processing",
+              code: "jobCompletedWithError",
               severity: MessageSeverity.error,
             },
           ],
@@ -274,10 +310,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       case JobStatus.failed:
         updateResults.push({
           type: ResultType.message,
-          name: "Failure",
+          name: "Message",
           messages: [
             {
-              text: "Job failed. An error occurred during job processing",
+              code: "jobFailed",
               severity: MessageSeverity.error,
             },
           ],
@@ -303,7 +339,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         name: "Advanced Mocked Run",
         messages: [
           {
-            text: "Job is running in advanced mock mode",
+            code: "jobAdvancedMock",
             severity: MessageSeverity.info,
           },
         ],
@@ -314,7 +350,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         name: "Basic Mocked Run",
         messages: [
           {
-            text: "Job is running in basic mock mode",
+            code: "jobBasicMock",
             severity: MessageSeverity.info,
           },
         ],
@@ -326,7 +362,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         name: "Test Run",
         messages: [
           {
-            text: "Job is running in test mode",
+            code: "jobTestRun",
             severity: MessageSeverity.info,
           },
         ],

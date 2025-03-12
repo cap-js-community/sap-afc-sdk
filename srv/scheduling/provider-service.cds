@@ -149,6 +149,8 @@ service SchedulingProviderService {
     excluding {
       result,
       severity,
+      texts,
+      localized,
     };
 
   @Capabilities: {

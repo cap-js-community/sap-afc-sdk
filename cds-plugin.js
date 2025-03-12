@@ -113,7 +113,7 @@ function serveApiRoot() {
     "/api",
     ...cds.middlewares.before,
     (req, res) => {
-      res.json(200, result);
+      res.status(200).json(result);
     },
     ...cds.middlewares.after,
   );
@@ -274,14 +274,14 @@ function serveSwaggerUI() {
           if (!restrict_all || cds.context?.user?._is_privileged || !cds.context?.user?._is_anonymous) {
             return next();
           }
-          res.send(401, "Unauthorized");
+          res.status(401).send("Unauthorized");
         },
         (req, res, next) => {
           req.swaggerDoc = toOpenApiDoc(req, service, openAPI);
           if (req.swaggerDoc) {
             return next();
           }
-          res.send(404, "Not found");
+          res.status(404).send("Not found");
         },
         swaggerUi.serveFiles(),
         swaggerUi.setup(null, {}),

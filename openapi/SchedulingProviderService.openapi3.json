@@ -1303,8 +1303,16 @@
             "type": "string",
             "enum": ["success", "info", "warning", "error"]
           },
+          "code": {
+            "type": "string"
+          },
           "text": {
             "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04.0000000Z"
           }
         }
       },

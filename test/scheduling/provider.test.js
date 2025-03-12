@@ -218,9 +218,19 @@ describe("API", () => {
     expect(response.data).toHaveLength(1);
     expect(response.data[0].text).toBe("This is a warning");
     expect(response.data[0].severity).toBe("warning");
+    response = await GET(
+      "/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1",
+      {
+        headers: {
+          "Accept-Language": "de",
+        },
+      },
+    );
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].text).toBe("Das ist eine Warnung");
+    expect(response.data[0].severity).toBe("warning");
     response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(response.data).toEqual([]);
-
     response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages");
     expect(response.data.messages).toBeUndefined();
   });
@@ -398,7 +408,21 @@ describe("API", () => {
     expect(cleanData(response.data[1])).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`, {
+      headers: {
+        "Accept-Language": "de",
+      },
+    });
+    // TODO: Translation
+    expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`, {
+      headers: {
+        "Accept-Language": "de",
+      },
+    });
+    // TODO: Translation
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 

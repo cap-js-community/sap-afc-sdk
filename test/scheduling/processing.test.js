@@ -2,7 +2,6 @@
 
 const cds = require("@sap/cds");
 const { text } = require("node:stream/consumers");
-const util = require("util");
 const { Readable } = require("stream");
 
 const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
@@ -71,16 +70,14 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID1 = jobResult[0].ID;
-    const jobResultID2 = jobResult[1].ID;
-    const jobResultID3 = jobResult[2].ID;
+    const jobMessageResultIDs = jobResult
+      .filter((entry) => entry.type_code === ResultType.message)
+      .map((entry) => entry.ID);
     expect(cleanData(jobResult)).toMatchSnapshot();
-    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
-    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
-    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID3 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    for (const jobMessageResultID of jobMessageResultIDs) {
+      let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobMessageResultID });
+      expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    }
   });
 
   it("processJob - simple mock - completed with warning", async () => {
@@ -107,13 +104,14 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithWarning);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID1 = jobResult[0].ID;
-    const jobResultID2 = jobResult[1].ID;
+    const jobMessageResultIDs = jobResult
+      .filter((entry) => entry.type_code === ResultType.message)
+      .map((entry) => entry.ID);
     expect(cleanData(jobResult)).toMatchSnapshot();
-    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
-    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    for (const jobMessageResultID of jobMessageResultIDs) {
+      let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobMessageResultID });
+      expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    }
   });
 
   it("processJob - simple mock - completed with error", async () => {
@@ -140,13 +138,14 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.completedWithError);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID1 = jobResult[0].ID;
-    const jobResultID2 = jobResult[1].ID;
+    const jobMessageResultIDs = jobResult
+      .filter((entry) => entry.type_code === ResultType.message)
+      .map((entry) => entry.ID);
     expect(cleanData(jobResult)).toMatchSnapshot();
-    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
-    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    for (const jobMessageResultID of jobMessageResultIDs) {
+      let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobMessageResultID });
+      expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    }
   });
 
   it("processJob - simple mock - failed", async () => {
@@ -173,13 +172,14 @@ describe("Processing Service", () => {
     expect(job.status_code).toBe(JobStatus.failed);
 
     const jobResult = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
-    const jobResultID1 = jobResult[0].ID;
-    const jobResultID2 = jobResult[1].ID;
+    const jobMessageResultIDs = jobResult
+      .filter((entry) => entry.type_code === ResultType.message)
+      .map((entry) => entry.ID);
     expect(cleanData(jobResult)).toMatchSnapshot();
-    let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID1 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
-    jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobResultID2 });
-    expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    for (const jobMessageResultID of jobMessageResultIDs) {
+      let jobResultMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: jobMessageResultID });
+      expect(cleanData(jobResultMessages)).toMatchSnapshot();
+    }
   });
 
   it("processJob - advanced mock", async () => {
@@ -239,6 +239,45 @@ describe("Processing Service", () => {
     ws.close();
   });
 
+  it("updateJob - translation", async () => {
+    await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
+    await processOutbox();
+    await expect(
+      processingService.updateJob(ID, JobStatus.completed, [
+        {
+          type: ResultType.message,
+          name: "Result",
+          messages: [
+            {
+              code: "jobCompleted",
+              severity: MessageSeverity.info,
+              texts: [
+                {
+                  locale: "de",
+                  text: "Job abgeschlossen",
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    ).resolves.not.toThrow();
+    await processOutbox();
+    const job = await SELECT.one.from("scheduling.Job").where({ ID });
+    expect(job.status_code).toBe(JobStatus.completed);
+    const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
+    const resultIDs = jobResults.map((j) => j.ID);
+    expect(cleanData(jobResults)).toMatchSnapshot();
+    let jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
+    expect(cleanData(jobMessages)).toMatchSnapshot();
+    await cds.tx({ locale: "de" }, async (tx) => {
+      jobMessages = await tx.run(
+        SELECT.localized("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } }),
+      );
+      expect(cleanData(jobMessages)).toMatchSnapshot();
+    });
+  });
+
   it("updateJob - results - base64", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
     await processOutbox();
@@ -261,7 +300,7 @@ describe("Processing Service", () => {
           name: "Result",
           messages: [
             {
-              text: "Job completed successfully",
+              code: "jobCompleted",
               severity: MessageSeverity.info,
             },
           ],
@@ -274,7 +313,7 @@ describe("Processing Service", () => {
     const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
     const resultIDs = jobResults.map((j) => j.ID);
     expect(cleanData(jobResults)).toMatchSnapshot();
-    const jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
+    let jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
     expect(cleanData(jobMessages)).toMatchSnapshot();
     const result = await SELECT.one
       .from("scheduling.JobResult")
@@ -287,9 +326,6 @@ describe("Processing Service", () => {
   it("updateJob - results - readable", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
     await processOutbox();
-    const stream = new Readable();
-    stream.push("This is a test");
-    stream.push(null);
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -297,7 +333,7 @@ describe("Processing Service", () => {
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
-          data: stream,
+          data: Readable.from("This is a test", { objectMode: false }),
         },
       ]),
     ).resolves.not.toThrow();
@@ -320,7 +356,6 @@ describe("Processing Service", () => {
   it("updateJob - results - arraybuffer", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
     await processOutbox();
-    const encoder = new util.TextEncoder();
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -328,7 +363,7 @@ describe("Processing Service", () => {
           name: "Data",
           filename: "test.txt",
           mimeType: "text/plain",
-          data: encoder.encode("This is a test"),
+          data: Buffer.from("This is a test"),
         },
       ]),
     ).resolves.not.toThrow();
@@ -745,6 +780,27 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/codeMissing/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: ResultType.message,
+            messages: [
+              {
+                code: "abc",
+              },
+            ],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/textMissing/s));
       log.clear();
       await clearEventQueue();
@@ -754,7 +810,12 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message" }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+              },
+            ],
           },
         ]),
       ).resolves.not.toThrow();
@@ -771,7 +832,13 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message", severity: "X" }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: "X",
+              },
+            ],
           },
         ]),
       ).resolves.not.toThrow();
@@ -788,7 +855,37 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: MessageSeverity.error,
+                createdAt: "xxx",
+              },
+            ],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("processing");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*Timestamp { type: 'cds.Timestamp' }/s));
+      log.clear();
+      await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            name: "Message",
+            type: ResultType.message,
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: MessageSeverity.error,
+              },
+            ],
             link: "https://sap.com",
           },
         ]),
@@ -806,7 +903,13 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: MessageSeverity.error,
+              },
+            ],
             mimeType: "text/plain",
           },
         ]),
@@ -824,7 +927,13 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: MessageSeverity.error,
+              },
+            ],
             filename: "test.txt",
           },
         ]),
@@ -842,7 +951,13 @@ describe("Processing Service", () => {
           {
             name: "Message",
             type: ResultType.message,
-            messages: [{ text: "This is a message", severity: MessageSeverity.error }],
+            messages: [
+              {
+                code: "abc",
+                text: "This is a message",
+                severity: MessageSeverity.error,
+              },
+            ],
             data: btoa("This is a test"),
           },
         ]),

@@ -1,3 +1,4 @@
+using sap.common.Locale from '@sap/cds/common';
 using scheduling.JobStatusCode from '../../db/scheduling';
 using scheduling.ResultTypeCode from '../../db/scheduling';
 using scheduling.MessageSeverityCode from '../../db/scheduling';
@@ -17,8 +18,16 @@ service SchedulingProcessingService {
   };
 
   type JobResultMessage {
-    text     : String not null;
-    severity : MessageSeverityCode not null;
+    code      :      String not null;
+    text      :      String;
+    severity  :      MessageSeverityCode not null;
+    createdAt :      Timestamp;
+    texts     : many JobResultMessageText;
+  };
+
+  type JobResultMessageText {
+    locale : Locale not null;
+    text   : String not null;
   };
 
   action processJob(ID : String, testRun : Boolean);

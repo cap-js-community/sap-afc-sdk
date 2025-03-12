@@ -59,6 +59,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <EntitySet Name="JobResultMessage" EntityType="SchedulingMonitoringService.JobResultMessage">
           <NavigationPropertyBinding Path="result" Target="JobResult"/>
           <NavigationPropertyBinding Path="severity" Target="MessageSeverity"/>
+          <NavigationPropertyBinding Path="texts" Target="JobResultMessage_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobResultMessage_texts"/>
         </EntitySet>
         <EntitySet Name="JobStatus" EntityType="SchedulingMonitoringService.JobStatus">
           <NavigationPropertyBinding Path="texts" Target="JobStatus_texts"/>
@@ -84,6 +86,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <NavigationPropertyBinding Path="texts" Target="MessageSeverity_texts"/>
           <NavigationPropertyBinding Path="localized" Target="MessageSeverity_texts"/>
         </EntitySet>
+        <EntitySet Name="JobResultMessage_texts" EntityType="SchedulingMonitoringService.JobResultMessage_texts"/>
         <EntitySet Name="JobStatus_texts" EntityType="SchedulingMonitoringService.JobStatus_texts"/>
         <EntitySet Name="ResultType_texts" EntityType="SchedulingMonitoringService.ResultType_texts"/>
         <EntitySet Name="ParameterType_texts" EntityType="SchedulingMonitoringService.ParameterType_texts"/>
@@ -210,11 +213,19 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="result_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="result_ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" Nullable="false"/>
         <Property Name="text" Type="Edm.String" Nullable="false"/>
         <NavigationProperty Name="severity" Type="SchedulingMonitoringService.MessageSeverity" Nullable="false">
           <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="severity_code" Type="Edm.String" Nullable="false" DefaultValue="info"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobResultMessage_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobResultMessage_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
         <Property Name="criticality" Type="Edm.Int32"/>
       </EntityType>
       <EntityType Name="JobStatus">
@@ -301,6 +312,15 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <NavigationProperty Name="localized" Type="SchedulingMonitoringService.MessageSeverity_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="JobResultMessage_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="text" Type="Edm.String" Nullable="false"/>
       </EntityType>
       <EntityType Name="JobStatus_texts">
         <Key>
@@ -1372,8 +1392,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="severity/numericCode"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1390,7 +1410,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
             </Record>
             <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="code"/>
+            </Record>
+            <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="text"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="createdAt"/>
             </Record>
           </Collection>
           <Annotation Term="UI.Criticality" Path="criticality"/>
@@ -1408,8 +1434,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="SortOrder">
               <Collection>
                 <Record Type="Common.SortOrderType">
-                  <PropertyValue Property="Property" PropertyPath="severity/numericCode"/>
-                  <PropertyValue Property="Descending" Bool="true"/>
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -1442,6 +1468,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/code">
+        <Annotation Term="Common.Label" String="Code"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/text">
         <Annotation Term="Common.Label" String="Message"/>
       </Annotations>
@@ -1472,6 +1501,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/createdAt">
+        <Annotation Term="Common.Label" String="Created On"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/criticality">
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Common.Label" String="Criticality"/>
@@ -1484,6 +1516,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Status"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/JobStatus">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1555,6 +1588,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Result Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/ResultType">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1606,6 +1640,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Parameter Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/ParameterType">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1657,6 +1692,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Data Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/DataType">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1712,6 +1748,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Mapping Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/MappingType">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1859,6 +1896,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+        <Annotation Term="Common.Label" String="Message Severity"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.EntityContainer/MessageSeverity">
         <Annotation Term="Capabilities.DeleteRestrictions">
@@ -1932,6 +1970,15 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/locale">
+        <Annotation Term="Common.Label" String="Language Code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/text">
+        <Annotation Term="Common.Label" String="Message"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobStatus_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>

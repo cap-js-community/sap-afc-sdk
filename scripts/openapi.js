@@ -191,7 +191,10 @@ function processSchedulingProviderService(check) {
   const jsonAfter = JSON.stringify(data, null, 2);
   if (check) {
     if (jsonAfter !== jsonBefore) {
-      throw new Error(`OpenAPI definition at ${filePath} is not up-to-date.`);
+      // eslint-disable-next-line no-console
+      console.log(`OpenAPI definition at ${filePath} is not up-to-date.`);
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1);
     }
   } else {
     fs.writeFileSync(filePath, jsonAfter);

@@ -152,13 +152,19 @@ entity JobResult : cuid, {
 @title: '{i18n>JobResultMessage}'
 entity JobResultMessage : cuid, {
   @title: '{i18n>JobResult}'
-  result   : Association to JobResult not null;
+  result    : Association to JobResult not null;
+
+  @title: '{i18n>Code}'
+  code      : String not null;
 
   @title: '{i18n>Message}'
-  text     : String not null;
+  text      : localized String not null;
 
   @title: '{i18n>Severity}'
-  severity : Association to MessageSeverity not null default #info;
+  severity  : Association to MessageSeverity not null default #info;
+
+  @title: '{i18n>CreatedAt}'
+  createdAt : Timestamp not null;
 };
 
 type JobStatusCode              : String enum {
@@ -172,6 +178,7 @@ type JobStatusCode              : String enum {
   canceled
 };
 
+@title: '{i18n>Status}'
 entity JobStatus : CodeList {
       @title: '{i18n>Status}'
   key code : JobStatusCode;
@@ -183,6 +190,7 @@ type ParameterTypeCode          : String enum {
   mapping;
 };
 
+@title: '{i18n>ParameterType}'
 entity ParameterType : CodeList {
       @title: '{i18n>ParameterType}'
   key code : ParameterTypeCode;
@@ -195,6 +203,7 @@ type DataTypeCode               : String enum {
   boolean;
 };
 
+@title: '{i18n>DataType}'
 entity DataType : CodeList {
       @title: '{i18n>DataType}'
   key code : DataTypeCode;
@@ -230,6 +239,7 @@ type MappingTypeCode            : String enum {
   taskDescription;
 };
 
+@title: '{i18n>MappingType}'
 entity MappingType : CodeList {
       @title: '{i18n>MappingType}'
   key code : MappingTypeCode;
@@ -241,6 +251,7 @@ type ResultTypeCode             : String enum {
   message;
 };
 
+@title: '{i18n>ResultType}'
 entity ResultType : CodeList {
       @title: '{i18n>ResultType}'
   key code : ResultTypeCode;
@@ -260,6 +271,7 @@ type MessageSeverityNumericCode : Integer enum {
   error   = 4;
 };
 
+@title: '{i18n>MessageSeverity}'
 entity MessageSeverity : CodeList {
       @title: '{i18n>MessageSeverity}'
   key code        : MessageSeverityCode;

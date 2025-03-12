@@ -141,8 +141,9 @@ exports[`API Create Job (test run) 3`] = `
 exports[`API Create Job (test run) 4`] = `
 [
   {
+    "code": "jobBasicMock",
     "severity": "info",
-    "text": "Job is running in basic mock mode",
+    "text": "Job is running in basic mock mode.",
   },
 ]
 `;
@@ -150,8 +151,29 @@ exports[`API Create Job (test run) 4`] = `
 exports[`API Create Job (test run) 5`] = `
 [
   {
+    "code": "jobBasicMock",
     "severity": "info",
-    "text": "Job is running in test mode",
+    "text": "Job is running in basic mock mode.",
+  },
+]
+`;
+
+exports[`API Create Job (test run) 6`] = `
+[
+  {
+    "code": "jobTestRun",
+    "severity": "info",
+    "text": "Job is running in test mode.",
+  },
+]
+`;
+
+exports[`API Create Job (test run) 7`] = `
+[
+  {
+    "code": "jobTestRun",
+    "severity": "info",
+    "text": "Job is running in test mode.",
   },
 ]
 `;
@@ -339,14 +361,17 @@ exports[`API GET Job Parameters 1`] = `
 exports[`API GET Job Result Messages 1`] = `
 [
   {
+    "code": "ERROR_01",
     "severity": "error",
     "text": "This is an error",
   },
   {
+    "code": "WARNING_01",
     "severity": "warning",
     "text": "This is a warning",
   },
   {
+    "code": "INFO_01",
     "severity": "info",
     "text": "This is an information",
   },

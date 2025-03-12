@@ -426,7 +426,15 @@ annotate service.JobResultMessage with @(
     },
     {
       $Type: 'UI.DataField',
+      Value: code,
+    },
+    {
+      $Type: 'UI.DataField',
       Value: text,
+    },
+    {
+      $Type: 'UI.DataField',
+      Value: createdAt,
     },
   ],
   UI.HeaderInfo         : {
@@ -443,8 +451,8 @@ annotate service.JobResultMessage with @(
     Visualizations: ['@UI.LineItem'],
     SortOrder     : [{
       $Type     : 'Common.SortOrderType',
-      Property  : severity.numericCode,
-      Descending: true
+      Property  : createdAt,
+      Descending: false
     }]
   },
   UI.SelectionFields    : [],
