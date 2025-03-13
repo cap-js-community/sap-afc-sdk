@@ -261,7 +261,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     }
     const durationParameter = req.job.parameters.find((parameter) => parameter.definition_name === "duration");
     if (durationParameter && parseFloat(durationParameter.value) > 0) {
-      processingTime = parseFloat(durationParameter.value);
+      processingTime = parseFloat(durationParameter.value) * 1000;
     }
     const statusParameter = req.job.parameters.find((parameter) => parameter.definition_name === "status");
     if (statusParameter && JobStatus[statusParameter.value]) {
