@@ -58,7 +58,7 @@ describe("Monitoring Service", () => {
     expect(response.data.status_code).toBe("cancelRequested");
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe(ID);
     expect(event.status).toBe("cancelRequested");

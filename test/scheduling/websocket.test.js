@@ -23,7 +23,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe("XXX");
     expect(event.status).toBe("running");
@@ -43,7 +43,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe("XXX");
     expect(event.status).toBe("running");
@@ -63,7 +63,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe("XXX");
     expect(event.status).toBe("running");

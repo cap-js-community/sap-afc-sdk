@@ -1,7 +1,8 @@
 "use strict";
 
 const cds = require("@sap/cds");
-const { Readable } = require("stream");
+const fs = require("fs");
+const path = require("path");
 
 const BaseApplicationService = require("../common/BaseApplicationService");
 const JobSchedulingError = require("./common/JobSchedulingError");
@@ -43,7 +44,12 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
-      const job = await SELECT.one(Job).where({ ID });
+      const job = await SELECT.one(Job, (job) => {
+        job`.*`,
+          job.parameters((parameter) => {
+            parameter`.*`;
+          });
+      }).where({ ID });
       if (!job) {
         return req.reject(JobSchedulingError.jobNotFound(ID));
       }
@@ -234,10 +240,11 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   async mockJobProcessing(req, config) {
     let min = config.min ?? 0;
     let max = config.max ?? 10;
-    const processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
+    let processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
     let processingStatus = config.default ?? JobStatus.completed;
     let advancedMock = false;
     if (config.status && Object.keys(config.status).length > 0) {
+      advancedMock = true;
       const statuses = Object.keys(config.status);
       min = 0;
       max = statuses.reduce((sum, status) => {
@@ -251,7 +258,14 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         }
         value += config.status[status];
       }
-      advancedMock = true;
+    }
+    const durationParameter = req.job.parameters.find((parameter) => parameter.definition_name === "duration");
+    if (durationParameter && parseFloat(durationParameter.value) > 0) {
+      processingTime = parseFloat(durationParameter.value);
+    }
+    const statusParameter = req.job.parameters.find((parameter) => parameter.definition_name === "status");
+    if (statusParameter && JobStatus[statusParameter.value]) {
+      processingStatus = statusParameter.value;
     }
     const ID = req.data.ID;
     const updateResults = [];
@@ -278,7 +292,14 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             name: "Data",
             filename: "log.txt",
             mimeType: "text/plain",
-            data: Readable.from(cds.i18n.messages.at("jobCompleted"), { objectMode: false }),
+            data: btoa(cds.i18n.messages.at("jobCompleted")),
+          },
+          {
+            type: ResultType.data,
+            name: "Data",
+            filename: "log.pdf",
+            mimeType: "application/pdf",
+            data: fs.readFileSync(path.join(__dirname, "./assets/log.pdf"), { encoding: "base64" }),
           },
         );
         break;

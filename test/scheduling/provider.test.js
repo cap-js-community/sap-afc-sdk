@@ -68,7 +68,7 @@ describe("API", () => {
 
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     expect(response.data[0].name).toBe("JOB_1");
     expect(response.data[1].name).toBe("JOB_2");
     expect(response.data[2].name).toBe("JOB_3");
@@ -96,11 +96,11 @@ describe("API", () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition?name=JOB_1");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?name=JOB_*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?name=*OB_2");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?name=*OB*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?name=*O*B*");
     expect(response.data).toHaveLength(0);
     response = await GET("/api/job-scheduling/v1/JobDefinition?name=job_1");
@@ -111,11 +111,11 @@ describe("API", () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition?search=JOB_1");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=JoB_*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*Ob_2");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*OB*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*O*B*");
     expect(response.data).toHaveLength(0);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=job_1");
@@ -124,11 +124,11 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job definition 1");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job def*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob definition 1");
     expect(response.data).toHaveLength(1);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob def*");
-    expect(response.data).toHaveLength(5);
+    expect(response.data).toHaveLength(6);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob*def*");
     expect(response.data).toHaveLength(0);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=job definition 1");
@@ -247,7 +247,7 @@ describe("API", () => {
     });
   });
 
-  it("Create Job (simple)", async () => {
+  it("Create Job (basic)", async () => {
     let response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_1",
       referenceID: "4711",
@@ -266,7 +266,6 @@ describe("API", () => {
         },
       ],
     });
-    expect(response.status).toBe(201);
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
   });
@@ -304,7 +303,7 @@ describe("API", () => {
 
     const ws = await connectToWS("job-scheduling", ID);
     let message = ws.message("jobStatusChanged");
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe(ID);
     expect(event.status).toBe("requested");
@@ -408,6 +407,53 @@ describe("API", () => {
     expect(cleanData(response.data[1])).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
+  it("Create Job (translation)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "4711",
+      startDateTime: "2025-01-01T12:00:00Z",
+      testRun: false,
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 32.0,
+        },
+        {
+          name: "E",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    const ID = response.data.ID;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await processOutbox();
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+    const entry = await eventQueueEntry();
+    expect(entry).toBeDefined();
+    expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
+    expect(entry.referenceEntityKey).toBe(ID);
+    expect(entry.payload).toMatch(/"testRun":true/);
+
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
+    const resultID1 = response.data[0].ID;
+    const resultID2 = response.data[1].ID;
+    expect(cleanData(response.data[0])).toMatchSnapshot();
+    expect(cleanData(response.data[1])).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`, {
       headers: {
         "Accept-Language": "de",
@@ -426,6 +472,51 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("Create Job (status and duration)", async () => {
+    const mockStatus = "failed";
+    const mockDuration = 9999999999;
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_6",
+      referenceID: "4711",
+      parameters: [
+        {
+          name: "status",
+          value: mockStatus,
+        },
+        {
+          name: "duration",
+          value: mockDuration,
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    const ID = response.data.ID;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await processOutbox();
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+    let entry = await eventQueueEntry();
+    expect(entry).toBeDefined();
+    expect(entry.referenceEntityKey).toBe(ID);
+    entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
+    expect(entry).toBeDefined();
+    expect(new Date(entry.startAfter).getTime()).toBeGreaterThan(new Date(Date.now() + mockDuration).getTime() - 10000);
+    const result = await UPDATE.entity("sap.eventqueue.Event")
+      .set({
+        startAfter: null,
+      })
+      .where({ ID: entry.ID });
+    expect(result).toBe(1);
+    await processOutbox();
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
+    const resultID = response.data[0].ID;
+    expect(cleanData(response.data[0])).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID}/messages`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);
@@ -436,7 +527,7 @@ describe("API", () => {
     expect(response.data.status).toEqual(JobStatus.cancelRequested);
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("websocket");
+    await processOutbox("SchedulingWebsocketService");
     let event = await message;
     expect(event.ID).toBe(ID);
     expect(event.status).toBe(JobStatus.cancelRequested);

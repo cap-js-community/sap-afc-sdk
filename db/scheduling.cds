@@ -117,10 +117,6 @@ entity JobParameter : cuid, {
   value      : String(5000);
 };
 
-@assert.unique.semanticKey: [
-  job,
-  name
-]
 @title                    : '{i18n>JobResult}'
 entity JobResult : cuid, {
   @title: '{i18n>Job}'

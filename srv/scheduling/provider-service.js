@@ -98,17 +98,9 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       // Definition
       const definitionName = req.data.name;
       const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
-        jobDefinition.name,
-          jobDefinition.version,
-          jobDefinition.supportsStartDateTime,
-          jobDefinition.supportsTestRun,
+        jobDefinition`.*`,
           jobDefinition.parameters((jobParameterDefinition) => {
-            jobParameterDefinition.name,
-              jobParameterDefinition.type,
-              jobParameterDefinition.dataType,
-              jobParameterDefinition.mappingType,
-              jobParameterDefinition.value,
-              jobParameterDefinition.required;
+            jobParameterDefinition`.*`;
           });
       }).where({ name: definitionName });
       if (!jobDefinition) {

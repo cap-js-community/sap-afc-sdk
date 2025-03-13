@@ -10,11 +10,11 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
     "type_code": "message",
   },
   {
-    "filename": "log.txt",
+    "filename": null,
     "link": null,
-    "mimeType": "text/plain",
-    "name": "Data",
-    "type_code": "data",
+    "mimeType": null,
+    "name": "Message",
+    "type_code": "message",
   },
   {
     "filename": null,
@@ -24,11 +24,18 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
     "type_code": "link",
   },
   {
-    "filename": null,
+    "filename": "log.txt",
     "link": null,
-    "mimeType": null,
-    "name": "Message",
-    "type_code": "message",
+    "mimeType": "text/plain",
+    "name": "Data",
+    "type_code": "data",
+  },
+  {
+    "filename": "log.pdf",
+    "link": null,
+    "mimeType": "application/pdf",
+    "name": "Data",
+    "type_code": "data",
   },
 ]
 `;
@@ -173,18 +180,18 @@ exports[`Processing Service processJob - simple mock - failed 3`] = `
 exports[`Processing Service updateJob - results - base64 1`] = `
 [
   {
-    "filename": "test.txt",
-    "link": null,
-    "mimeType": "text/plain",
-    "name": "Data",
-    "type_code": "data",
-  },
-  {
     "filename": null,
     "link": "https://sap.com",
     "mimeType": null,
     "name": "Link",
     "type_code": "link",
+  },
+  {
+    "filename": "test.txt",
+    "link": null,
+    "mimeType": "text/plain",
+    "name": "Data",
+    "type_code": "data",
   },
   {
     "filename": null,

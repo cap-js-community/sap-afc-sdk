@@ -94,7 +94,7 @@ exports[`API Create Job (advanced) 3`] = `
 ]
 `;
 
-exports[`API Create Job (simple) 1`] = `
+exports[`API Create Job (basic) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
@@ -104,6 +104,50 @@ exports[`API Create Job (simple) 1`] = `
   "testRun": null,
   "version": "1",
 }
+`;
+
+exports[`API Create Job (status and duration) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_6",
+  "referenceID": "4711",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (status and duration) 2`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_6",
+  "referenceID": "4711",
+  "startDateTime": null,
+  "status": "failed",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (status and duration) 3`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Basic Mocked Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (status and duration) 4`] = `
+[
+  {
+    "code": "jobBasicMock",
+    "severity": "info",
+    "text": "Job is running in basic mock mode.",
+  },
+]
 `;
 
 exports[`API Create Job (test run) 1`] = `
@@ -151,6 +195,48 @@ exports[`API Create Job (test run) 4`] = `
 exports[`API Create Job (test run) 5`] = `
 [
   {
+    "code": "jobTestRun",
+    "severity": "info",
+    "text": "Job is running in test mode.",
+  },
+]
+`;
+
+exports[`API Create Job (translation) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "4711",
+  "startDateTime": "2025-01-01T12:00:00Z",
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`API Create Job (translation) 2`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Basic Mocked Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (translation) 3`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Test Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (translation) 4`] = `
+[
+  {
     "code": "jobBasicMock",
     "severity": "info",
     "text": "Job is running in basic mock mode.",
@@ -158,7 +244,17 @@ exports[`API Create Job (test run) 5`] = `
 ]
 `;
 
-exports[`API Create Job (test run) 6`] = `
+exports[`API Create Job (translation) 5`] = `
+[
+  {
+    "code": "jobBasicMock",
+    "severity": "info",
+    "text": "Job is running in basic mock mode.",
+  },
+]
+`;
+
+exports[`API Create Job (translation) 6`] = `
 [
   {
     "code": "jobTestRun",
@@ -168,7 +264,7 @@ exports[`API Create Job (test run) 6`] = `
 ]
 `;
 
-exports[`API Create Job (test run) 7`] = `
+exports[`API Create Job (translation) 7`] = `
 [
   {
     "code": "jobTestRun",
@@ -260,6 +356,14 @@ exports[`API GET Job Definitions 1`] = `
     "description": "Job Definition 5",
     "longDescription": "Job Definition 5",
     "name": "JOB_5",
+    "supportsStartDateTime": false,
+    "supportsTestRun": false,
+    "version": "1",
+  },
+  {
+    "description": "Job Definition 6",
+    "longDescription": "Job Definition 6",
+    "name": "JOB_6",
     "supportsStartDateTime": false,
     "supportsTestRun": false,
     "version": "1",

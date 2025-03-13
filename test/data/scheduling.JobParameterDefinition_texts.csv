@@ -19,6 +19,8 @@ en;B;JOB_4;Parameter B
 en;C;JOB_4;Parameter C
 en;D;JOB_4;Parameter D
 en;E;JOB_4;Parameter E
+en;status;JOB_6;Status
+en;duration;JOB_6;Duration
 de;A;JOB_1;Parameter A
 de;B;JOB_1;Parameter B
 de;C;JOB_1;Parameter C
@@ -39,3 +41,5 @@ de;B;JOB_4;Parameter B
 de;C;JOB_4;Parameter C
 de;D;JOB_4;Parameter D
 de;E;JOB_4;Parameter E
+de;status;JOB_6;Status
+de;duration;JOB_6;Dauer

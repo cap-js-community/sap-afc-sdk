@@ -39,36 +39,28 @@ function cleanData(data) {
   return data;
 }
 
-async function processOutbox(scope) {
+async function processOutbox(subType) {
   const context = new cds.EventContext();
-  if (!scope || scope === "processing") {
+  if (subType) {
+    await eventQueue.processEventQueue(context, "CAP_OUTBOX", subType);
+  } else {
     await eventQueue.processEventQueue(context, "CAP_OUTBOX", "SchedulingProcessingService");
-  }
-  if (!scope || scope === "websocket") {
     await eventQueue.processEventQueue(context, "CAP_OUTBOX", "SchedulingWebsocketService");
   }
 }
 
-async function clearEventQueue() {
-  await DELETE.from("sap.eventqueue.Event");
-}
-
-async function eventQueueEntry(scope, referenceEntityKey, payload) {
-  let subType = "SchedulingProcessingService";
-  switch (scope) {
-    case "processing":
-      "SchedulingProcessingService";
-      break;
-    case "websocket":
-      "SchedulingWebsocketService";
-      break;
-  }
+async function eventQueueEntry(subType, referenceEntityKey, payload) {
+  subType ??= "SchedulingProcessingService";
   return await SELECT.one.from("sap.eventqueue.Event").where({
     type: "CAP_OUTBOX",
     subType,
     ...(referenceEntityKey && { referenceEntityKey }),
     ...(payload && { payload: { like: `%${payload}%` } }),
   });
+}
+
+async function clearEventQueue() {
+  await DELETE.from("sap.eventqueue.Event");
 }
 
 async function connectToWS(service, ID, options) {
