@@ -8,18 +8,18 @@ using scheduling.MessageSeverityCode from '../../db/scheduling';
 service SchedulingProcessingService {
 
   type JobResult {
-    name     :      String not null;
+    name     :      String(255) not null;
     type     :      ResultTypeCode not null;
-    link     :      String;
-    mimeType :      String;
-    filename :      String;
+    link     :      String(5000);
+    mimeType :      String(255);
+    filename :      String(5000);
     data     :      LargeBinary;
     messages : many JobResultMessage;
   };
 
   type JobResultMessage {
-    code      :      String not null;
-    text      :      String;
+    code      :      String(255) not null;
+    text      :      String(5000);
     severity  :      MessageSeverityCode not null;
     createdAt :      Timestamp;
     texts     : many JobResultMessageText;
@@ -27,10 +27,10 @@ service SchedulingProcessingService {
 
   type JobResultMessageText {
     locale : Locale not null;
-    text   : String not null;
+    text   : String(5000) not null;
   };
 
-  action processJob(ID : String, testRun : Boolean);
-  action updateJob(ID : String, status : JobStatusCode, results : many JobResult);
-  action cancelJob(ID : String);
+  action processJob(ID : String(255), testRun : Boolean);
+  action updateJob(ID : String(255), status : JobStatusCode, results : many JobResult);
+  action cancelJob(ID : String(255));
 }

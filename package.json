@@ -60,7 +60,7 @@
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.1",
     "@sap/cds-common-content": "^2.1.0",
-    "@sap/sbf": "^6.9.1",
+    "@sap/sbf": "^6.9.2",
     "commander": "^13.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",

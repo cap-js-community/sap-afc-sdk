@@ -36,7 +36,7 @@ extend SchedulingMonitoringService.JobResult with columns {
       'odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
     else
       null
-  end as dataLink : String
+  end as dataLink : String(5000)
 };
 
 extend SchedulingMonitoringService.Job with columns {

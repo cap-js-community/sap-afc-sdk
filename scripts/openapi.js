@@ -42,9 +42,11 @@ function processSchedulingProviderService(check) {
     properties: {
       code: {
         type: "string",
+        maxLength: 255,
       },
       message: {
         type: "string",
+        maxLength: 5000,
       },
     },
   };
@@ -59,7 +61,7 @@ function processSchedulingProviderService(check) {
   data.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
   delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.type;
   data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.oneOf = [
-    { type: "string" },
+    { type: "string", maxLength: 255 },
     { type: "boolean" },
     { type: "number" },
   ];
@@ -73,14 +75,14 @@ function processSchedulingProviderService(check) {
   data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
   delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.type;
   data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.oneOf = [
-    { type: "string" },
+    { type: "string", maxLength: 255 },
     { type: "boolean" },
     { type: "number" },
   ];
   data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
   delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.type;
   data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.oneOf = [
-    { type: "string" },
+    { type: "string", maxLength: 255 },
     { type: "boolean" },
     { type: "number" },
   ];

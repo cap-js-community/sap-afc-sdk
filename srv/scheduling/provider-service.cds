@@ -47,6 +47,10 @@ service SchedulingProviderService {
       *,
       parameters : redirected to JobParameterDefinition
         on parameters.jobName = $self.name
+    }
+    excluding {
+      texts,
+      localized
     };
 
   @title: null
@@ -61,7 +65,9 @@ service SchedulingProviderService {
           mappingType.code as mappingType
     }
     excluding {
-      job
+      job,
+      texts,
+      localized
     };
 
   @Capabilities.ReadRestrictions.CustomQueryOptions: [
@@ -85,7 +91,7 @@ service SchedulingProviderService {
   @title                                           : null
   entity Job                                                as
     projection on scheduling.Job {
-      key ID         : String(500)  @readonly,
+      key ID         : String(255)  @readonly,
           definition.name as name,
           referenceID,
           startDateTime,
@@ -107,8 +113,8 @@ service SchedulingProviderService {
   @title: null
   entity JobParameter                            @readonly  as
     projection on scheduling.JobParameter {
-      key ID                       : String(500) @readonly,
-          job.ID          as jobID : String(500) @readonly,
+      key ID                       : String(255) @readonly,
+          job.ID          as jobID : String(255) @readonly,
           definition.name as name,
           @cds.validate: false
           value,
@@ -122,8 +128,8 @@ service SchedulingProviderService {
   @title: null
   entity JobResult                         @readonly        as
     projection on scheduling.JobResult {
-      key ID                 : String(500) @readonly,
-          job.ID    as jobID : String(500) @readonly,
+      key ID                 : String(255) @readonly,
+          job.ID    as jobID : String(255) @readonly,
           type.code as type,
           *,
           messages           : redirected to JobResultMessage
@@ -141,8 +147,8 @@ service SchedulingProviderService {
   @title: null
   entity JobResultMessage                         @readonly as
     projection on scheduling.JobResultMessage {
-      key ID                        : String(500) @readonly,
-          result.ID     as resultID : String(500) @readonly,
+      key ID                        : String(255) @readonly,
+          result.ID     as resultID : String(255) @readonly,
           severity.code as severity,
           *
     }

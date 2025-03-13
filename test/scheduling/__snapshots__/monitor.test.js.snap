@@ -34,12 +34,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <EntityContainer Name="EntityContainer">
         <EntitySet Name="JobDefinition" EntityType="SchedulingMonitoringService.JobDefinition">
           <NavigationPropertyBinding Path="parameters" Target="JobParameterDefinition"/>
+          <NavigationPropertyBinding Path="texts" Target="JobDefinition_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobDefinition_texts"/>
         </EntitySet>
         <EntitySet Name="JobParameterDefinition" EntityType="SchedulingMonitoringService.JobParameterDefinition">
           <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
           <NavigationPropertyBinding Path="type" Target="ParameterType"/>
           <NavigationPropertyBinding Path="dataType" Target="DataType"/>
           <NavigationPropertyBinding Path="mappingType" Target="MappingType"/>
+          <NavigationPropertyBinding Path="texts" Target="JobParameterDefinition_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobParameterDefinition_texts"/>
         </EntitySet>
         <EntitySet Name="Job" EntityType="SchedulingMonitoringService.Job">
           <NavigationPropertyBinding Path="definition" Target="JobDefinition"/>
@@ -86,6 +90,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <NavigationPropertyBinding Path="texts" Target="MessageSeverity_texts"/>
           <NavigationPropertyBinding Path="localized" Target="MessageSeverity_texts"/>
         </EntitySet>
+        <EntitySet Name="JobDefinition_texts" EntityType="SchedulingMonitoringService.JobDefinition_texts"/>
+        <EntitySet Name="JobParameterDefinition_texts" EntityType="SchedulingMonitoringService.JobParameterDefinition_texts">
+          <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
+        </EntitySet>
         <EntitySet Name="JobResultMessage_texts" EntityType="SchedulingMonitoringService.JobResultMessage_texts"/>
         <EntitySet Name="JobStatus_texts" EntityType="SchedulingMonitoringService.JobStatus_texts"/>
         <EntitySet Name="ResultType_texts" EntityType="SchedulingMonitoringService.ResultType_texts"/>
@@ -98,14 +106,20 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Key>
           <PropertyRef Name="name"/>
         </Key>
-        <Property Name="name" Type="Edm.String" Nullable="false"/>
-        <Property Name="description" Type="Edm.String"/>
-        <Property Name="longDescription" Type="Edm.String"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="longDescription" Type="Edm.String" MaxLength="5000"/>
         <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
         <Property Name="supportsTestRun" Type="Edm.Boolean"/>
-        <Property Name="version" Type="Edm.String" Nullable="false"/>
+        <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
           <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobDefinition_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobDefinition_texts">
+          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
         </NavigationProperty>
       </EntityType>
       <EntityType Name="JobParameterDefinition">
@@ -113,26 +127,33 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="name"/>
           <PropertyRef Name="job_name"/>
         </Key>
-        <Property Name="name" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false" Partner="parameters">
           <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
         </NavigationProperty>
-        <Property Name="job_name" Type="Edm.String" Nullable="false"/>
-        <Property Name="description" Type="Edm.String"/>
+        <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
         <NavigationProperty Name="type" Type="SchedulingMonitoringService.ParameterType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="type_code" Type="Edm.String" Nullable="false"/>
+        <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="dataType" Type="SchedulingMonitoringService.DataType" Nullable="false">
           <ReferentialConstraint Property="dataType_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="dataType_code" Type="Edm.String" Nullable="false"/>
+        <Property Name="dataType_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="mappingType" Type="SchedulingMonitoringService.MappingType">
           <ReferentialConstraint Property="mappingType_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="mappingType_code" Type="Edm.String"/>
-        <Property Name="value" Type="Edm.String"/>
+        <Property Name="mappingType_code" Type="Edm.String" MaxLength="255"/>
+        <Property Name="value" Type="Edm.String" MaxLength="5000"/>
         <Property Name="required" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobParameterDefinition_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobParameterDefinition_texts">
+          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
+          <ReferentialConstraint Property="job_name" ReferencedProperty="job_name"/>
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="Job">
         <Key>
@@ -148,13 +169,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
           <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
         </NavigationProperty>
-        <Property Name="definition_name" Type="Edm.String" Nullable="false"/>
-        <Property Name="version" Type="Edm.String" Nullable="false"/>
-        <Property Name="link" Type="Edm.String"/>
+        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
         <NavigationProperty Name="status" Type="SchedulingMonitoringService.JobStatus" Nullable="false">
           <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="status_code" Type="Edm.String" Nullable="false" DefaultValue="requested"/>
+        <Property Name="status_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="requested"/>
         <Property Name="testRun" Type="Edm.Boolean"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameter)" Partner="job">
           <OnDelete Action="Cascade"/>
@@ -177,9 +198,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
           <ReferentialConstraint Property="definition_job_name" ReferencedProperty="job_name"/>
         </NavigationProperty>
-        <Property Name="definition_name" Type="Edm.String" Nullable="false"/>
-        <Property Name="definition_job_name" Type="Edm.String" Nullable="false"/>
-        <Property Name="value" Type="Edm.String"/>
+        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="definition_job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="value" Type="Edm.String" MaxLength="5000"/>
       </EntityType>
       <EntityType Name="JobResult">
         <Key>
@@ -190,19 +211,19 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="job_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="name" Type="Edm.String" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="type" Type="SchedulingMonitoringService.ResultType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="type_code" Type="Edm.String" Nullable="false"/>
-        <Property Name="link" Type="Edm.String"/>
-        <Property Name="mimeType" Type="Edm.String"/>
-        <Property Name="filename" Type="Edm.String"/>
+        <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="mimeType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="filename" Type="Edm.String" MaxLength="5000"/>
         <Property Name="data" Type="Edm.Stream"/>
         <NavigationProperty Name="messages" Type="Collection(SchedulingMonitoringService.JobResultMessage)" Partner="result">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <Property Name="dataLink" Type="Edm.String"/>
+        <Property Name="dataLink" Type="Edm.String" MaxLength="5000"/>
       </EntityType>
       <EntityType Name="JobResultMessage">
         <Key>
@@ -213,12 +234,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="result_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="result_ID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
-        <Property Name="text" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
         <NavigationProperty Name="severity" Type="SchedulingMonitoringService.MessageSeverity" Nullable="false">
           <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
         </NavigationProperty>
-        <Property Name="severity_code" Type="Edm.String" Nullable="false" DefaultValue="info"/>
+        <Property Name="severity_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="info"/>
         <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobResultMessage_texts)">
           <OnDelete Action="Cascade"/>
@@ -234,7 +255,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobStatus_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -248,7 +269,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ResultType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -262,7 +283,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ParameterType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -276,7 +297,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.DataType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -290,7 +311,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MappingType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -304,7 +325,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="numericCode" Type="Edm.Int32"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MessageSeverity_texts)">
           <OnDelete Action="Cascade"/>
@@ -313,6 +334,30 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
+      <EntityType Name="JobDefinition_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="name"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="longDescription" Type="Edm.String" MaxLength="5000"/>
+      </EntityType>
+      <EntityType Name="JobParameterDefinition_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="name"/>
+          <PropertyRef Name="job_name"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
+          <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
+        </NavigationProperty>
+        <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+      </EntityType>
       <EntityType Name="JobResultMessage_texts">
         <Key>
           <PropertyRef Name="locale"/>
@@ -320,7 +365,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Key>
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="text" Type="Edm.String" Nullable="false"/>
+        <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
       </EntityType>
       <EntityType Name="JobStatus_texts">
         <Key>
@@ -330,7 +375,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <EntityType Name="ResultType_texts">
         <Key>
@@ -340,7 +385,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <EntityType Name="ParameterType_texts">
         <Key>
@@ -350,7 +395,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <EntityType Name="DataType_texts">
         <Key>
@@ -360,7 +405,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <EntityType Name="MappingType_texts">
         <Key>
@@ -370,7 +415,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <EntityType Name="MessageSeverity_texts">
         <Key>
@@ -380,7 +425,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-        <Property Name="code" Type="Edm.String" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
       </EntityType>
       <Action Name="cancel" IsBound="true" EntitySetPath="in">
         <Parameter Name="in" Type="SchedulingMonitoringService.Job"/>
@@ -1970,6 +2015,33 @@ exports[`Monitoring Service Get $metadata 1`] = `
             </Record>
           </Collection>
         </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/locale">
+        <Annotation Term="Common.Label" String="Language Code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/name">
+        <Annotation Term="Common.Label" String="Name"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/description">
+        <Annotation Term="Common.Label" String="Description"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/longDescription">
+        <Annotation Term="Common.Label" String="Long Description"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/locale">
+        <Annotation Term="Common.Label" String="Language Code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/name">
+        <Annotation Term="Common.Label" String="Name"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job">
+        <Annotation Term="Common.Label" String="Job"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job_name">
+        <Annotation Term="Common.Label" String="Job"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/description">
+        <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>

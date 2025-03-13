@@ -199,7 +199,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           }
         }
       ],
@@ -270,7 +270,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           }
         }
       ],
@@ -364,7 +364,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           }
         }
       ],
@@ -557,7 +557,8 @@
           "name": "name",
           "required": true,
           "schema": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           }
         }
       ],
@@ -627,7 +628,8 @@
           "name": "name",
           "required": true,
           "schema": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           }
         }
       ],
@@ -721,7 +723,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           }
         }
       ],
@@ -792,7 +794,7 @@
           "required": true,
           "schema": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           }
         }
       ],
@@ -1005,7 +1007,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "maxLength": 500
+              "maxLength": 255
             }
           }
         ],
@@ -1021,10 +1023,11 @@
         "properties": {
           "ID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "referenceID": {
             "type": "string",
@@ -1037,10 +1040,12 @@
             "example": "2017-04-13T15:51:04Z"
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "status": {
             "type": "string",
+            "maxLength": 255,
             "enum": [
               "requested",
               "running",
@@ -1071,7 +1076,8 @@
             "maxLength": 255
           },
           "link": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "testRun": {
             "type": "boolean"
@@ -1084,7 +1090,8 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "referenceID": {
             "type": "string",
@@ -1110,13 +1117,16 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "longDescription": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "supportsStartDateTime": {
             "type": "boolean"
@@ -1125,7 +1135,8 @@
             "type": "boolean"
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           }
         },
         "required": ["name", "version"]
@@ -1136,19 +1147,22 @@
         "properties": {
           "ID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "jobID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "value": {
+            "maxLength": 5000,
             "oneOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 255
               },
               {
                 "type": "boolean"
@@ -1166,12 +1180,15 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "value": {
+            "maxLength": 5000,
             "oneOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 255
               },
               {
                 "type": "boolean"
@@ -1189,24 +1206,30 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "jobName": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "type": {
             "type": "string",
+            "maxLength": 255,
             "enum": ["readOnlyValue", "writableValue", "mapping"]
           },
           "dataType": {
             "type": "string",
+            "maxLength": 255,
             "enum": ["string", "number", "datetime", "boolean"]
           },
           "mappingType": {
             "type": "string",
+            "maxLength": 255,
             "enum": [
               "accountingPrinciple",
               "companyCode",
@@ -1238,9 +1261,11 @@
             ]
           },
           "value": {
+            "maxLength": 5000,
             "oneOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 255
               },
               {
                 "type": "boolean"
@@ -1263,27 +1288,32 @@
         "properties": {
           "ID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "jobID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "type": {
             "type": "string",
+            "maxLength": 255,
             "enum": ["link", "data", "message"]
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "link": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "mimeType": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "filename": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           }
         }
       },
@@ -1293,21 +1323,24 @@
         "properties": {
           "ID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "resultID": {
             "type": "string",
-            "maxLength": 500
+            "maxLength": 255
           },
           "severity": {
             "type": "string",
+            "maxLength": 255,
             "enum": ["success", "info", "warning", "error"]
           },
           "code": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "text": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           },
           "createdAt": {
             "type": "string",
@@ -1321,10 +1354,12 @@
         "required": ["code", "message"],
         "properties": {
           "code": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 5000
           }
         }
       }

@@ -9,13 +9,13 @@ using {
 @title: '{i18n>JobDefinition}'
 entity JobDefinition {
       @title: '{i18n>Name}'
-  key name                  : String not null;
+  key name                  : String(255) not null;
 
       @title: '{i18n>Description}'
-      description           : String;
+      description           : localized String(5000);
 
       @title: '{i18n>LongDescription}'
-      longDescription       : String;
+      longDescription       : localized String(5000);
 
       @title: '{i18n>SupportsStartDateTime}'
       supportsStartDateTime : Boolean;
@@ -24,7 +24,7 @@ entity JobDefinition {
       supportsTestRun       : Boolean;
 
       @title: '{i18n>Version}'
-      version               : String not null;
+      version               : String(255) not null;
 
       @title: '{i18n>Parameters}'
       parameters            : Composition of many JobParameterDefinition
@@ -34,13 +34,13 @@ entity JobDefinition {
 @title: '{i18n>JobParameterDefinition}'
 entity JobParameterDefinition {
       @title: '{i18n>Name}'
-  key name        : String;
+  key name        : String(255) not null;
 
       @title: '{i18n>Job}'
   key job         : Association to JobDefinition not null;
 
       @title: '{i18n>Description}'
-      description : String;
+      description : localized String(5000);
 
       @title: '{i18n>ParameterType}'
       type        : Association to ParameterType not null;
@@ -52,7 +52,7 @@ entity JobParameterDefinition {
       mappingType : Association to MappingType;
 
       @title: '{i18n>Value}'
-      value       : String;
+      value       : String(5000);
 
       @title: '{i18n>Required}'
       required    : Boolean not null default false;
@@ -78,11 +78,11 @@ entity Job : cuid, managed {
 
   @readonly
   @title: '{i18n>Version}'
-  version       : String not null;
+  version       : String(255) not null;
 
   @readonly
   @title: '{i18n>Link}'
-  link          : String;
+  link          : String(5000);
 
   @readonly
   @title: '{i18n>Status}'
@@ -114,7 +114,7 @@ entity JobParameter : cuid, {
   definition : Association to JobParameterDefinition not null;
 
   @title: '{i18n>Value}'
-  value      : String;
+  value      : String(5000);
 };
 
 @assert.unique.semanticKey: [
@@ -127,19 +127,19 @@ entity JobResult : cuid, {
   job      : Association to Job not null;
 
   @title: '{i18n>Name}'
-  name     : String not null;
+  name     : String(255) not null;
 
   @title: '{i18n>Type}'
   type     : Association to ResultType not null;
 
   @title: '{i18n>Link}'
-  link     : String;
+  link     : String(5000);
 
   @title: '{i18n>MimeType}'
-  mimeType : String;
+  mimeType : String(255);
 
   @title: '{i18n>Data}'
-  filename : String;
+  filename : String(5000);
 
   @title: '{i18n>Data}'
   data     : LargeBinary;
@@ -155,10 +155,10 @@ entity JobResultMessage : cuid, {
   result    : Association to JobResult not null;
 
   @title: '{i18n>Code}'
-  code      : String not null;
+  code      : String(255) not null;
 
   @title: '{i18n>Message}'
-  text      : localized String not null;
+  text      : localized String(5000) not null;
 
   @title: '{i18n>Severity}'
   severity  : Association to MessageSeverity not null default #info;
@@ -167,7 +167,7 @@ entity JobResultMessage : cuid, {
   createdAt : Timestamp not null;
 };
 
-type JobStatusCode              : String enum {
+type JobStatusCode              : String(255) enum {
   requested;
   running;
   completed;
@@ -184,7 +184,7 @@ entity JobStatus : CodeList {
   key code : JobStatusCode;
 };
 
-type ParameterTypeCode          : String enum {
+type ParameterTypeCode          : String(255) enum {
   readOnlyValue;
   writableValue;
   mapping;
@@ -196,7 +196,7 @@ entity ParameterType : CodeList {
   key code : ParameterTypeCode;
 };
 
-type DataTypeCode               : String enum {
+type DataTypeCode               : String(255) enum {
   string;
   number;
   datetime;
@@ -209,7 +209,7 @@ entity DataType : CodeList {
   key code : DataTypeCode;
 };
 
-type MappingTypeCode            : String enum {
+type MappingTypeCode            : String(255) enum {
   accountingPrinciple;
   companyCode;
   plant;
@@ -245,7 +245,7 @@ entity MappingType : CodeList {
   key code : MappingTypeCode;
 };
 
-type ResultTypeCode             : String enum {
+type ResultTypeCode             : String(255) enum {
   link;
   data;
   message;
@@ -257,7 +257,7 @@ entity ResultType : CodeList {
   key code : ResultTypeCode;
 };
 
-type MessageSeverityCode        : String enum {
+type MessageSeverityCode        : String(255) enum {
   success;
   info;
   warning;
