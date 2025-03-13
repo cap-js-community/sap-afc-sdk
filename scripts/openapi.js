@@ -60,8 +60,9 @@ function processSchedulingProviderService(check) {
   ];
   data.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
   delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.type;
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.maxLength;
   data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.oneOf = [
-    { type: "string", maxLength: 255 },
+    { type: "string", maxLength: 5000 },
     { type: "boolean" },
     { type: "number" },
   ];
@@ -74,15 +75,17 @@ function processSchedulingProviderService(check) {
   data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
   data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
   delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.type;
+  delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.maxLength;
   data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.oneOf = [
-    { type: "string", maxLength: 255 },
+    { type: "string", maxLength: 5000 },
     { type: "boolean" },
     { type: "number" },
   ];
   data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
   delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.type;
+  delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.maxLength;
   data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.oneOf = [
-    { type: "string", maxLength: 255 },
+    { type: "string", maxLength: 5000 },
     { type: "boolean" },
     { type: "number" },
   ];

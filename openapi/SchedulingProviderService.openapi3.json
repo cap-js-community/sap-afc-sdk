@@ -1158,11 +1158,10 @@
             "maxLength": 255
           },
           "value": {
-            "maxLength": 5000,
             "oneOf": [
               {
                 "type": "string",
-                "maxLength": 255
+                "maxLength": 5000
               },
               {
                 "type": "boolean"
@@ -1184,11 +1183,10 @@
             "maxLength": 255
           },
           "value": {
-            "maxLength": 5000,
             "oneOf": [
               {
                 "type": "string",
-                "maxLength": 255
+                "maxLength": 5000
               },
               {
                 "type": "boolean"
@@ -1261,11 +1259,10 @@
             ]
           },
           "value": {
-            "maxLength": 5000,
             "oneOf": [
               {
                 "type": "string",
-                "maxLength": 255
+                "maxLength": 5000
               },
               {
                 "type": "boolean"
