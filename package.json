@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=22"
   },
-  "author": "Oliver Klemenz <oklemenz@gmail.com>, Maximilian Gruenfelder <max.grunfelder@gmail.com>",
+  "author": "Oliver Klemenz <oliver.klemenz@sap.com>, Gruenfelder, Maximilian <maximilian.gruenfelder@sap.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
