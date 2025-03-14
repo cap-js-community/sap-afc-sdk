@@ -90,6 +90,9 @@ describe("API", () => {
 
     response = await GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters");
     expect(response.data[0].parameters).toBeUndefined();
+
+    response = await GET("/api/job-scheduling/v1/JobDefinition?$filter=name eq 'JOB_1'");
+    expect(response.data).toHaveLength(6);
   });
 
   it("GET Job Definitions (name)", async () => {

@@ -21,6 +21,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.before("READ", "*", (req) => {
       delete req.query.SELECT.where;
+      delete req.query.__proto__.SELECT.where;
       delete req.query.SELECT.orderBy;
       req.query.SELECT.columns = ["*"];
       delete req.query.SELECT.limit;

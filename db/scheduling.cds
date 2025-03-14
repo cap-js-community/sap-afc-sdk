@@ -117,7 +117,7 @@ entity JobParameter : cuid, {
   value      : String(5000);
 };
 
-@title                    : '{i18n>JobResult}'
+@title: '{i18n>JobResult}'
 entity JobResult : cuid, {
   @title: '{i18n>Job}'
   job      : Association to Job not null;
