@@ -73,19 +73,7 @@ function secureRoutes() {
 }
 
 function addMiddlewares() {
-  cds.middlewares.before.push(handleQuery);
   cds.middlewares.after.unshift(handleError);
-}
-
-function handleQuery(req, res, next) {
-  if (req.baseUrl?.startsWith("/api/")) {
-    Object.keys(req.query).forEach((key) => {
-      if (key.startsWith("$")) {
-        delete req.query[key];
-      }
-    });
-  }
-  next();
 }
 
 function handleError(err, req, res, next) {
