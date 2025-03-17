@@ -181,7 +181,7 @@ annotate service.Job with @(
 
 annotate service.Job {
   status      @Common.ValueListWithFixedValues: true  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
-  link        @HTML5.LinkTarget               : '_blank';
+  link        @HTML5.LinkTarget: '_blank';
   definition  @ValueList                      : {
     entity: 'JobDefinition',
     type  : #Fixed
@@ -388,8 +388,8 @@ annotate service.JobResult with @(
 annotate service.JobResult {
   job      @UI.Hidden;
   type     @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
-  link     @HTML5.LinkTarget               : '_blank';
-  dataLink @HTML5.LinkTarget               : '_blank';
+  link     @HTML5.LinkTarget: '_blank';
+  dataLink @HTML5.LinkTarget: '_blank';
 };
 
 annotate service.JobResultMessage with @(

@@ -5,6 +5,10 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/cap-js-community/sap-afc-sdk)](https://api.reuse.software/info/github.com/cap-js-community/sap-afc-sdk)
 [![Main CI](https://github.com/cap-js-community/sap-afc-sdk/actions/workflows/main-ci.yml/badge.svg)](https://github.com/cap-js-community/sap-afc-sdk/commits/main)
 
+> Integration with SAP Advanced Financial Closing is not yet published.
+> Please refer to [What's New for SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing/whats-new/whats-new)
+> for the latest updates.
+
 ## About this Project
 
 [SAP Advanced Financial Closing SDK for CDS](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk) provides an SDK for [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing) to

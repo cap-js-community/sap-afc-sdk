@@ -42,23 +42,22 @@ service SchedulingProviderService {
     }
   ]
   @title                                           : null
-  entity JobDefinition @readonly                            as
+  entity JobDefinition @readonly          as
     projection on scheduling.JobDefinition {
       *,
       parameters : redirected to JobParameterDefinition
-        on parameters.jobName = $self.name
-    }
-    excluding {
-      texts,
-      localized
-    };
+                     on parameters.jobName = $self.name
+      }
+      excluding {
+        texts,
+        localized
+      };
 
   @title: null
-  entity JobParameterDefinition @readonly                   as
+  entity JobParameterDefinition @readonly as
     projection on scheduling.JobParameterDefinition {
       key name,
-      key job.name         as jobName,
-          *,
+      key job.name         as jobName, *,
           description,
           dataType.code    as dataType,
           type.code        as type,
@@ -89,29 +88,28 @@ service SchedulingProviderService {
     }
   ]
   @title                                           : null
-  entity Job                                                as
+  entity Job                              as
     projection on scheduling.Job {
       key ID         : String(255)  @readonly,
           definition.name as name,
           referenceID,
           startDateTime,
           version,
-          status.code     as status @readonly,
-          *,
+          status.code     as status @readonly, *,
           parameters : redirected to JobParameter
-        on parameters.jobID = $self.ID,
+                         on parameters.jobID = $self.ID,
           results    : redirected to JobResult
-        on results.jobID = $self.ID,
-    }
-    excluding {
-      definition
-    }
-    actions {
-      action cancel();
-    };
+                         on results.jobID = $self.ID,
+                       }
+                       excluding {
+                         definition
+                       }
+        actions {
+          action cancel();
+        };
 
-  @title: null
-  entity JobParameter                            @readonly  as
+          @title       : null
+  entity JobParameter @readonly           as
     projection on scheduling.JobParameter {
       key ID                       : String(255) @readonly,
           job.ID          as jobID : String(255) @readonly,
@@ -126,31 +124,29 @@ service SchedulingProviderService {
     };
 
   @title: null
-  entity JobResult                         @readonly        as
+  entity JobResult @readonly              as
     projection on scheduling.JobResult {
       key ID                 : String(255) @readonly,
           job.ID    as jobID : String(255) @readonly,
-          type.code as type,
-          *,
+          type.code as type, *,
           messages           : redirected to JobResultMessage
-        on messages.resultID = $self.ID,
-    }
-    excluding {
-      job,
-      type,
-      data,
-    }
-    actions {
-      function data() returns LargeBinary;
-    };
+                                 on messages.resultID = $self.ID,
+      }
+      excluding {
+        job,
+        type,
+        data,
+      }
+      actions {
+        function data() returns LargeBinary;
+      };
 
   @title: null
-  entity JobResultMessage                         @readonly as
+  entity JobResultMessage @readonly       as
     projection on scheduling.JobResultMessage {
       key ID                        : String(255) @readonly,
           result.ID     as resultID : String(255) @readonly,
-          severity.code as severity,
-          *
+          severity.code as severity, *
     }
     excluding {
       result,

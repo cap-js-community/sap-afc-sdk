@@ -262,9 +262,9 @@ type MessageSeverityCode        : String(255) enum {
 
 type MessageSeverityNumericCode : Integer enum {
   success = 1;
-  info    = 2;
+  info = 2;
   warning = 3;
-  error   = 4;
+  error = 4;
 };
 
 @title: '{i18n>MessageSeverity}'
