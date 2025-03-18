@@ -223,7 +223,7 @@ CAP application.
     - Terminal: `afc init cf`
   - Kyma:
     - Terminal: `afc init kyma`
-- Add AFC SDK features
+- Optionally add AFC SDK features
   - Terminal: `afc add broker,sample,http`
 - Test
   - Terminal: `npm start`
@@ -329,7 +329,7 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
 module.exports = CustomSchedulingProcessingService;
 ```
 
-A stub implementation for the custom scheduling processing service can be generated via command:
+A stub implementation for custom scheduling processing service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -475,7 +475,7 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
 module.exports = CustomSchedulingProviderService;
 ```
 
-A stub implementation for the custom scheduling provider service can be generated via command:
+A stub implementation for custom scheduling provider service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -555,7 +555,7 @@ class CustomPeriodicSchedulingJobSync extends PeriodicSchedulingJobSync {
 module.exports = CustomPeriodicSchedulingJobSync;
 ```
 
-A stub implementation for the periodic job sync can be generated via command:
+A stub implementation for periodic job sync can be generated via command:
 
 - Terminal: `afc add stub`
 
