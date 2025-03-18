@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 "use strict";
 
-const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 const { copyTemplate, adjustJSON } = require("../common/util");

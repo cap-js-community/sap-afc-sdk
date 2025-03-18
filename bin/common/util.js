@@ -78,5 +78,5 @@ module.exports = {
   adjustLines,
   replaceTextPart,
   adjustJSON,
-  copyTemplate
+  copyTemplate,
 };
