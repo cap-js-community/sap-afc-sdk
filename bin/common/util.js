@@ -60,9 +60,23 @@ function adjustJSON(file, callback) {
   return false;
 }
 
+function copyTemplate(folder, files) {
+  fs.mkdirSync(folder, { recursive: true });
+  for (const file of files) {
+    const src = path.join(__dirname, "..", "templates", file);
+    const dest = path.join(process.cwd(), file);
+    if (!fs.existsSync(dest)) {
+      fs.copyFileSync(src, dest);
+    }
+  }
+  // eslint-disable-next-line no-console
+  console.log(`Folder '${folder}' written.`);
+}
+
 module.exports = {
   adjustText,
   adjustLines,
   replaceTextPart,
   adjustJSON,
+  copyTemplate
 };

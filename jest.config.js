@@ -6,7 +6,7 @@ module.exports = {
   bail: false,
   clearMocks: false,
   collectCoverage: true,
-  collectCoverageFrom: ["cds-plugin.js", "**/src/**/*.js", "**/srv/**/*.js"],
+  collectCoverageFrom: ["cds-plugin.js", "**/src/**/*.js", "**/srv/**/*.js", "!**/bin/**/*.js", "!**/scripts/**/*.js"],
   coverageDirectory: "reports/coverage/unit/",
   coverageReporters: ["lcov", "text"],
   coverageThreshold: {
@@ -22,7 +22,7 @@ module.exports = {
   resetMocks: false,
   resetModules: false,
   testMatch: ["**/test/**/*.test.js"],
-  testPathIgnorePatterns: ["/node_modules/"],
+  testPathIgnorePatterns: ["/node_modules/", "/bin/", "/scripts/"],
   verbose: true,
   maxWorkers: 2,
   setupFilesAfterEnv: ["./jest.setupAfterEnv.js"],

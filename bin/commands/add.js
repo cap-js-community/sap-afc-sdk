@@ -3,6 +3,9 @@
 
 const commander = require("commander");
 module.exports = {
+  dependencies: {
+    test: ["sample"],
+  },
   register: function (program) {
     return program
       .command("add")
@@ -18,14 +21,17 @@ module.exports = {
         `
 Features: 
   broker \t\t - expose a broker service
+  stub \t\t\t - add stub implementation
   mock \t\t\t - mock job processing
   sample \t\t - add sample data
   http \t\t\t - add .http files
+  test \t\t\t - add test
   app \t\t\t - add app files
 
 Examples:
   afc add broker
   afc add broker,sample,http
+  afc add stub
   afc add -x mock
 `,
       );
@@ -40,18 +46,27 @@ Examples:
   },
   process: function (features, options) {
     for (const feature of features) {
+      if (module.exports.dependencies[feature]) {
+        for (const dependency of module.exports.dependencies[feature]) {
+          if (!features.includes(dependency)) {
+            features.push(dependency);
+          }
+        }
+      }
+    }
+    for (const feature of features) {
       try {
         if (options.xremove && !["mock"].includes(feature)) {
           console.log("Feature removal is only supported for 'mock'");
           continue;
         }
-        const featureFn = require(`../features/${feature}`);
-        featureFn(options);
         if (!options.xremove) {
           console.log(`Adding feature '${feature}'`);
         } else {
           console.log(`Removing feature '${feature}'`);
         }
+        const featureFn = require(`../features/${feature}`);
+        featureFn(options);
       } catch (err) {
         console.log(`Unknown feature '${feature}'`);
       }

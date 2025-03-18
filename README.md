@@ -285,7 +285,7 @@ To disable mock processing remove CDS env `cds.requires.sap-afc-sdk.mockProcessi
 #### Implement Job Processing
 
 The default implementation of the job processing is already provided by the SDK. Focus can be put on
-custpm processing logic, and the processing status update handling.
+custom processing logic, and the processing status update handling.
 
 To implement a custom job processing extend the job processing service definition as follows:
 
@@ -293,6 +293,7 @@ To implement a custom job processing extend the job processing service definitio
 
 ```cds
 using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+
 annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
 ```
 
@@ -327,6 +328,10 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
 
 module.exports = CustomSchedulingProcessingService;
 ```
+
+A stub implementation for the custom scheduling processing service can be generated via command:
+
+- Terminal: `afc add stub`
 
 As part of the custom scheduling process service implementation, the following operations can be implemented:
 
@@ -369,24 +374,33 @@ type ResultTypeCode   : String enum {
 };
 
 type MessageSeverityCode : String enum {
-  error;
-  warning;
+  success;
   info;
+  warning;
+  error;
 };
 
 type JobResult {
-  name     :      String not null;
+  name     :      String(255) not null;
   type     :      ResultTypeCode not null;
-  link     :      String;
-  mimeType :      String;
-  filename :      String;
+  link     :      String(5000);
+  mimeType :      String(255);
+  filename :      String(5000);
   data     :      LargeBinary;
   messages : many JobResultMessage;
 };
 
 type JobResultMessage {
-  text     : String not null;
-  severity : MessageSeverityCode not null;
+  code      : String(255) not null;
+  text      : String(5000);
+  severity  : MessageSeverityCode not null;
+  createdAt : Timestamp;
+  texts     : many JobResultMessageText;
+};
+
+type JobResultMessageText {
+  locale : Locale not null;
+  text   : String(5000) not null;
 };
 ```
 
@@ -426,13 +440,14 @@ To implement a custom job provider extend the job provider service definition as
 
 ```cds
 using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+
 annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';
 ```
 
 **Implementation file:** `/srv/scheduling-provider-service.js`
 
 ```js
-const { SchedulingProviderService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProviderService } = require("@cap-js-community/sap-afc-sdk");
 
 class CustomSchedulingProviderService extends SchedulingProviderService {
   async init() {
@@ -448,7 +463,7 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
       await next();
     });
 
-    this.on(JobResult.actions.data, JobResult, async (req) => {
+    this.on(JobResult.actions.data, JobResult, async (req, next) => {
       // Your logic goes here
       await next();
     });
@@ -459,6 +474,10 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
 
 module.exports = CustomSchedulingProviderService;
 ```
+
+A stub implementation for the custom scheduling provider service can be generated via command:
+
+- Terminal: `afc add stub`
 
 As part of the custom scheduling provider service implementation, the following operations can be implemented:
 
@@ -482,6 +501,7 @@ Scheduling Provider Service can be restricted for authorization adding `@require
 
 ```cds
 using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+
 annotate SchedulingProviderService with @requires: 'JobScheduling';
 ```
 
@@ -499,13 +519,11 @@ To implement a custom job sync extend the job sync configuration in CDS env as f
 ```json
 {
   "cds": {
-    "requires": {
-      "eventQueue": {
-        "periodicEvents": {
-          "SchedulingJob/Sync": {
-            "cron": "*/1 * * * *",
-            "impl": "/srv/SchedulingJobSync.js"
-          }
+    "eventQueue": {
+      "periodicEvents": {
+        "SchedulingJob/Sync": {
+          "cron": "*/1 * * * *",
+          "impl": "/srv/scheduling-job-sync.js"
         }
       }
     }
@@ -515,7 +533,7 @@ To implement a custom job sync extend the job sync configuration in CDS env as f
 
 The `cron` interval option defines the periodicity of the scheduling job synchronization.
 
-**Implementation file:** `/srv/SchedulingJobSync.js`
+**Implementation file:** `/srv/scheduling-job-sync.js`
 
 ```js
 const { PeriodicSchedulingJobSync } = require("@cap-js-community/sap-afc-sdk");
@@ -537,6 +555,10 @@ class CustomPeriodicSchedulingJobSync extends PeriodicSchedulingJobSync {
 module.exports = CustomPeriodicSchedulingJobSync;
 ```
 
+A stub implementation for the periodic job sync can be generated via command:
+
+- Terminal: `afc add stub`
+
 Details on how to implement periodic event via Event Queue can be found in
 [Event-Queue documentation on Periodic Events](https://cap-js-community.github.io/event-queue/configure-event/#periodic-events).
 
@@ -556,6 +578,14 @@ To add sample job definitions and job instances run:
 - Terminal: `afc add sample`
 
 Test data will be placed at `/db/data`
+
+#### Unit-Tests
+
+To add unit-tests for testing the API endpoints run:
+
+- Terminal: `afc add test`
+
+Test files will be placed at `/test`.
 
 #### Add .http files
 

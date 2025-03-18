@@ -44,7 +44,13 @@ cds.on("listening", () => {
 function secureRoutes() {
   if (cds.env.requires?.["sap-afc-sdk"]?.api?.cors) {
     const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.api?.cors);
-    cds.app.use("/api", cors(corsOptions));
+    cds.app.use(
+      "/api",
+      cors({
+        origin: approuterUrl(),
+        ...corsOptions,
+      }),
+    );
   }
   if (serverUrl().startsWith("http://localhost")) {
     return;

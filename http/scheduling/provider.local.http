@@ -34,7 +34,6 @@ Content-Type: application/json
 {
     "name": "JOB_1",
     "referenceID": "abc4711",
-    "startDateTime": "2025-01-01T12:00:00Z",
     "parameters": [{
         "name": "A",
         "value": "abc"

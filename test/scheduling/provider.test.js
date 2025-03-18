@@ -59,9 +59,14 @@ describe("API", () => {
     });
 
     it("GET CORS", async () => {
-      let response = await GET("/api/job-scheduling/v1/JobDefinition");
+      let response = await GET("/api/job-scheduling/v1/JobDefinition", {
+        headers: {
+          Origin: "https://example.com",
+        },
+      });
       expect(response.headers).toMatchObject({
-        "access-control-allow-origin": "*",
+        "access-control-allow-origin": "https://sap-afc-sdk.sap.com",
+        vary: "Origin",
       });
     });
   });

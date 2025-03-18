@@ -12,5 +12,6 @@ cds init afcsdk
 cd afcsdk
 npm install github:cap-js-community/sap-afc-sdk
 afc init kyma
-afc add -a broker,mock,sample,http
+afc add -a broker,stub,mock,sample,test,http
+npm test
 ctz containerize.yaml --push --logs
