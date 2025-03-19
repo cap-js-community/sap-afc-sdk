@@ -3,7 +3,7 @@ locale;code;name;descr
 "de";companyCode;Buchungskreis;Buchungskreis
 "de";plant;Werk;Werk
 "de";controllingArea;Kostenrechnungskreis;Kostenrechnungskreis
-"de";fiscalPeriod;Fiscal Period;Fiscal Period
+"de";fiscalPeriod;Geschäftsperiode;Geschäftsperiode
 "de";fiscalYearPeriod;Geschäftsjahresperiode;Geschäftsjahresperiode
 "de";fiscalYear;Geschäftsjahr;Geschäftsjahr
 "de";keyDate;Stichtag;Stichtag
@@ -11,13 +11,13 @@ locale;code;name;descr
 "de";fiscalYearVariant;Geschäftsjahresvariante;Geschäftsjahresvariante
 "de";ledger;Ledger;Ledger
 "de";testRun;Testlauf;Testlauf
-"de";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"de";postingPeriodVariant;Buchungsperiodenvariante;Buchungsperiodenvariante
 "de";processingUser;Ausführender Benutzer;Ausführender Benutzer
 "de";interestedUser;Interessierter Benutzer;Interessierter Benutzer
 "de";userResponsible;Verantwortlicher Benutzer;Verantwortlicher Benutzer
-"de";processingUserEmail;Processing User Email;Processing User Email
-"de";interestedUserEmail;Interested User Email;Interested User Email
-"de";userResponsibleEmail;User Responsible Email;User Responsible Email
+"de";processingUserEmail;E-Mail des ausführenden Benutzers;E-Mail des ausführenden Benutzers
+"de";interestedUserEmail;E-Mail des interessierten Benutzers;E-Mail des interessierten Benutzers
+"de";userResponsibleEmail;E-Mail des verantwortlichen Benutzers;E-Mail des verantwortlichen Benutzers
 "de";executionID;Ausführungs-ID;Ausführungs-ID
 "de";customField1;Benutzerdefiniertes Feld 1;Benutzerdefiniertes Feld 1
 "de";customField2;Benutzerdefiniertes Feld 2;Benutzerdefiniertes Feld 2

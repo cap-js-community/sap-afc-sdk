@@ -1,5 +1,5 @@
 locale;code;name;descr
-"hr";string;String;String
+"hr";string;Niz;Niz
 "hr";number;Broj;Broj
-"hr";datetime;Date & Time;Date & Time
-"hr";boolean;Booleova vrijednost;Booleova vrijednost
+"hr";datetime;Datum i vrijeme;Datum i vrijeme
+"hr";boolean;Booleov;Booleov

@@ -1,4 +1,4 @@
 locale;code;name;descr
-"hr";readOnlyValue;Read-Only Value;Read-Only Value
-"hr";writableValue;Writable Value;Writable Value
-"hr";mapping;Mapping;Mapping
+"hr";readOnlyValue;Vrijednost samo za čitanje;Vrijednost samo za čitanje
+"hr";writableValue;Vrijednost pretočiva u pismo;Vrijednost pretočiva u pismo
+"hr";mapping;Mapiranje;Mapiranje

@@ -1,5 +1,5 @@
 locale;code;name;descr
-"pl";string;String;String
+"pl";string;Ciąg znaków;Ciąg znaków
 "pl";number;Liczba;Liczba
-"pl";datetime;Date & Time;Date & Time
+"pl";datetime;Data i godzina;Data i godzina
 "pl";boolean;Wartość logiczna;Wartość logiczna

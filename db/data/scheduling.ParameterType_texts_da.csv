@@ -1,4 +1,4 @@
 locale;code;name;descr
-"da";readOnlyValue;Read-Only Value;Read-Only Value
-"da";writableValue;Writable Value;Writable Value
-"da";mapping;Mapping;Mapping
+"da";readOnlyValue;Skrivebeskyttet værdi;Skrivebeskyttet værdi
+"da";writableValue;Værdi, der kan skrives;Værdi, der kan skrives
+"da";mapping;Tildeling;Tildeling

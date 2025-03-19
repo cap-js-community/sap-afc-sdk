@@ -3,7 +3,7 @@ locale;code;name;descr
 "ms";companyCode;Kod Syarikat;Kod Syarikat
 "ms";plant;Loji;Loji
 "ms";controllingArea;Bahagian Pengawalan;Bahagian Pengawalan
-"ms";fiscalPeriod;Fiscal Period;Fiscal Period
+"ms";fiscalPeriod;Tempoh Fiskal;Tempoh Fiskal
 "ms";fiscalYearPeriod;Tempoh Tahun Fiskal;Tempoh Tahun Fiskal
 "ms";fiscalYear;Tahun Fiskal;Tahun Fiskal
 "ms";keyDate;Tarikh Rujukan;Tarikh Rujukan
@@ -11,13 +11,13 @@ locale;code;name;descr
 "ms";fiscalYearVariant;Varian Tahun Fiskal;Varian Tahun Fiskal
 "ms";ledger;Lejar;Lejar
 "ms";testRun;Jalanan Ujian;Jalanan Ujian
-"ms";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ms";postingPeriodVariant;Varian Tempoh Pengeposan;Varian Tempoh Pengeposan
 "ms";processingUser;Pengguna Pemprosesan;Pengguna Pemprosesan
 "ms";interestedUser;Pengguna Berkepentingan;Pengguna Berkepentingan
 "ms";userResponsible;Pengguna Bertanggungjawab;Pengguna Bertanggungjawab
-"ms";processingUserEmail;Processing User Email;Processing User Email
-"ms";interestedUserEmail;Interested User Email;Interested User Email
-"ms";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ms";processingUserEmail;E-mel Pengguna Pemprosesan;E-mel Pengguna Pemprosesan
+"ms";interestedUserEmail;E-mel Pengguna Berkepentingan;E-mel Pengguna Berkepentingan
+"ms";userResponsibleEmail;E-mel Pengguna Bertanggungjawab;E-mel Pengguna Bertanggungjawab
 "ms";executionID;ID Pelaksanaan;ID Pelaksanaan
 "ms";customField1;Medan Tersuai 1;Medan Tersuai 1
 "ms";customField2;Medan Tersuai 2;Medan Tersuai 2

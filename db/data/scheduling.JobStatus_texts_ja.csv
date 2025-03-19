@@ -1,9 +1,9 @@
 locale;code;name;descr
-"ja";requested;Requested;Requested
-"ja";running;Running;Running
+"ja";requested;依頼済;依頼済
+"ja";running;実行中;実行中
 "ja";completed;完了;完了
-"ja";completedWithWarning;Completed With Warning;警告
-"ja";completedWithError;Completed With Error;エラー
+"ja";completedWithWarning;完了 (警告あり);警告
+"ja";completedWithError;完了 (エラーあり);エラー
 "ja";failed;失敗;失敗
-"ja";cancelRequested;Cancel Requested;Requested
-"ja";canceled;Canceled;Canceled
+"ja";cancelRequested;取消依頼済;依頼済
+"ja";canceled;取消済;取消済

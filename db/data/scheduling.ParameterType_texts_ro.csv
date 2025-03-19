@@ -1,4 +1,4 @@
 locale;code;name;descr
-"ro";readOnlyValue;Read-Only Value;Read-Only Value
-"ro";writableValue;Writable Value;Writable Value
-"ro";mapping;Mapping;Mapping
+"ro";readOnlyValue;Valoare doar în citire;Valoare doar în citire
+"ro";writableValue;Valoare care poate fi scrisă;Valoare care poate fi scrisă
+"ro";mapping;Mapare;Mapare

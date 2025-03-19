@@ -1,4 +1,4 @@
 locale;code;name;descr
-"ru";readOnlyValue;Read-Only Value;Read-Only Value
-"ru";writableValue;Writable Value;Writable Value
-"ru";mapping;Mapping;Mapping
+"ru";readOnlyValue;Значение только для чтения;Значение только для чтения
+"ru";writableValue;Значение с возможностью записи;Значение с возможностью записи
+"ru";mapping;Сопоставление;Сопоставление

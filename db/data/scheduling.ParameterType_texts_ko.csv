@@ -1,4 +1,4 @@
 locale;code;name;descr
-"ko";readOnlyValue;Read-Only Value;Read-Only Value
-"ko";writableValue;Writable Value;Writable Value
-"ko";mapping;Mapping;Mapping
+"ko";readOnlyValue;읽기 전용 값;읽기 전용 값
+"ko";writableValue;쓰기 가능 값;쓰기 가능 값
+"ko";mapping;매핑;매핑

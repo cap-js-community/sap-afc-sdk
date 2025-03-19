@@ -1,9 +1,9 @@
 locale;code;name;descr
-"zh_TW";requested;Requested;Requested
-"zh_TW";running;Running;Running
+"zh_TW";requested;已請求;已請求
+"zh_TW";running;執行中;執行中
 "zh_TW";completed;已完成;已完成
-"zh_TW";completedWithWarning;Completed With Warning;警告
-"zh_TW";completedWithError;Completed With Error;錯誤
+"zh_TW";completedWithWarning;已完成 (出現警告);警告
+"zh_TW";completedWithError;已完成 (出現錯誤);錯誤
 "zh_TW";failed;失敗;失敗
-"zh_TW";cancelRequested;Cancel Requested;Requested
-"zh_TW";canceled;Canceled;Canceled
+"zh_TW";cancelRequested;已請求取消;已請求
+"zh_TW";canceled;已取消;已取消

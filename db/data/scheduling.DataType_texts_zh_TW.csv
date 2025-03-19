@@ -1,5 +1,5 @@
 locale;code;name;descr
-"zh_TW";string;String;String
+"zh_TW";string;字串;字串
 "zh_TW";number;數字;數字
-"zh_TW";datetime;Date & Time;Date & Time
+"zh_TW";datetime;日期和時間;日期和時間
 "zh_TW";boolean;布林值;布林值

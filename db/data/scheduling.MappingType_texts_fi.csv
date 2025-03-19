@@ -3,7 +3,7 @@ locale;code;name;descr
 "fi";companyCode;Yritys;Yritys
 "fi";plant;Toimipiste;Toimipiste
 "fi";controllingArea;Kustannuslaskenta-alue;Kustannuslaskenta-alue
-"fi";fiscalPeriod;Fiscal Period;Fiscal Period
+"fi";fiscalPeriod;Liiketoimintakausi;Liiketoimintakausi
 "fi";fiscalYearPeriod;Tilikauden kausi;Tilikauden kausi
 "fi";fiscalYear;Tilikausi;Tilikausi
 "fi";keyDate;Määräpäivä;Määräpäivä
@@ -11,13 +11,13 @@ locale;code;name;descr
 "fi";fiscalYearVariant;Tilikausivariantti;Tilikausivariantti
 "fi";ledger;Pääkirja;Pääkirja
 "fi";testRun;Testiajo;Testiajo
-"fi";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"fi";postingPeriodVariant;Kirjauskausivariantti;Kirjauskausivariantti
 "fi";processingUser;Käsittelevä käyttäjä;Käsittelevä käyttäjä
 "fi";interestedUser;Kiinnostunut käyttäjä;Kiinnostunut käyttäjä
 "fi";userResponsible;Vastaava käyttäjä;Vastaava käyttäjä
-"fi";processingUserEmail;Processing User Email;Processing User Email
-"fi";interestedUserEmail;Interested User Email;Interested User Email
-"fi";userResponsibleEmail;User Responsible Email;User Responsible Email
+"fi";processingUserEmail;Käsittelevän käyttäjän sähköposti;Käsittelevän käyttäjän sähköposti
+"fi";interestedUserEmail;Kiinnostuneen käyttäjän sähköposti;Kiinnostuneen käyttäjän sähköposti
+"fi";userResponsibleEmail;Vastaavan käyttäjän sähköposti;Vastaavan käyttäjän sähköposti
 "fi";executionID;Suoritustunnus;Suoritustunnus
 "fi";customField1;Mukautettu kenttä 1;Mukautettu kenttä 1
 "fi";customField2;Mukautettu kenttä 2;Mukautettu kenttä 2

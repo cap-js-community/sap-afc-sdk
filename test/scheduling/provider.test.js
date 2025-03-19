@@ -467,7 +467,6 @@ describe("API", () => {
         "Accept-Language": "de",
       },
     });
-    // TODO: Translation
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -476,7 +475,6 @@ describe("API", () => {
         "Accept-Language": "de",
       },
     });
-    // TODO: Translation
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 

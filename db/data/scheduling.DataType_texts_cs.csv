@@ -1,5 +1,5 @@
 locale;code;name;descr
-"cs";string;String;String
+"cs";string;Řetězec;Řetězec
 "cs";number;Číslo;Číslo
-"cs";datetime;Date & Time;Date & Time
+"cs";datetime;Datum a čas;Datum a čas
 "cs";boolean;Logická hodnota;Logická hodnota

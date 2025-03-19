@@ -1,4 +1,4 @@
 locale;code;name;descr
-"de";readOnlyValue;Read-Only Value;Read-Only Value
-"de";writableValue;Writable Value;Writable Value
+"de";readOnlyValue;Schreibgeschützter Wert;Schreibgeschützter Wert
+"de";writableValue;Schreibbarer Wert;Schreibbarer Wert
 "de";mapping;Mapping;Mapping

@@ -3,7 +3,7 @@ locale;code;name;descr
 "ar";companyCode;رمز الشركة;رمز الشركة
 "ar";plant;الوحدة;الوحدة
 "ar";controllingArea;منطقة المراقبة;منطقة المراقبة
-"ar";fiscalPeriod;Fiscal Period;Fiscal Period
+"ar";fiscalPeriod;الفترة المالية;الفترة المالية
 "ar";fiscalYearPeriod;فترة السنة المالية;فترة السنة المالية
 "ar";fiscalYear;السنة المالية;السنة المالية
 "ar";keyDate;التاريخ الأساسي;التاريخ الأساسي
@@ -11,13 +11,13 @@ locale;code;name;descr
 "ar";fiscalYearVariant;متغير السنة المالية;متغير السنة المالية
 "ar";ledger;دفتر الأستاذ;دفتر الأستاذ
 "ar";testRun;تشغيل اختباري;تشغيل اختباري
-"ar";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ar";postingPeriodVariant;متغير فترة الترحيل;متغير فترة الترحيل
 "ar";processingUser;المستخدم المعالِج;المستخدم المعالِج
 "ar";interestedUser;المستخدم المهتم;المستخدم المهتم
 "ar";userResponsible;المستخدم المسؤول;المستخدم المسؤول
-"ar";processingUserEmail;Processing User Email;Processing User Email
-"ar";interestedUserEmail;Interested User Email;Interested User Email
-"ar";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ar";processingUserEmail;البريد الإلكتروني للمستخدم المعالِج;البريد الإلكتروني للمستخدم المعالِج
+"ar";interestedUserEmail;البريد الإلكتروني للمستخدم المهتم;البريد الإلكتروني للمستخدم المهتم
+"ar";userResponsibleEmail;البريد الإلكتروني للمستخدم المسؤول;البريد الإلكتروني للمستخدم المسؤول
 "ar";executionID;معرف التنفيذ;معرف التنفيذ
 "ar";customField1;حقل مخصص 1;حقل مخصص 1
 "ar";customField2;حقل مخصص 2;حقل مخصص 2

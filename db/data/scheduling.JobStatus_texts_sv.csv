@@ -1,9 +1,9 @@
 locale;code;name;descr
-"sv";requested;Requested;Requested
-"sv";running;Running;Running
+"sv";requested;Begärd;Begärd
+"sv";running;Pågår;Pågår
 "sv";completed;Slutförd;Slutförd
-"sv";completedWithWarning;Completed With Warning;Varning
-"sv";completedWithError;Completed With Error;Fel
+"sv";completedWithWarning;Slutförd med varning;Varning
+"sv";completedWithError;Slutförd med fel;Fel
 "sv";failed;Misslyckades;Misslyckades
-"sv";cancelRequested;Cancel Requested;Requested
-"sv";canceled;Canceled;Canceled
+"sv";cancelRequested;Avbrott begärt;Begärd
+"sv";canceled;Avbruten;Avbruten

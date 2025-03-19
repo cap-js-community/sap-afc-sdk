@@ -9,7 +9,7 @@ locale;code;name;descr
 "nl";keyDate;Peildatum;Peildatum
 "nl";chartOfAccounts;Rekeningschema;Rekeningschema
 "nl";fiscalYearVariant;Boekjaarvariant;Boekjaarvariant
-"nl";ledger;Grootboek;Grootboek
+"nl";ledger;Ledger;Ledger
 "nl";testRun;Testrun;Testrun
 "nl";postingPeriodVariant;Boekingsperiodevariant;Boekingsperiodevariant
 "nl";processingUser;Verwerkende gebruiker;Verwerkende gebruiker

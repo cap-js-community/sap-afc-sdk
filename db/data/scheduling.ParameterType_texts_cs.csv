@@ -1,4 +1,4 @@
 locale;code;name;descr
-"cs";readOnlyValue;Read-Only Value;Read-Only Value
-"cs";writableValue;Writable Value;Writable Value
-"cs";mapping;Mapping;Mapping
+"cs";readOnlyValue;Hodnota jen ke čtení;Hodnota jen ke čtení
+"cs";writableValue;Zapisovatelná hodnota;Zapisovatelná hodnota
+"cs";mapping;Mapování;Mapování

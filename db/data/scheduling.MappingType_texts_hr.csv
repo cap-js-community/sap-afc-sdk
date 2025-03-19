@@ -3,21 +3,21 @@ locale;code;name;descr
 "hr";companyCode;Šifra poduzeća;Šifra poduzeća
 "hr";plant;Pogon;Pogon
 "hr";controllingArea;Područje kontrolinga;Područje kontrolinga
-"hr";fiscalPeriod;Fiscal Period;Fiscal Period
+"hr";fiscalPeriod;Fiskalno razdoblje;Fiskalno razdoblje
 "hr";fiscalYearPeriod;Razdoblje fiskalne godine;Razdoblje fiskalne godine
 "hr";fiscalYear;Fiskalna godina;Fiskalna godina
-"hr";keyDate;ključni datum;ključni datum
+"hr";keyDate;Ključni datum;Ključni datum
 "hr";chartOfAccounts;Kontni plan;Kontni plan
 "hr";fiscalYearVariant;Varijanta fiskalne godine;Varijanta fiskalne godine
 "hr";ledger;Knjiga;Knjiga
 "hr";testRun;Probno izvođenje;Probno izvođenje
-"hr";postingPeriodVariant;Posting Period Variant;Posting Period Variant
-"hr";processingUser;Referent;Referent
+"hr";postingPeriodVariant;Varijanta razdoblja knjiženja;Varijanta razdoblja knjiženja
+"hr";processingUser;Korisnik obrade;Korisnik obrade
 "hr";interestedUser;Zainteresiran korisnik;Zainteresiran korisnik
 "hr";userResponsible;Odgovorni korisnik;Odgovorni korisnik
-"hr";processingUserEmail;Processing User Email;Processing User Email
-"hr";interestedUserEmail;Interested User Email;Interested User Email
-"hr";userResponsibleEmail;User Responsible Email;User Responsible Email
+"hr";processingUserEmail;E-adresa korisnika obrade;E-adresa korisnika obrade
+"hr";interestedUserEmail;E-adresa zainteresiranog korisnika;E-adresa zainteresiranog korisnika
+"hr";userResponsibleEmail;E-adresa odgovornog korisnika;E-adresa odgovornog korisnika
 "hr";executionID;ID izvršenja;ID izvršenja
 "hr";customField1;Prilagođeno polje 1;Prilagođeno polje 1
 "hr";customField2;Prilagođeno polje 2;Prilagođeno polje 2

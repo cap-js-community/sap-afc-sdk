@@ -1,9 +1,9 @@
 locale;code;name;descr
-"ar";requested;Requested;Requested
-"ar";running;Running;Running
+"ar";requested;مطلوب;مطلوب
+"ar";running;قيد التشغيل;قيد التشغيل
 "ar";completed;مكتمل;مكتمل
-"ar";completedWithWarning;Completed With Warning;تحذير
-"ar";completedWithError;Completed With Error;خطأ
+"ar";completedWithWarning;مكتمل مع وجود تحذير;تحذير
+"ar";completedWithError;مكتمل مع وجود خطأ;خطأ
 "ar";failed;فشل;فشل
-"ar";cancelRequested;Cancel Requested;Requested
-"ar";canceled;Canceled;Canceled
+"ar";cancelRequested;الإلغاء مطلوب;مطلوب
+"ar";canceled;مُلغى;مُلغى

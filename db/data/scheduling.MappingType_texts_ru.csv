@@ -3,7 +3,7 @@ locale;code;name;descr
 "ru";companyCode;Балансовая единица;Балансовая единица
 "ru";plant;Завод;Завод
 "ru";controllingArea;Контроллинговая единица;Контроллинговая единица
-"ru";fiscalPeriod;Fiscal Period;Fiscal Period
+"ru";fiscalPeriod;Финансовый период;Финансовый период
 "ru";fiscalYearPeriod;Период финансового года;Период финансового года
 "ru";fiscalYear;Финансовый год;Финансовый год
 "ru";keyDate;Отчетная дата;Отчетная дата
@@ -11,13 +11,13 @@ locale;code;name;descr
 "ru";fiscalYearVariant;Вариант финансового года;Вариант финансового года
 "ru";ledger;Регистр;Регистр
 "ru";testRun;Тестовый прогон;Тестовый прогон
-"ru";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ru";postingPeriodVariant;Вариант периода проводки;Вариант периода проводки
 "ru";processingUser;Обработчик;Обработчик
 "ru";interestedUser;Заинтересованный пользователь;Заинтересованный пользователь
 "ru";userResponsible;Ответственный;Ответственный
-"ru";processingUserEmail;Processing User Email;Processing User Email
-"ru";interestedUserEmail;Interested User Email;Interested User Email
-"ru";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ru";processingUserEmail;Электронная почта обработчика;Электронная почта обработчика
+"ru";interestedUserEmail;Электронная почта заинтересованного пользователя;Электронная почта заинтересованного пользователя
+"ru";userResponsibleEmail;Электронная почта ответственного;Электронная почта ответственного
 "ru";executionID;Ид. выполнения;Ид. выполнения
 "ru";customField1;Пользовательское поле 1;Пользовательское поле 1
 "ru";customField2;Пользовательское поле 2;Пользовательское поле 2

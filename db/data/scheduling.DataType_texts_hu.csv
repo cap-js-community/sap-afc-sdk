@@ -1,5 +1,5 @@
 locale;code;name;descr
-"hu";string;String;String
+"hu";string;Sztring;Sztring
 "hu";number;Szám;Szám
-"hu";datetime;Date & Time;Date & Time
+"hu";datetime;Dátum és időpont;Dátum és időpont
 "hu";boolean;Logikai;Logikai

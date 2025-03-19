@@ -249,7 +249,7 @@ exports[`API Create Job (translation) 5`] = `
   {
     "code": "jobBasicMock",
     "severity": "info",
-    "text": "Job is running in basic mock mode.",
+    "text": "Job läuft im einfachen Mock-Modus.",
   },
 ]
 `;
@@ -269,7 +269,7 @@ exports[`API Create Job (translation) 7`] = `
   {
     "code": "jobTestRun",
     "severity": "info",
-    "text": "Job is running in test mode.",
+    "text": "Job läuft im Testmodus.",
   },
 ]
 `;

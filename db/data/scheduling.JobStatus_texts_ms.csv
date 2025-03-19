@@ -1,9 +1,9 @@
 locale;code;name;descr
-"ms";requested;Requested;Requested
-"ms";running;Running;Running
+"ms";requested;Diminta;Diminta
+"ms";running;Sedang Berjalan;Sedang Berjalan
 "ms";completed;Selesai;Selesai
-"ms";completedWithWarning;Completed With Warning;Amaran
-"ms";completedWithError;Completed With Error;Ralat
+"ms";completedWithWarning;Selesai Dengan Amaran;Amaran
+"ms";completedWithError;Selesai Dengan ralat;Ralat
 "ms";failed;Gagal;Gagal
-"ms";cancelRequested;Cancel Requested;Requested
-"ms";canceled;Canceled;Canceled
+"ms";cancelRequested;Pembatalan Diminta;Diminta
+"ms";canceled;Dibatalkan;Dibatalkan

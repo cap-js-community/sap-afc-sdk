@@ -1,9 +1,9 @@
 locale;code;name;descr
-"hu";requested;Requested;Requested
-"hu";running;Running;Running
+"hu";requested;Kérelmezve;Kérelmezve
+"hu";running;Jelenleg fut;Jelenleg fut
 "hu";completed;Befejezve;Befejezve
-"hu";completedWithWarning;Completed With Warning;Figyelmeztetés
-"hu";completedWithError;Completed With Error;Hiba
+"hu";completedWithWarning;Figyelmeztetéssel befejezve;Figyelmeztetés
+"hu";completedWithError;Hibákkal befejezve;Hiba
 "hu";failed;Sikertelen;Sikertelen
-"hu";cancelRequested;Cancel Requested;Requested
-"hu";canceled;Canceled;Canceled
+"hu";cancelRequested;Visszavonás kérelmezve;Kérelmezve
+"hu";canceled;Visszavonva;Visszavonva

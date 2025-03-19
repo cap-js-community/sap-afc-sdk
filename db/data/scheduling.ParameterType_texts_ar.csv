@@ -1,4 +1,4 @@
 locale;code;name;descr
-"ar";readOnlyValue;Read-Only Value;Read-Only Value
-"ar";writableValue;Writable Value;Writable Value
-"ar";mapping;Mapping;Mapping
+"ar";readOnlyValue;قيمة للقراءة فقط;قيمة للقراءة فقط
+"ar";writableValue;قيمة قابلة للكتابة;قيمة قابلة للكتابة
+"ar";mapping;الربط;الربط

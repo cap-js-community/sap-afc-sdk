@@ -1,4 +1,4 @@
 locale;code;name;descr
-"ja";readOnlyValue;Read-Only Value;Read-Only Value
-"ja";writableValue;Writable Value;Writable Value
-"ja";mapping;Mapping;Mapping
+"ja";readOnlyValue;読取値;読取値
+"ja";writableValue;書込可能値;書込可能値
+"ja";mapping;マッピング;マッピング

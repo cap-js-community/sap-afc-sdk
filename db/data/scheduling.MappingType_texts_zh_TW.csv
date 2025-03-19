@@ -3,7 +3,7 @@ locale;code;name;descr
 "zh_TW";companyCode;公司代碼;公司代碼
 "zh_TW";plant;工廠;工廠
 "zh_TW";controllingArea;成本控制範圍;成本控制範圍
-"zh_TW";fiscalPeriod;Fiscal Period;Fiscal Period
+"zh_TW";fiscalPeriod;會計期間;會計期間
 "zh_TW";fiscalYearPeriod;會計年度期間;會計年度期間
 "zh_TW";fiscalYear;會計年度;會計年度
 "zh_TW";keyDate;關鍵日期;關鍵日期
@@ -11,13 +11,13 @@ locale;code;name;descr
 "zh_TW";fiscalYearVariant;會計年度變式;會計年度變式
 "zh_TW";ledger;分類帳;分類帳
 "zh_TW";testRun;測試執行;測試執行
-"zh_TW";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"zh_TW";postingPeriodVariant;過帳期間變式;過帳期間變式
 "zh_TW";processingUser;處理使用者;處理使用者
 "zh_TW";interestedUser;感興趣的使用者;感興趣的使用者
 "zh_TW";userResponsible;負責使用者;負責使用者
-"zh_TW";processingUserEmail;Processing User Email;Processing User Email
-"zh_TW";interestedUserEmail;Interested User Email;Interested User Email
-"zh_TW";userResponsibleEmail;User Responsible Email;User Responsible Email
+"zh_TW";processingUserEmail;處理使用者電子郵件;處理使用者電子郵件
+"zh_TW";interestedUserEmail;感興趣的使用者電子郵件;感興趣的使用者電子郵件
+"zh_TW";userResponsibleEmail;負責使用者電子郵件;負責使用者電子郵件
 "zh_TW";executionID;執行 ID;執行 ID
 "zh_TW";customField1;自訂欄位 1;自訂欄位 1
 "zh_TW";customField2;自訂欄位 2;自訂欄位 2

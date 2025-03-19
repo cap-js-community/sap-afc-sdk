@@ -1,23 +1,23 @@
 locale;code;name;descr
 "es";accountingPrinciple;Principio de contabilidad;Principio de contabilidad
 "es";companyCode;Sociedad;Sociedad
-"es";plant;Planta;Planta
-"es";controllingArea;Área de control;Área de control
-"es";fiscalPeriod;Fiscal Period;Fiscal Period
+"es";plant;Centro;Centro
+"es";controllingArea;Sociedad CO;Sociedad CO
+"es";fiscalPeriod;Período contable;Período contable
 "es";fiscalYearPeriod;Período de ejercicio;Período de ejercicio
 "es";fiscalYear;Ejercicio fiscal;Ejercicio fiscal
 "es";keyDate;Fecha clave;Fecha clave
-"es";chartOfAccounts;Catálogo de cuentas;Catálogo de cuentas
+"es";chartOfAccounts;Plan de cuentas;Plan de cuentas
 "es";fiscalYearVariant;Variante de ejercicio;Variante de ejercicio
 "es";ledger;Ledger;Ledger
-"es";testRun;Ejecución de test;Ejecución de test
-"es";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"es";testRun;Ejecución de prueba;Ejecución de prueba
+"es";postingPeriodVariant;Variante de período contable;Variante de período contable
 "es";processingUser;Usuario de procesamiento;Usuario de procesamiento
 "es";interestedUser;Usuario interesado;Usuario interesado
 "es";userResponsible;Usuario responsable;Usuario responsable
-"es";processingUserEmail;Processing User Email;Processing User Email
-"es";interestedUserEmail;Interested User Email;Interested User Email
-"es";userResponsibleEmail;User Responsible Email;User Responsible Email
+"es";processingUserEmail;Correo electrónico de usuario de procesamiento;Correo electrónico de usuario de procesamiento
+"es";interestedUserEmail;Correo electrónico de usuario interesado;Correo electrónico de usuario interesado
+"es";userResponsibleEmail;Correo electrónico de usuario responsable;Correo electrónico de usuario responsable
 "es";executionID;ID de ejecución;ID de ejecución
 "es";customField1;Campo personalizado 1;Campo personalizado 1
 "es";customField2;Campo personalizado 2;Campo personalizado 2

@@ -1,4 +1,4 @@
 locale;code;name;descr
-"zh_CN";readOnlyValue;Read-Only Value;Read-Only Value
-"zh_CN";writableValue;Writable Value;Writable Value
-"zh_CN";mapping;Mapping;Mapping
+"zh_CN";readOnlyValue;只读值;只读值
+"zh_CN";writableValue;可写入值;可写入值
+"zh_CN";mapping;映射;映射

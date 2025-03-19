@@ -1,9 +1,9 @@
 locale;code;name;descr
-"sl";requested;Requested;Requested
-"sl";running;Running;Running
+"sl";requested;Zahtevano;Zahtevano
+"sl";running;Se izvaja;Se izvaja
 "sl";completed;Dokončano;Dokončano
-"sl";completedWithWarning;Completed With Warning;Opozorilo
-"sl";completedWithError;Completed With Error;Napaka
+"sl";completedWithWarning;Dokončano z opozorilom;Opozorilo
+"sl";completedWithError;Dokončano z napako;Napaka
 "sl";failed;Neuspešno;Neuspešno
-"sl";cancelRequested;Cancel Requested;Requested
-"sl";canceled;Canceled;Canceled
+"sl";cancelRequested;Zahtevan preklic;Zahtevano
+"sl";canceled;Preklicano;Preklicano

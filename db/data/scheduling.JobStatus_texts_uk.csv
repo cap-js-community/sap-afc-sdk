@@ -1,9 +1,9 @@
 locale;code;name;descr
-"uk";requested;Запитане;Запитане
+"uk";requested;Запитано;Запитано
 "uk";running;Виконується;Виконується
 "uk";completed;Завершено;Завершено
 "uk";completedWithWarning;Завершено із застереженням;Застереження
 "uk";completedWithError;Завершено з помилкою;Помилка
 "uk";failed;Не вдалося;Не вдалося
-"uk";cancelRequested;Скасувати запитане;Запитане
-"uk";canceled;Скасоване;Скасоване
+"uk";cancelRequested;Скасувати запитане;Запитано
+"uk";canceled;Скасовано;Скасовано

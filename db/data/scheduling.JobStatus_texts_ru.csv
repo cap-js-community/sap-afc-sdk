@@ -1,9 +1,9 @@
 locale;code;name;descr
-"ru";requested;Requested;Requested
-"ru";running;Running;Running
+"ru";requested;Запрошено;Запрошено
+"ru";running;Выполняется;Выполняется
 "ru";completed;Завершено;Завершено
-"ru";completedWithWarning;Completed With Warning;Предупреждение
-"ru";completedWithError;Completed With Error;Ошибка
-"ru";failed;Ошибка;Ошибка
-"ru";cancelRequested;Cancel Requested;Requested
-"ru";canceled;Canceled;Canceled
+"ru";completedWithWarning;Завершено с предупреждением;Предупреждение
+"ru";completedWithError;Завершено с ошибкой;Ошибка
+"ru";failed;Не удалось;Не удалось
+"ru";cancelRequested;Запрошена отмена;Запрошено
+"ru";canceled;Отменено;Отменено

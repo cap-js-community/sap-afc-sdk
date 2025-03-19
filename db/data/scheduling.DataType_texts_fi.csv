@@ -1,5 +1,5 @@
 locale;code;name;descr
-"fi";string;String;String
+"fi";string;Merkkijono;Merkkijono
 "fi";number;Numero;Numero
-"fi";datetime;Date & Time;Date & Time
+"fi";datetime;Päivämäärä & aika;Päivämäärä & aika
 "fi";boolean;Totuusarvo;Totuusarvo

@@ -3,7 +3,7 @@ locale;code;name;descr
 "th";companyCode;รหัสบริษัท;รหัสบริษัท
 "th";plant;โรงงาน;โรงงาน
 "th";controllingArea;เขตการควบคุม;เขตการควบคุม
-"th";fiscalPeriod;Fiscal Period;Fiscal Period
+"th";fiscalPeriod;งวดบัญชี;งวดบัญชี
 "th";fiscalYearPeriod;งวดของปีบัญชี;งวดของปีบัญชี
 "th";fiscalYear;ปีบัญชี;ปีบัญชี
 "th";keyDate;วันที่หลัก;วันที่หลัก
@@ -11,13 +11,13 @@ locale;code;name;descr
 "th";fiscalYearVariant;ชุดตัวเลือกปีบัญชี;ชุดตัวเลือกปีบัญชี
 "th";ledger;บัญชีแยกประเภท;บัญชีแยกประเภท
 "th";testRun;การทดสอบการทำงาน;การทดสอบการทำงาน
-"th";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"th";postingPeriodVariant;ชุดตัวเลือกงวดการผ่านรายการ;ชุดตัวเลือกงวดการผ่านรายการ
 "th";processingUser;ผู้ใช้ที่ดำเนินการ;ผู้ใช้ที่ดำเนินการ
 "th";interestedUser;ผู้ใช้ที่สนใจ;ผู้ใช้ที่สนใจ
 "th";userResponsible;ผู้ใช้ที่รับผิดชอบ;ผู้ใช้ที่รับผิดชอบ
-"th";processingUserEmail;Processing User Email;Processing User Email
-"th";interestedUserEmail;Interested User Email;Interested User Email
-"th";userResponsibleEmail;User Responsible Email;User Responsible Email
+"th";processingUserEmail;อีเมล์ของผู้ใช้ที่ดำเนินการ;อีเมล์ของผู้ใช้ที่ดำเนินการ
+"th";interestedUserEmail;อีเมล์ของผู้ใช้ที่สนใจ;อีเมล์ของผู้ใช้ที่สนใจ
+"th";userResponsibleEmail;อีเมล์ของผู้ใช้ที่รับผิดชอบ;อีเมล์ของผู้ใช้ที่รับผิดชอบ
 "th";executionID;ID การดำเนินการ;ID การดำเนินการ
 "th";customField1;ฟิลด์ที่ปรับแต่งได้ 1;ฟิลด์ที่ปรับแต่งได้ 1
 "th";customField2;ฟิลด์ที่ปรับแต่งได้ 2;ฟิลด์ที่ปรับแต่งได้ 2

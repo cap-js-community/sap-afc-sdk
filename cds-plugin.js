@@ -347,7 +347,6 @@ function serverUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server) {
     return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server;
   }
-  // TODO: Kyma
   if (process.env.VCAP_APPLICATION) {
     const url = JSON.parse(process.env.VCAP_APPLICATION).uris?.[0];
     if (url) {
@@ -358,7 +357,6 @@ function serverUrl() {
 }
 
 function authorizationUrl() {
-  // TODO: IAS
   return cds.env.requires?.auth?.credentials?.url ?? config.endpoints.authentication;
 }
 

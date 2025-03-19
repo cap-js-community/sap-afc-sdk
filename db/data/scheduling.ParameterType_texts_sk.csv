@@ -1,4 +1,4 @@
 locale;code;name;descr
-"sk";readOnlyValue;Read-Only Value;Read-Only Value
-"sk";writableValue;Writable Value;Writable Value
-"sk";mapping;Mapping;Mapping
+"sk";readOnlyValue;Hodnota iba na čítanie;Hodnota iba na čítanie
+"sk";writableValue;Zapisovateľná hodnota;Zapisovateľná hodnota
+"sk";mapping;Priradenie;Priradenie

@@ -1,5 +1,5 @@
 locale;code;name;descr
-"ar";string;String;String
+"ar";string;السلسلة;السلسلة
 "ar";number;رقم;رقم
-"ar";datetime;Date & Time;Date & Time
+"ar";datetime;التاريخ والوقت;التاريخ والوقت
 "ar";boolean;منطقي;منطقي

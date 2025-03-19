@@ -1,9 +1,9 @@
 locale;code;name;descr
-"cs";requested;Requested;Requested
-"cs";running;Running;Running
+"cs";requested;Požadováno;Požadováno
+"cs";running;Běží;Běží
 "cs";completed;Dokončeno;Dokončeno
-"cs";completedWithWarning;Completed With Warning;Upozornění
-"cs";completedWithError;Completed With Error;Chyba
+"cs";completedWithWarning;Dokončeno s upozorněním;Upozornění
+"cs";completedWithError;Dokončeno s chybou;Chyba
 "cs";failed;Neúspěšné;Neúspěšné
-"cs";cancelRequested;Cancel Requested;Requested
-"cs";canceled;Canceled;Canceled
+"cs";cancelRequested;Požadováno zrušení;Požadováno
+"cs";canceled;Zrušeno;Zrušeno

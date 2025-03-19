@@ -1,9 +1,9 @@
 locale;code;name;descr
-"hr";requested;Requested;Requested
-"hr";running;Running;Running
+"hr";requested;Zatraženo;Zatraženo
+"hr";running;Izvodi se;Izvodi se
 "hr";completed;Dovršeno;Dovršeno
-"hr";completedWithWarning;Completed With Warning;Upozorenje
-"hr";completedWithError;Completed With Error;Pogreška
+"hr";completedWithWarning;Dovršeno s upozorenjem;Upozorenje
+"hr";completedWithError;Dovršeno s pogreškom;Pogreška
 "hr";failed;Nije uspjelo;Nije uspjelo
-"hr";cancelRequested;Cancel Requested;Requested
-"hr";canceled;Canceled;Canceled
+"hr";cancelRequested;Zatraženo otkazivanje;Zatraženo
+"hr";canceled;Otkazano;Otkazano

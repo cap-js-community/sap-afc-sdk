@@ -1,5 +1,5 @@
 locale;code;name;descr
-"es";string;String;String
+"es";string;Cadena;Cadena
 "es";number;Número;Número
-"es";datetime;Date & Time;Date & Time
+"es";datetime;Fecha y hora;Fecha y hora
 "es";boolean;Booleano;Booleano

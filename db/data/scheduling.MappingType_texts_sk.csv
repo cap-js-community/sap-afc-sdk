@@ -3,7 +3,7 @@ locale;code;name;descr
 "sk";companyCode;Účtovný okruh;Účtovný okruh
 "sk";plant;Závod;Závod
 "sk";controllingArea;Nákladový okruh;Nákladový okruh
-"sk";fiscalPeriod;Fiscal Period;Fiscal Period
+"sk";fiscalPeriod;Fiškálne obdobie;Fiškálne obdobie
 "sk";fiscalYearPeriod;Obdobie fiškálneho roka;Obdobie fiškálneho roka
 "sk";fiscalYear;Fiškálny rok;Fiškálny rok
 "sk";keyDate;Rozhodujúci deň;Rozhodujúci deň
@@ -11,13 +11,13 @@ locale;code;name;descr
 "sk";fiscalYearVariant;Variant fiškálneho roka;Variant fiškálneho roka
 "sk";ledger;Účtovná kniha;Účtovná kniha
 "sk";testRun;Testovací chod;Testovací chod
-"sk";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"sk";postingPeriodVariant;Variant účtovného obdobia;Variant účtovného obdobia
 "sk";processingUser;Spracovávajúci používateľ;Spracovávajúci používateľ
 "sk";interestedUser;Zapojený používateľ;Zapojený používateľ
-"sk";userResponsible;Zodpoved.používateľ;Zodpoved.používateľ
-"sk";processingUserEmail;Processing User Email;Processing User Email
-"sk";interestedUserEmail;Interested User Email;Interested User Email
-"sk";userResponsibleEmail;User Responsible Email;User Responsible Email
+"sk";userResponsible;Zodpovedný používateľ;Zodpovedný používateľ
+"sk";processingUserEmail;Spracovávajúci používateľ - e-mail;Spracovávajúci používateľ - e-mail
+"sk";interestedUserEmail;Zapojený používateľ - e-mail;Zapojený používateľ - e-mail
+"sk";userResponsibleEmail;Zodpovedný používateľ - e-mail;Zodpovedný používateľ - e-mail
 "sk";executionID;ID vykonania;ID vykonania
 "sk";customField1;Vlastné pole 1;Vlastné pole 1
 "sk";customField2;Vlastné pole 2;Vlastné pole 2

@@ -1,4 +1,4 @@
 locale;code;name;descr
-"es";readOnlyValue;Read-Only Value;Read-Only Value
-"es";writableValue;Writable Value;Writable Value
-"es";mapping;Mapping;Mapping
+"es";readOnlyValue;Valor de solo lectura;Valor de solo lectura
+"es";writableValue;Valor grabable;Valor grabable
+"es";mapping;Asignación;Asignación
