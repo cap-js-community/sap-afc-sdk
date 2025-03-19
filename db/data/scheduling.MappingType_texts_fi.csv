@@ -1,0 +1,28 @@
+locale;code;name;descr
+"fi";accountingPrinciple;Tilinpäätössääntö;Tilinpäätössääntö
+"fi";companyCode;Yritys;Yritys
+"fi";plant;Toimipiste;Toimipiste
+"fi";controllingArea;Kustannuslaskenta-alue;Kustannuslaskenta-alue
+"fi";fiscalPeriod;Fiscal Period;Fiscal Period
+"fi";fiscalYearPeriod;Tilikauden kausi;Tilikauden kausi
+"fi";fiscalYear;Tilikausi;Tilikausi
+"fi";keyDate;Määräpäivä;Määräpäivä
+"fi";chartOfAccounts;Tilikartta;Tilikartta
+"fi";fiscalYearVariant;Tilikausivariantti;Tilikausivariantti
+"fi";ledger;Pääkirja;Pääkirja
+"fi";testRun;Testiajo;Testiajo
+"fi";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"fi";processingUser;Käsittelevä käyttäjä;Käsittelevä käyttäjä
+"fi";interestedUser;Kiinnostunut käyttäjä;Kiinnostunut käyttäjä
+"fi";userResponsible;Vastaava käyttäjä;Vastaava käyttäjä
+"fi";processingUserEmail;Processing User Email;Processing User Email
+"fi";interestedUserEmail;Interested User Email;Interested User Email
+"fi";userResponsibleEmail;User Responsible Email;User Responsible Email
+"fi";executionID;Suoritustunnus;Suoritustunnus
+"fi";customField1;Mukautettu kenttä 1;Mukautettu kenttä 1
+"fi";customField2;Mukautettu kenttä 2;Mukautettu kenttä 2
+"fi";customField3;Mukautettu kenttä 3;Mukautettu kenttä 3
+"fi";taskListID;Tehtäväluettelotunnus;Tehtäväluettelotunnus
+"fi";taskListDescription;Tehtäväluettelon kuvaus;Tehtäväluettelon kuvaus
+"fi";taskID;Tehtävätunnus;Tehtävätunnus
+"fi";taskDescription;Tehtävän kuvaus;Tehtävän kuvaus

@@ -1,0 +1,5 @@
+locale;code;name;descr
+"bg";string;Низ;Низ
+"bg";number;Номер;Номер
+"bg";datetime;Дата и час;Дата и час
+"bg";boolean;Булева стойност;Булева стойност

@@ -1,0 +1,28 @@
+locale;code;name;descr
+"ko";accountingPrinciple;회계 원칙;회계 원칙
+"ko";companyCode;회사 코드;회사 코드
+"ko";plant;플랜트;플랜트
+"ko";controllingArea;관리회계 영역;관리회계 영역
+"ko";fiscalPeriod;Fiscal Period;Fiscal Period
+"ko";fiscalYearPeriod;회계연도 기간;회계연도 기간
+"ko";fiscalYear;회계연도;회계연도
+"ko";keyDate;주요 일자;주요 일자
+"ko";chartOfAccounts;계정과목표;계정과목표
+"ko";fiscalYearVariant;회계연도 변형;회계연도 변형
+"ko";ledger;원장;원장
+"ko";testRun;테스트 실행;테스트 실행
+"ko";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ko";processingUser;처리자;처리자
+"ko";interestedUser;관심 있는 사용자;관심 있는 사용자
+"ko";userResponsible;담당자;담당자
+"ko";processingUserEmail;Processing User Email;Processing User Email
+"ko";interestedUserEmail;Interested User Email;Interested User Email
+"ko";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ko";executionID;실행 ID;실행 ID
+"ko";customField1;사용자 정의 필드 1;사용자 정의 필드 1
+"ko";customField2;사용자 정의 필드 2;사용자 정의 필드 2
+"ko";customField3;사용자 정의 필드 3;사용자 정의 필드 3
+"ko";taskListID;태스크 리스트 ID;태스크 리스트 ID
+"ko";taskListDescription;태스크 리스트 내역;태스크 리스트 내역
+"ko";taskID;태스크 ID;태스크 ID
+"ko";taskDescription;태스크 내역;태스크 내역

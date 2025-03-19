@@ -1,0 +1,28 @@
+locale;code;name;descr
+"ro";accountingPrinciple;Principiu contabil;Principiu contabil
+"ro";companyCode;Cod companie;Cod companie
+"ro";plant;Unitate logistică;Unitate logistică
+"ro";controllingArea;Arie de control;Arie de control
+"ro";fiscalPeriod;Fiscal Period;Fiscal Period
+"ro";fiscalYearPeriod;Perioadă an fiscal;Perioadă an fiscal
+"ro";fiscalYear;An fiscal;An fiscal
+"ro";keyDate;Dată cheie;Dată cheie
+"ro";chartOfAccounts;Plan de conturi;Plan de conturi
+"ro";fiscalYearVariant;Variantă an fiscal;Variantă an fiscal
+"ro";ledger;Registru;Registru
+"ro";testRun;Execuție test;Execuție test
+"ro";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ro";processingUser;Utilizator de prelucrare;Utilizator de prelucrare
+"ro";interestedUser;Utilizator interesat;Utilizator interesat
+"ro";userResponsible;Utilizator responsabil;Utilizator responsabil
+"ro";processingUserEmail;Processing User Email;Processing User Email
+"ro";interestedUserEmail;Interested User Email;Interested User Email
+"ro";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ro";executionID;ID execuție;ID execuție
+"ro";customField1;Câmp 1 definit de utilizator;Câmp 1 definit de utilizator
+"ro";customField2;Câmp 2 definit de utilizator;Câmp 2 definit de utilizator
+"ro";customField3;Câmp 3 definit de utilizator;Câmp 3 definit de utilizator
+"ro";taskListID;ID listă de sarcini;ID listă de sarcini
+"ro";taskListDescription;Descriere listă de sarcini;Descriere listă de sarcini
+"ro";taskID;ID sarcină;ID sarcină
+"ro";taskDescription;Descriere sarcină;Descriere sarcină

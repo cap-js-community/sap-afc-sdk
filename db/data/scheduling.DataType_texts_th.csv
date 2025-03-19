@@ -1,0 +1,5 @@
+locale;code;name;descr
+"th";string;String;String
+"th";number;ตัวเลข;ตัวเลข
+"th";datetime;Date & Time;Date & Time
+"th";boolean;บูลีน;บูลีน

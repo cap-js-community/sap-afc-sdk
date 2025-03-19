@@ -1,0 +1,5 @@
+locale;code;name;descr
+"pl";string;String;String
+"pl";number;Liczba;Liczba
+"pl";datetime;Date & Time;Date & Time
+"pl";boolean;Wartość logiczna;Wartość logiczna

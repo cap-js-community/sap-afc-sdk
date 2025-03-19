@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ms";string;String;String
+"ms";number;Nombor;Nombor
+"ms";datetime;Date & Time;Date & Time
+"ms";boolean;Boolean;Boolean

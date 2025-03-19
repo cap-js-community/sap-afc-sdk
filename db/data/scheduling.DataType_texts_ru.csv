@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ru";string;String;String
+"ru";number;Числовой;Числовой
+"ru";datetime;Date & Time;Date & Time
+"ru";boolean;Логическое выражение;Логическое выражение

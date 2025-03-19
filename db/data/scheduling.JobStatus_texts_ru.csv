@@ -1,0 +1,9 @@
+locale;code;name;descr
+"ru";requested;Requested;Requested
+"ru";running;Running;Running
+"ru";completed;Завершено;Завершено
+"ru";completedWithWarning;Completed With Warning;Предупреждение
+"ru";completedWithError;Completed With Error;Ошибка
+"ru";failed;Ошибка;Ошибка
+"ru";cancelRequested;Cancel Requested;Requested
+"ru";canceled;Canceled;Canceled

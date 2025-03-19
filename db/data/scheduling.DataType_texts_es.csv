@@ -1,0 +1,5 @@
+locale;code;name;descr
+"es";string;String;String
+"es";number;Número;Número
+"es";datetime;Date & Time;Date & Time
+"es";boolean;Booleano;Booleano

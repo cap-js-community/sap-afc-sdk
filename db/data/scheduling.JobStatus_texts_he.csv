@@ -1,0 +1,9 @@
+locale;code;name;descr
+"he";requested;מבוקש;מבוקש
+"he";running;פועל;פועל
+"he";completed;הושלם;הושלם
+"he";completedWithWarning;הושלם עם אזהרה;אזהרה
+"he";completedWithError;הושלם עם שגיאה;שגיאה
+"he";failed;נכשל;נכשל
+"he";cancelRequested;התבקש ביטול;מבוקש
+"he";canceled;בוטל;בוטל

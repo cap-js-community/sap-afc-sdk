@@ -38,16 +38,9 @@ class JobSchedulingError extends BaseError {
     });
   }
 
-  static invalidOptionSkip(value) {
-    return new JobSchedulingError("invalidOptionSkip", {
-      args: [value],
-      httpStatus: 400,
-    });
-  }
-
-  static invalidOptionTop(value) {
-    return new JobSchedulingError("invalidOptionTop", {
-      args: [value],
+  static invalidOption(value, option) {
+    return new JobSchedulingError("invalidOption", {
+      args: [value, option],
       httpStatus: 400,
     });
   }

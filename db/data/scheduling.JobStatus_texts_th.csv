@@ -1,0 +1,9 @@
+locale;code;name;descr
+"th";requested;Requested;Requested
+"th";running;Running;Running
+"th";completed;เสร็จสมบูรณ์;เสร็จสมบูรณ์
+"th";completedWithWarning;Completed With Warning;คำเตือน
+"th";completedWithError;Completed With Error;ข้อผิดพลาด
+"th";failed;ล้มเหลว;ล้มเหลว
+"th";cancelRequested;Cancel Requested;Requested
+"th";canceled;Canceled;Canceled

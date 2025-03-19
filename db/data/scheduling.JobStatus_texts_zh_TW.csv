@@ -1,0 +1,9 @@
+locale;code;name;descr
+"zh_TW";requested;Requested;Requested
+"zh_TW";running;Running;Running
+"zh_TW";completed;已完成;已完成
+"zh_TW";completedWithWarning;Completed With Warning;警告
+"zh_TW";completedWithError;Completed With Error;錯誤
+"zh_TW";failed;失敗;失敗
+"zh_TW";cancelRequested;Cancel Requested;Requested
+"zh_TW";canceled;Canceled;Canceled

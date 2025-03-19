@@ -55,7 +55,7 @@ exports[`Processing Service processJob - simple mock - completed 3`] = `
   {
     "code": "jobCompleted",
     "severity_code": "info",
-    "text": "Job completed successfully.",
+    "text": "Job completed successfully",
   },
 ]
 `;
@@ -208,7 +208,7 @@ exports[`Processing Service updateJob - results - base64 2`] = `
   {
     "code": "jobCompleted",
     "severity_code": "info",
-    "text": "Job completed successfully.",
+    "text": "Job completed successfully",
   },
 ]
 `;
@@ -244,7 +244,7 @@ exports[`Processing Service updateJob - translation 2`] = `
   {
     "code": "jobCompleted",
     "severity_code": "info",
-    "text": "Job completed successfully.",
+    "text": "Job completed successfully",
   },
 ]
 `;

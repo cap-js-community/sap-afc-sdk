@@ -1,0 +1,28 @@
+locale;code;name;descr
+"cs";accountingPrinciple;Předpis pro vedení účetnictví;Předpis pro vedení účetnictví
+"cs";companyCode;Účetní okruh;Účetní okruh
+"cs";plant;Závod;Závod
+"cs";controllingArea;Nákladový okruh;Nákladový okruh
+"cs";fiscalPeriod;Fiscal Period;Fiscal Period
+"cs";fiscalYearPeriod;Období fiskálního roku;Období fiskálního roku
+"cs";fiscalYear;Fiskální rok;Fiskální rok
+"cs";keyDate;Rozhodný den;Rozhodný den
+"cs";chartOfAccounts;Účtový rozvrh;Účtový rozvrh
+"cs";fiscalYearVariant;Varianta fisk.roku;Varianta fisk.roku
+"cs";ledger;Účetní kniha;Účetní kniha
+"cs";testRun;Testovací běh;Testovací běh
+"cs";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"cs";processingUser;Zpracující uživatel;Zpracující uživatel
+"cs";interestedUser;Zainteresovaný uživatel;Zainteresovaný uživatel
+"cs";userResponsible;Odpovědný uživatel;Odpovědný uživatel
+"cs";processingUserEmail;Processing User Email;Processing User Email
+"cs";interestedUserEmail;Interested User Email;Interested User Email
+"cs";userResponsibleEmail;User Responsible Email;User Responsible Email
+"cs";executionID;ID provedení;ID provedení
+"cs";customField1;Uživatelské pole 1;Uživatelské pole 1
+"cs";customField2;Uživatelské pole 2;Uživatelské pole 2
+"cs";customField3;Uživatelské pole 3;Uživatelské pole 3
+"cs";taskListID;ID plánu úloh;ID plánu úloh
+"cs";taskListDescription;Popis seznamu úloh;Popis seznamu úloh
+"cs";taskID;ID úlohy;ID úlohy
+"cs";taskDescription;Popis úlohy;Popis úlohy

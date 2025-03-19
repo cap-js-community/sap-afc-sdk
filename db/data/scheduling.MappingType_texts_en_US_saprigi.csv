@@ -1,0 +1,28 @@
+locale;code;name;descr
+"en_US_saprigi";accountingPrinciple;⁪⁪⁪‌​‍‌‍‍​​‌​‌‍‍‍‍‌‍​‌‍​‌​‌‌‍‍‍​‍‌​​‌‌​‌‍‍‌⁪Accounting Principle⁪⁪;⁪⁪⁪‌​‌‌‍​​​‍‌‍‌​​‍​​​‍‍​‌‌​​​‌‍‌​‌​​​‌‌‌​‌​​⁪Accounting Principle⁪⁪
+"en_US_saprigi";companyCode;⁪⁪⁪‍‍‌‌‌‍‍‌‌‌​​‌‍‌‌​​‌‍‌​‌‍‌‌‌‍​​‍​‍​‍​​‍‌​⁪Company Code⁪⁪;⁪⁪⁪‍​‌‍​​​‍​‌​​​​​‌‍‌‍‍‍‌‌‍‌​​​​‌​‍​‍​‌‌‌​‍⁪Company Code⁪⁪
+"en_US_saprigi";plant;⁪⁪⁪‌‌​‌‍‌‍‌‌‍‍​​‍‍‌‌‌‌‌‌‍‌‌​‌‌​​‌‍​‌‌‌‌‍‌​​⁪Plant⁪⁪;⁪⁪⁪‌​​‍​​‌‍‍​​‍‌‌‌​‌‌‌‌​‌‌‌‌‍‌‍​‌‌‍​​‌‍​​‍‌​⁪Plant⁪⁪
+"en_US_saprigi";controllingArea;⁪⁪⁪‍‍‌‌‌‌​‍‍​‍‌‍‌‌‌‌‍​​‍​‍​‌‍‍‍​‌‌​​​‌‌‍⁪Controlling Area⁪⁪;⁪⁪⁪‌​‍​‌​‌‍‍​‍‍​‍‍‍‌‍‌‍‍​‍​​‍‌​​​‌‌​‍‍‌​​‌‍‍⁪Controlling Area⁪⁪
+"en_US_saprigi";fiscalPeriod;⁪⁪⁪‌‌​​​​​‌​‍‍‍​‍‍‍​​‌‍​‌‍​‌‌‍‍‍‌‌‍‌‌‌‌‍​​​⁪Fiscal Period⁪⁪;⁪⁪⁪‍‍‍‌​‌‍‍​​‌‌‍‌‍​‌​‌‌​‍‍‍​‍‌​‍‍‌‌‌‌​​‌‍‍‌⁪Fiscal Period⁪⁪
+"en_US_saprigi";fiscalYearPeriod;⁪⁪⁪‍‍‍‌‍​‍‌‍‍‍‌‍‍​​‌​‌‌‍​​‍‌‍‌‌‌‍‍‍​​‌​​‍‍‍⁪Fiscal Year Period⁪⁪;⁪⁪⁪‍‍‍‍​‌​‍​​​​‌​‍‍‍‌‌‍‌‍‌‍‌​‍​​‍​‍​​​‌‍‍‍‍⁪Fiscal Year Period⁪⁪
+"en_US_saprigi";fiscalYear;⁪⁪⁪‌​​​‍‍‌‌‍‌‌​‍​​‍‍‌‍‌​​‍‍‌‌‍‌‍​​‍‍‍​‍​‌‍‍⁪Fiscal Year⁪⁪;⁪⁪⁪‍​‍‍‌‍​‍‌​​‍​​‍‍​‌‍‍​‌‌​​​​‌​‌​‌​‌​​‌​‍​⁪Fiscal Year⁪⁪
+"en_US_saprigi";keyDate;⁪⁪⁪‍​‌​‌‌‌‌​​​‌‌​‍‍‍‍‍‌​‌‌‌‌​‌‍​‌‌‍‍‌​​‌‍⁪Key Date⁪⁪;⁪⁪⁪‍‍‌‌​‌​​‌​‍​​‍‌‌​‍‍​​‌‍‌‌‍​​‌‍‌‌​‍​​⁪Key Date⁪⁪
+"en_US_saprigi";chartOfAccounts;⁪⁪⁪‌​‌‍‍‌​​‌​‍‍‍‍‍‌‍‌‍​‍‍‌‌​‌‍‌‍​​‌​​‍‌‍‌‍‍​⁪Chart Of Accounts⁪⁪;⁪⁪⁪‌​‍​​​​​​‌​​​​‍‍​‌‍‌​‍‌‌‌‍‌​‌​‍‍‌​​‍‌​​‍​⁪Chart Of Accounts⁪⁪
+"en_US_saprigi";fiscalYearVariant;⁪⁪⁪‌‌​‌​​‌​‍‍‍‍‌​‌​​‌‍‍​‌‍‍‍​‍‌​‌‍‌​‍‍‍‍‌​​⁪Fiscal Year Variant⁪⁪;⁪⁪⁪‌‌​‌‌​​‍​‌‍‌​​‍‍‌‍​​‍​‌‌‌​​​‌‌‍‍‍‍‍‍‍‌‌​‌⁪Fiscal Year Variant⁪⁪
+"en_US_saprigi";ledger;⁪⁪⁪‍‌‌‍‌‍‌‌‍​‌‌‍​‍‌​​‌‌‌‌​‍‌​‍‍‍​‍​‍​‍​‍​‌‍⁪Ledger⁪⁪;⁪⁪⁪‌​​‍​‍‍‍‌​‍​‌​​‍‍​​​‌​‌​​‌‍‌‌​‌​​​‌‌‌​​​​⁪Ledger⁪⁪
+"en_US_saprigi";testRun;⁪⁪⁪‍‌‍‍​​​‌‍‌‍​​‍‌‌​​​‌​‌‌‍​​‌​‌​‌‍​‍​​‍‍​⁪Test Run⁪⁪;⁪⁪⁪‌‌​‌‌‌‌‍‍‍‍​​‍​​‌​‌‌​‍‍‌​‍​​​‌‌‌‍‌​‌​‍‌‍​⁪Test Run⁪⁪
+"en_US_saprigi";postingPeriodVariant;⁪⁪⁪‌‌​​‍‍‍​‍‌‌‌​‌‌​‍‍‍​‍‌‍​​‌‍‍‌‌‌‌‌‌‌‍‍‍‍​​⁪Posting Period Variant⁪⁪;⁪⁪⁪‍​‌​‍‍‍‍​‍‌‌‍‌‍​‍‍‍‍‌‌‍‍‌‍‍​​‍​‍‌‌‌​‌‌⁪Posting Period Variant⁪⁪
+"en_US_saprigi";processingUser;⁪⁪⁪‌‌​‍‍‌‍​​‌‌‍‍​​​​​​‍​​‌​‍‍​‍‌​​​‌‍‌​‌​‌​​⁪Processing User⁪⁪;⁪⁪⁪‍​​‌‍‌​​​‍‌‌​‌​​‍‌‍​‍​‌‍​‍‌‍‌​‌​​‍​​‌‍‌‍⁪Processing User⁪⁪
+"en_US_saprigi";interestedUser;⁪⁪⁪‌‌​‍​‌​​‌‌​‍‍‌‍‌​​‌‍‌‍‌‍‍‌​‌‍​‍‍‍​‌‍​​‌‍‌⁪Interested User⁪⁪;⁪⁪⁪‍​‍‍‍​​‍‍‍‌​‌‍​​​‌‍‍​‌‌‍‍‌‌‌‌‍​‍​‍‌‌‌​⁪Interested User⁪⁪
+"en_US_saprigi";userResponsible;⁪⁪⁪‍‍‌​​‍‍‍‌‍‌​​‍​‍​‍‌‌​‌‍‌‍​‍‌‌‍‌​‌​‌‌​‍‌​⁪User Responsible⁪⁪;⁪⁪⁪‌‌​‌‌‍​‌​‌​‌​‍‌‍​​​​‌‌‌‍‌​‌‌‍​‌‍​​​‍‍‍‌​​⁪User Responsible⁪⁪
+"en_US_saprigi";processingUserEmail;⁪⁪⁪‍‍‍​‌​​​​​​‌​‌‍​‍​‍​​‍‍‍‌​‍‍​‌​​‌​​‌‌‌​​⁪Processing User Email⁪⁪;⁪⁪⁪‌‍‍‌‌​​‍‌‌‌‍‌​​‌‌‌‌‍​​​‍​​​​​‍‌​​​​‌‌‍​⁪Processing User Email⁪⁪
+"en_US_saprigi";interestedUserEmail;⁪⁪⁪‌‍​‌‍‌‌​‍​‍‍‍​​‍‍‍‌‍‍‍‌​​‌‌​‌‍​‌‍‌‌​​​​‍⁪Interested User Email⁪⁪;⁪⁪⁪‍‍‌‌​​‌​‌​‌‍‍‍​‍‍‍​​​​‌​‌​‍‍​‌‌‌​‌​‍‌‌​⁪Interested User Email⁪⁪
+"en_US_saprigi";userResponsibleEmail;⁪⁪⁪‌‍​​‍‍‌‌‍‍​‍​‌‍‌​‍‍‌‍‍‍​‌‍‍​‍‍‍‍‍‌‌​‍​​‍⁪User Responsible Email⁪⁪;⁪⁪⁪‌‌‌‌‌​‍​​‌​​​​​‌‍​​​​‌​‌‍​‍​‍​‌‌‌‍​‍‍‍‌​​⁪User Responsible Email⁪⁪
+"en_US_saprigi";executionID;⁪⁪⁪‍‍‍​‍‍‍​‌​‌‍​‍‌​​​​​‌​​‌‌​​​‌‍​‍‍​‍‍​​​‌⁪Execution ID⁪⁪;⁪⁪⁪‍​‍​‍‍​‌‍​​‌‍‌​​‌​‍​‍‌‌‍‌‍‌‌‍‌​‌​‌​‍‍⁪Execution ID⁪⁪
+"en_US_saprigi";customField1;⁪⁪⁪‍‌​‌‌‍‍‌‌​‍‍‍​​​‌‌​‌‍‍​‍‌‌‌‍​‌​‍‍‍‌‍‍‌​‍⁪Custom Field 1⁪⁪;⁪⁪⁪‌​‌‍‌‍​‍‍‍​‍‍‍‌‍​‌​‍​‌‍​​‌​​​‍​‌‌‍​‌‍‌‌‍​⁪Custom Field 1⁪⁪
+"en_US_saprigi";customField2;⁪⁪⁪‌‌​​‍‍‌‍‌​​‍‌​​‍‌‌​‍​‌​‍​‌‍​‌​‌‍‍​‌​‍‍‍‍‍⁪Custom Field 2⁪⁪;⁪⁪⁪‌​‍‌‌​‌​‌‌‌‌‍‍‌‍‌​‌​​​​​‌‍​‌​​​‌‍​‍‌‌‍​‌⁪Custom Field 2⁪⁪
+"en_US_saprigi";customField3;⁪⁪⁪‌​​​‍‍‍​‍‍​‌‍‌​‌​‍‍‍​​‌‌‌‌​‍‍​‍‌‌​‌‌‌​‌‌‌⁪Custom Field 3⁪⁪;⁪⁪⁪‍‌‌‌‌‍‌‍​‌​​‌‍‌‌​‍‍‍‌‍‌‍​​​‌​‌​​​‌​​​​‍‍⁪Custom Field 3⁪⁪
+"en_US_saprigi";taskListID;⁪⁪⁪‍‌‍‌‌​‌​‌​‌‍‍‍‌‍‍​​‍​‌​‌‍​​‌​‍‍​​​‍​‌‌‍‍⁪Task List ID⁪⁪;⁪⁪⁪‍​​​​​‍‍‍​‍‍‍​​​‌‍‌‍‍‍‌‌‌​‌‍​‍‍​​‌​‍‍‌‌⁪Task List ID⁪⁪
+"en_US_saprigi";taskListDescription;⁪⁪⁪‌​‍‌​‍‍‌‍‍​‍​‌‌‌‌‌‍‌‍‌‍‍‌‌‍‍​​‌‍​​‌‍​‌‌​⁪Task List Description⁪⁪;⁪⁪⁪‍‍​‍​‍‍​‍​‍​‍‌‍​​‍​​‌‍‌​​‍‍​‍‍‌‌‌‍‌‍‌‍‍​⁪Task List Description⁪⁪
+"en_US_saprigi";taskID;⁪⁪⁪‍​‍​‌‍​‍​‍​‍‍‌‌​‍‌​‍​​‍​‍​​‌​‍​‌‌‍‍‍‌‍⁪Task ID⁪⁪;⁪⁪⁪‌​‌​​‍‍‌​‌​​​​​​​​​​​‍‌‍‌​‌‍‍‍‍‍‌‌‍‍‍​‍​⁪Task ID⁪⁪
+"en_US_saprigi";taskDescription;⁪⁪⁪‍‌‌​‌‌‌‌‍​​‍​​‍‌​‍​‍‌‍‌‌‍​‌​‌‌‍‍​‍‍​​‌​‍⁪Task Description⁪⁪;⁪⁪⁪‌​‍‌‌‍‌‌​‌​​​​​‍​​‌‌​​‍‍​​‍‌​‍‍​‌​​​‍‍‍‍⁪Task Description⁪⁪

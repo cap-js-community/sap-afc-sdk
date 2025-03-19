@@ -1,0 +1,9 @@
+locale;code;name;descr
+"sk";requested;Requested;Requested
+"sk";running;Running;Running
+"sk";completed;Dokončené;Dokončené
+"sk";completedWithWarning;Completed With Warning;Upozornenie
+"sk";completedWithError;Completed With Error;Chyba
+"sk";failed;Neúspešné;Neúspešné
+"sk";cancelRequested;Cancel Requested;Requested
+"sk";canceled;Canceled;Canceled

@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ro";string;String;String
+"ro";number;Număr;Număr
+"ro";datetime;Date & Time;Date & Time
+"ro";boolean;Boolean;Boolean

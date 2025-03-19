@@ -1,0 +1,5 @@
+locale;code;name;descr
+"sv";string;String;String
+"sv";number;Siffra;Siffra
+"sv";datetime;Date & Time;Date & Time
+"sv";boolean;Boolesk;Boolesk

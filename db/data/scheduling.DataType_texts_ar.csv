@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ar";string;String;String
+"ar";number;رقم;رقم
+"ar";datetime;Date & Time;Date & Time
+"ar";boolean;منطقي;منطقي

@@ -1,0 +1,28 @@
+locale;code;name;descr
+"fr";accountingPrinciple;Norme comptable;Norme comptable
+"fr";companyCode;Société;Société
+"fr";plant;Division;Division
+"fr";controllingArea;Périmètre analytique;Périmètre analytique
+"fr";fiscalPeriod;Période comptable;Période comptable
+"fr";fiscalYearPeriod;Période d'exercice comptable;Période d'exercice comptable
+"fr";fiscalYear;Exercice comptable;Exercice comptable
+"fr";keyDate;Date de référence;Date de référence
+"fr";chartOfAccounts;Plan comptable;Plan comptable
+"fr";fiscalYearVariant;Version d'exercice;Version d'exercice
+"fr";ledger;Ledger;Ledger
+"fr";testRun;Exécution test;Exécution test
+"fr";postingPeriodVariant;Variante de période comptable;Variante de période comptable
+"fr";processingUser;Utilisateur exécutant;Utilisateur exécutant
+"fr";interestedUser;Utilisateur intéressé;Utilisateur intéressé
+"fr";userResponsible;Utilisateur responsable;Utilisateur responsable
+"fr";processingUserEmail;E-mail de l'utilisateur exécutant;E-mail de l'utilisateur exécutant
+"fr";interestedUserEmail;E-mail de l'utilisateur intéressé;E-mail de l'utilisateur intéressé
+"fr";userResponsibleEmail;E-mail de l'utilisateur responsable;E-mail de l'utilisateur responsable
+"fr";executionID;ID d’exécution;ID d’exécution
+"fr";customField1;Zone personnalisée 1;Zone personnalisée 1
+"fr";customField2;Zone personnalisée 2;Zone personnalisée 2
+"fr";customField3;Zone personnalisée 3;Zone personnalisée 3
+"fr";taskListID;ID de liste de tâches;ID de liste de tâches
+"fr";taskListDescription;Description de la liste de tâches;Description de la liste de tâches
+"fr";taskID;ID de tâche;ID de tâche
+"fr";taskDescription;Description de la tâche;Description de la tâche

@@ -1,0 +1,5 @@
+locale;code;name;descr
+"hu";string;String;String
+"hu";number;Szám;Szám
+"hu";datetime;Date & Time;Date & Time
+"hu";boolean;Logikai;Logikai

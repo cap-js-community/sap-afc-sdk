@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ko";string;String;String
+"ko";number;숫자;숫자
+"ko";datetime;Date & Time;Date & Time
+"ko";boolean;부울;부울

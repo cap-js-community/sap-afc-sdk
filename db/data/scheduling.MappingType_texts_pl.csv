@@ -1,0 +1,28 @@
+locale;code;name;descr
+"pl";accountingPrinciple;Zasada rachunkowości;Zasada rachunkowości
+"pl";companyCode;Jednostka gospodarcza;Jednostka gospodarcza
+"pl";plant;Zakład;Zakład
+"pl";controllingArea;Obszar rachunku kosztów;Obszar rachunku kosztów
+"pl";fiscalPeriod;Fiscal Period;Fiscal Period
+"pl";fiscalYearPeriod;Okres roku obrotowego;Okres roku obrotowego
+"pl";fiscalYear;Rok obrotowy;Rok obrotowy
+"pl";keyDate;Data kluczowa;Data kluczowa
+"pl";chartOfAccounts;Plan kont;Plan kont
+"pl";fiscalYearVariant;Wariant roku obrotowego;Wariant roku obrotowego
+"pl";ledger;Księga;Księga
+"pl";testRun;Przebieg próbny;Przebieg próbny
+"pl";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"pl";processingUser;Użytkownik przetwarzający;Użytkownik przetwarzający
+"pl";interestedUser;Zainteresowany użytkownik;Zainteresowany użytkownik
+"pl";userResponsible;Użytkownik odpowiedzialny;Użytkownik odpowiedzialny
+"pl";processingUserEmail;Processing User Email;Processing User Email
+"pl";interestedUserEmail;Interested User Email;Interested User Email
+"pl";userResponsibleEmail;User Responsible Email;User Responsible Email
+"pl";executionID;ID wykonania;ID wykonania
+"pl";customField1;Pole niestandardowe 1;Pole niestandardowe 1
+"pl";customField2;Pole niestandardowe 2;Pole niestandardowe 2
+"pl";customField3;Pole niestandardowe 3;Pole niestandardowe 3
+"pl";taskListID;ID listy zadań;ID listy zadań
+"pl";taskListDescription;Opis planu zadań;Opis planu zadań
+"pl";taskID;ID zadania;ID zadania
+"pl";taskDescription;Opis zadania;Opis zadania

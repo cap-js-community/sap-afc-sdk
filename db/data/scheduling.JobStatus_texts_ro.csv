@@ -1,0 +1,9 @@
+locale;code;name;descr
+"ro";requested;Requested;Requested
+"ro";running;Running;Running
+"ro";completed;Terminat;Terminat
+"ro";completedWithWarning;Completed With Warning;Avertizare
+"ro";completedWithError;Completed With Error;Eroare
+"ro";failed;Nereușit;Nereușit
+"ro";cancelRequested;Cancel Requested;Requested
+"ro";canceled;Canceled;Canceled

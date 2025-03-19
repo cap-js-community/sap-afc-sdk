@@ -25,10 +25,10 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       req.query.SELECT.columns = ["*"];
       delete req.query.SELECT.limit;
       if (req.req?.query?.skip && isNaN(req.req?.query?.skip)) {
-        return req.reject(JobSchedulingError.invalidOptionSkip(req.req.query.skip));
+        return req.reject(JobSchedulingError.invalidOption(req.req.query.skip, "skip"));
       }
       if (req.req?.query?.top && isNaN(req.req?.query?.top)) {
-        return req.reject(JobSchedulingError.invalidOptionTop(req.req.query.top));
+        return req.reject(JobSchedulingError.invalidOption(req.req.query.top, "top"));
       }
       if (req.req?.query?.skip || req.req?.query?.top) {
         req.query.limit(Math.max(req.req.query.top, 1), Math.max(req.req.query.skip, 0));

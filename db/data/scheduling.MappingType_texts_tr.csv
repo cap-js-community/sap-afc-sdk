@@ -1,0 +1,28 @@
+locale;code;name;descr
+"tr";accountingPrinciple;Muhasebe ilkesi;Muhasebe ilkesi
+"tr";companyCode;Şirket kodu;Şirket kodu
+"tr";plant;Üretim yeri;Üretim yeri
+"tr";controllingArea;Kontrol kodu;Kontrol kodu
+"tr";fiscalPeriod;Mali dönem;Mali dönem
+"tr";fiscalYearPeriod;Mali yıl dönemi;Mali yıl dönemi
+"tr";fiscalYear;Mali yıl;Mali yıl
+"tr";keyDate;Anahtar tarih;Anahtar tarih
+"tr";chartOfAccounts;Hesap planı;Hesap planı
+"tr";fiscalYearVariant;Mali yıl varyantı;Mali yıl varyantı
+"tr";ledger;Defter;Defter
+"tr";testRun;Test çalıştırması;Test çalıştırması
+"tr";postingPeriodVariant;Kayıt dönemi varyantı;Kayıt dönemi varyantı
+"tr";processingUser;İşleyen kullanıcı;İşleyen kullanıcı
+"tr";interestedUser;İlgili kullanıcı;İlgili kullanıcı
+"tr";userResponsible;Sorumlu kullanıcı;Sorumlu kullanıcı
+"tr";processingUserEmail;İşleyen kullanıcı e-postası;İşleyen kullanıcı e-postası
+"tr";interestedUserEmail;İlgili kullanıcı e-postası;İlgili kullanıcı e-postası
+"tr";userResponsibleEmail;Sorumlu kullanıcı e-postası;Sorumlu kullanıcı e-postası
+"tr";executionID;Yürütme tanıtıcısı;Yürütme tanıtıcısı
+"tr";customField1;Özel alan 1;Özel alan 1
+"tr";customField2;Özel alan 2;Özel alan 2
+"tr";customField3;Özel alan 3;Özel alan 3
+"tr";taskListID;Görev listesi tanıtıcısı;Görev listesi tanıtıcısı
+"tr";taskListDescription;Görev listesi tanımı;Görev listesi tanımı
+"tr";taskID;Görev tanıtıcısı;Görev tanıtıcısı
+"tr";taskDescription;Görev tanımı;Görev tanımı

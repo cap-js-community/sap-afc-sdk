@@ -1,0 +1,9 @@
+locale;code;name;descr
+"hr";requested;Requested;Requested
+"hr";running;Running;Running
+"hr";completed;Dovršeno;Dovršeno
+"hr";completedWithWarning;Completed With Warning;Upozorenje
+"hr";completedWithError;Completed With Error;Pogreška
+"hr";failed;Nije uspjelo;Nije uspjelo
+"hr";cancelRequested;Cancel Requested;Requested
+"hr";canceled;Canceled;Canceled

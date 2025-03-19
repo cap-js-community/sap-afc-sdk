@@ -1,0 +1,9 @@
+locale;code;name;descr
+"ar";requested;Requested;Requested
+"ar";running;Running;Running
+"ar";completed;مكتمل;مكتمل
+"ar";completedWithWarning;Completed With Warning;تحذير
+"ar";completedWithError;Completed With Error;خطأ
+"ar";failed;فشل;فشل
+"ar";cancelRequested;Cancel Requested;Requested
+"ar";canceled;Canceled;Canceled

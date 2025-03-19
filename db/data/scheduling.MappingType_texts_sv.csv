@@ -1,0 +1,28 @@
+locale;code;name;descr
+"sv";accountingPrinciple;Redovisningsstandard;Redovisningsstandard
+"sv";companyCode;Företag;Företag
+"sv";plant;Produktionsenhet;Produktionsenhet
+"sv";controllingArea;Controllingenhet;Controllingenhet
+"sv";fiscalPeriod;Fiscal Period;Fiscal Period
+"sv";fiscalYearPeriod;Räkenskapsårsperiod;Räkenskapsårsperiod
+"sv";fiscalYear;Räkenskapsår;Räkenskapsår
+"sv";keyDate;Referensdag;Referensdag
+"sv";chartOfAccounts;Kontoplan;Kontoplan
+"sv";fiscalYearVariant;Räkenskapsårsvariant;Räkenskapsårsvariant
+"sv";ledger;Ledger;Ledger
+"sv";testRun;Testkörning;Testkörning
+"sv";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"sv";processingUser;Utförande användare;Utförande användare
+"sv";interestedUser;Intressentanvändare;Intressentanvändare
+"sv";userResponsible;Ansvarig användare;Ansvarig användare
+"sv";processingUserEmail;Processing User Email;Processing User Email
+"sv";interestedUserEmail;Interested User Email;Interested User Email
+"sv";userResponsibleEmail;User Responsible Email;User Responsible Email
+"sv";executionID;Utförande-ID;Utförande-ID
+"sv";customField1;Användardefinierat fält 1;Användardefinierat fält 1
+"sv";customField2;Användardefinierat fält 2;Användardefinierat fält 2
+"sv";customField3;Användardefinierat fält 3;Användardefinierat fält 3
+"sv";taskListID;Uppgiftsplan-ID;Uppgiftsplan-ID
+"sv";taskListDescription;Beskrivning uppgiftsplan;Beskrivning uppgiftsplan
+"sv";taskID;Uppgifts-ID;Uppgifts-ID
+"sv";taskDescription;Uppgiftsbeskrivning;Uppgiftsbeskrivning

@@ -646,19 +646,22 @@ describe("API", () => {
     });
 
     it("READ Job Definition with wrong options", async () => {
-      await expect(GET("/api/job-scheduling/v1/JobDefinition?skip=A")).rejects.toThrowAPIError(
-        400,
-        "invalidOptionSkip",
-        ["A"],
-      );
-      await expect(GET("/api/job-scheduling/v1/JobDefinition?top=B")).rejects.toThrowAPIError(400, "invalidOptionTop", [
+      await expect(GET("/api/job-scheduling/v1/JobDefinition?skip=A")).rejects.toThrowAPIError(400, "invalidOption", [
+        "A",
+        "skip",
+      ]);
+      await expect(GET("/api/job-scheduling/v1/JobDefinition?top=B")).rejects.toThrowAPIError(400, "invalidOption", [
         "B",
+        "top",
       ]);
     });
 
     it("READ Job with wrong options", async () => {
-      await expect(GET("/api/job-scheduling/v1/Job?skip=A")).rejects.toThrowAPIError(400, "invalidOptionSkip", ["A"]);
-      await expect(GET("/api/job-scheduling/v1/Job?top=B")).rejects.toThrowAPIError(400, "invalidOptionTop", ["B"]);
+      await expect(GET("/api/job-scheduling/v1/Job?skip=A")).rejects.toThrowAPIError(400, "invalidOption", [
+        "A",
+        "skip",
+      ]);
+      await expect(GET("/api/job-scheduling/v1/Job?top=B")).rejects.toThrowAPIError(400, "invalidOption", ["B", "top"]);
     });
 
     it("POST Job with wrong data", async () => {

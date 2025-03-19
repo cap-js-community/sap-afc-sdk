@@ -824,7 +824,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
         <Annotation Term="Core.Immutable" Bool="true"/>
         <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Common.Label" String="Created On"/>
+        <Annotation Term="Common.Label" String="Created At"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/createdBy">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
@@ -1547,7 +1547,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/createdAt">
-        <Annotation Term="Common.Label" String="Created On"/>
+        <Annotation Term="Common.Label" String="Created At"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage/criticality">
         <Annotation Term="Core.Computed" Bool="true"/>
@@ -2361,7 +2361,7 @@ exports[`Monitoring Service Get Codelists 1`] = `
     {
       "code": "cancelRequested",
       "descr": "Requested",
-      "name": "Cancel Requested",
+      "name": "Cancellation Requested",
     },
     {
       "code": "completed",
@@ -2371,12 +2371,12 @@ exports[`Monitoring Service Get Codelists 1`] = `
     {
       "code": "completedWithError",
       "descr": "Error",
-      "name": "Completed With Error",
+      "name": "Completed with Error",
     },
     {
       "code": "completedWithWarning",
       "descr": "Warning",
-      "name": "Completed With Warning",
+      "name": "Completed with Warning",
     },
     {
       "code": "failed",
@@ -2459,8 +2459,8 @@ exports[`Monitoring Service Get Codelists 4`] = `
     },
     {
       "code": "chartOfAccounts",
-      "descr": "Chart Of Accounts",
-      "name": "Chart Of Accounts",
+      "descr": "Chart of Accounts",
+      "name": "Chart of Accounts",
     },
     {
       "code": "companyCode",

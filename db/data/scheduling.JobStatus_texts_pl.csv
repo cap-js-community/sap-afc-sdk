@@ -1,0 +1,9 @@
+locale;code;name;descr
+"pl";requested;Requested;Requested
+"pl";running;Running;Running
+"pl";completed;Zakończone;Zakończone
+"pl";completedWithWarning;Completed With Warning;Ostrzeżenie
+"pl";completedWithError;Completed With Error;Błąd
+"pl";failed;Nie powiodło się;Nie powiodło się
+"pl";cancelRequested;Cancel Requested;Requested
+"pl";canceled;Canceled;Canceled

@@ -56,7 +56,7 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.9.0",
+    "@cap-js-community/event-queue": "^1.9.3",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.1",
     "@sap/cds-common-content": "^2.1.0",

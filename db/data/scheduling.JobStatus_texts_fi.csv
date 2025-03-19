@@ -1,0 +1,9 @@
+locale;code;name;descr
+"fi";requested;Requested;Requested
+"fi";running;Running;Running
+"fi";completed;Päätetty;Päätetty
+"fi";completedWithWarning;Completed With Warning;Varoitus
+"fi";completedWithError;Completed With Error;Virhe
+"fi";failed;Epäonnistunut;Epäonnistunut
+"fi";cancelRequested;Cancel Requested;Requested
+"fi";canceled;Canceled;Canceled

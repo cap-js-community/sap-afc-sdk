@@ -1,0 +1,28 @@
+locale;code;name;descr
+"ja";accountingPrinciple;会計原則;会計原則
+"ja";companyCode;会社コード;会社コード
+"ja";plant;プラント;プラント
+"ja";controllingArea;管理領域;管理領域
+"ja";fiscalPeriod;Fiscal Period;Fiscal Period
+"ja";fiscalYearPeriod;会計年度期間;会計年度期間
+"ja";fiscalYear;会計年度;会計年度
+"ja";keyDate;基準日;基準日
+"ja";chartOfAccounts;勘定コード表;勘定コード表
+"ja";fiscalYearVariant;会計年度バリアント;会計年度バリアント
+"ja";ledger;元帳;元帳
+"ja";testRun;テスト実行;テスト実行
+"ja";postingPeriodVariant;Posting Period Variant;Posting Period Variant
+"ja";processingUser;処理ユーザ;処理ユーザ
+"ja";interestedUser;関心のあるユーザ;関心のあるユーザ
+"ja";userResponsible;責任ユーザ;責任ユーザ
+"ja";processingUserEmail;Processing User Email;Processing User Email
+"ja";interestedUserEmail;Interested User Email;Interested User Email
+"ja";userResponsibleEmail;User Responsible Email;User Responsible Email
+"ja";executionID;実行 ID;実行 ID
+"ja";customField1;ユーザ定義項目 1;ユーザ定義項目 1
+"ja";customField2;ユーザ定義項目 2;ユーザ定義項目 2
+"ja";customField3;ユーザ定義項目 3;ユーザ定義項目 3
+"ja";taskListID;タスクリスト ID;タスクリスト ID
+"ja";taskListDescription;タスクリスト内容説明;タスクリスト内容説明
+"ja";taskID;タスク ID;タスク ID
+"ja";taskDescription;タスク内容説明;タスク内容説明

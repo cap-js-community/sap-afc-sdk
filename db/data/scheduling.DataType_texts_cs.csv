@@ -1,0 +1,5 @@
+locale;code;name;descr
+"cs";string;String;String
+"cs";number;Číslo;Číslo
+"cs";datetime;Date & Time;Date & Time
+"cs";boolean;Logická hodnota;Logická hodnota

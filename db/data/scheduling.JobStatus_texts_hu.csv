@@ -1,0 +1,9 @@
+locale;code;name;descr
+"hu";requested;Requested;Requested
+"hu";running;Running;Running
+"hu";completed;Befejezve;Befejezve
+"hu";completedWithWarning;Completed With Warning;Figyelmeztetés
+"hu";completedWithError;Completed With Error;Hiba
+"hu";failed;Sikertelen;Sikertelen
+"hu";cancelRequested;Cancel Requested;Requested
+"hu";canceled;Canceled;Canceled

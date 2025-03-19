@@ -1,0 +1,9 @@
+locale;code;name;descr
+"sv";requested;Requested;Requested
+"sv";running;Running;Running
+"sv";completed;Slutförd;Slutförd
+"sv";completedWithWarning;Completed With Warning;Varning
+"sv";completedWithError;Completed With Error;Fel
+"sv";failed;Misslyckades;Misslyckades
+"sv";cancelRequested;Cancel Requested;Requested
+"sv";canceled;Canceled;Canceled
