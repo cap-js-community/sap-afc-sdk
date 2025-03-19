@@ -108,16 +108,17 @@ Examples:
       });
 
       // Kyma
+      const repository = process.env.CONTAINER_REPOSITORY || "docker.io/abc123";
       adjustText("chart/values.yaml", (content) => {
         content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
+        content = replaceTextPart(content, "registry: registry-name", `registry: ${repository}`);
+        if (process.env.GLOBAL_DOMAIN) {
+          content = replaceTextPart(content, "domain: abc.com", `domain: ${process.env.GLOBAL_DOMAIN}`);
+        }
         return content;
       });
       adjustText("containerize.yaml", (content) => {
-        content = replaceTextPart(
-          content,
-          "<your-container-registry>",
-          process.env.CONTAINER_REPOSITORY || "docker.io/abc123",
-        );
+        content = replaceTextPart(content, "<your-container-registry>", repository);
         for (const app of appStubs) {
           let part = `--prefix app/${app}`;
           let replacement = `--prefix node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
