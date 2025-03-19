@@ -156,7 +156,9 @@
           "server": null
         },
         "api": {
-          "cors": true,
+          "cors": {
+            "origin": true
+          },
           "csp": true
         },
         "ui": {

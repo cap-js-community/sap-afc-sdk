@@ -8,7 +8,7 @@ const commander = require("commander");
 const { open } = require("openurl");
 const prompt = require("prompt-sync")();
 
-const { adjustLines } = require("../common/util");
+const { adjustLines, generateHashBrokerPassword } = require("../common/util");
 
 const PLAN_NAME = "standard";
 const SERVICE_SUFFIX = "api";
@@ -60,8 +60,8 @@ module.exports = {
       .description("Manage API")
       .addArgument(new commander.Argument("<action>", "Manage API keys").choices(["key"]))
       .option("-n, --new [name]", "Create new API key with optional name")
-      .option("-p, --password <password>", "Broker password")
       .option("-s, --server <password>", "Server URL")
+      .option("-p, --password <password>", "Broker password")
       .option("-a, --passcode", "Request temporary authentication code")
       .option("-i, --internal", "Fetch internal credentials")
       .option("-t, --token", "Fetch oauth token")
@@ -70,6 +70,8 @@ module.exports = {
       .option("-h, --http", "Fill .http files")
       .option("-c, --clear", "Clear .http files placeholders")
       .option("-r, --reset", "Reset API management")
+      .option("-l, --label [label]", "Label for instances")
+      .option("-g, --generate", "Generate broker password and hash")
       .addHelpText(
         "afterAll",
         `
@@ -95,7 +97,9 @@ Examples:
   process: async function (action, options) {
     switch (action) {
       case "key":
-        if (options.passcode) {
+        if (options.generate) {
+          manageBroker(options);
+        } else if (options.passcode) {
           managePasscode(options);
         } else if (options.reset) {
           manageClear(options);
@@ -111,6 +115,13 @@ Examples:
     }
   },
 };
+
+function manageBroker() {
+  const brokerPassword = generateHashBrokerPassword();
+  console.log(
+    `Keep it safe to create broker and to fetch key after deployment: afc api key -p '${brokerPassword.clear}'`,
+  );
+}
 
 function managePasscode(options) {
   const config = fetchAppInfo(options);
@@ -248,7 +259,6 @@ function fetchAppInfo(options, service) {
     const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
     serverUrl = /routes:\s*(.*)/.exec(result)?.[1];
   }
-  // TODO: Kyma
   if (!serverUrl) {
     serverUrl = prompt("Server URL: ");
   }
@@ -285,7 +295,8 @@ function cfService() {
 }
 
 function cfBroker(options, config, optional) {
-  const brokerName = `${config.service}-broker`;
+  const serviceName = `${config.service}${options.label ? `-${options.label}` : ""}`;
+  const brokerName = `${serviceName}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
   let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
@@ -309,10 +320,11 @@ function cfBroker(options, config, optional) {
 }
 
 function cfServiceInstance(options, config, optional) {
-  const serviceInstanceName = `${config.service}-${SERVICE_SUFFIX}`;
-  const regexService = new RegExp(`${serviceInstanceName}.*${config.service}.*${PLAN_NAME}.*(${config.broker})`);
+  const serviceName = `${config.service}${options.label ? `-${options.label}` : ""}`;
+  const serviceInstanceName = `${serviceName}-${SERVICE_SUFFIX}`;
+  const regexService = new RegExp(`${serviceInstanceName}.*${serviceName}.*${PLAN_NAME}.*(${config.broker})`);
   const cfCreateServicesCommand = `cf services`;
-  const cfServiceCommand = `cf create-service -b ${config.broker} ${config.service} ${PLAN_NAME} ${serviceInstanceName}`;
+  const cfServiceCommand = `cf create-service -b ${config.broker} ${serviceName} ${PLAN_NAME} ${serviceInstanceName}`;
   let result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
   let cfService = regexService.exec(result)?.[1];
   if (!cfService && !optional) {

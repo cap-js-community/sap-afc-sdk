@@ -65,7 +65,7 @@ describe("API", () => {
         },
       });
       expect(response.headers).toMatchObject({
-        "access-control-allow-origin": "https://sap-afc-sdk.sap.com",
+        "access-control-allow-origin": "https://example.com",
         vary: "Origin",
       });
     });

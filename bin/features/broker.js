@@ -4,7 +4,8 @@
 const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
-const shelljs = require("shelljs");
+
+const { generateHashBrokerPassword } = require("../common/util");
 
 const BROKER_PATH = path.join(process.cwd(), "./srv/broker.json");
 const CATALOG_PATH = path.join(process.cwd(), "./srv/catalog.json");
@@ -77,18 +78,8 @@ function writeFile(path, content) {
   return true;
 }
 
-function generateHashBrokerPassword() {
-  const result = shelljs.exec("npx -y -p @sap/sbf hash-broker-password -b").stdout;
-  const parts = result.split("\n");
-  const [, clear, , hash] = parts;
-  return {
-    clear,
-    hash,
-  };
-}
-
 module.exports = () => {
-  // catalog
+  // Catalog
   if (process.env.BROKER_SERVICE_ID) {
     CATALOG.services[0].id = process.env.BROKER_SERVICE_ID;
   }
@@ -97,7 +88,7 @@ module.exports = () => {
   }
   writeFile(CATALOG_PATH, CATALOG);
 
-  // broker
+  // Broker
   let brokerPassword = {};
   if (!fileExists(BROKER_PATH)) {
     if (process.env.BROKER_PASSWORD_HASH) {
@@ -108,7 +99,8 @@ module.exports = () => {
     }
   }
   if (writeFile(BROKER_PATH, BROKER) && brokerPassword.clear) {
-    console.log("Broker Password (keep it safe to create broker):", brokerPassword.clear);
-    console.log(`\nAfter deployment fetch API key: afc api key -p '${brokerPassword.clear}`);
+    console.log(
+      `Keep it safe to create broker and to fetch key after deployment: afc api key -p '${brokerPassword.clear}'`,
+    );
   }
 };

@@ -2,6 +2,7 @@
 
 const path = require("path");
 const fs = require("fs");
+const shelljs = require("shelljs");
 
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
@@ -73,10 +74,21 @@ function copyTemplate(folder, files) {
   console.log(`Folder '${folder}' written.`);
 }
 
+function generateHashBrokerPassword() {
+  const result = shelljs.exec("npx -y -p @sap/sbf hash-broker-password -b").stdout;
+  const parts = result.split("\n");
+  const [, clear, , hash] = parts;
+  return {
+    clear,
+    hash,
+  };
+}
+
 module.exports = {
   adjustText,
   adjustLines,
   replaceTextPart,
   adjustJSON,
   copyTemplate,
+  generateHashBrokerPassword,
 };
