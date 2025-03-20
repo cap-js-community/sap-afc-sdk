@@ -454,13 +454,13 @@ describe("Processing Service", () => {
     cds.env.log.levels["periodic"] = "info";
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processOutbox("SchedulingProcessingService.syncJob");
     expect(log.output).toEqual(expect.stringMatching(/periodic sync job/s));
 
     log.output = "";
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processOutbox("SchedulingProcessingService.syncJob");
     expect(log.output).not.toEqual(expect.stringMatching(/periodic sync job/s));
   });
 

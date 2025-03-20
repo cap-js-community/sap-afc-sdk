@@ -2,8 +2,8 @@ locale;code;name;descr
 "nl";requested;Aangevraagd;Aangevraagd
 "nl";running;Wordt uitgevoerd;Wordt uitgevoerd
 "nl";completed;Voltooid;Voltooid
-"nl";completedWithWarning;Voltooid met waarschuwing;Waarschuwing
-"nl";completedWithError;Voltooid met fout;Fout
+"nl";completedWithWarning;Completed with Warning;Waarschuwing
+"nl";completedWithError;Completed with Error;Fout
 "nl";failed;Mislukt;Mislukt
-"nl";cancelRequested;Annuleren aangevraagd;Aangevraagd
+"nl";cancelRequested;Annulering aangevraagd;Aangevraagd
 "nl";canceled;Geannuleerd;Geannuleerd

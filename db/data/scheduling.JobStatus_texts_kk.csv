@@ -2,8 +2,8 @@ locale;code;name;descr
 "kk";requested;Сұралды;Сұралды
 "kk";running;Орындалуда;Орындалуда
 "kk";completed;Аяқталды;Аяқталды
-"kk";completedWithWarning;Ескертумен аяқталды;Ескерту
-"kk";completedWithError;Қатемен аяқталды;Қате
+"kk";completedWithWarning;Completed with Warning;Ескерту
+"kk";completedWithError;Completed with Error;Қате
 "kk";failed;Сәтсіз аяқталды;Сәтсіз аяқталды
 "kk";cancelRequested;Болдырмау сұралды;Сұралды
 "kk";canceled;Болдырылмады;Болдырылмады

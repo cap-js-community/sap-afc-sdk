@@ -2,8 +2,8 @@ locale;code;name;descr
 "de";requested;Angefordert;Angefordert
 "de";running;Wird ausgeführt;Wird ausgeführt
 "de";completed;Abgeschlossen;Abgeschlossen
-"de";completedWithWarning;Mit Warnung abgeschlossen;Warnung
-"de";completedWithError;Mit Fehler abgeschlossen;Fehler
+"de";completedWithWarning;Completed with Warning;Warnung
+"de";completedWithError;Completed with Error;Fehler
 "de";failed;Fehlgeschlagen;Fehlgeschlagen
-"de";cancelRequested;Abbruch angefordert;Angefordert
+"de";cancelRequested;Stornierung angefordert;Angefordert
 "de";canceled;Abgebrochen;Abgebrochen

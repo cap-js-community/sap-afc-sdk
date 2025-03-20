@@ -2,8 +2,8 @@ locale;code;name;descr
 "pl";requested;Wymagane;Wymagane
 "pl";running;Wykonywane;Wykonywane
 "pl";completed;Zakończone;Zakończone
-"pl";completedWithWarning;Ukończono z ostrzeżeniem;Ostrzeżenie
-"pl";completedWithError;Ukończono z błędem;Błąd
+"pl";completedWithWarning;Completed with Warning;Ostrzeżenie
+"pl";completedWithError;Completed with Error;Błąd
 "pl";failed;Nie powiodło się;Nie powiodło się
-"pl";cancelRequested;Anulowanie wymagane;Wymagane
+"pl";cancelRequested;Zażądano anulowania;Wymagane
 "pl";canceled;Anulowane;Anulowane

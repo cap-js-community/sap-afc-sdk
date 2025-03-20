@@ -2,8 +2,8 @@ locale;code;name;descr
 "ms";requested;Diminta;Diminta
 "ms";running;Sedang Berjalan;Sedang Berjalan
 "ms";completed;Selesai;Selesai
-"ms";completedWithWarning;Selesai Dengan Amaran;Amaran
-"ms";completedWithError;Selesai Dengan ralat;Ralat
+"ms";completedWithWarning;Completed with Warning;Amaran
+"ms";completedWithError;Completed with Error;Ralat
 "ms";failed;Gagal;Gagal
 "ms";cancelRequested;Pembatalan Diminta;Diminta
 "ms";canceled;Dibatalkan;Dibatalkan

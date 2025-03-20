@@ -5,5 +5,5 @@ locale;code;name;descr
 "hu";completedWithWarning;Figyelmeztetéssel befejezve;Figyelmeztetés
 "hu";completedWithError;Hibákkal befejezve;Hiba
 "hu";failed;Sikertelen;Sikertelen
-"hu";cancelRequested;Visszavonás kérelmezve;Kérelmezve
+"hu";cancelRequested;Visszavonás igényelve;Kérelmezve
 "hu";canceled;Visszavonva;Visszavonva

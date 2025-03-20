@@ -2,8 +2,8 @@ locale;code;name;descr
 "fi";requested;Pyydetty;Pyydetty
 "fi";running;Käynnissä;Käynnissä
 "fi";completed;Päätetty;Päätetty
-"fi";completedWithWarning;Suoritettu, varoituksia;Varoitus
-"fi";completedWithError;Suoritus päättyi virheeseen;Virhe
+"fi";completedWithWarning;Completed with Warning;Varoitus
+"fi";completedWithError;Completed with Error;Virhe
 "fi";failed;Epäonnistunut;Epäonnistunut
-"fi";cancelRequested;Peruutus pyydetty;Pyydetty
+"fi";cancelRequested;Peruutusta pyydetty;Pyydetty
 "fi";canceled;Peruutettu;Peruutettu
