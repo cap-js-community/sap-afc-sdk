@@ -33,11 +33,11 @@ entity JobDefinition {
 
 @title: '{i18n>JobParameterDefinition}'
 entity JobParameterDefinition {
-      @title: '{i18n>Name}'
-  key name        : String(255) not null;
-
       @title: '{i18n>Job}'
   key job         : Association to JobDefinition not null;
+
+      @title: '{i18n>Name}'
+  key name        : String(255) not null;
 
       @title: '{i18n>Description}'
       description : localized String(5000);

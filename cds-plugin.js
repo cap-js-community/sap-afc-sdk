@@ -17,6 +17,7 @@ const { mergeDeep, toObject } = require("./src/util/helper");
 const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
 
 const SERVER_SUFFIX = "srv";
+const APPROUTER_SUFFIX = "approuter";
 
 process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
@@ -47,8 +48,8 @@ function secureRoutes() {
     cds.app.use(
       "/api",
       cors({
-        origin: approuterUrl(),
         ...corsOptions,
+        origin: corsOptions.origin !== undefined && corsOptions.origin !== null ? corsOptions.origin : approuterUrl(),
       }),
     );
   }
@@ -340,7 +341,11 @@ function approuterUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
     return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter;
   }
-  return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(\\..*)`), `$1$2`);
+  if (process.env.VCAP_APPLICATION) {
+    return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1$2`);
+  } else {
+    return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1-${APPROUTER_SUFFIX}$2`);
+  }
 }
 
 function serverUrl() {

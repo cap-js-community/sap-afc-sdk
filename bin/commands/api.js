@@ -60,17 +60,19 @@ module.exports = {
       .description("Manage API")
       .addArgument(new commander.Argument("<action>", "Manage API keys").choices(["key"]))
       .option("-n, --new [name]", "Create new API key with optional name")
-      .option("-s, --server <password>", "Server URL")
+      .option("-l, --label <label>", "Label for instances")
+      .option("-s, --server <server-url>", "Server URL")
       .option("-p, --password <password>", "Broker password")
       .option("-a, --passcode", "Request temporary authentication code")
       .option("-i, --internal", "Fetch internal credentials")
       .option("-t, --token", "Fetch oauth token")
       .option("-b, --bearer", "Generate authorization bearer header")
-      .option("-d, --destination", "Generate destination import file")
+      .option("-d, --destination", "Generate destination import file (json)")
+      .option("-o, --properties", "Generate destination import file (txt)")
       .option("-h, --http", "Fill .http files")
       .option("-c, --clear", "Clear .http files placeholders")
       .option("-r, --reset", "Reset API management")
-      .option("-l, --label [label]", "Label for instances")
+      .option("-x, --xreset", "Reset API management")
       .option("-g, --generate", "Generate broker password and hash")
       .addHelpText(
         "afterAll",
@@ -92,6 +94,9 @@ Examples:
   },
   handle: async function (action) {
     const options = this.opts();
+    if (options.properties) {
+      options.destination = true;
+    }
     await module.exports.process(action, options);
   },
   process: async function (action, options) {
@@ -101,7 +106,7 @@ Examples:
           manageBroker(options);
         } else if (options.passcode) {
           managePasscode(options);
-        } else if (options.reset) {
+        } else if (options.reset || options.xreset) {
           manageClear(options);
           manageReset(options);
         } else if (options.clear) {
@@ -125,6 +130,10 @@ function manageBroker() {
 
 function managePasscode(options) {
   const config = fetchAppInfo(options);
+  if (!config.cf) {
+    console.log("Command only supported for CF apps");
+    return;
+  }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
   config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   open(`${config.authUrl}/passcode`);
@@ -132,6 +141,10 @@ function managePasscode(options) {
 
 async function manageInternal(options) {
   const config = fetchAppInfo(options);
+  if (!config.cf) {
+    console.log("Command only supported for CF apps");
+    return;
+  }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
   config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   config.auth = stripHTTPS(config.authUrl);
@@ -139,7 +152,7 @@ async function manageInternal(options) {
   config.internalClientId = /"xsuaa": \[.*"credentials": \{.*"clientid": "(.*?)"/s.exec(result)?.[1];
   config.internalClientSecret = /"xsuaa": \[.*"credentials": \{.*"clientsecret": "(.*?)"/s.exec(result)?.[1];
   if (!(config.auth && config.internalClientId && config.internalClientSecret)) {
-    console.log(`Failed to retrieve internal credentials`);
+    console.log(`Failed to retrieve internal credentials`, { app: config.app });
     return;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
@@ -148,7 +161,15 @@ async function manageInternal(options) {
     console.log(`clientSecret (internal): ${config.internalClientSecret}`);
   }
   if (options.destination) {
-    createDestination(config.app, config.url, config.tokenUrl, config.internalClientId, config.internalClientSecret);
+    serverUrl(config);
+    createDestination(
+      config.app,
+      config.url,
+      config.tokenUrl,
+      config.internalClientId,
+      config.internalClientSecret,
+      options,
+    );
   }
   if (options.token || options.bearer || options.http) {
     config.internalToken = await fetchOAuthToken(config.authUrl, config.internalClientId, config.internalClientSecret);
@@ -201,7 +222,7 @@ async function manageKey(options) {
     console.log(`clientSecret: ${config.clientSecret}`);
   }
   if (options.destination) {
-    createDestination(`${config.app}-api`, config.api, config.tokenUrl, config.clientId, config.clientSecret);
+    createDestination(`${config.app}-api`, config.api, config.tokenUrl, config.clientId, config.clientSecret, options);
   }
   if (options.token || options.bearer || options.http) {
     config.token = await fetchOAuthToken(config.authUrl, config.clientId, config.clientSecret);
@@ -222,7 +243,7 @@ async function manageKey(options) {
 }
 
 function manageClear(options) {
-  fillHTTPFiles(options, {});
+  fillHTTPFiles(options, {}, true);
 }
 
 function manageReset(options) {
@@ -251,22 +272,20 @@ function manageReset(options) {
 function fetchAppInfo(options, service) {
   let serverUrl = options.server;
   let app = service;
-  // MTA
+  let cf = false;
   const mtaPath = path.join(process.cwd(), "mta.yaml");
   if (fs.existsSync(mtaPath)) {
+    cf = true;
     const mta = fs.readFileSync(mtaPath, "utf8");
     app = /- name: (.*)\n\s*type: nodejs\n\s*path: gen\/srv/s.exec(mta)?.[1];
     const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
     serverUrl = /routes:\s*(.*)/.exec(result)?.[1];
   }
-  if (!serverUrl) {
-    serverUrl = prompt("Server URL: ");
-  }
-  serverUrl = serverUrl.startsWith("https://") ? serverUrl : `https://${serverUrl}`;
+  serverUrl = ensureHttps(serverUrl);
   return {
+    cf,
     app,
     service,
-    host: stripHTTPS(serverUrl),
     url: serverUrl,
   };
 }
@@ -295,13 +314,13 @@ function cfService() {
 }
 
 function cfBroker(options, config, optional) {
-  const serviceName = `${config.service}${options.label ? `-${options.label}` : ""}`;
-  const brokerName = `${serviceName}-broker`;
+  const brokerName = `${config.service}${options.label ? `-${options.label}` : ""}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
   let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
   let cfBroker = regexBroker.exec(result)?.[1];
   if (!cfBroker && !optional) {
+    serverUrl(config);
     if (!options.password) {
       options.password = prompt.hide("Broker password: ");
     }
@@ -320,11 +339,10 @@ function cfBroker(options, config, optional) {
 }
 
 function cfServiceInstance(options, config, optional) {
-  const serviceName = `${config.service}${options.label ? `-${options.label}` : ""}`;
-  const serviceInstanceName = `${serviceName}-${SERVICE_SUFFIX}`;
-  const regexService = new RegExp(`${serviceInstanceName}.*${serviceName}.*${PLAN_NAME}.*(${config.broker})`);
+  const serviceInstanceName = `${config.service}${options.label ? `-${options.label}` : ""}-${SERVICE_SUFFIX}`;
+  const regexService = new RegExp(`${serviceInstanceName}.*${config.service}.*${PLAN_NAME}.*(${config.broker})`);
   const cfCreateServicesCommand = `cf services`;
-  const cfServiceCommand = `cf create-service -b ${config.broker} ${serviceName} ${PLAN_NAME} ${serviceInstanceName}`;
+  const cfServiceCommand = `cf create-service -b ${config.broker} ${config.service} ${PLAN_NAME} ${serviceInstanceName}`;
   let result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
   let cfService = regexService.exec(result)?.[1];
   if (!cfService && !optional) {
@@ -401,7 +419,11 @@ function cfDeleteBroker(options, config) {
   shelljs.exec(cfDeleteServiceCommand, { silent: true }).stdout;
 }
 
-function fillHTTPFiles(options, config) {
+function fillHTTPFiles(options, config, clear) {
+  if (!clear) {
+    serverUrl(config);
+    config.host ??= stripHTTPS(config.url);
+  }
   const httpPath = path.join(process.cwd(), "http");
   const files = fs.readdirSync(httpPath, { recursive: true });
   for (let file of files) {
@@ -433,7 +455,14 @@ function fillHTTPFiles(options, config) {
   }
 }
 
-function createDestination(name, serverUrl, authUrl, clientId, clientSecret) {
+function serverUrl(config) {
+  if (!config.url) {
+    config.url = prompt("Server URL: ");
+    config.url = ensureHttps(config.url);
+  }
+}
+
+function createDestination(name, serverUrl, authUrl, clientId, clientSecret, options) {
   const destination = {
     destination: {
       Name: name,
@@ -447,9 +476,18 @@ function createDestination(name, serverUrl, authUrl, clientId, clientSecret) {
       URL: serverUrl,
     },
   };
-  const destinationPath = path.join(process.cwd(), `default-${name}.json`);
-  fs.writeFileSync(destinationPath, JSON.stringify(destination, null, 2));
-  console.log(`File '${destinationPath}' written.`);
+  if (options.properties) {
+    const destinationProperties = Object.keys(destination.destination).reduce((result, key) => {
+      return `${result}${key}=${destination.destination[key]}\n`;
+    }, "");
+    const destinationPath = path.join(process.cwd(), `default-${name}.properties`);
+    fs.writeFileSync(destinationPath, destinationProperties);
+    console.log(`File '${destinationPath}' written.`);
+  } else {
+    const destinationPath = path.join(process.cwd(), `default-${name}.json`);
+    fs.writeFileSync(destinationPath, JSON.stringify(destination, null, 2));
+    console.log(`File '${destinationPath}' written.`);
+  }
 }
 
 async function fetchOAuthToken(url, clientId, clientSecret) {
@@ -467,6 +505,13 @@ async function fetchOAuthToken(url, clientId, clientSecret) {
     }
   }
   console.log("Failed to fetch OAuth token");
+}
+
+function ensureHttps(url) {
+  if (url) {
+    return url.startsWith("https://") ? url : `https://${url}`;
+  }
+  return url;
 }
 
 function stripHTTPS(url) {

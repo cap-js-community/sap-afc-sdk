@@ -74,9 +74,9 @@ describe("API", () => {
   it("GET Job Definitions", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition");
     expect(response.data).toHaveLength(6);
-    expect(response.data[0].name).toBe("JOB_1");
-    expect(response.data[1].name).toBe("JOB_2");
-    expect(response.data[2].name).toBe("JOB_3");
+    for (let i = 0; i < response.data.length; i++) {
+      expect(response.data[i].name).toBe(`JOB_${i + 1}`);
+    }
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1");
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -92,6 +92,17 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=-1&top=4");
     expect(response.data).toHaveLength(4);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?skip=1");
+    expect(response.data).toHaveLength(5);
+    for (let i = 0; i < response.data.length; i++) {
+      expect(response.data[i].name).toBe(`JOB_${i + 2}`);
+    }
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/JobDefinition");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
 
     response = await GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters");
     expect(response.data[0].parameters).toBeUndefined();
@@ -152,14 +163,22 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("B");
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1");
+    expect(cleanData(response.data)).toMatchSnapshot();
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
   });
 
   it("GET Job", async () => {
     let response = await GET("/api/job-scheduling/v1/Job");
     expect(response.data).toHaveLength(3);
-    expect(response.data[0].name).toBe("JOB_1");
-    expect(response.data[1].name).toBe("JOB_2");
-    expect(response.data[2].name).toBe("JOB_3");
+    for (let i = 0; i < response.data.length; i++) {
+      expect(response.data[i].name).toBe(`JOB_${i + 1}`);
+    }
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103");
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -175,9 +194,23 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/Job?skip=-1&top=4");
     expect(response.data).toHaveLength(3);
+    response = await GET("/api/job-scheduling/v1/JobDefinition?skip=1");
+    expect(response.data).toHaveLength(5);
+    for (let i = 0; i < response.data.length; i++) {
+      expect(response.data[i].name).toBe(`JOB_${i + 2}`);
+    }
 
-    response = await GET("/api/job-scheduling/v1/Job?$expand=parameters");
-    expect(response.data[0].parameters).toBeUndefined();
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/Job");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
+
+    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103?$expand=parameters");
+    expect(response.data.parameters).toBeUndefined();
+
+    response = await GET("/api/job-scheduling/v1/Job?$filter=name eq 'JOB_1'");
+    expect(response.data).toHaveLength(3);
   });
 
   it("GET Job (referencedID)", async () => {
@@ -202,6 +235,14 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("B");
+    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1");
+    expect(cleanData(response.data)).toMatchSnapshot();
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
   });
 
   it("GET Job Results", async () => {
@@ -209,10 +250,19 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?top=1");
     expect(response.data).toHaveLength(1);
-    expect(response.data[0].type).toBe("link");
+    expect(response.data[0].type).toBe("data");
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1&top=1");
     expect(response.data).toHaveLength(1);
-    expect(response.data[0].type).toBe("data");
+    expect(response.data[0].type).toBe("link");
+
+    response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1");
+    expect(cleanData(response.data)).toMatchSnapshot();
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
   });
 
   it("GET Job Result Messages", async () => {
@@ -224,8 +274,8 @@ describe("API", () => {
     expect(response.data[0].severity).toBe("error");
     response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1");
     expect(response.data).toHaveLength(1);
-    expect(response.data[0].text).toBe("This is a warning");
-    expect(response.data[0].severity).toBe("warning");
+    expect(response.data[0].text).toBe("This is an information");
+    expect(response.data[0].severity).toBe("info");
     response = await GET(
       "/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1",
       {
@@ -235,8 +285,33 @@ describe("API", () => {
       },
     );
     expect(response.data).toHaveLength(1);
+    expect(response.data[0].text).toBe("Das ist eine Information");
+    expect(response.data[0].severity).toBe("info");
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=2&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].text).toBe("This is a warning");
+    expect(response.data[0].severity).toBe("warning");
+    response = await GET(
+      "/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=2&top=1",
+      {
+        headers: {
+          "Accept-Language": "de",
+        },
+      },
+    );
+    expect(response.data).toHaveLength(1);
     expect(response.data[0].text).toBe("Das ist eine Warnung");
     expect(response.data[0].severity).toBe("warning");
+
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1");
+    expect(cleanData(response.data)).toMatchSnapshot();
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 2;
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
+    expect(response.data).toHaveLength(2);
+    cds.env.query.limit.max = limitMax;
+
     response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(response.data).toEqual([]);
     response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages");
@@ -399,7 +474,11 @@ describe("API", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
-    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      min: 0,
+      max: 0,
+      default: JobStatus.completed,
+    };
     await processOutbox();
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
@@ -407,6 +486,8 @@ describe("API", () => {
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
+
+    await processOutbox();
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -446,7 +527,11 @@ describe("API", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
-    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = {
+      min: 0,
+      max: 0,
+      default: JobStatus.completed,
+    };
     await processOutbox();
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
@@ -454,6 +539,8 @@ describe("API", () => {
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
+
+    await processOutbox();
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -480,7 +567,7 @@ describe("API", () => {
 
   it("Create Job (status and duration)", async () => {
     const mockStatus = "failed";
-    const mockDuration = 9999999999;
+    const mockDuration = 99999;
     let response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_6",
       referenceID: "4711",

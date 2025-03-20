@@ -19,9 +19,12 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
-    this.before("READ", "*", (req) => {
+    this.before("READ", (req) => {
       req.query.SELECT.where = undefined;
-      delete req.query.SELECT.orderBy;
+      req.query.SELECT.orderBy = Object.keys(req.target.keys ?? []).reduce((orderBy, key) => {
+        orderBy.push({ ref: [key], sort: "asc" });
+        return orderBy;
+      }, []);
       req.query.SELECT.columns = ["*"];
       delete req.query.SELECT.limit;
       if (req.req?.query?.skip && isNaN(req.req?.query?.skip)) {
@@ -30,9 +33,10 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       if (req.req?.query?.top && isNaN(req.req?.query?.top)) {
         return req.reject(JobSchedulingError.invalidOption(req.req.query.top, "top"));
       }
-      if (req.req?.query?.skip || req.req?.query?.top) {
-        req.query.limit(Math.max(req.req.query.top, 1), Math.max(req.req.query.skip, 0));
-      }
+      let top = parseInt(req.req?.query?.top ?? cds.env.query.limit.max);
+      top = top <= 0 ? 1 : Math.min(top, cds.env.query.limit.max);
+      const skip = Math.max(parseInt(req.req?.query?.skip) || 0, 0);
+      req.query.limit(top, skip);
     });
 
     this.before("READ", JobDefinition, (req) => {
@@ -57,8 +61,14 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
-    this.before("READ", JobParameter, (req) => {
+    this.before("READ", [JobParameter, JobResult], (req) => {
+      delete req.query.SELECT.orderBy;
       req.query.orderBy("jobID asc", "name asc");
+    });
+
+    this.before("READ", JobResultMessage, (req) => {
+      delete req.query.SELECT.orderBy;
+      req.query.orderBy("resultID asc", "code asc");
     });
 
     this.on("READ", [JobParameterDefinition, JobParameter], async (req, next) => {

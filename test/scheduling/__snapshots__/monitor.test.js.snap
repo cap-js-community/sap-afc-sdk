@@ -124,14 +124,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
       </EntityType>
       <EntityType Name="JobParameterDefinition">
         <Key>
-          <PropertyRef Name="name"/>
           <PropertyRef Name="job_name"/>
+          <PropertyRef Name="name"/>
         </Key>
-        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false" Partner="parameters">
           <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="description" Type="Edm.String" MaxLength="5000"/>
         <NavigationProperty Name="type" Type="SchedulingMonitoringService.ParameterType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
@@ -151,8 +151,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
         <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobParameterDefinition_texts">
-          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
           <ReferentialConstraint Property="job_name" ReferencedProperty="job_name"/>
+          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
         </NavigationProperty>
       </EntityType>
       <EntityType Name="Job">
@@ -195,11 +195,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </NavigationProperty>
         <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
         <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobParameterDefinition" Nullable="false">
-          <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
           <ReferentialConstraint Property="definition_job_name" ReferencedProperty="job_name"/>
+          <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
         </NavigationProperty>
-        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="definition_job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="value" Type="Edm.String" MaxLength="5000"/>
       </EntityType>
       <EntityType Name="JobResult">
@@ -347,15 +347,15 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <EntityType Name="JobParameterDefinition_texts">
         <Key>
           <PropertyRef Name="locale"/>
-          <PropertyRef Name="name"/>
           <PropertyRef Name="job_name"/>
+          <PropertyRef Name="name"/>
         </Key>
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
-        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
           <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="description" Type="Edm.String" MaxLength="5000"/>
       </EntityType>
       <EntityType Name="JobResultMessage_texts">
@@ -492,14 +492,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/name">
-        <Annotation Term="Common.Label" String="Name"/>
-      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job_name">
         <Annotation Term="Common.Label" String="Job"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/name">
+        <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/description">
         <Annotation Term="Common.Label" String="Description"/>
@@ -1094,10 +1094,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobParameter/definition">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_name">
+      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_job_name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_job_name">
+      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameter/value">
@@ -2031,14 +2031,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/name">
-        <Annotation Term="Common.Label" String="Name"/>
-      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job_name">
         <Annotation Term="Common.Label" String="Job"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/name">
+        <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/description">
         <Annotation Term="Common.Label" String="Description"/>
@@ -2850,16 +2850,6 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
       "name": "JOB_6",
       "parameters": [
         {
-          "dataType_code": "string",
-          "description": "Status",
-          "job_name": "JOB_6",
-          "mappingType_code": null,
-          "name": "status",
-          "required": false,
-          "type_code": "writableValue",
-          "value": "completed",
-        },
-        {
           "dataType_code": "number",
           "description": "Duration",
           "job_name": "JOB_6",
@@ -2868,6 +2858,16 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "required": false,
           "type_code": "writableValue",
           "value": "10",
+        },
+        {
+          "dataType_code": "string",
+          "description": "Status",
+          "job_name": "JOB_6",
+          "mappingType_code": null,
+          "name": "status",
+          "required": false,
+          "type_code": "writableValue",
+          "value": "completed",
         },
       ],
       "supportsStartDateTime": false,
@@ -3265,16 +3265,6 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
       "name": "JOB_6",
       "parameters": [
         {
-          "dataType_code": "string",
-          "description": "Status",
-          "job_name": "JOB_6",
-          "mappingType_code": null,
-          "name": "status",
-          "required": false,
-          "type_code": "writableValue",
-          "value": "completed",
-        },
-        {
           "dataType_code": "number",
           "description": "Duration",
           "job_name": "JOB_6",
@@ -3283,6 +3273,16 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
           "required": false,
           "type_code": "writableValue",
           "value": "10",
+        },
+        {
+          "dataType_code": "string",
+          "description": "Status",
+          "job_name": "JOB_6",
+          "mappingType_code": null,
+          "name": "status",
+          "required": false,
+          "type_code": "writableValue",
+          "value": "completed",
         },
       ],
       "supportsStartDateTime": false,
@@ -3552,16 +3552,6 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
       "name": "JOB_6",
       "parameters": [
         {
-          "dataType_code": "string",
-          "description": "Status",
-          "job_name": "JOB_6",
-          "mappingType_code": null,
-          "name": "status",
-          "required": false,
-          "type_code": "writableValue",
-          "value": "completed",
-        },
-        {
           "dataType_code": "number",
           "description": "Duration",
           "job_name": "JOB_6",
@@ -3570,6 +3560,16 @@ exports[`Monitoring Service Get Job Definitions 5`] = `
           "required": false,
           "type_code": "writableValue",
           "value": "10",
+        },
+        {
+          "dataType_code": "string",
+          "description": "Status",
+          "job_name": "JOB_6",
+          "mappingType_code": null,
+          "name": "status",
+          "required": false,
+          "type_code": "writableValue",
+          "value": "completed",
         },
       ],
       "supportsStartDateTime": false,

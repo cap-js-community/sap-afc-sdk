@@ -174,11 +174,11 @@ exports[`API Create Job (test run) 2`] = `
 
 exports[`API Create Job (test run) 3`] = `
 {
-  "filename": null,
+  "filename": "log.txt",
   "link": null,
-  "mimeType": null,
-  "name": "Test Run",
-  "type": "message",
+  "mimeType": "text/plain",
+  "name": "Data",
+  "type": "data",
 }
 `;
 
@@ -192,15 +192,7 @@ exports[`API Create Job (test run) 4`] = `
 ]
 `;
 
-exports[`API Create Job (test run) 5`] = `
-[
-  {
-    "code": "jobTestRun",
-    "severity": "info",
-    "text": "Job is running in test mode.",
-  },
-]
-`;
+exports[`API Create Job (test run) 5`] = `[]`;
 
 exports[`API Create Job (translation) 1`] = `
 {
@@ -226,11 +218,11 @@ exports[`API Create Job (translation) 2`] = `
 
 exports[`API Create Job (translation) 3`] = `
 {
-  "filename": null,
+  "filename": "log.txt",
   "link": null,
-  "mimeType": null,
-  "name": "Test Run",
-  "type": "message",
+  "mimeType": "text/plain",
+  "name": "Data",
+  "type": "data",
 }
 `;
 
@@ -254,25 +246,9 @@ exports[`API Create Job (translation) 5`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 6`] = `
-[
-  {
-    "code": "jobTestRun",
-    "severity": "info",
-    "text": "Job is running in test mode.",
-  },
-]
-`;
+exports[`API Create Job (translation) 6`] = `[]`;
 
-exports[`API Create Job (translation) 7`] = `
-[
-  {
-    "code": "jobTestRun",
-    "severity": "info",
-    "text": "Job läuft im Testmodus.",
-  },
-]
-`;
+exports[`API Create Job (translation) 7`] = `[]`;
 
 exports[`API GET Job 1`] = `
 [
@@ -437,12 +413,78 @@ exports[`API GET Job Parameter Definitions 1`] = `
 ]
 `;
 
+exports[`API GET Job Parameter Definitions 2`] = `
+[
+  {
+    "dataType": "number",
+    "description": "Parameter B",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "B",
+    "required": false,
+    "type": "readOnlyValue",
+    "value": 21,
+  },
+  {
+    "dataType": "boolean",
+    "description": "Parameter C",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "C",
+    "required": true,
+    "type": "writableValue",
+    "value": false,
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter D",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "D",
+    "required": false,
+    "type": "writableValue",
+    "value": 22,
+  },
+  {
+    "dataType": "datetime",
+    "description": "Parameter E",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "E",
+    "required": false,
+    "type": "writableValue",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
 exports[`API GET Job Parameters 1`] = `
 [
   {
     "name": "A",
     "value": "ABC",
   },
+  {
+    "name": "B",
+    "value": 11,
+  },
+  {
+    "name": "C",
+    "value": true,
+  },
+  {
+    "name": "D",
+    "value": 12,
+  },
+  {
+    "name": "E",
+    "value": "2025-01-02T00:00:00Z",
+  },
+]
+`;
+
+exports[`API GET Job Parameters 2`] = `
+[
   {
     "name": "B",
     "value": 11,
@@ -470,20 +512,42 @@ exports[`API GET Job Result Messages 1`] = `
     "text": "This is an error",
   },
   {
+    "code": "INFO_01",
+    "severity": "info",
+    "text": "This is an information",
+  },
+  {
     "code": "WARNING_01",
     "severity": "warning",
     "text": "This is a warning",
   },
+]
+`;
+
+exports[`API GET Job Result Messages 2`] = `
+[
   {
     "code": "INFO_01",
     "severity": "info",
     "text": "This is an information",
+  },
+  {
+    "code": "WARNING_01",
+    "severity": "warning",
+    "text": "This is a warning",
   },
 ]
 `;
 
 exports[`API GET Job Results 1`] = `
 [
+  {
+    "filename": "test.txt",
+    "link": null,
+    "mimeType": "text/plain",
+    "name": "Data",
+    "type": "data",
+  },
   {
     "filename": null,
     "link": "https://sap.com",
@@ -492,11 +556,23 @@ exports[`API GET Job Results 1`] = `
     "type": "link",
   },
   {
-    "filename": "test.txt",
+    "filename": null,
     "link": null,
-    "mimeType": "text/plain",
-    "name": "Data",
-    "type": "data",
+    "mimeType": null,
+    "name": "Message",
+    "type": "message",
+  },
+]
+`;
+
+exports[`API GET Job Results 2`] = `
+[
+  {
+    "filename": null,
+    "link": "https://sap.com",
+    "mimeType": null,
+    "name": "Link",
+    "type": "link",
   },
   {
     "filename": null,

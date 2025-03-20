@@ -159,7 +159,7 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 ### Options
 
-Options can be passed to SDK via CDS environment via `cds.rerquires.sap-afc-sdk` section:
+Options can be passed to SDK via CDS environment via `cds.requires.sap-afc-sdk` section:
 
 - `endpoints: Object`: Endpoint configuration. Default `{}`
   - `endpoints.approuter: String`: Url of approuter. Default `null` (derived from conventions `<app>-srv`)
@@ -602,25 +602,30 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 #### Cloud Foundry
 
-- Add MTA feature (already part of [Bootstrap](#bootstrap))
-  - Terminal: `cds add mta`
+- Add MTA feature (already part of [Bootstrap](#bootstrap) for CF)
+  - Terminal: `afc init cf`
 - Build MTA
   - Terminal: `mbt build`
 - Deploy MTA
   - Terminal: `cf deploy mta_archives/<mta>.mtar`
-- Follow Guide for [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
+- For details see guide [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
 
 #### Kyma
 
-- Add helm feature (already part of [Bootstrap](#bootstrap))
-  - Terminal: `cds add helm`
+- Add helm feature (already part of [Bootstrap](#bootstrap) for Kyma)
+  - Terminal: `afc init kyma`
+- Configuration
+  - Set global domain in `chart/values.yaml`
+  - Set global image registry in `chart/values.yaml`
+  - Set repository in `containerize.yaml`
+  - Set endpoints to `approuter` and `server` in cds env (see [Options](#options)) to Kyma API rule hosts
 - Containerize
   - Terminal: `ctz containerize.yaml --push`
 - Upgrade
   - Terminal: `helm upgrade --install <name> ./gen/chart -n <namespace>`
-- Deploy
+- Rollout
   - Terminal: `kubectl rollout restart deployment -n <namespace>`
-- Follow Guide for [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
+- For details see guide [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
 
 ### Broker (Cloud Foundry)
 
