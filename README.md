@@ -304,7 +304,7 @@ const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sa
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
-    const { processJob, updateJob, cancelJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
 
     this.on(processJob, async (req, next) => {
       // Your logic goes here. Check req.data.testRun
@@ -318,6 +318,11 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     });
 
     this.on(cancelJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    this.on(syncJob, async (req, next) => {
       // Your logic goes here
       await next();
     });
@@ -509,21 +514,25 @@ Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/gui
 
 #### Implement Periodic Job Sync
 
-A periodic scheduling job synchronization event named `SchedulingJob/Sync` is running per default every **1 minute** in the Event Queue,
-to perform job synchronization from an external source. The default implementation is a no-op.
+A periodic scheduling job synchronization event named `SchedulingProcessingService.syncJob` is running per default every **1 minute**
+in the Event Queue, to perform job synchronization from an external source. The default implementation is a no-op.
 
-To implement a custom job sync extend the job sync configuration in CDS env as follows.
+The event `syncJob` is registered automatically with cron interval `*/1 * * * *` in the Event Queue configuration.
+To change the cron interval, the Event Queue configuration can be adjusted in the CDS env:
 
 **CDS Env:**
 
 ```json
 {
   "cds": {
-    "eventQueue": {
-      "periodicEvents": {
-        "SchedulingJob/Sync": {
-          "cron": "*/1 * * * *",
-          "impl": "/srv/scheduling-job-sync.js"
+    "requires": {
+      "SchedulingProcessingService": {
+        "outbox": {
+          "events": {
+            "syncJob": {
+              "cron": "*/2 * * * *"
+            }
+          }
         }
       }
     }
@@ -533,26 +542,33 @@ To implement a custom job sync extend the job sync configuration in CDS env as f
 
 The `cron` interval option defines the periodicity of the scheduling job synchronization.
 
-**Implementation file:** `/srv/scheduling-job-sync.js`
+**CDS file:** `/srv/scheduling-processing-service.cds`
+
+```cds
+using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+
+annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+```
+
+**Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
-const { PeriodicSchedulingJobSync } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
 
-class CustomPeriodicSchedulingJobSync extends PeriodicSchedulingJobSync {
-  constructor(context, eventType, eventSubType, config) {
-    super(context, eventType, eventSubType, config);
-  }
+class CustomSchedulingProcessingService extends SchedulingProcessingService {
+  async init() {
+    const { syncJob } = this.operations;
 
-  async processPeriodicEvent(processContext, key, eventEntry) {
-    try {
+    this.on(syncJob, async (req, next) => {
       // Your logic goes here
-    } catch (err) {
-      this.logger.error("Error during processing periodic event!", err);
-    }
+      await next();
+    });
+
+    super.init();
   }
 }
 
-module.exports = CustomPeriodicSchedulingJobSync;
+module.exports = CustomSchedulingProcessingService;
 ```
 
 A stub implementation for periodic job sync can be generated via command:

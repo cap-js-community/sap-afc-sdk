@@ -33,4 +33,5 @@ service SchedulingProcessingService {
   action processJob(ID : String(255), testRun : Boolean);
   action updateJob(ID : String(255), status : JobStatusCode, results : many JobResult);
   action cancelJob(ID : String(255));
+  action syncJob();
 }

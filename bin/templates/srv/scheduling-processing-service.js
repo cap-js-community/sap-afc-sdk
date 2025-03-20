@@ -5,7 +5,7 @@ const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sa
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
-    const { processJob, updateJob, cancelJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
 
     this.on(processJob, async (req, next) => {
       // Your logic goes here. Check req.data.testRun
@@ -19,6 +19,11 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     });
 
     this.on(cancelJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    this.on(syncJob, async (req, next) => {
       // Your logic goes here
       await next();
     });

@@ -9,8 +9,6 @@ module.exports = {
   ...require("./srv/scheduling/common/codelist"),
   // Errors
   JobSchedulingError: require("./srv/scheduling/common/JobSchedulingError"),
-  // Periodic Events
-  PeriodicSchedulingJobSync: require("./srv/scheduling/periodic/SchedulingJobSync"),
   // Services
   SchedulingProviderService: require("./srv/scheduling/provider-service"),
   SchedulingProcessingService: require("./srv/scheduling/processing-service"),

@@ -56,7 +56,7 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.9.3",
+    "@cap-js-community/event-queue": "github:cap-js-community/event-queue#fb/periodicEvents",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.1",
     "@sap/cds-common-content": "^2.1.0",
@@ -111,13 +111,7 @@
       }
     },
     "eventQueue": {
-      "useAsCAPOutbox": true,
-      "periodicEvents": {
-        "SchedulingJob/Sync": {
-          "cron": "*/1 * * * *",
-          "impl": "./node_modules/@cap-js-community/sap-afc-sdk/srv/scheduling/periodic/SchedulingJobSync.js"
-        }
-      }
+      "useAsCAPOutbox": true
     },
     "featureToggles": {
       "config": {
@@ -137,7 +131,12 @@
           "kind": "persistent-outbox",
           "maxAttempts": 5,
           "checkForNextChunk": true,
-          "parallelEventProcessing": 5
+          "parallelEventProcessing": 5,
+          "events": {
+            "syncJob": {
+              "cron": "*/1 * * * *"
+            }
+          }
         }
       },
       "SchedulingWebsocketService": {

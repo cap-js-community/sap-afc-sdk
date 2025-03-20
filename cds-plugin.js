@@ -45,11 +45,17 @@ cds.on("listening", () => {
 function secureRoutes() {
   if (cds.env.requires?.["sap-afc-sdk"]?.api?.cors) {
     const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.api?.cors);
+    const origin =
+      corsOptions.origin !== undefined && corsOptions.origin !== null
+        ? corsOptions.origin
+        : cds.env.requires.multitenancy
+          ? approuterUrlRegExp()
+          : approuterUrl();
     cds.app.use(
       "/api",
       cors({
         ...corsOptions,
-        origin: corsOptions.origin !== undefined && corsOptions.origin !== null ? corsOptions.origin : approuterUrl(),
+        origin,
       }),
     );
   }
@@ -67,7 +73,7 @@ function secureRoutes() {
             ...defaultDirectives,
             "default-src": [
               ...(defaultDirectives["default-src"] || []),
-              approuterUrl(),
+              cds.env.requires.multitenancy ? approuterWildcardUrl() : approuterUrl(),
               serverUrl(),
               authorizationUrl(),
             ],
@@ -339,7 +345,7 @@ function toOpenApiDoc(req, service, name) {
 
 function approuterUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
-    return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter;
+    return cds.env.requires["sap-afc-sdk"].endpoints.approuter;
   }
   if (process.env.VCAP_APPLICATION) {
     return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1$2`);
@@ -348,9 +354,35 @@ function approuterUrl() {
   }
 }
 
+function approuterDomain() {
+  let url = approuterUrl();
+  if (url?.startsWith("https://")) {
+    url = url.substring(8);
+  }
+  return url;
+}
+
+function approuterWildcardUrl() {
+  return `*.${approuterDomain()}`;
+}
+
+function approuterTenantUrl(req) {
+  const subdomain = req.user?.tokenInfo?.extAttributes?.zdn;
+  if (subdomain) {
+    return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
+  }
+  return approuterUrl();
+}
+
+function approuterUrlRegExp() {
+  let url = approuterDomain();
+  url = url.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+  return RegExp(url + "$");
+}
+
 function serverUrl() {
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server) {
-    return cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server;
+    return cds.env.requires["sap-afc-sdk"].endpoints.server;
   }
   if (process.env.VCAP_APPLICATION) {
     const url = JSON.parse(process.env.VCAP_APPLICATION).uris?.[0];
@@ -403,7 +435,7 @@ function registerAfterReadJobFillLink(db) {
     result = Array.isArray(result) ? result : [result];
     for (const row of result) {
       if (row.ID && row.link === null) {
-        row.link = `${approuterUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
+        row.link = `${cds.env.requires.multitenancy ? approuterTenantUrl(req) : approuterUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
       }
     }
   });

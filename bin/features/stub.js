@@ -5,7 +5,6 @@ const path = require("path");
 const { copyTemplate, adjustJSON } = require("../common/util");
 
 const Files = [
-  "srv/scheduling-job-sync.js",
   "srv/scheduling-processing-service.cds",
   "srv/scheduling-processing-service.js",
   "srv/scheduling-provider-service.cds",
@@ -18,14 +17,13 @@ module.exports = () => {
     copyTemplate(folder, Files);
     adjustJSON("package.json", (json) => {
       json.cds ??= {};
-      json.cds.eventQueue ??= {};
-      json.cds.eventQueue.periodicEvents ??= {};
-      json.cds.eventQueue.periodicEvents["SchedulingJob/Sync"] ??= {};
-      if (!json.cds.eventQueue.periodicEvents["SchedulingJob/Sync"].cron) {
-        json.cds.eventQueue.periodicEvents["SchedulingJob/Sync"].cron = "*/1 * * * *";
-      }
-      if (!json.cds.eventQueue.periodicEvents["SchedulingJob/Sync"].impl) {
-        json.cds.eventQueue.periodicEvents["SchedulingJob/Sync"].impl = "./srv/scheduling-job-sync.js";
+      json.cds.requires ??= {};
+      json.cds.requires.SchedulingProcessingService ??= {};
+      json.cds.requires.SchedulingProcessingService.outbox ??= {};
+      json.cds.requires.SchedulingProcessingService.outbox.events ??= {};
+      json.cds.requires.SchedulingProcessingService.outbox.events.syncJob ??= {};
+      if (!json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron) {
+        json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron = "*/1 * * * *";
       }
     });
   } catch (err) {

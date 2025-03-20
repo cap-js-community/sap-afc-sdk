@@ -21,7 +21,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.before("READ", (req) => {
       req.query.SELECT.where = undefined;
-      req.query.SELECT.orderBy = Object.keys(req.target.keys ?? []).reduce((orderBy, key) => {
+      req.query.SELECT.orderBy = Object.keys(req.target.keys).reduce((orderBy, key) => {
         orderBy.push({ ref: [key], sort: "asc" });
         return orderBy;
       }, []);

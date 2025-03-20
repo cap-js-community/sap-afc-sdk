@@ -450,6 +450,20 @@ describe("Processing Service", () => {
     ws.close();
   });
 
+  it("syncJob", async () => {
+    cds.env.log.levels["periodic"] = "info";
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await expect(processingService.syncJob()).resolves.not.toThrow();
+    await processOutbox("SchedulingProcessingService");
+    expect(log.output).toEqual(expect.stringMatching(/periodic sync job/s));
+
+    log.output = "";
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+    await expect(processingService.syncJob()).resolves.not.toThrow();
+    await processOutbox("SchedulingProcessingService");
+    expect(log.output).not.toEqual(expect.stringMatching(/periodic sync job/s));
+  });
+
   describe("Error Situations", () => {
     it("processJob", async () => {
       await expect(processingService.processJob("XXX")).resolves.not.toThrow();

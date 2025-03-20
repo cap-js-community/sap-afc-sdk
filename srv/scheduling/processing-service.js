@@ -40,7 +40,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
   async init() {
     const { Job } = this.entities("scheduling");
-    const { processJob, updateJob, cancelJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
@@ -71,6 +71,13 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
     this.on(cancelJob, async (req, next) => {
       await this.processJobUpdate(req, JobStatus.canceled);
+    });
+
+    this.on(syncJob, async (req, next) => {
+      const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
+      if (processingConfig) {
+        await this.mockJobSync(req);
+      }
     });
 
     return super.init();
@@ -390,6 +397,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       });
     }
     return mockResults;
+  }
+
+  async mockJobSync(req) {
+    cds.log("periodic").info("periodic sync job");
   }
 
   /*async reportStatus(req, status) {
