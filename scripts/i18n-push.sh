@@ -11,7 +11,7 @@ declare -a paths=(
   "../db/i18n/i18n.properties                                   $DEST_ROOT/db/i18n/i18n.properties"
   "../srv/i18n/messages.properties                              $DEST_ROOT/srv/i18n/messages.properties"
   "../srv/scheduling/i18n/messages.properties                   $DEST_ROOT/srv/scheduling/i18n/messages.properties"
-  "../openapi/SchedulingProviderService.openapi3.json           $DEST_ROOT/../srv/openapi/SchedulingProviderService.openapi3.json"
+  "../openapi/SchedulingProviderV1Service.openapi3.json         $DEST_ROOT/../srv/openapi/SchedulingProviderV1Service.openapi3.json"
 )
 
 for entry in "${paths[@]}"; do

@@ -13,7 +13,7 @@ const DEFAULT_RESPONSES = require("./assets/default-responses");
 
 function processSchedulingProviderService(check) {
   // Load
-  const filePath = path.join(process.cwd(), "./openapi/SchedulingProviderService.openapi3.json");
+  const filePath = path.join(process.cwd(), "./openapi/SchedulingProviderV1Service.openapi3.json");
   const jsonBefore = fs.existsSync(filePath) ? JSON.stringify(JSON.parse(fs.readFileSync(filePath)), null, 2) : "";
   const data = JSON.parse(
     shelljs.exec("cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi", {
