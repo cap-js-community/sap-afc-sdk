@@ -25,6 +25,7 @@ function processSchedulingProviderService(check) {
   data.info.version = "1.0.0";
   delete data["x-sap-api-type"];
   delete data["x-odata-version"];
+  data["x-sap-direction"] = "outbound";
   data.externalDocs = {
     description: "SAP Advanced Financial Closing SDK for CDS",
     url: "https://github.com/cap-js-community/sap-afc-sdk",

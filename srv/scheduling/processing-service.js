@@ -400,7 +400,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async mockJobSync(req) {
-    cds.log("periodic").info("periodic sync job");
+    cds.log("job-sync").info("periodic sync job triggered");
   }
 
   /*async reportStatus(req, status) {

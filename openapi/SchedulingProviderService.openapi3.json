@@ -1522,6 +1522,7 @@
       "oauth2": []
     }
   ],
+  "x-sap-direction": "outbound",
   "externalDocs": {
     "description": "SAP Advanced Financial Closing SDK for CDS",
     "url": "https://github.com/cap-js-community/sap-afc-sdk"
