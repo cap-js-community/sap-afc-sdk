@@ -122,10 +122,6 @@ annotate service.Job with @(
   UI.LineItem                  : [
     {
       $Type: 'UI.DataField',
-      Value: ID,
-    },
-    {
-      $Type: 'UI.DataField',
       Value: referenceID,
     },
     {
