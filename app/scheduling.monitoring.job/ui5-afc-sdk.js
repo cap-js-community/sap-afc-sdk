@@ -12,8 +12,9 @@ module.exports = async function () {
       manifest["sap.app"].id = `${packageJson.name}.${manifest["sap.app"].id}`;
     }
     if (!manifest?.["sap.cloud"]?.service) {
+      const strippedAppName = packageJson.name.replace(/-/g, "");
       manifest["sap.cloud"] ??= {};
-      manifest["sap.cloud"].service = `${packageJson.name}.service`;
+      manifest["sap.cloud"].service = `${strippedAppName}.service`;
     }
   });
   adjustJSON("./xs-app.json", (xsApp) => {

@@ -75,7 +75,9 @@ Examples:
         }
       }
       // Project
+      let projectName = "";
       adjustJSON("package.json", (json) => {
+        projectName = json.name;
         if (
           (process.env.APPROUTER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.approuter) ||
           (process.env.SERVER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.server)
@@ -126,6 +128,9 @@ Examples:
       // Kyma
       const repository = process.env.CONTAINER_REPOSITORY || "docker.io/abc123";
       adjustText("chart/values.yaml", (content) => {
+        if (projectName) {
+          content = replaceTextPart(content, "backendDestinations:\n  srv-api:", `backendDestinations:\n  ${projectName}-srv-api:`);
+        }
         content = replaceTextPart(content, "expose:\n    enabled: false", "expose:\n    enabled: true");
         content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
         content = replaceTextPart(content, "registry: registry-name", `registry: ${repository}`);

@@ -17,7 +17,7 @@
     ],
     "cf": ["mta"],
     "kyma": ["helm", "containerize"],
-    "afc": ["broker", "mock", "sample", "http"]
+    "afc": ["broker", "stub", "mock", "sample", "test", "http"]
   },
   "options": {
     "cds": "--for production --y"
