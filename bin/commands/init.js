@@ -129,7 +129,11 @@ Examples:
       const repository = process.env.CONTAINER_REPOSITORY || "docker.io/abc123";
       adjustText("chart/values.yaml", (content) => {
         if (projectName) {
-          content = replaceTextPart(content, "backendDestinations:\n  srv-api:", `backendDestinations:\n  ${projectName}-srv-api:`);
+          content = replaceTextPart(
+            content,
+            "backendDestinations:\n  srv-api:\n    service: srv",
+            `backendDestinations:\n  srv-api:\n    service: srv\n  ${projectName}-srv-api:\n    service: srv`,
+          );
         }
         content = replaceTextPart(content, "expose:\n    enabled: false", "expose:\n    enabled: true");
         content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");

@@ -14,7 +14,7 @@ using scheduling from '../../db/scheduling';
   }],
   SecuritySchemes: [{Authorization: 'oauth2'}]
 }
-@openapi: 'SchedulingProviderV1Service'
+@openapi             : 'SchedulingProviderV1Service'
 @protocol            : 'rest'
 @(path: '/api/job-scheduling/v1')
 @title               : 'SAP Advanced Financial Closing Scheduling Service Provider Interface'
