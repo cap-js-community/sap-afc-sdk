@@ -24,7 +24,7 @@ sap.ui.define(
         const table = this.getView().byId("scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table");
         const contexts = table.tableBindingInfo?.binding?.getAllCurrentContexts();
         for (const context of contexts ?? []) {
-          if (context.getObject().ID === message.data?.ID) {
+          if (message.data?.IDs?.includes(context.getObject().ID)) {
             this.base.getExtensionAPI().refresh();
             const router = this.base.getAppComponent().getRouter();
             if (router && !router.getHashChanger().getHash().startsWith("Job")) {

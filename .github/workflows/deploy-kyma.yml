@@ -1,0 +1,69 @@
+# This workflow will set up a test project based on SDK and deploy to Cloud Foundry
+name: Test Deploy Kyma
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  #  workflow_run:
+  #    workflows: ["Main CI"]
+  #    types:
+  #      - completed
+  #    branches:
+  #      - main
+  workflow_dispatch:
+
+env:
+  NODE_OPTIONS: --use-openssl-ca
+jobs:
+  default:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Setup CDS project
+        run: npx cds init afcsdk && cd afcsdk && npm i
+      - name: Install SDK
+        run: npm i github:cap-js-community/sap-afc-sdk
+        working-directory: ./afcsdk
+      - name: Boostrap SDK
+        run: npx afc init kyma
+        working-directory: ./afcsdk
+        env:
+          CONTAINER_REPOSITORY: afcsdk.common.repositories.cloud.sap
+          GLOBAL_DOMAIN: c-589f01f.stage.kyma.ondemand.com
+          APPROUTER_URL: https://afcsdk-approuter-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
+          SERVER_URL: https://afcsdk-srv-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
+      - name: Add SDK features
+        run: npx afc add -a broker,stub,mock,sample,test,http
+        working-directory: ./afcsdk
+        env:
+          BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_KYMA_HASH }}
+          BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_KYMA_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_KYMA_PLAN_ID }}
+      - name: Unit Test
+        run: npm test
+        working-directory: ./afcsdk
+      - name: Setup Kyma
+        uses: ./.github/actions/kyma-setup
+        with:
+          imageRegistry: afcsdk.common.repositories.cloud.sap
+          user: ${{ vars.ARTIFACTORY_CI_USERNAME }}
+          password: ${{ secrets.ARTIFACTORY_TOKEN }}
+          kubeConfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Set Registry
+        run: npm set @sap:registry=https://int.repositories.cloud.sap/artifactory/api/npm/build-snapshots-npm/
+      - name: Containerize
+        run: ctz containerize.yaml --push --logs
+        working-directory: ./afcsdk
+      - name: Upgrade
+        run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
+        working-directory: ./afcsdk
+      - name: Rollout
+        run: kubectl rollout restart deployment -n afc-sdk-dev
+        working-directory: ./afcsdk

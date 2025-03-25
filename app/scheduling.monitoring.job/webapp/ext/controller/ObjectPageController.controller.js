@@ -11,7 +11,7 @@ sap.ui.define(
             const object = this.base.getExtensionAPI().getBindingContext()?.getObject();
             const message = JSON.parse(event.getParameter("data"));
             if (message.event === "jobStatusChanged") {
-              if (object?.ID === message?.data?.ID) {
+              if (message?.data?.IDs?.includes(object?.ID)) {
                 this.base.getExtensionAPI().refresh();
                 const router = this.base.getAppComponent().getRouter();
                 if (router && router.getHashChanger().getHash().startsWith("Job")) {

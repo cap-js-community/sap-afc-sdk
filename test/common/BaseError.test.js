@@ -3,7 +3,7 @@
 const BaseError = require("../../srv/common/BaseError");
 
 describe("Base Error", () => {
-  it("Checks", async () => {
+  it("Instantiation", async () => {
     const baseError = new BaseError("test", {
       args: [],
       httpStatus: 400,

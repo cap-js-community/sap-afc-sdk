@@ -58,15 +58,16 @@ describe("Monitoring Service", () => {
     expect(response.data.status_code).toBe("cancelRequested");
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("cancelRequested");
 
     message = ws.message("jobStatusChanged");
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("canceled");
 
     response = await GET(`/odata/v4/job-scheduling/monitoring/Job/${ID}`);

@@ -260,10 +260,16 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.after("CREATE", Job, async (data, req) => {
       const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
-      await schedulingWebsocketService.tx(req).emit("jobStatusChanged", {
-        ID: data.ID,
-        status: data.status,
-      });
+      await schedulingWebsocketService.tx(req).emit(
+        "jobStatusChanged",
+        {
+          IDs: [data.ID],
+          status: data.status,
+        },
+        {
+          "x-eventQueue-referenceEntityKey": data.ID,
+        },
+      );
       const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
       await schedulingProcessingService.tx(req).send(
         "processJob",
@@ -300,7 +306,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       await schedulingWebsocketService.tx(req).emit(
         "jobStatusChanged",
         {
-          ID: job.ID,
+          IDs: [job.ID],
           status: JobStatus.cancelRequested,
         },
         {

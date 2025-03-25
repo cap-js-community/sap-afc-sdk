@@ -111,7 +111,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     await schedulingWebsocketService.tx(req).emit(
       "jobStatusChanged",
       {
-        ID: job.ID,
+        IDs: [job.ID],
         status,
       },
       {
@@ -260,7 +260,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const statusValue = Math.random() * (max - min) + min;
       let value = 0;
       for (const status of statuses) {
-        if (value <= statusValue) {
+        if (value < statusValue) {
           processingStatus = status;
         }
         value += config.status[status];

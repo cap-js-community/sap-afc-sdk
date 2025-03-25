@@ -265,16 +265,6 @@ footer {
 
             <h2> Service Endpoints: </h2>
             
-      <div id="schedulingwebsocketservice-ws">
-        <h3 class="header">
-          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
       <div id="featureservice-rest">
         <h3 class="header">
           <a href="/rest/feature"><span>/rest/feature</span></a> 
@@ -287,6 +277,16 @@ footer {
               <a href="/rest/feature/state" title="/rest/feature/state"><span>state ()</span></a>
             </div>
           </li>
+        </ul>
+      </div>
+  
+      <div id="schedulingwebsocketservice-ws">
+        <h3 class="header">
+          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
+        </h3>
+        <ul>
+        </ul>
+        <ul>
         </ul>
       </div>
   

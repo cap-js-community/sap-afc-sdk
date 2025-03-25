@@ -1,0 +1,64 @@
+name: "kyma-setup"
+
+description: "Installs the Kyma dependencies"
+
+inputs:
+  imageRegistry:
+    description: Image Registry
+    required: true
+  user:
+    description: Artifactory User
+    required: true
+  password:
+    description: Artifactory Password
+    required: true
+  kubeConfig:
+    description: Kube Config
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: apt-get update -y
+      shell: bash
+    - run: apt-get install software-properties-common -y
+      shell: bash
+    - run: apt-get install curl ca-certificates -y
+      shell: bash
+    - run: apt install sudo
+      shell: bash
+    - run: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      shell: bash
+    - run: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      shell: bash
+    - run: apt-get update -y
+      shell: bash
+    - run: apt-get install make -y
+      shell: bash
+    - run: apt-get install maven -y
+      shell: bash
+    - run: apt-get install docker.io -y
+      shell: bash
+    - run: (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.31.0/pack-v0.31.0-linux.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+      shell: bash
+    - run: apt-get install kubectl -y
+      shell: bash
+    - run: curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+      shell: bash
+    - run: sudo apt-get install apt-transport-https --yes
+      shell: bash
+    - run: echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+      shell: bash
+    - run: sudo apt-get update
+      shell: bash
+    - run: sudo apt-get install helm
+      shell: bash
+    - run: npm install -g ctz
+      shell: bash
+    - shell: bash
+      run: |
+        mkdir ${HOME}/kyma-binaries
+        export PATH=${HOME}/kyma-binaries/:$PATH
+        echo "${{ inputs.password }}" | docker login "${{ inputs.imageRegistry }}" -u "${{ inputs.user }}" --password-stdin
+        mkdir ${HOME}/.kube
+        echo "${{ inputs.kubeConfig }}" > ${HOME}/.kube/config

@@ -40,13 +40,7 @@ function cleanData(data) {
 }
 
 async function processOutbox(subType) {
-  const context = new cds.EventContext();
-  if (subType) {
-    await eventQueue.processEventQueue(context, "CAP_OUTBOX", subType);
-  } else {
-    await eventQueue.processEventQueue(context, "CAP_OUTBOX", "SchedulingProcessingService");
-    await eventQueue.processEventQueue(context, "CAP_OUTBOX", "SchedulingWebsocketService");
-  }
+  await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", subType);
 }
 
 async function eventQueueEntry(subType, referenceEntityKey, payload) {
@@ -93,12 +87,16 @@ async function connectToWS(service, ID, options) {
     close: () => {
       socket.close();
     },
-    message: (event) => {
+    message: (event, count = 1) => {
+      const messages = [];
       return new Promise((resolve) => {
         socket.on("message", (message) => {
           const payload = JSON.parse(message);
           if (payload.event === event) {
-            resolve(payload.data);
+            messages.push(payload.data);
+            if (messages.length === count) {
+              resolve(count === 1 ? messages[0] : messages);
+            }
           }
         });
       });

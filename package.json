@@ -56,7 +56,7 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "1.10.0-beta.1",
+    "@cap-js-community/event-queue": "1.10.0-beta.4",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.1",
     "@sap/cds-common-content": "^2.1.0",
@@ -145,7 +145,15 @@
           "transactionMode": "alwaysRollback",
           "maxAttempts": 5,
           "checkForNextChunk": true,
-          "parallelEventProcessing": 5
+          "parallelEventProcessing": 5,
+          "events": {
+            "jobStatusChanged": {
+              "timeBucket": "*/5 * * * * *",
+              "[test]": {
+                "timeBucket": null
+              }
+            }
+          }
         }
       },
       "sap-afc-sdk": {

@@ -379,17 +379,21 @@ describe("API", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
-    const entry = await eventQueueEntry();
+    let entry = await eventQueueEntry("SchedulingProcessingService");
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
     expect(entry.referenceEntityKey).toBe(ID);
 
     const ws = await connectToWS("job-scheduling", ID);
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("requested");
+
+    entry = await eventQueueEntry("SchedulingWebsocketService.jobStatusChanged");
+    expect(entry).toBeDefined();
+    expect(entry.referenceEntityKey).toBe(ID);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -398,9 +402,10 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
 
     message = ws.message("jobStatusChanged");
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.running);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
@@ -479,7 +484,7 @@ describe("API", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -487,7 +492,7 @@ describe("API", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -532,7 +537,7 @@ describe("API", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -540,7 +545,7 @@ describe("API", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -586,7 +591,7 @@ describe("API", () => {
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     let entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -600,7 +605,7 @@ describe("API", () => {
       })
       .where({ ID: entry.ID });
     expect(result).toBe(1);
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
@@ -620,15 +625,16 @@ describe("API", () => {
     expect(response.data.status).toEqual(JobStatus.cancelRequested);
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.cancelRequested);
 
     message = ws.message("jobStatusChanged");
-    await processOutbox();
+    await processOutbox("SchedulingProcessingService");
+    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
-    expect(event.ID).toBe(ID);
+    expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.canceled);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
