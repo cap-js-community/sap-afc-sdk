@@ -20,7 +20,6 @@ using scheduling from '../../db/scheduling';
 @title               : 'SAP Advanced Financial Closing Scheduling Service Provider Interface'
 @Core.Description    : 'Defines how an application can integrate with job scheduling provider service'
 @Core.LongDescription: 'The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.'
-@impl                : '@cap-js-community/sap-afc-sdk/srv/scheduling/provider-service.js'
 service SchedulingProviderService {
 
   @Capabilities.ReadRestrictions.CustomQueryOptions: [

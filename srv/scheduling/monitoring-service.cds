@@ -1,7 +1,6 @@
 using scheduling from '../../db/scheduling';
 
 @path: '/odata/v4/job-scheduling/monitoring'
-@impl: '@cap-js-community/sap-afc-sdk/srv/scheduling/monitoring-service.js'
 service SchedulingMonitoringService {
   entity JobDefinition @readonly          as projection on scheduling.JobDefinition;
   entity JobParameterDefinition @readonly as projection on scheduling.JobParameterDefinition;

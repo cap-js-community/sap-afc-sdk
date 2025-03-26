@@ -4,7 +4,6 @@ using scheduling.ResultTypeCode from '../../db/scheduling';
 using scheduling.MessageSeverityCode from '../../db/scheduling';
 
 @protocol: 'none'
-@impl    : '@cap-js-community/sap-afc-sdk/srv/scheduling/processing-service.js'
 service SchedulingProcessingService {
 
   type JobResult {
