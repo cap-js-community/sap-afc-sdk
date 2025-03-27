@@ -52,8 +52,7 @@ be consumed with [SAP Cloud Application Programming Model (Node.js)](https://www
     - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
   - Access Service Endpoints
     - Public API
-      - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider
-        API ([OpenAPI](http://localhost:4004/api-docs/api/job-scheduling/v1))
+      - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI Swagger UI](http://localhost:4004/api-docs/api/job-scheduling/v1))
     - OData API (UI)
       - [/odata/v4/job-scheduling/monitoring](http://localhost:4004/odata/v4/job-scheduling/monitoring): Feature Toggle
         API ([$metadata](http://localhost:4004/odata/v4/job-scheduling/monitoring/$metadata))
@@ -79,7 +78,7 @@ process, and monitor the entity close for your organization.
 The SAP Advanced Financial Closing SDK for CDS provides a plugin
 for [SAP Cloud Application Programming Model (CAP)](https://cap.cloud.sap) (Node.js)
 to extend and integrate with SAP Advanced Financial Closing (AFC). Specifically, it provides an out-of-the-box
-implementation of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderV1Service.openapi3.json)
+implementation of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](https://hub.sap.com/api/SSPIV1)
 to expose a Scheduling Provider service to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
 
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
@@ -133,7 +132,7 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 - **SAP Advanced Financial Closing (AFC):**
   - Sends scheduling requests via AFC Scheduling Service Provider Interface using REST
-    API ([OpenAPI](./openapi/SchedulingProviderV1Service.openapi3.json))
+    API ([OpenAPI](https://hub.sap.com/api/SSPIV1))
 - **Scheduling Provider Service:**
   - Handles incoming scheduling requests
   - Creates scheduling jobs synchronously and places asynchronous requests into the Event Queue
@@ -433,7 +432,7 @@ In addition, to overwriting the default implementation via an `on` handler, also
 #### Implement Job Provider
 
 A job provider service is already provided per default by the SDK, implementing
-the [SAP Advanced Financial Closing Scheduling Service Provider Interface](./openapi/SchedulingProviderV1Service.openapi3.json).
+the [SAP Advanced Financial Closing Scheduling Service Provider Interface](https://hub.sap.com/api/SSPIV1).
 Therefore, focus can be put on additional custom provider logic (e.g. streaming of data from a remote location).
 
 The **SAP Advanced Financial Closing Scheduling Service Provider Interface** is published on SAP Business Accelerator Hub
