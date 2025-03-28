@@ -5,19 +5,19 @@ permissions:
   pull-requests: write
 
 on:
-  #  workflow_run:
-  #    workflows: ["Main CI"]
-  #    types:
-  #      - completed
-  #    branches:
-  #      - main
+  workflow_run:
+    workflows: ["Main CI"]
+    types:
+      - completed
+    branches:
+      - main
   workflow_dispatch:
 
 env:
   NODE_OPTIONS: --use-openssl-ca
 jobs:
   default:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
         uses: ./.github/actions/kyma-setup
         with:
           imageRegistry: afcsdk.common.repositories.cloud.sap
-          user: ${{ vars.ARTIFACTORY_CI_USERNAME }}
+          user: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
       - name: Set Registry

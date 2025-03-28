@@ -46,7 +46,7 @@ jobs:
         working-directory: ./afcsdk
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
-      - name: CF setup
+      - name: Setup CF
         uses: ./.github/actions/cf-setup
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
