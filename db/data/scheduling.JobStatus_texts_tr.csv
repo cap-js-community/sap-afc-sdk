@@ -2,8 +2,8 @@ locale;code;name;descr
 "tr";requested;Talep edildi;Talep edildi
 "tr";running;Çalışıyor;Çalışıyor
 "tr";completed;Tamamlandı;Tamamlandı
-"tr";completedWithWarning;Completed with Warning;Uyarı
-"tr";completedWithError;Completed with Error;Hata
+"tr";completedWithWarning;Uyarıyla tamamlandı;Uyarı
+"tr";completedWithError;Hatayla tamamlandı;Hata
 "tr";failed;Başarısız oldu;Başarısız oldu
 "tr";cancelRequested;İptal talep edildi;Talep edildi
 "tr";canceled;İptal edildi;İptal edildi
