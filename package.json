@@ -63,7 +63,7 @@
     "@sap/sbf": "^6.9.2",
     "commander": "^13.1.0",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
+    "express": "^5.0.0",
     "helmet": "^8.1.0",
     "http-status-codes": "^2.3.0",
     "openurl": "^1.1.1",
