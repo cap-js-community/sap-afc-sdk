@@ -35,6 +35,12 @@ runs:
       shell: bash
     - run: sudo apt-get install -y docker-ce docker-ce-cli containerd.io
       shell: bash
+    - run: curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+      shell: bash
+    - run: echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+      shell: bash
+    - run: sudo apt-get update -y
+      shell: bash
     - run: sudo apt-get install helm -y
       shell: bash
     - run: npm install -g ctz
