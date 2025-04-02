@@ -66,7 +66,7 @@ jobs:
       - name: Images
         run: docker images
       - name: Push Image to Artifactory
-        run: docker push afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
+        run: docker push afcsdk-approuter:latest
       - name: Upgrade
         run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
         working-directory: ./afcsdk
