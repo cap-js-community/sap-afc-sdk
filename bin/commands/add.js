@@ -55,6 +55,7 @@ Examples:
       }
     }
     for (const feature of features) {
+      let featureFn;
       try {
         if (options.xremove && !["mock"].includes(feature)) {
           console.log("Feature removal is only supported for 'mock'");
@@ -65,11 +66,18 @@ Examples:
         } else {
           console.log(`Removing feature '${feature}'`);
         }
-        const featureFn = require(`../features/${feature}`);
+        featureFn = require(`../features/${feature}`);
+      } catch {
+        console.log(`Unknown feature '${feature}'`);
+        continue;
+      }
+      try {
         featureFn(options);
       } catch (err) {
-        console.log(`Unknown feature '${feature}'`);
+        console.log(`Adding feature '${feature}' failed: ${err.message}`);
+        return false;
       }
     }
+    return true;
   },
 };

@@ -9,5 +9,5 @@ service SchedulingWebsocketService {
     status : JobStatusCode;
   };
 
-  action clusterQueueEntries.jobStatusChanged() returns {};
+  action eventQueueCluster.jobStatusChanged() returns {};
 }

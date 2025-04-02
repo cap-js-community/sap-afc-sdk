@@ -56,9 +56,9 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "1.10.0-beta.5",
+    "@cap-js-community/event-queue": "1.10.0-beta.6",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
-    "@cap-js-community/websocket": "^1.6.1",
+    "@cap-js-community/websocket": "^1.6.2",
     "@sap/cds-common-content": "^2.1.0",
     "@sap/sbf": "^6.9.2",
     "commander": "^13.1.0",
@@ -74,10 +74,10 @@
   "devDependencies": {
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/cds-test": "^0.2.0",
-    "@cap-js/sqlite": "^1.9.0",
-    "@sap/cds": "^8.8.3",
-    "@sap/cds-dk": "^8.8.2",
-    "@sap/cds-lsp": "^8.8.0",
+    "@cap-js/sqlite": "^1.10.0",
+    "@sap/cds": "^8.9.0",
+    "@sap/cds-dk": "^8.9.0",
+    "@sap/cds-lsp": "^8.9.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-jest": "^28.11.0",
@@ -150,7 +150,7 @@
             "jobStatusChanged": {
               "timeBucket": "*/5 * * * * *",
               "[test]": {
-                "timeBucket": null
+                "timeBucket": false
               }
             }
           }

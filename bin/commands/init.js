@@ -45,14 +45,21 @@ Examples:
   },
   handle: function (target) {
     console.log(`Initializing project`);
-    module.exports.process(target);
-    const options = this.opts();
-    if (options.add) {
-      const features = options.add.split(",").map((f) => f.trim());
-      const addCommand = require("./add");
-      addCommand.process(features);
+    let success = module.exports.process(target);
+    if (success) {
+      const options = this.opts();
+      if (options.add) {
+        const features = options.add.split(",").map((f) => f.trim());
+        const addCommand = require("./add");
+        success = addCommand.process(features);
+      }
     }
-    console.log("Successfully initialized project.");
+    if (success) {
+      console.log("Successfully initialized project.");
+    } else {
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1);
+    }
   },
   process: function (target) {
     try {
@@ -167,8 +174,11 @@ Examples:
         `npm install --save @cap-js-community/event-queue @cap-js-community/websocket @cap-js-community/feature-toggle-library`,
         { silent: true },
       );
+
+      return true;
     } catch (err) {
-      console.error(err.message);
+      console.error("Project initialization failed: ", err.message);
     }
+    return false;
   },
 };

@@ -5,7 +5,7 @@ const { unique } = require("../../src/util/helper");
 
 module.exports = class SchedulingWebsocketService extends BaseApplicationService {
   async init() {
-    this.on("clusterQueueEntries.jobStatusChanged", async (req) => {
+    this.on("eventQueueCluster.jobStatusChanged", async (req) => {
       return req.eventQueue.clusterByDataProperty("status", (status, entries) => {
         return {
           IDs: unique(entries.reduce((result, entry) => result.concat(entry.IDs), [])),

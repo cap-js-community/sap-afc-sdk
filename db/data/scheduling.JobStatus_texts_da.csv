@@ -2,8 +2,8 @@ locale;code;name;descr
 "da";requested;Anmodet;Anmodet
 "da";running;Kører;Kører
 "da";completed;Afsluttet;Afsluttet
-"da";completedWithWarning;Completed with Warning;Advarsel
-"da";completedWithError;Completed with Error;Fejl
+"da";completedWithWarning;Afsluttet med advarsel;Advarsel
+"da";completedWithError;Afsluttet med fejl;Fejl
 "da";failed;Mislykkedes;Mislykkedes
 "da";cancelRequested;Annullering rekvireret;Anmodet
 "da";canceled;Annulleret;Annulleret

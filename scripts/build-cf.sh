@@ -7,7 +7,7 @@ export BROKER_SERVICE_PLAN_ID="a7609272-ce22-41e0-a605-1ad3318ef2d5"
 rm -rf temp/afcsdk
 mkdir -p temp
 cd temp
-cds init afcsdk
+npx cds init afcsdk
 cd afcsdk
 npm install github:cap-js-community/sap-afc-sdk
 afc init cf
