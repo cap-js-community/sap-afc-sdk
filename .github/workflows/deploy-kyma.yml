@@ -65,11 +65,18 @@ jobs:
         working-directory: ./afcsdk
       - name: Images
         run: docker images
-      - name: Tag the Image for Artifactory
+      - name: Tag Images
         run: |
+          docker tag afcsdk-hana-deployer:latest afcsdk.common.repositories.cloud.sap/afcsdk-hana-deployer:latest
+          docker tag afcsdk-html5-deployer:latest afcsdk.common.repositories.cloud.sap/afcsdk-html5-deployer:latest
+          docker tag afcsdk-srv:latest afcsdk.common.repositories.cloud.sap/afcsdk-srv:latest
           docker tag afcsdk-approuter:latest afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
-      - name: Push Image to Artifactory
-        run: docker push afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
+      - name: Push Images
+        run: |
+          docker push afcsdk.common.repositories.cloud.sap/afcsdk-hana-deployer:latest
+          docker push afcsdk.common.repositories.cloud.sap/afcsdk-html5-deployer:latest
+          docker push afcsdk.common.repositories.cloud.sap/afcsdk-srv:latest
+          docker push afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
       - name: Upgrade
         run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
         working-directory: ./afcsdk
