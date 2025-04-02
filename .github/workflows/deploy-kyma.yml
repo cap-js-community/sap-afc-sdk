@@ -53,10 +53,13 @@ jobs:
       - name: Setup Kyma
         uses: ./.github/actions/kyma-setup
         with:
-          imageRegistry: afcsdk.common.repositories.cloud.sap
-          user: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
-          password: ${{ secrets.ARTIFACTORY_TOKEN }}
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Login Docker
+        uses: docker/login-action@v1
+        with:
+          registry: afcsdk.common.repositories.cloud.sap
+          username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
+          password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: Push dummy
         uses: actions-hub/docker@master
         with:

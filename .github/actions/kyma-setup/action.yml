@@ -3,15 +3,6 @@ name: "kyma-setup"
 description: "Installs the Kyma dependencies"
 
 inputs:
-  imageRegistry:
-    description: Image Registry
-    required: true
-  user:
-    description: Artifactory User
-    required: true
-  password:
-    description: Artifactory Password
-    required: true
   kubeConfig:
     description: Kube Config
     required: true
@@ -24,12 +15,6 @@ runs:
     - name: Install Containerize
       run: npm install -g ctz
       shell: bash
-    - name: Login Docker
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ inputs.imageRegistry }}
-        username: ${{ inputs.user }}
-        password: ${{ inputs.password }}
     - name: Setup Tools
       uses: buildpacks/github-actions/setup-tools@v5.1.0
     - name: Setup Pack
