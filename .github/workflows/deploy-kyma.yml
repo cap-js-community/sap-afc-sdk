@@ -60,10 +60,11 @@ jobs:
           registry: afcsdk.common.repositories.cloud.sap
           username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
-        working-directory: ./afcsdk
       - name: Containerize
-        run: ctz containerize.yaml --push --logs
+        run: ctz containerize.yaml --logs
         working-directory: ./afcsdk
+      - name: Images
+        run: docker images
       - name: Upgrade
         run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
         working-directory: ./afcsdk
