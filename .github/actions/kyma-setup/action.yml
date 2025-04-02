@@ -45,6 +45,12 @@ runs:
       shell: bash
     - run: npm install -g ctz
       shell: bash
+    - run: sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+      shell: bash
+    - run: sudo apt-get update -y
+      shell: bash
+    - run: sudo apt-get install pack-cli
+      shell: bash
     - run: |
         mkdir ${HOME}/kyma-binaries
         export PATH=${HOME}/kyma-binaries/:$PATH
