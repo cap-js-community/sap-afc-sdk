@@ -19,28 +19,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: sudo apt-get update -y
-      shell: bash
-    - run: sudo apt-get install -y ca-certificates curl gnupg
-      shell: bash
-    - run: sudo install -m 0755 -d /etc/apt/keyrings
-      shell: bash
-    - run: curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-      shell: bash
-    - run: echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-      shell: bash
-    - run: sudo apt-get update -y
-      shell: bash
-    - run: sudo apt-get install helm -y
-      shell: bash
-    - run: npm install -g ctz
-      shell: bash
-    - run: sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
-      shell: bash
-    - run: sudo apt-get update -y
-      shell: bash
-    - run: sudo apt-get install pack-cli
-      shell: bash
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+    - name: Install Containerize
+      run: npm install -g ctz
+    - name: Install Pack CLI
+      uses: buildpacks/github-actions/setup-pack@v5
     - run: |
         mkdir ${HOME}/kyma-binaries
         export PATH=${HOME}/kyma-binaries/:$PATH
