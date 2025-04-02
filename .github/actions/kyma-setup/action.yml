@@ -25,16 +25,6 @@ runs:
       shell: bash
     - run: sudo install -m 0755 -d /etc/apt/keyrings
       shell: bash
-    - run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
-      shell: bash
-    - run: sudo chmod a+r /etc/apt/keyrings/docker.asc
-      shell: bash
-    - run: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      shell: bash
-    - run: sudo apt-get update -y
-      shell: bash
-    - run: sudo apt-get install -y docker.io
-      shell: bash
     - run: curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
       shell: bash
     - run: echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
