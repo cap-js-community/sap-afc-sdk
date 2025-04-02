@@ -54,12 +54,12 @@ jobs:
         uses: ./.github/actions/kyma-setup
         with:
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
-#      - name: Login Docker
-#        uses: docker/login-action@v3
-#        with:
-#          registry: afcsdk.common.repositories.cloud.sap
-#          username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
-#          password: ${{ secrets.ARTIFACTORY_TOKEN }}
+      #      - name: Login Docker
+      #        uses: docker/login-action@v3
+      #        with:
+      #          registry: afcsdk.common.repositories.cloud.sap
+      #          username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
+      #          password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: Containerize
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
