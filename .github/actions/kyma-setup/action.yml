@@ -20,10 +20,11 @@ runs:
   using: "composite"
   steps:
     - name: Install Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v4
     - name: Install Containerize
       run: npm install -g ctz
-    - name: Install Pack CLI
+      shell: bash
+    - name: Install Pack
       uses: buildpacks/github-actions/setup-pack@v5
     - run: |
         mkdir ${HOME}/kyma-binaries
