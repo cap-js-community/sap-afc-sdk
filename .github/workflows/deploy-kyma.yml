@@ -57,8 +57,6 @@ jobs:
           user: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
-      - name: Set Registry
-        run: npm set @sap:registry=https://int.repositories.cloud.sap/artifactory/api/npm/build-snapshots-npm/
       - name: Containerize
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
