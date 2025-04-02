@@ -57,6 +57,10 @@ jobs:
           user: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Push dummy
+        uses: actions-hub/docker@master
+        with:
+          args: push ${GITHUB_REPOSITORY}:latest
       - name: Containerize
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
