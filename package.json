@@ -56,7 +56,7 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "1.10.0-beta.6",
+    "@cap-js-community/event-queue": "^1.10.0-beta.6",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.2",
     "@sap/cds-common-content": "^2.1.0",
@@ -159,8 +159,8 @@
       "sap-afc-sdk": {
         "model": "@cap-js-community/sap-afc-sdk",
         "endpoints": {
-          "approuter": null,
-          "server": null
+          "approuter": false,
+          "server": false
         },
         "api": {
           "cors": {
