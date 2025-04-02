@@ -60,11 +60,6 @@ jobs:
           registry: afcsdk.common.repositories.cloud.sap
           username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
-      - name: Push dummy
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: user/app:latest
       - name: Containerize
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
