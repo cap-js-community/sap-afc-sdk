@@ -57,7 +57,7 @@ jobs:
           user: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
           kubeConfig: ${{ secrets.KUBE_CONFIG }}
-      - run: docker info
+      - run: cat $HOME/.docker/config.json
       - name: Containerize
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
