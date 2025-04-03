@@ -162,9 +162,7 @@ Examples:
         }
         yaml.setIn(["srv", "expose", "enabled"], true);
         if (projectName) {
-          yaml.setIn(["backendDestinations", `${projectName}-srv-api`], {
-            service: "srv",
-          });
+          yaml.setIn(["backendDestinations", `${projectName}-srv-api`, "service"], "srv");
         }
         yaml.setIn(["xsuaa", "servicePlanName"], "broker");
         return yaml;
