@@ -1,0 +1,706 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Build CF 1`] = `
+"{
+  "name": "afcsdk",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/event-queue": "^1.9.4",
+    "@cap-js-community/feature-toggle-library": "^1.2.5",
+    "@cap-js-community/sap-afc-sdk": "file:../../..",
+    "@cap-js-community/websocket": "^1.6.2",
+    "@cap-js/hana": "^1",
+    "@sap/cds": "^8",
+    "@sap/xssec": "^4",
+    "express": "^4",
+    "redis": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/cds-test": "^0.2.0",
+    "@cap-js/cds-types": "^0.9.0",
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "test": "jest"
+  },
+  "cds": {
+    "requires": {
+      "sap-afc-sdk": {
+        "[production]": {
+          "endpoints": {
+            "approuter": "https://afcsdk-approuter.cloud.sap",
+            "server": "https://afcsdk-srv.cloud.sap"
+          }
+        },
+        "mockProcessing": {
+          "min": 0,
+          "max": 10,
+          "default": "completed",
+          "status": {
+            "completed": 0.5,
+            "completedWithWarning": 0.2,
+            "completedWithError": 0.2,
+            "failed": 0.1
+          }
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa",
+        "db": "hana",
+        "destinations": true,
+        "html5-runtime": true
+      },
+      "application-logging": true,
+      "workzone": true,
+      "SchedulingProcessingService": {
+        "outbox": {
+          "events": {
+            "syncJob": {
+              "cron": "*/1 * * * *"
+            }
+          }
+        }
+      }
+    },
+    "sql": {
+      "native_hana_associations": false
+    }
+  },
+  "sapux": [
+    "node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job"
+  ]
+}"
+`;
+
+exports[`Build CF 2`] = `
+"{
+  "routes": [
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": true
+    }
+  ],
+  "websockets": {
+    "enabled": true
+  }
+}"
+`;
+
+exports[`Build CF 3`] = `
+"{
+  "SBF_SERVICE_CONFIG": {
+    "afcsdk": {
+      "extend_credentials": {
+        "shared": {
+          "endpoints": {
+            "api": "/api",
+            "job-scheduling-v1": "/api/job-scheduling/v1"
+          },
+          "oauth2-configuration": {
+            "credential-types": [
+              "binding-secret",
+              "x509"
+            ]
+          }
+        }
+      },
+      "extend_xssecurity": {
+        "shared": {
+          "oauth2-configuration": {
+            "credential-types": [
+              "binding-secret",
+              "x509"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "SBF_BROKER_CREDENTIALS_HASH": {
+    "broker-user": "sha256:xxx=:xxx="
+  }
+}"
+`;
+
+exports[`Build CF 4`] = `
+"{
+  "services": [
+    {
+      "id": "e25a901f-43d1-43c0-bbd6-48b9c6aecb61",
+      "name": "afcsdk",
+      "description": "AFC Scheduling Provider Service",
+      "bindable": true,
+      "plans": [
+        {
+          "id": "958cbd91-af93-4fdd-a793-16c82ae9e70b",
+          "name": "standard",
+          "description": "Standard plan",
+          "free": true,
+          "bindable": true,
+          "plan_updateable": true
+        }
+      ],
+      "metadata": {
+        "displayName": "AFC Scheduling Provider Service",
+        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+      }
+    }
+  ]
+}"
+`;
+
+exports[`Build CF 5`] = `
+"_schema-version: 3.3.0
+ID: afcsdk
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+  deploy_mode: html5-repo
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: afcsdk-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: \${default-url}
+    requires:
+      - name: afcsdk-destination
+      - name: afcsdk-db
+      - name: afcsdk-auth
+      - name: afcsdk-redis
+      - name: afcsdk-logging
+
+  - name: afcsdk-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: afcsdk-db
+
+  - name: afcsdk
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: afcsdk-auth
+      - name: afcsdk-destination
+      - name: afcsdk-html5-runtime
+      - name: afcsdk-logging
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: \${protocol}
+          app-uri: \${default-uri}
+
+  - name: afcsdk-app-deployer
+    type: com.sap.application.content
+    path: gen
+    requires:
+      - name: afcsdk-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: afcsdkscheduling.monitoring.job
+          artifacts:
+            - scheduling.monitoring.job.zip
+          target-path: app/
+
+  - name: afcsdkscheduling.monitoring.job
+    type: html5
+    path: node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm i
+        - npm run build
+      supported-platforms:
+        []
+
+  - name: afcsdk-destinations
+    type: com.sap.application.content
+    requires:
+      - name: afcsdk-auth
+        parameters:
+          service-key:
+            name: afcsdk-auth-key
+      - name: afcsdk-html5-repo-host
+        parameters:
+          service-key:
+            name: afcsdk-html5-repo-host-key
+      - name: srv-api
+      - name: afcsdk-destination
+        parameters:
+          content-target: true
+    build-parameters:
+      no-source: true
+    parameters:
+      content:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+            - Name: afcsdk-html5-repository
+              ServiceInstanceName: afcsdk-html5-repo-host
+              ServiceKeyName: afcsdk-html5-repo-host-key
+              sap.cloud.service: afcsdk.service
+            - Name: afcsdk-auth
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: afcsdk-auth
+              ServiceKeyName: afcsdk-auth-key
+              sap.cloud.service: afcsdk.service
+
+resources:
+  - name: afcsdk-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: afcsdk-srv-api
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+              - Name: ui5
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+  - name: afcsdk-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: afcsdk-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: broker
+      path: ./xs-security.json
+      config:
+        xsappname: afcsdk-\${org}-\${space}
+        tenant-mode: dedicated
+  - name: afcsdk-redis
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: redis-cache
+      service-plan: standard
+      # config:
+      # memory: 2 # GB, can be 2 or 4
+      # multi_az: true
+      # cluster_mode: true
+      # shard_count: 1
+      # node_count: 3 # per shard minimum is 3 (for standard plan)
+      # engine_version: "6.0" # can be "4.0" or "6.0"
+      # maintenance_window:
+      # day_of_week: Friday
+      # start_hour_utc: 0
+      # duration: 5 # hours
+
+  - name: afcsdk-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: afcsdk-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: afcsdk-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs
+      service-plan: standard
+  - name: afcsdk-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: broker
+      path: ./xs-security.json
+      config:
+        xsappname: afcsdk-\${org}-\${space}
+        tenant-mode: dedicated
+"
+`;
+
+exports[`Build Kyma 1`] = `
+"{
+  "name": "afcsdk",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/event-queue": "^1.9.4",
+    "@cap-js-community/feature-toggle-library": "^1.2.5",
+    "@cap-js-community/sap-afc-sdk": "file:../../..",
+    "@cap-js-community/websocket": "^1.6.2",
+    "@cap-js/hana": "^1",
+    "@sap/cds": "^8",
+    "@sap/xssec": "^4",
+    "express": "^4",
+    "redis": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/cds-test": "^0.2.0",
+    "@cap-js/cds-types": "^0.9.0",
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "test": "jest"
+  },
+  "cds": {
+    "requires": {
+      "sap-afc-sdk": {
+        "[production]": {
+          "endpoints": {
+            "approuter": "https://afcsdk-approuter.cloud.sap",
+            "server": "https://afcsdk-srv.cloud.sap"
+          }
+        },
+        "mockProcessing": {
+          "min": 0,
+          "max": 10,
+          "default": "completed",
+          "status": {
+            "completed": 0.5,
+            "completedWithWarning": 0.2,
+            "completedWithError": 0.2,
+            "failed": 0.1
+          }
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa",
+        "db": "hana",
+        "destinations": true,
+        "html5-runtime": true
+      },
+      "application-logging": true,
+      "workzone": true,
+      "SchedulingProcessingService": {
+        "outbox": {
+          "events": {
+            "syncJob": {
+              "cron": "*/1 * * * *"
+            }
+          }
+        }
+      }
+    },
+    "sql": {
+      "native_hana_associations": false
+    }
+  },
+  "sapux": [
+    "node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job"
+  ]
+}"
+`;
+
+exports[`Build Kyma 2`] = `
+"{
+  "routes": [
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": true
+    }
+  ],
+  "websockets": {
+    "enabled": true
+  }
+}"
+`;
+
+exports[`Build Kyma 3`] = `
+"{
+  "SBF_SERVICE_CONFIG": {
+    "afcsdk": {
+      "extend_credentials": {
+        "shared": {
+          "endpoints": {
+            "api": "/api",
+            "job-scheduling-v1": "/api/job-scheduling/v1"
+          },
+          "oauth2-configuration": {
+            "credential-types": [
+              "binding-secret",
+              "x509"
+            ]
+          }
+        }
+      },
+      "extend_xssecurity": {
+        "shared": {
+          "oauth2-configuration": {
+            "credential-types": [
+              "binding-secret",
+              "x509"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "SBF_BROKER_CREDENTIALS_HASH": {
+    "broker-user": "sha256:xxx=:xxx="
+  }
+}"
+`;
+
+exports[`Build Kyma 4`] = `
+"{
+  "services": [
+    {
+      "id": "e25a901f-43d1-43c0-bbd6-48b9c6aecb61",
+      "name": "afcsdk",
+      "description": "AFC Scheduling Provider Service",
+      "bindable": true,
+      "plans": [
+        {
+          "id": "958cbd91-af93-4fdd-a793-16c82ae9e70b",
+          "name": "standard",
+          "description": "Standard plan",
+          "free": true,
+          "bindable": true,
+          "plan_updateable": true
+        }
+      ],
+      "metadata": {
+        "displayName": "AFC Scheduling Provider Service",
+        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+      }
+    }
+  ]
+}"
+`;
+
+exports[`Build Kyma 5`] = `
+"# yaml-language-server: $schema=./values.schema.json
+
+global:
+  domain: c-589f01f.stage.kyma.ondemand.com
+  imagePullSecret:
+    name: docker-registry
+  image:
+    registry: afcsdk.common.repositories.cloud.sap
+    tag: latest
+srv:
+  bindings:
+    destination:
+      serviceInstanceName: destination
+    db:
+      serviceInstanceName: hana
+    auth:
+      serviceInstanceName: xsuaa
+  image:
+    repository: afcsdk-srv
+  resources:
+    limits:
+      ephemeral-storage: 1G
+      memory: 500M
+    requests:
+      ephemeral-storage: 1G
+      cpu: 500m
+      memory: 500M
+  health:
+    liveness:
+      path: /health
+    readiness:
+      path: /health
+  expose:
+    enabled: true
+  networkSecurity:
+    allowNamespaceInternal: true
+approuter:
+  image:
+    repository: afcsdk-approuter
+  resources:
+    limits:
+      ephemeral-storage: 1G
+      memory: 500M
+    requests:
+      ephemeral-storage: 1G
+      cpu: 500m
+      memory: 500M
+  health:
+    liveness:
+      path: /
+    readiness:
+      path: /
+  envFrom:
+    - configMapRef:
+        name: "{{ .Release.Name }}-approuter-configmap"
+  bindings:
+    html5-apps-repo-runtime:
+      serviceInstanceName: html5-apps-repo-runtime
+    auth:
+      serviceInstanceName: xsuaa
+backendDestinations:
+  srv-api:
+    service: srv
+  afcsdk-srv-api:
+    service: srv
+destination:
+  serviceOfferingName: destination
+  servicePlanName: lite
+  parameters:
+    version: 1.0.0
+    HTML5Runtime_enabled: true
+hana-deployer:
+  image:
+    repository: afcsdk-hana-deployer
+  bindings:
+    hana:
+      serviceInstanceName: hana
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1G
+    requests:
+      cpu: 1000m
+      memory: 1G
+hana:
+  serviceOfferingName: hana
+  servicePlanName: hdi-shared
+html5-apps-repo-host:
+  serviceOfferingName: html5-apps-repo
+  servicePlanName: app-host
+html5-apps-deployer:
+  env:
+    SAP_CLOUD_SERVICE: afcsdk.service
+  image:
+    repository: afcsdk-html5-deployer
+  bindings:
+    xsuaa:
+      serviceInstanceName: xsuaa
+    destination:
+      serviceInstanceName: destination
+    html5-apps-repo:
+      serviceInstanceName: html5-apps-repo-host
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1G
+    requests:
+      cpu: 1000m
+      memory: 1G
+  envFrom:
+    - configMapRef:
+        name: "{{ .Release.Name }}-html5-apps-deployer-configmap"
+html5-apps-repo-runtime:
+  serviceOfferingName: html5-apps-repo
+  servicePlanName: app-runtime
+xsuaa:
+  serviceOfferingName: xsuaa
+  servicePlanName: broker
+  parameters:
+    tenant-mode: dedicated
+    oauth2-configuration:
+      redirect-uris:
+        - https://*.{{ tpl .Values.global.domain . }}/**
+    xsappname: afcsdk-{{ .Release.Namespace }}
+"
+`;
+
+exports[`Build Kyma 6`] = `
+"_schema-version: '1.0'
+repository: afcsdk.common.repositories.cloud.sap
+tag: latest
+before-all:
+  - npx cds build --production
+  - mkdir -p ui-resources/resources
+  - npm i --prefix node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
+  - npm run build --prefix node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
+  # zip filename should match the archiveName specified in ui5-deploy.yaml
+  - cp -f node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job/dist/scheduling.monitoring.job.zip ui-resources/resources/scheduling.monitoring.job.zip
+modules:
+  - name: afcsdk-srv
+    build-parameters:
+      buildpack:
+        type: nodejs
+        builder: builder-jammy-base
+        path: gen/srv
+        env:
+          BP_NODE_RUN_SCRIPTS: ""
+  - name: afcsdk-approuter
+    build-parameters:
+      buildpack:
+        type: nodejs
+        builder: builder-jammy-base
+        path: app/router
+        env:
+          BP_NODE_RUN_SCRIPTS: ""
+  - name: afcsdk-hana-deployer
+    build-parameters:
+      buildpack:
+        type: nodejs
+        builder: builder-jammy-base
+        path: gen/db
+        env:
+          BP_NODE_RUN_SCRIPTS: ""
+  - name: afcsdk-html5-deployer
+    build-parameters:
+      buildpack:
+        type: nodejs
+        builder: builder-jammy-base
+        path: ui-resources
+        env:
+          BP_NODE_RUN_SCRIPTS: ""
+"
+`;

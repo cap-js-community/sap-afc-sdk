@@ -41,6 +41,8 @@
     "watch": "cds watch",
     "test": "jest --silent",
     "test:update": "npm test -- -u",
+    "test:bin": "cd bin && jest --silent",
+    "test:bin:update": "npm run test:bin -- -u",
     "lint": "npm run eslint && npm run prettier && npm run prettier:cds",
     "lint:ci": "npm run eslint:ci && npm run prettier:ci",
     "eslint": "eslint --fix .",
