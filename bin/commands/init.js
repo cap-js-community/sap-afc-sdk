@@ -8,7 +8,7 @@ const shelljs = require("shelljs");
 const config = require("../config.json");
 const commander = require("commander");
 
-const { adjustJSON, adjustYAML } = require("../common/util");
+const { adjustJSON, adjustYAMLDocument } = require("../common/util");
 
 module.exports = {
   register: function (program) {
@@ -76,13 +76,13 @@ Examples:
       }
 
       // Remove previous replacements
-      adjustYAML("mta.yaml", (yaml) => {
+      adjustYAMLDocument("mta.yaml", (yaml) => {
         for (const app of appStubs) {
-          for (const module of yaml.modules) {
-            if (module.path === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
-              module.path = `app/${app}`;
-              if (module["build-parameters"]?.commands?.[0] === "npm i") {
-                module["build-parameters"].commands[0] = "npm ci";
+          for (const module of yaml.get("modules").items) {
+            if (module.get("path") === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
+              module.set("path", `app/${app}`);
+              if (module.getIn(["build-parameters", "commands", 0]) === "npm i") {
+                module.setIn(["build-parameters", "commands", 0], "npm ci");
               }
               break;
             }
@@ -131,18 +131,18 @@ Examples:
       }
 
       // CF
-      adjustYAML("mta.yaml", (yaml) => {
-        for (const resource of yaml.resources) {
-          if (resource.parameters?.service === "xsuaa") {
-            resource.parameters["service-plan"] = "broker";
+      adjustYAMLDocument("mta.yaml", (yaml) => {
+        for (const resource of yaml.get("resources").items) {
+          if (resource.getIn(["parameters", "service"]) === "xsuaa") {
+            resource.setIn(["parameters", "service-plan"], "broker");
           }
         }
         for (const app of appStubs) {
-          for (const module of yaml.modules) {
-            if (module.path === `app/${app}`) {
-              module.path = `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
-              if (module["build-parameters"]?.commands?.[0] === "npm ci") {
-                module["build-parameters"].commands[0] = "npm i";
+          for (const module of yaml.get("modules").items) {
+            if (module.get("path") === `app/${app}`) {
+              module.set("path", `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
+              if (module.getIn(["build-parameters", "commands", 0]) === "npm ci") {
+                module.setIn(["build-parameters", "commands", 0], "npm i");
               }
               break;
             }
@@ -153,41 +153,35 @@ Examples:
 
       // Kyma
       const repository = process.env.CONTAINER_REPOSITORY;
-      adjustYAML("chart/values.yaml", (yaml) => {
+      adjustYAMLDocument("chart/values.yaml", (yaml) => {
         if (process.env.GLOBAL_DOMAIN) {
-          yaml.global ??= {};
-          yaml.global.domain = process.env.GLOBAL_DOMAIN;
+          yaml.setIn(["global", "domain"], process.env.GLOBAL_DOMAIN);
         }
         if (repository) {
-          yaml.global ??= {};
-          yaml.global.image ??= {};
-          yaml.global.image.registry = repository;
+          yaml.setIn(["global", "image", "registry"], repository);
         }
-        yaml.srv ??= {};
-        yaml.srv.expose ??= {};
-        yaml.srv.expose.enabled = true;
+        yaml.setIn(["srv", "expose", "enabled"], true);
         if (projectName) {
-          yaml.backendDestinations ??= {};
-          yaml.backendDestinations[`${projectName}-srv-api`] ??= {
+          yaml.setIn(["backendDestinations", `${projectName}-srv-api`], {
             service: "srv",
-          };
+          });
         }
-        yaml.xsuaa ??= {};
-        yaml.xsuaa.servicePlanName = "broker";
+        yaml.setIn(["xsuaa", "servicePlanName"], "broker");
         return yaml;
       });
-      adjustYAML("containerize.yaml", (yaml) => {
+      adjustYAMLDocument("containerize.yaml", (yaml) => {
         if (repository) {
-          yaml.repository = repository;
+          yaml.set("repository", repository);
         }
         for (const app of appStubs) {
-          for (let i = 0; i < yaml["before-all"].length; i++) {
-            let line = yaml["before-all"][i];
-            if (line.includes(`app/${app}`)) {
-              line = line.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
-              yaml["before-all"][i] = line;
+          yaml.get("before-all").items.forEach((line, index) => {
+            if (line.value.includes(`app/${app}`)) {
+              yaml.setIn(
+                ["before-all", index],
+                line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),
+              );
             }
-          }
+          });
         }
         return yaml;
       });

@@ -45,7 +45,8 @@ describe("Build", () => {
   });
 
   it("CF", async () => {
-    shelljs.exec([...Commands.BEFORE, ...Commands.CF, ...Commands.AFTER].join(" && "));
+    const code = shelljs.exec([...Commands.BEFORE, ...Commands.CF, ...Commands.AFTER].join(" && ")).code;
+    expect(code).toBe(0);
     for (const file of [...Files.ALL, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
@@ -53,7 +54,8 @@ describe("Build", () => {
   });
 
   it("Kyma", async () => {
-    shelljs.exec([...Commands.BEFORE, ...Commands.KYMA, ...Commands.AFTER].join(" && "));
+    const code = shelljs.exec([...Commands.BEFORE, ...Commands.KYMA, ...Commands.AFTER].join(" && ")).code;
+    expect(code).toBe(0);
     for (const file of [...Files.ALL, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();

@@ -8,10 +8,10 @@ const shelljs = require("shelljs");
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
-    let content = fs.readFileSync(filePath, "utf8");
-    const newContent = callback(content);
+    const content = fs.readFileSync(filePath, "utf8");
+    const newContent = callback(content) || content;
     if (newContent !== content) {
-      fs.writeFileSync(filePath, newContent);
+      fs.writeFileSync(filePath, newContent, "utf8");
       return true;
     }
   }
@@ -22,7 +22,7 @@ function adjustLines(file, callback) {
   return adjustText(file, (content) => {
     const newLines = [];
     for (const line of content.split("\n")) {
-      const adjustedLine = callback(line);
+      const adjustedLine = callback(line) || line;
       if (adjustedLine !== undefined && adjustedLine !== null) {
         if (Array.isArray(adjustedLine)) {
           newLines.push(...adjustedLine);
@@ -52,10 +52,10 @@ function adjustJSON(file, callback) {
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
     const json = JSON.parse(content);
-    callback(json);
-    const newContent = JSON.stringify(json, null, 2);
+    const newJson = callback(json) || json;
+    const newContent = JSON.stringify(newJson, null, 2);
     if (newContent !== content) {
-      fs.writeFileSync(filePath, newContent);
+      fs.writeFileSync(filePath, newContent, "utf8");
       return true;
     }
   }
@@ -65,12 +65,27 @@ function adjustJSON(file, callback) {
 function adjustYAML(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
-    let content = fs.readFileSync(filePath, "utf8");
+    const content = fs.readFileSync(filePath, "utf8");
     const yml = yaml.parse(content);
-    const newYml = callback(yml);
+    const newYml = callback(yml) || yml;
     const newContent = yaml.stringify(newYml);
     if (newContent !== content) {
-      fs.writeFileSync(filePath, newContent);
+      fs.writeFileSync(filePath, newContent, "utf8");
+      return true;
+    }
+  }
+  return false;
+}
+
+function adjustYAMLDocument(file, callback) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    const yml = yaml.parseDocument(content);
+    const newYml = callback(yml) || yml;
+    const newContent = newYml.toString();
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent, "utf8");
       return true;
     }
   }
@@ -106,6 +121,7 @@ module.exports = {
   replaceTextPart,
   adjustJSON,
   adjustYAML,
+  adjustYAMLDocument,
   copyTemplate,
   generateHashBrokerPassword,
 };

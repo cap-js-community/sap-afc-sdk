@@ -162,7 +162,7 @@ exports[`Build CF 5`] = `
 "_schema-version: 3.3.0
 ID: afcsdk
 version: 1.0.0
-description: A simple CAP project.
+description: "A simple CAP project."
 parameters:
   enable-parallel-deployments: true
   deploy_mode: html5-repo
@@ -182,7 +182,7 @@ modules:
     build-parameters:
       builder: npm-ci
     provides:
-      - name: srv-api
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
           srv-url: \${default-url}
     requires:
@@ -191,6 +191,7 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-redis
       - name: afcsdk-logging
+
   - name: afcsdk-db-deployer
     type: hdb
     path: gen/db
@@ -198,6 +199,7 @@ modules:
       buildpack: nodejs_buildpack
     requires:
       - name: afcsdk-db
+
   - name: afcsdk
     type: approuter.nodejs
     path: app/router
@@ -209,7 +211,7 @@ modules:
       - name: srv-api
         group: destinations
         properties:
-          name: srv-api
+          name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
       - name: afcsdk-auth
@@ -221,6 +223,7 @@ modules:
         properties:
           app-protocol: \${protocol}
           app-uri: \${default-uri}
+
   - name: afcsdk-app-deployer
     type: com.sap.application.content
     path: gen
@@ -235,6 +238,7 @@ modules:
           artifacts:
             - scheduling.monitoring.job.zip
           target-path: app/
+
   - name: afcsdkscheduling.monitoring.job
     type: html5
     path: node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
@@ -245,6 +249,7 @@ modules:
         - npm i
         - npm run build
       supported-platforms: []
+
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -276,6 +281,7 @@ modules:
               ServiceInstanceName: afcsdk-auth
               ServiceKeyName: afcsdk-auth-key
               sap.cloud.service: afcsdk.service
+
 resources:
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
@@ -304,7 +310,7 @@ resources:
       - name: srv-api
         group: destinations
         properties:
-          name: srv-api
+          name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
   - name: afcsdk-db
@@ -326,6 +332,18 @@ resources:
     parameters:
       service: redis-cache
       service-plan: standard
+      # config:
+      # memory: 2 # GB, can be 2 or 4
+      # multi_az: true
+      # cluster_mode: true
+      # shard_count: 1
+      # node_count: 3 # per shard minimum is 3 (for standard plan)
+      # engine_version: "6.0" # can be "4.0" or "6.0"
+      # maintenance_window:
+      # day_of_week: Friday
+      # start_hour_utc: 0
+      # duration: 5 # hours
+
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
     parameters:
@@ -502,7 +520,9 @@ exports[`Build Kyma 4`] = `
 `;
 
 exports[`Build Kyma 5`] = `
-"global:
+"# yaml-language-server: $schema=./values.schema.json
+
+global:
   domain: xxx.stage.kyma.ondemand.com
   imagePullSecret:
     name: docker-registry
@@ -628,7 +648,7 @@ html5-apps-repo-runtime:
 `;
 
 exports[`Build Kyma 6`] = `
-"_schema-version: "1.0"
+"_schema-version: '1.0'
 repository: afcsdk.common.repositories.cloud.sap
 tag: latest
 before-all:
@@ -638,6 +658,7 @@ before-all:
     node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
   - npm run build --prefix
     node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
+  # zip filename should match the archiveName specified in ui5-deploy.yaml
   - cp -f
     node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job/dist/scheduling.monitoring.job.zip
     ui-resources/resources/scheduling.monitoring.job.zip
