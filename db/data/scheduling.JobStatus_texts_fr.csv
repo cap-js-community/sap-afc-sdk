@@ -2,8 +2,8 @@ locale;code;name;descr
 "fr";requested;Demandé;Demandé
 "fr";running;En cours;En cours
 "fr";completed;Terminé;Terminé
-"fr";completedWithWarning;Completed with Warning;Avertissement
-"fr";completedWithError;Completed with Error;Erreur
+"fr";completedWithWarning;Terminé avec avertissement;Avertissement
+"fr";completedWithError;Terminé avec erreur;Erreur
 "fr";failed;Échec;Échec
 "fr";cancelRequested;Annulation demandée;Demandé
 "fr";canceled;Annulé;Annulé

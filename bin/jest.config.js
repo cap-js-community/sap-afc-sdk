@@ -22,7 +22,7 @@ module.exports = {
   resetMocks: false,
   resetModules: false,
   testMatch: ["**/test/**/*.test.js"],
-  testPathIgnorePatterns: ["/templates/"],
+  testPathIgnorePatterns: ["/templates/", "/temp/"],
   verbose: true,
   maxWorkers: 2,
   testTimeout: 60000,

@@ -61,22 +61,8 @@ jobs:
           username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: Containerize
-        run: ctz containerize.yaml --logs
+        run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
-      - name: Images
-        run: docker images
-      - name: Tag Images
-        run: |
-          docker tag afcsdk-hana-deployer:latest afcsdk.common.repositories.cloud.sap/afcsdk-hana-deployer:latest
-          docker tag afcsdk-html5-deployer:latest afcsdk.common.repositories.cloud.sap/afcsdk-html5-deployer:latest
-          docker tag afcsdk-srv:latest afcsdk.common.repositories.cloud.sap/afcsdk-srv:latest
-          docker tag afcsdk-approuter:latest afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
-      - name: Push Images
-        run: |
-          docker push afcsdk.common.repositories.cloud.sap/afcsdk-hana-deployer:latest
-          docker push afcsdk.common.repositories.cloud.sap/afcsdk-html5-deployer:latest
-          docker push afcsdk.common.repositories.cloud.sap/afcsdk-srv:latest
-          docker push afcsdk.common.repositories.cloud.sap/afcsdk-approuter:latest
       - name: Upgrade
         run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
         working-directory: ./afcsdk

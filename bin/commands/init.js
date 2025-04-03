@@ -8,7 +8,7 @@ const shelljs = require("shelljs");
 const config = require("../config.json");
 const commander = require("commander");
 
-const { adjustJSON, adjustText, replaceTextPart } = require("../common/util");
+const { adjustJSON, adjustYAML } = require("../common/util");
 
 module.exports = {
   register: function (program) {
@@ -65,13 +65,6 @@ Examples:
     try {
       target ||= config.defaultTarget;
 
-      // Remove previous replacements
-      adjustText("mta.yaml", (content) => {
-        content = content.replace(/path: node_modules\/@cap-js-community\/sap-afc-sdk\/app\//g, "path: app/");
-        content = content.replace(/- npm i/g, "- npm ci");
-        return content;
-      });
-
       // Create app stubs
       const appStubs = [];
       for (const app of config.apps) {
@@ -81,6 +74,23 @@ Examples:
           appStubs.push(app);
         }
       }
+
+      // Remove previous replacements
+      adjustYAML("mta.yaml", (yaml) => {
+        for (const app of appStubs) {
+          for (const module of yaml.modules) {
+            if (module.path === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
+              module.path = `app/${app}`;
+              if (module["build-parameters"]?.commands?.[0] === "npm i") {
+                module["build-parameters"].commands[0] = "npm ci";
+              }
+              break;
+            }
+          }
+        }
+        return yaml;
+      });
+
       // Project
       let projectName = "";
       adjustJSON("package.json", (json) => {
@@ -121,47 +131,65 @@ Examples:
       }
 
       // CF
-      adjustText("mta.yaml", (content) => {
-        content = replaceTextPart(content, "service-plan: application", "service-plan: broker");
-        for (const app of appStubs) {
-          const part = `path: app/${app}`;
-          const replacement = `path: node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
-          content = replaceTextPart(content, part, replacement);
-          content = replaceTextPart(content, "- npm ci", "- npm i", replacement);
+      adjustYAML("mta.yaml", (yaml) => {
+        for (const resource of yaml.resources) {
+          if (resource.parameters?.service === "xsuaa") {
+            resource.parameters["service-plan"] = "broker";
+          }
         }
-        return content;
+        for (const app of appStubs) {
+          for (const module of yaml.modules) {
+            if (module.path === `app/${app}`) {
+              module.path = `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
+              if (module["build-parameters"]?.commands?.[0] === "npm ci") {
+                module["build-parameters"].commands[0] = "npm i";
+              }
+              break;
+            }
+          }
+        }
+        return yaml;
       });
 
       // Kyma
-      const repository = process.env.CONTAINER_REPOSITORY || "docker.io/abc123";
-      adjustText("chart/values.yaml", (content) => {
-        if (projectName) {
-          content = replaceTextPart(
-            content,
-            "backendDestinations:\n  srv-api:\n    service: srv",
-            `backendDestinations:\n  srv-api:\n    service: srv\n  ${projectName}-srv-api:\n    service: srv`,
-          );
-        }
-        content = replaceTextPart(content, "expose:\n    enabled: false", "expose:\n    enabled: true");
-        content = replaceTextPart(content, "servicePlanName: application", "servicePlanName: broker");
-        content = replaceTextPart(content, "registry: registry-name", `registry: ${repository}`);
+      const repository = process.env.CONTAINER_REPOSITORY;
+      adjustYAML("chart/values.yaml", (yaml) => {
         if (process.env.GLOBAL_DOMAIN) {
-          content = replaceTextPart(content, "domain: abc.com", `domain: ${process.env.GLOBAL_DOMAIN}`);
+          yaml.global ??= {};
+          yaml.global.domain = process.env.GLOBAL_DOMAIN;
         }
-        return content;
+        if (repository) {
+          yaml.global ??= {};
+          yaml.global.image ??= {};
+          yaml.global.image.registry = repository;
+        }
+        yaml.srv ??= {};
+        yaml.srv.expose ??= {};
+        yaml.srv.expose.enabled = true;
+        if (projectName) {
+          yaml.backendDestinations ??= {};
+          yaml.backendDestinations[`${projectName}-srv-api`] ??= {
+            service: "srv",
+          };
+        }
+        yaml.xsuaa ??= {};
+        yaml.xsuaa.servicePlanName = "broker";
+        return yaml;
       });
-      adjustText("containerize.yaml", (content) => {
-        content = replaceTextPart(content, "<your-container-registry>", repository);
-        for (const app of appStubs) {
-          let part = `--prefix app/${app}`;
-          let replacement = `--prefix node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
-          content = replaceTextPart(content, part, replacement);
-          content = replaceTextPart(content, part, replacement);
-          part = `cp -f app/${app}`;
-          replacement = `cp -f node_modules/@cap-js-community/sap-afc-sdk/app/${app}`;
-          content = replaceTextPart(content, part, replacement);
+      adjustYAML("containerize.yaml", (yaml) => {
+        if (repository) {
+          yaml.repository = repository;
         }
-        return content;
+        for (const app of appStubs) {
+          for (let i = 0; i < yaml["before-all"].length; i++) {
+            let line = yaml["before-all"][i];
+            if (line.includes(`app/${app}`)) {
+              line = line.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
+              yaml["before-all"][i] = line;
+            }
+          }
+        }
+        return yaml;
       });
 
       // Approuter

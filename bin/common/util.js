@@ -2,6 +2,7 @@
 
 const path = require("path");
 const fs = require("fs");
+const yaml = require("yaml");
 const shelljs = require("shelljs");
 
 function adjustText(file, callback) {
@@ -61,6 +62,21 @@ function adjustJSON(file, callback) {
   return false;
 }
 
+function adjustYAML(file, callback) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    let content = fs.readFileSync(filePath, "utf8");
+    const yml = yaml.parse(content);
+    const newYml = callback(yml);
+    const newContent = yaml.stringify(newYml);
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent);
+      return true;
+    }
+  }
+  return false;
+}
+
 function copyTemplate(folder, files) {
   fs.mkdirSync(folder, { recursive: true });
   for (const file of files) {
@@ -89,6 +105,7 @@ module.exports = {
   adjustLines,
   replaceTextPart,
   adjustJSON,
+  adjustYAML,
   copyTemplate,
   generateHashBrokerPassword,
 };
