@@ -21,7 +21,7 @@ exports[`Build CF 1`] = `
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0.3.0",
-    "@cap-js/cds-types": "^0.9.0",
+    "@cap-js/cds-types": "^0.10.0",
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^8",
     "jest": "^29.7.0"
@@ -383,7 +383,7 @@ exports[`Build Kyma 1`] = `
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0.3.0",
-    "@cap-js/cds-types": "^0.9.0",
+    "@cap-js/cds-types": "^0.10.0",
     "@cap-js/sqlite": "^1",
     "jest": "^29.7.0"
   },
