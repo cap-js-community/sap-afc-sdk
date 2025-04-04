@@ -11,6 +11,7 @@ const prompt = require("prompt-sync")();
 const { adjustLines, generateHashBrokerPassword } = require("../common/util");
 
 const PLAN_NAME = "standard";
+const INTERNAL_SUFFIX = "internal";
 const SERVICE_SUFFIX = "api";
 const SERVICE_KEY_SUFFIX = "key";
 
@@ -162,8 +163,9 @@ async function manageInternal(options) {
   }
   if (options.destination) {
     serverUrl(config);
+    const destinationName = `${config.service}${options.label ? `-${options.label}` : ""}-${INTERNAL_SUFFIX}-${SERVICE_SUFFIX}`;
     createDestination(
-      config.app,
+      destinationName,
       config.url,
       config.tokenUrl,
       config.internalClientId,
@@ -216,13 +218,15 @@ async function manageKey(options) {
     return;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
+    console.log(`name: ${config.serviceKey}`);
     console.log(`api: ${config.api}`);
     console.log(`auth: ${config.tokenUrl}`);
     console.log(`clientId: ${config.clientId}`);
     console.log(`clientSecret: ${config.clientSecret}`);
   }
   if (options.destination) {
-    createDestination(`${config.app}-api`, config.api, config.tokenUrl, config.clientId, config.clientSecret, options);
+    const destinationName = `${config.service}${options.label ? `-${options.label}` : ""}-${SERVICE_SUFFIX}`;
+    createDestination(destinationName, config.api, config.tokenUrl, config.clientId, config.clientSecret, options);
   }
   if (options.token || options.bearer || options.http) {
     config.token = await fetchOAuthToken(config.authUrl, config.clientId, config.clientSecret);
