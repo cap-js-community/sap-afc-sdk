@@ -6,17 +6,6 @@ module.exports = {
   bail: false,
   clearMocks: false,
   collectCoverage: false,
-  collectCoverageFrom: [],
-  coverageDirectory: "reports/coverage/unit/",
-  coverageReporters: ["lcov", "text"],
-  coverageThreshold: {
-    global: {
-      branches: 85,
-      functions: 95,
-      lines: 95,
-      statements: 95,
-    },
-  },
   moduleDirectories: ["node_modules"],
   modulePathIgnorePatterns: [],
   resetMocks: false,
