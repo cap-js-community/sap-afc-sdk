@@ -57,7 +57,6 @@ exports[`Build CF 1`] = `
         "destinations": true,
         "html5-runtime": true
       },
-      "application-logging": true,
       "workzone": true,
       "SchedulingProcessingService": {
         "outbox": {
@@ -190,7 +189,7 @@ modules:
       - name: afcsdk-db
       - name: afcsdk-auth
       - name: afcsdk-redis
-      - name: afcsdk-logging
+      - name: afcsdk-cloud-logging
 
   - name: afcsdk-db-deployer
     type: hdb
@@ -217,7 +216,7 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
-      - name: afcsdk-logging
+      - name: afcsdk-cloud-logging
     provides:
       - name: app-api
         properties:
@@ -354,11 +353,14 @@ resources:
     parameters:
       service: html5-apps-repo
       service-plan: app-runtime
-  - name: afcsdk-logging
+  - name: afcsdk-cloud-logging
     type: org.cloudfoundry.managed-service
     parameters:
-      service: application-logs
+      service: cloud-logging
       service-plan: standard
+      config:
+        ingest_otlp:
+          enabled: true
 "
 `;
 
@@ -418,7 +420,6 @@ exports[`Build Kyma 1`] = `
         "destinations": true,
         "html5-runtime": true
       },
-      "application-logging": true,
       "workzone": true,
       "SchedulingProcessingService": {
         "outbox": {
@@ -537,6 +538,11 @@ srv:
       serviceInstanceName: hana
     auth:
       serviceInstanceName: xsuaa
+    cloud-logging:
+      serviceInstanceName: cloud-logging
+      credentialsRotationPolicy:
+        enabled: true
+        rotationFrequency: 168h
   image:
     repository: afcsdk-srv
   resources:
@@ -644,6 +650,12 @@ html5-apps-deployer:
 html5-apps-repo-runtime:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-runtime
+cloud-logging:
+  serviceOfferingName: cloud-logging
+  servicePlanName: standard
+  parameters:
+    ingest_otlp:
+      enabled: true
 "
 `;
 

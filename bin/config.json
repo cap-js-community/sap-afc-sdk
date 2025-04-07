@@ -4,17 +4,7 @@
   "appRoot": "app",
   "apps": ["scheduling.monitoring.job"],
   "features": {
-    "cds": [
-      "sqlite",
-      "hana",
-      "xsuaa",
-      "cloud-logging",
-      "approuter",
-      "destination",
-      "html5-repo",
-      "workzone",
-      "redis"
-    ],
+    "cds": ["sqlite", "hana", "xsuaa", "cloud-logging", "approuter", "destination", "html5-repo", "workzone", "redis"],
     "cf": ["mta"],
     "kyma": ["helm", "containerize"],
     "afc": ["broker", "stub", "mock", "sample", "test", "http"]
