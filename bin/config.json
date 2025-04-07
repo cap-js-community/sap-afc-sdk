@@ -8,7 +8,7 @@
       "sqlite",
       "hana",
       "xsuaa",
-      "application-logging",
+      "cloud-logging",
       "approuter",
       "destination",
       "html5-repo",
