@@ -94,7 +94,7 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
 The SAP Advanced Financial Closing SDK for CDS is build on the following architecture open source
 building blocks as depicted in the following diagram:
 
-![Architecture Concept](./docs/assets/architecture_concept.png)
+![Architecture Concept](./docs/assets/architecture_concept.svg)
 
 - **WebSocket Adapter for CDS** (https://github.com/cap-js-community/websocket)
   - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in context of the SAP
@@ -126,7 +126,7 @@ services in AFC.
 
 The following diagram illustrates the high-level architecture of the SAP Advanced Financial Closing SDK for CDS:
 
-![Architecture Design](./docs/assets/architecture_design.png)
+![Architecture Design](./docs/assets/architecture_design.svg)
 
 **Key components and processing flow**:
 
