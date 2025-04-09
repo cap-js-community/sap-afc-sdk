@@ -67,12 +67,7 @@ function processSchedulingProviderService(check) {
     { type: "boolean" },
     { type: "number" },
   ];
-  data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = [
-    "name",
-    "dataType",
-    "type",
-    "mappingType",
-  ];
+  data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = ["name", "dataType", "type"];
   data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
   data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
   delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.type;
@@ -91,9 +86,18 @@ function processSchedulingProviderService(check) {
     { type: "number" },
   ];
 
+  data.components.schemas["SchedulingProviderService.JobResult"].required = ["ID", "type", "name"];
   delete data.components.schemas["SchedulingProviderService.Job-create"].properties.results;
   delete data.components.schemas["SchedulingProviderService.JobResult"].properties.data;
   delete data.components.schemas["SchedulingProviderService.JobResult-create"];
+
+  data.components.schemas["SchedulingProviderService.JobResultMessage"].required = [
+    "ID",
+    "severity",
+    "code",
+    "text",
+    "createdAt",
+  ];
   delete data.components.schemas["SchedulingProviderService.JobResultMessage-create"];
 
   // Paths

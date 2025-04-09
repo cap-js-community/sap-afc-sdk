@@ -1277,7 +1277,7 @@
             "default": false
           }
         },
-        "required": ["name", "dataType", "type", "mappingType"]
+        "required": ["name", "dataType", "type"]
       },
       "SchedulingProviderService.JobResult": {
         "title": "JobResult",
@@ -1312,7 +1312,8 @@
             "type": "string",
             "maxLength": 5000
           }
-        }
+        },
+        "required": ["ID", "type", "name"]
       },
       "SchedulingProviderService.JobResultMessage": {
         "title": "JobResultMessage",
@@ -1344,7 +1345,8 @@
             "format": "date-time",
             "example": "2017-04-13T15:51:04.0000000Z"
           }
-        }
+        },
+        "required": ["ID", "severity", "code", "text", "createdAt"]
       },
       "error": {
         "type": "object",

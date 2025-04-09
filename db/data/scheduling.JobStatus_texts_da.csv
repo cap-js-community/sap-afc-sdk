@@ -5,5 +5,5 @@ locale;code;name;descr
 "da";completedWithWarning;Afsluttet med advarsel;Advarsel
 "da";completedWithError;Afsluttet med fejl;Fejl
 "da";failed;Mislykkedes;Mislykkedes
-"da";cancelRequested;Annullering rekvireret;Anmodet
+"da";cancelRequested;Annullering anmodet;Anmodet
 "da";canceled;Annulleret;Annulleret

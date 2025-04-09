@@ -2,8 +2,8 @@ locale;code;name;descr
 "ru";requested;Запрошено;Запрошено
 "ru";running;Выполняется;Выполняется
 "ru";completed;Завершено;Завершено
-"ru";completedWithWarning;Completed with Warning;Предупреждение
-"ru";completedWithError;Completed with Error;Ошибка
+"ru";completedWithWarning;Завершено с предупреждением;Предупреждение
+"ru";completedWithError;Завершено с ошибкой;Ошибка
 "ru";failed;Не удалось;Не удалось
-"ru";cancelRequested;Запрошено сторно;Запрошено
+"ru";cancelRequested;Запрошена отмена;Запрошено
 "ru";canceled;Отменено;Отменено
