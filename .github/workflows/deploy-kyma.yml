@@ -64,8 +64,8 @@ jobs:
         run: ctz containerize.yaml --push --logs
         working-directory: ./afcsdk
       - name: Upgrade
-        run: helm upgrade --install afcsdk ./gen/chart -n afc-sdk-dev
+        run: helm upgrade --install afcsdk ./gen/chart -n ${{ secrets.KYMA_NAMESPACE }}
         working-directory: ./afcsdk
       - name: Rollout
-        run: kubectl rollout restart deployment -n afc-sdk-dev
+        run: kubectl rollout restart deployment -n ${{ secrets.KYMA_NAMESPACE }}
         working-directory: ./afcsdk
