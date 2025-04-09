@@ -1020,5 +1020,40 @@ describe("Processing Service", () => {
       log.clear();
       await clearEventQueue();
     });
+
+    it("cancelJob - completed", async () => {
+      cds.env.requires["sap-afc-sdk"].mockProcessing = {
+        default: JobStatus.completed,
+      };
+      await expect(processingService.processJob(ID)).resolves.not.toThrow();
+
+      await processOutbox("SchedulingProcessingService");
+
+      let entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
+      expect(entry).toBeDefined();
+      expect(entry.startAfter).toBeDefined();
+      const result = await UPDATE.entity("sap.eventqueue.Event")
+        .set({
+          startAfter: null,
+        })
+        .where({ ID: entry.ID });
+      expect(result).toBe(1);
+
+      await processOutbox("SchedulingProcessingService");
+
+      const job = await SELECT.one.from("scheduling.Job").where({ ID });
+      expect(job.status_code).toBe(JobStatus.completed);
+
+      await clearEventQueue();
+
+      await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
+      await processOutbox("SchedulingProcessingService");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*completed.*canceled/s));
+      log.clear();
+      await clearEventQueue();
+    });
   });
 });
