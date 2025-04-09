@@ -71,6 +71,8 @@ module.exports = {
       .option("-d, --destination", "Generate destination import file (json)")
       .option("-o, --properties", "Generate destination import file (txt)")
       .option("-h, --http", "Fill .http files")
+      .option("-e, --endpoint <endpoint>", "API endpoint path")
+      .option("-j, --jobscheduling", "Job Scheduling Provider API endpoint path")
       .option("-c, --clear", "Clear .http files placeholders")
       .option("-r, --reset", "Reset API management")
       .option("-x, --xreset", "Reset API management")
@@ -90,6 +92,8 @@ Examples:
   afc api key -h
   afc api key -h -i
   afc api key -h -c
+  afc api key -d -e <endpoint>
+  afc api key -d -j
 `,
       );
   },
@@ -393,6 +397,11 @@ function cfServiceCredentials(options, config) {
   config.clientId = /"clientid": "(.*?)"/.exec(result)?.[1];
   config.clientSecret = /"clientsecret": "(.*?)"/.exec(result)?.[1];
   config.api = /"api": "(.*?)"/.exec(result)?.[1];
+  if (options.endpoint) {
+    config.api = `${config.api}/${options.endpoint}}`;
+  } else if (options.jobscheduling) {
+    config.api = `${config.api}/job-scheduling/v1`;
+  }
   if (config.auth && config.clientId && config.clientSecret) {
     return true;
   }

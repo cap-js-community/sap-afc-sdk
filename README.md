@@ -670,6 +670,11 @@ The broker is used to manage service key management to the API.
       - See `.http` files in [/http/scheduling](./http/scheduling) to call scheduling provider API endpoints
     - Clear credentials in .http files via
       - Terminal: `afc api key -c`
+  - Destination:
+    - A destination file for an API endpoint can be created via command:
+      - Terminal: `afc add key -d -e <endpoint>`
+    - A destination file for Job Scheduling Provider API can be created via command:
+      - Terminal: `afc add key -d -j`
 - Reset API management in CF
   - Terminal: `afc api key -r`
 
