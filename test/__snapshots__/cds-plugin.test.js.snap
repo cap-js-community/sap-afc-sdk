@@ -253,7 +253,7 @@ footer {
     <body>
         <div id="welcome">
             <h1> Welcome to <i>@sap/cds</i> Server </h1>
-            <p class="subtitle"> Serving @cap-js-community/sap-afc-sdk 0.2.0 </p>
+            <p class="subtitle"> Serving @cap-js-community/sap-afc-sdk</p>
 
             <p> These are the paths currently served:</p>
 

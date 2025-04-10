@@ -60,7 +60,7 @@ describe("CDS Plugin", () => {
 
   it("GET Welcome Page", async () => {
     const response = await GET("/");
-    response.data = response.data.replace(/>@cap-js-community\/sap-afc-sdk (.*?)</, ">@cap-js-community/sap-afc-sdk<");
+    response.data = response.data.replace(/@cap-js-community\/sap-afc-sdk (.*?) ?</g, "@cap-js-community/sap-afc-sdk<");
     expect(response.status).toBe(200);
     expect(response.data).toMatchSnapshot();
   });
