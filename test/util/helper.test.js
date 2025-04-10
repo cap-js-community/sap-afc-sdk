@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  mergeDeep,
+  merge,
   isObject,
   toObject,
   wildcard,
@@ -12,7 +12,7 @@ const {
 } = require("../../src/util/helper");
 
 describe("Helper", () => {
-  it("mergeDeep", async () => {
+  it("merge", async () => {
     const objects = [
       {
         a: 1,
@@ -45,7 +45,7 @@ describe("Helper", () => {
         },
       },
     ];
-    expect(mergeDeep(...objects)).toEqual({
+    expect(merge(...objects)).toEqual({
       a: 3,
       b: "3",
       c: ["1", "2", "3"],

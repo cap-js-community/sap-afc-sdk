@@ -189,12 +189,6 @@ Examples:
         json.websockets = { enabled: true };
       });
 
-      // Install @cap-js-community packages
-      shelljs.exec(
-        `npm install --save @cap-js-community/event-queue @cap-js-community/websocket @cap-js-community/feature-toggle-library`,
-        { silent: true },
-      );
-
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);

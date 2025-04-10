@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-function mergeDeep(...objects) {
+function merge(...objects) {
   const isObject = (obj) => obj && typeof obj === "object";
   return objects.reduce((result, object) => {
     Object.keys(object).forEach((key) => {
@@ -11,7 +11,7 @@ function mergeDeep(...objects) {
       if (Array.isArray(currentValue) && Array.isArray(objectValue)) {
         result[key] = currentValue.concat(...objectValue);
       } else if (isObject(currentValue) && isObject(objectValue)) {
-        result[key] = mergeDeep(currentValue, objectValue);
+        result[key] = merge(currentValue, objectValue);
       } else {
         result[key] = objectValue;
       }
@@ -60,7 +60,7 @@ function messageLocales() {
 }
 
 module.exports = {
-  mergeDeep,
+  merge,
   isObject,
   toObject,
   wildcard,

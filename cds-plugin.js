@@ -12,9 +12,14 @@ const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 const toggles = require("@cap-js-community/feature-toggle-library");
 const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
-const { mergeDeep, toObject } = require("./src/util/helper");
+const { merge, toObject } = require("./src/util/helper");
 
-const config = mergeDeep(require("./config"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
+const config = merge(require("./config.json"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
+
+// Plugins
+for (const plugin of config.plugins) {
+  require(`${plugin}/cds-plugin`);
+}
 
 const SERVER_SUFFIX = "srv";
 const APPROUTER_SUFFIX = "approuter";
@@ -139,7 +144,7 @@ function serveBroker() {
   let brokerConfig = toObject(cds.env.requires?.["sap-afc-sdk"]?.broker);
   const brokerPath = path.join(cds.root, config.paths.broker);
   try {
-    brokerConfig = mergeDeep(require(brokerPath), brokerConfig);
+    brokerConfig = merge(require(brokerPath), brokerConfig);
   } catch (err) {
     if (Object.keys(brokerConfig).length === 0) {
       cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
@@ -260,7 +265,7 @@ function serveMergedAppConfig(packageRoot, uiPath) {
         inbound.resolutionResult.url = `${uiPath}/${inbound.resolutionResult.url}`;
       }
     }
-    const mergedFioriSandboxConfig = mergeDeep(packageFioriSandboxConfig, projectFioriSandboxConfig);
+    const mergedFioriSandboxConfig = merge(packageFioriSandboxConfig, projectFioriSandboxConfig);
     res.send(mergedFioriSandboxConfig);
   });
 }
@@ -414,7 +419,7 @@ function outboxServices() {
 }
 
 function handleFeatureToggles() {
-  // event-queue
+  // Event-Queue
   for (const name in config.toggles.eventQueue) {
     const toggle = config.toggles.eventQueue[name];
     eventQueueConfig[name] = toggles.getFeatureValue(toggle);

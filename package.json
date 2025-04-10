@@ -26,8 +26,9 @@
     "src",
     "srv",
     "test/data",
-    "CHANGELOG.md",
+    ".cdsrc.js",
     "cds-plugin.js",
+    "CHANGELOG.md",
     "config.json",
     "index.cds"
   ],
@@ -58,9 +59,9 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.10.0-beta.6",
+    "@cap-js-community/event-queue": "^1.10.0",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
-    "@cap-js-community/websocket": "^1.6.2",
+    "@cap-js-community/websocket": "^1.6.3",
     "@sap/cds-common-content": "^2.1.0",
     "@sap/sbf": "^6.9.2",
     "commander": "^13.1.0",
@@ -82,7 +83,7 @@
     "@sap/cds-dk": "^8.9.1",
     "@sap/cds-lsp": "^8.9.1",
     "eslint": "^9.24.0",
-    "eslint-config-prettier": "^10.1.1",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-n": "^17.17.0",
     "globals": "^16.0.0",
