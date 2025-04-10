@@ -13,4 +13,3 @@ npm install github:cap-js-community/sap-afc-sdk
 afc init cf
 afc add -a broker,stub,mock,sample,test,http
 npm test
-mbt build
