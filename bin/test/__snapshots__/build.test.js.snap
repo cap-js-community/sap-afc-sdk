@@ -9,10 +9,7 @@ exports[`Build CF 1`] = `
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.9.4",
-    "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/sap-afc-sdk": "file:../../..",
-    "@cap-js-community/websocket": "^1.6.2",
     "@cap-js/hana": "^1",
     "@sap/cds": "^8",
     "@sap/xssec": "^4",
@@ -373,10 +370,7 @@ exports[`Build Kyma 1`] = `
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.9.4",
-    "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/sap-afc-sdk": "file:../../..",
-    "@cap-js-community/websocket": "^1.6.2",
     "@cap-js/hana": "^1",
     "@sap/cds": "^8",
     "@sap/xssec": "^4",
