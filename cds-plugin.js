@@ -444,6 +444,6 @@ function registerAfterReadJobFillLink(db) {
 }
 
 // Plugins
-module.export = (async () => {
+module.exports = (async () => {
   return await Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
 })();
