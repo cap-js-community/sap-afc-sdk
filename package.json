@@ -1,6 +1,6 @@
 {
   "name": "@cap-js-community/sap-afc-sdk",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "SAP Advanced Financial Closing SDK for CDS",
   "homepage": "https://cap.cloud.sap/",
   "engines": {
@@ -71,6 +71,7 @@
     "http-status-codes": "^2.3.0",
     "openurl": "^1.1.1",
     "prompt-sync": "^4.2.0",
+    "shelljs": "^0.9.2",
     "swagger-ui-express": "^5.0.1",
     "verror": "^1.10.1",
     "yaml": "^2.7.1"
@@ -89,7 +90,6 @@
     "globals": "^16.0.0",
     "jest": "^29.7.0",
     "prettier": "^3.5.3",
-    "shelljs": "^0.9.2",
     "ws": "^8.18.1"
   },
   "cds": {
