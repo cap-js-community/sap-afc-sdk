@@ -1,5 +1,10 @@
 "use strict";
 
-process.env.CDS_PLUGIN_PACKAGE = ".";
+const cds = require("@sap/cds");
 
-require("../cds-plugin");
+process.env.SAP_AFC_SDK_PLUGIN_PACKAGE = ".";
+
+module.exports = async (options) => {
+  await require("../cds-plugin");
+  return cds.server(options);
+};

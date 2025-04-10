@@ -19,7 +19,7 @@ const config = merge(require("./config.json"), cds.env.requires?.["sap-afc-sdk"]
 const SERVER_SUFFIX = "srv";
 const APPROUTER_SUFFIX = "approuter";
 
-process.env.CDS_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
+process.env.SAP_AFC_SDK_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
 cds.on("bootstrap", () => {
   secureRoutes();
@@ -174,7 +174,7 @@ function serveBroker() {
 }
 
 function serveUIs() {
-  if (process.env.CDS_PLUGIN_PACKAGE === "." && process.env.NODE_ENV !== "test") {
+  if (process.env.SAP_AFC_SDK_PLUGIN_PACKAGE === "." && process.env.NODE_ENV !== "test") {
     return;
   }
   if (!cds.env.requires?.["sap-afc-sdk"]?.ui) {
@@ -184,11 +184,13 @@ function serveUIs() {
   let uiShowLaunchpad = cds.env.requires?.["sap-afc-sdk"]?.ui?.launchpad;
   if (uiShowLaunchpad) {
     const packageRoot = cds.utils.path.resolve(
-      require.resolve(path.join(process.env.CDS_PLUGIN_PACKAGE, "package.json"), { paths: [cds.root] }),
+      require.resolve(path.join(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, "package.json"), { paths: [cds.root] }),
       "..",
     );
     if (!fs.existsSync(`${cds.root}/${cds.env.folders.app}appconfig/fioriSandboxConfig.json`)) {
-      cds.app.serve(`${uiPath}/${config.paths.launchpad}`).from(process.env.CDS_PLUGIN_PACKAGE, "/app/launchpad.html");
+      cds.app
+        .serve(`${uiPath}/${config.paths.launchpad}`)
+        .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, "/app/launchpad.html");
       cds.app.use(`/appconfig`, express.static(`${packageRoot}/app/appconfig`));
     } else {
       serveMergedAppConfig(packageRoot, uiPath);
@@ -203,11 +205,11 @@ function serveUIs() {
       if (uiShowLaunchpad) {
         cds.app
           .serve(`${uiPath}/${app}/webapp`)
-          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+          .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
       } else if (uiShowApp) {
         cds.app
           .serve(`${uiPath}/${app}`)
-          .from(process.env.CDS_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
+          .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
       }
       cds.app.use(`/${app}/webapp/odata/v4/*`, (req, res) => {
         res.redirect(
@@ -442,6 +444,6 @@ function registerAfterReadJobFillLink(db) {
 }
 
 // Plugins
-module.export = async () => {
-  await Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
-};
+module.export = (async () => {
+  return await Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
+})();
