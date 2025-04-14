@@ -217,6 +217,11 @@ CAP application.
 
 - Add AFC SDK
   - Terminal `npm install @cap-js-community/sap-afc-sdk`
+- Use `afc` command
+  - Add globally:
+    - Terminal: `npm install -g @cap-js-community/sap-afc-sdk`
+  - Use locally:
+    - Terminal: `npx afc`
 - Init Target Environment
   - Cloud Foundry:
     - Terminal: `afc init cf`

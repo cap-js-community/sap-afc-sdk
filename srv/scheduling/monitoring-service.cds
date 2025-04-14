@@ -1,6 +1,6 @@
 using scheduling from '../../db/scheduling';
 
-@path: '/odata/v4/job-scheduling/monitoring'
+@path: 'job-scheduling/monitoring'
 service SchedulingMonitoringService {
   entity JobDefinition @readonly          as projection on scheduling.JobDefinition;
   entity JobParameterDefinition @readonly as projection on scheduling.JobParameterDefinition;

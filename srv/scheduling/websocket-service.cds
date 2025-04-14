@@ -1,7 +1,7 @@
 using scheduling.JobStatusCode from '../../db/scheduling';
 
 @ws
-@path: '/ws/job-scheduling'
+@path: 'job-scheduling'
 service SchedulingWebsocketService {
 
   event jobStatusChanged {
