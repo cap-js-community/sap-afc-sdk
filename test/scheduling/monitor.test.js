@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { authorization, cleanData, clearEventQueue, connectToWS, processOutbox } = require("../helper");
+const { authorization, cleanData, clearEventQueue, connectToWS, processOutbox, callBatch } = require("../helper");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
@@ -40,6 +40,80 @@ describe("Monitoring Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("Get UI Flow", async () => {
+    let response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job?$count=true&$orderby=createdAt%20desc&$select=ID,createdAt,criticality,definition_name,modifiedAt,referenceID,status_code,testRun,version&$expand=definition($select=description,name),status($select=code,name)&$skip=0&$top=30",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)?$select=ID,createdAt,createdBy,definition_name,link,modifiedAt,modifiedBy,referenceID,status_code,testRun,version&$expand=definition($select=description,longDescription,name,supportsStartDateTime,supportsTestRun),status($select=code,name)",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/parameters?$count=true&$orderby=definition_name&$select=ID,definition_name,value&$expand=definition($select=dataType_code,job_name,mappingType_code,name,type_code;$expand=dataType($select=code,name),mappingType($select=code,name),type($select=code,name))&$skip=0&$top=10",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/messages?$count=true&$orderby=createdAt&$select=ID,code,createdAt,criticality,text&$expand=severity($select=code,name,numericCode)&$skip=0&$top=10",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/messages?$count=true&$orderby=createdAt&$select=ID,code,createdAt,criticality,text&$expand=severity($select=code,name,numericCode)&$skip=0&$top=10",
+    );
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/odata/v4/job-scheduling/monitoring/JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data");
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
+  it("Get UI Flow (batch)", async () => {
+    const response = await callBatch(POST, "/odata/v4/job-scheduling/monitoring/$batch", [
+      {
+        method: "GET",
+        url: "Job?$count=true&$orderby=createdAt%20desc&$select=ID,createdAt,criticality,definition_name,modifiedAt,referenceID,status_code,testRun,version&$expand=definition($select=description,name),status($select=code,name)&$skip=0&$top=30",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)?$select=ID,createdAt,createdBy,definition_name,link,modifiedAt,modifiedBy,referenceID,status_code,testRun,version&$expand=definition($select=description,longDescription,name,supportsStartDateTime,supportsTestRun),status($select=code,name)",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/parameters?$count=true&$orderby=definition_name&$select=ID,definition_name,value&$expand=definition($select=dataType_code,job_name,mappingType_code,name,type_code;$expand=dataType($select=code,name),mappingType($select=code,name),type($select=code,name))&$skip=0&$top=10",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/messages?$count=true&$orderby=createdAt&$select=ID,code,createdAt,criticality,text&$expand=severity($select=code,name,numericCode)&$skip=0&$top=10",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
+      },
+      {
+        method: "GET",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/messages?$count=true&$orderby=createdAt&$select=ID,code,createdAt,criticality,text&$expand=severity($select=code,name,numericCode)&$skip=0&$top=10",
+      },
+      {
+        method: "GET",
+        url: "JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
+        headers: [
+          "Accept: text/plain",
+        ]
+      }
+    ]);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);
@@ -71,11 +145,15 @@ describe("Monitoring Service", () => {
   it("Get Codelists", async () => {
     let response = await GET("/odata/v4/job-scheduling/monitoring/JobStatus");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/odata/v4/job-scheduling/monitoring/ResultType");
+    expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/odata/v4/job-scheduling/monitoring/ParameterType");
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/odata/v4/job-scheduling/monitoring/DataType");
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/odata/v4/job-scheduling/monitoring/MappingType");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/odata/v4/job-scheduling/monitoring/MessageSeverity");
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 

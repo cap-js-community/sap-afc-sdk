@@ -113,6 +113,79 @@ async function wait(milliseconds) {
   });
 }
 
+async function callBatch(POST, baseUrl, requests, boundary = "boundary") {
+  const payload = [];
+  for (const request of requests) {
+    payload.push(`--${boundary}`, "Content-Type: application/http", "");
+    payload.push(`${request.method} ${request.url} HTTP/1.1`);
+    payload.push(...(request.headers ?? []));
+    if (request.body) {
+      if (!request.headers.find((header) => {
+        return header.startsWith("Content-Type:");
+      })) {
+        payload.push("Content-Type: application/json");
+      }
+      payload.push(JSON.stringify(request.body));
+    } else {
+      payload.push("");
+    }
+  }
+  payload.push(`--${boundary}--`);
+  const response = await POST(baseUrl, payload.join("\r\n"), {
+    headers: {
+      "Content-Type": `multipart/mixed; boundary=${boundary}`,
+    },
+  });
+  if (![200, 202].includes(response.status)) {
+    const message = `Unexpected status \nActual: ${response.status}, Expected: 202`;
+    throw new Error(message);
+  }
+  return {
+    status: response.status,
+    data: splitMultipartResponse(response.data, boundary),
+  };
+}
+
+function splitMultipartResponse(body, boundary) {
+  body = Array.isArray(body) ? body.join("") : body;
+  return body
+    .split(new RegExp(`(?:^|\r\n)--${boundary}(?:\r\n|--\r\n$|--$)`))
+    .slice(1, -1)
+    .map((part) => {
+      const [_meta, ..._rest] = part.split("\r\n\r\n");
+      const multipart = _meta.match(/content-type:\s*multipart\/mixed;\s*boundary=([\w-]*)/i);
+      if (multipart !== null) {
+        const subBoundary = multipart[1];
+        return splitMultipartResponse(_rest.join("\r\n\r\n"), subBoundary);
+      } else {
+        const contentId = _meta.match(/content-id:\s*(\w+)/i) || undefined;
+        const contentTransferEncoding = _meta.match(/content-transfer-encoding:\s*(\w+)/i) || undefined;
+        const [_info, _body] = _rest;
+        const body = _body && _body.startsWith("{") ? JSON.parse(_body) : _body;
+        const [_status, ..._headers] = _info.split("\r\n");
+        const [_statusCode, statusText] = _status.split(/\s+/).slice(1);
+        const statusCode = parseInt(_statusCode);
+        const headers = {};
+        _headers.forEach((_header) => {
+          const splitPos = _header.indexOf(": ");
+          if (splitPos > 0) {
+            headers[_header.slice(0, splitPos)] = _header.slice(splitPos + 2);
+          }
+        });
+        return {
+          status: statusCode,
+          statusCode,
+          statusText,
+          headers,
+          body: statusCode < 400 ? body : undefined,
+          error: statusCode >= 400 ? body : undefined,
+          contentId: contentId && contentId[1],
+          contentTransferEncoding: contentTransferEncoding && contentTransferEncoding[1],
+        };
+      }
+    });
+}
+
 module.exports = {
   authorization: {
     default: ALICE,
@@ -125,4 +198,5 @@ module.exports = {
   processOutbox,
   connectToWS,
   wait,
+  callBatch
 };

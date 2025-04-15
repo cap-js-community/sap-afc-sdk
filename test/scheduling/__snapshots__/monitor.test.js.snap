@@ -2399,6 +2399,29 @@ exports[`Monitoring Service Get Codelists 1`] = `
 
 exports[`Monitoring Service Get Codelists 2`] = `
 {
+  "@odata.context": "$metadata#ResultType",
+  "value": [
+    {
+      "code": "data",
+      "descr": "Data",
+      "name": "Data",
+    },
+    {
+      "code": "link",
+      "descr": "Link",
+      "name": "Link",
+    },
+    {
+      "code": "message",
+      "descr": "Message",
+      "name": "Message",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get Codelists 3`] = `
+{
   "@odata.context": "$metadata#ParameterType",
   "value": [
     {
@@ -2420,7 +2443,7 @@ exports[`Monitoring Service Get Codelists 2`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 3`] = `
+exports[`Monitoring Service Get Codelists 4`] = `
 {
   "@odata.context": "$metadata#DataType",
   "value": [
@@ -2448,7 +2471,7 @@ exports[`Monitoring Service Get Codelists 3`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 4`] = `
+exports[`Monitoring Service Get Codelists 5`] = `
 {
   "@odata.context": "$metadata#MappingType",
   "value": [
@@ -2586,6 +2609,38 @@ exports[`Monitoring Service Get Codelists 4`] = `
       "code": "userResponsibleEmail",
       "descr": "User Responsible Email",
       "name": "User Responsible Email",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get Codelists 6`] = `
+{
+  "@odata.context": "$metadata#MessageSeverity",
+  "value": [
+    {
+      "code": "error",
+      "descr": "Error",
+      "name": "Error",
+      "numericCode": 4,
+    },
+    {
+      "code": "info",
+      "descr": "Information",
+      "name": "Information",
+      "numericCode": 2,
+    },
+    {
+      "code": "success",
+      "descr": "Success",
+      "name": "Success",
+      "numericCode": 1,
+    },
+    {
+      "code": "warning",
+      "descr": "Warning",
+      "name": "Warning",
+      "numericCode": 3,
     },
   ],
 }
@@ -3165,3 +3220,749 @@ exports[`Monitoring Service Get Jobs 2`] = `
   "version": "1",
 }
 `;
+
+exports[`Monitoring Service Get UI Flow (batch) 1`] = `
+[
+  {
+    "body": {
+      "@odata.context": "$metadata#Job",
+      "@odata.count": 3,
+      "value": [
+        {
+          "criticality": 5,
+          "definition": {
+            "description": "Job Definition 1",
+            "name": "JOB_1",
+          },
+          "definition_name": "JOB_1",
+          "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+          "status": {
+            "code": "requested",
+            "name": "Requested",
+          },
+          "status_code": "requested",
+          "testRun": false,
+          "version": "1",
+        },
+        {
+          "criticality": 5,
+          "definition": {
+            "description": "Job Definition 2",
+            "name": "JOB_2",
+          },
+          "definition_name": "JOB_2",
+          "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
+          "status": {
+            "code": "running",
+            "name": "Running",
+          },
+          "status_code": "running",
+          "testRun": true,
+          "version": "1",
+        },
+        {
+          "criticality": 2,
+          "definition": {
+            "description": "Job Definition 3",
+            "name": "JOB_3",
+          },
+          "definition_name": "JOB_3",
+          "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+          "status": {
+            "code": "completedWithError",
+            "name": "Completed with Error",
+          },
+          "status_code": "completedWithError",
+          "testRun": false,
+          "version": "1",
+        },
+      ],
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "$metadata#Job/$entity",
+      "definition": {
+        "description": "Job Definition 3",
+        "longDescription": "Job Definition 3",
+        "name": "JOB_3",
+        "supportsStartDateTime": false,
+        "supportsTestRun": true,
+      },
+      "definition_name": "JOB_3",
+      "link": "http://localhost:4004/<ID>",
+      "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+      "status": {
+        "code": "completedWithError",
+        "name": "Completed with Error",
+      },
+      "status_code": "completedWithError",
+      "testRun": false,
+      "version": "1",
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "../$metadata#JobResult",
+      "@odata.count": 3,
+      "value": [
+        {
+          "dataLink": "/odata/v4/job-scheduling/monitoring/JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
+          "filename": "test.txt",
+          "link": null,
+          "mimeType": "text/plain",
+          "name": "Data",
+          "type": {
+            "code": "data",
+            "name": "Data",
+          },
+          "type_code": "data",
+        },
+        {
+          "dataLink": null,
+          "filename": null,
+          "link": "https://sap.com",
+          "mimeType": null,
+          "name": "Link",
+          "type": {
+            "code": "link",
+            "name": "Link",
+          },
+          "type_code": "link",
+        },
+        {
+          "dataLink": null,
+          "filename": null,
+          "link": null,
+          "mimeType": null,
+          "name": "Message",
+          "type": {
+            "code": "message",
+            "name": "Message",
+          },
+          "type_code": "message",
+        },
+      ],
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "../$metadata#JobParameter",
+      "@odata.count": 5,
+      "value": [
+        {
+          "definition": {
+            "dataType": {
+              "code": "string",
+              "name": "String",
+            },
+            "dataType_code": "string",
+            "job_name": "JOB_3",
+            "mappingType": null,
+            "mappingType_code": null,
+            "name": "A",
+            "type": {
+              "code": "writableValue",
+              "name": "Writable Value",
+            },
+            "type_code": "writableValue",
+          },
+          "definition_name": "A",
+          "value": "ABC",
+        },
+        {
+          "definition": {
+            "dataType": {
+              "code": "number",
+              "name": "Number",
+            },
+            "dataType_code": "number",
+            "job_name": "JOB_3",
+            "mappingType": null,
+            "mappingType_code": null,
+            "name": "B",
+            "type": {
+              "code": "readOnlyValue",
+              "name": "Read-Only Value",
+            },
+            "type_code": "readOnlyValue",
+          },
+          "definition_name": "B",
+          "value": "13",
+        },
+        {
+          "definition": {
+            "dataType": {
+              "code": "boolean",
+              "name": "Boolean",
+            },
+            "dataType_code": "boolean",
+            "job_name": "JOB_3",
+            "mappingType": {
+              "code": "testRun",
+              "name": "Test Run",
+            },
+            "mappingType_code": "testRun",
+            "name": "C",
+            "type": {
+              "code": "mapping",
+              "name": "Mapping",
+            },
+            "type_code": "mapping",
+          },
+          "definition_name": "C",
+          "value": "false",
+        },
+        {
+          "definition": {
+            "dataType": {
+              "code": "number",
+              "name": "Number",
+            },
+            "dataType_code": "number",
+            "job_name": "JOB_3",
+            "mappingType": null,
+            "mappingType_code": null,
+            "name": "D",
+            "type": {
+              "code": "writableValue",
+              "name": "Writable Value",
+            },
+            "type_code": "writableValue",
+          },
+          "definition_name": "D",
+          "value": "15",
+        },
+        {
+          "definition": {
+            "dataType": {
+              "code": "datetime",
+              "name": "Date & Time",
+            },
+            "dataType_code": "datetime",
+            "job_name": "JOB_3",
+            "mappingType": null,
+            "mappingType_code": null,
+            "name": "E",
+            "type": {
+              "code": "writableValue",
+              "name": "Writable Value",
+            },
+            "type_code": "writableValue",
+          },
+          "definition_name": "E",
+          "value": "2025-01-02T00:00:00Z",
+        },
+      ],
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "../../$metadata#JobResultMessage",
+      "@odata.count": 3,
+      "value": [
+        {
+          "code": "ERROR_01",
+          "criticality": 1,
+          "severity": {
+            "code": "error",
+            "name": "Error",
+            "numericCode": 4,
+          },
+          "text": "This is an error",
+        },
+        {
+          "code": "WARNING_01",
+          "criticality": 2,
+          "severity": {
+            "code": "warning",
+            "name": "Warning",
+            "numericCode": 3,
+          },
+          "text": "This is a warning",
+        },
+        {
+          "code": "INFO_01",
+          "criticality": 5,
+          "severity": {
+            "code": "info",
+            "name": "Information",
+            "numericCode": 2,
+          },
+          "text": "This is an information",
+        },
+      ],
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "../$metadata#JobResult/$entity",
+      "dataLink": null,
+      "filename": null,
+      "link": null,
+      "mimeType": null,
+      "name": "Message",
+      "type": {
+        "code": "message",
+        "name": "Message",
+      },
+      "type_code": "message",
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": {
+      "@odata.context": "../../$metadata#JobResultMessage",
+      "@odata.count": 3,
+      "value": [
+        {
+          "code": "ERROR_01",
+          "criticality": 1,
+          "severity": {
+            "code": "error",
+            "name": "Error",
+            "numericCode": 4,
+          },
+          "text": "This is an error",
+        },
+        {
+          "code": "WARNING_01",
+          "criticality": 2,
+          "severity": {
+            "code": "warning",
+            "name": "Warning",
+            "numericCode": 3,
+          },
+          "text": "This is a warning",
+        },
+        {
+          "code": "INFO_01",
+          "criticality": 5,
+          "severity": {
+            "code": "info",
+            "name": "Information",
+            "numericCode": 2,
+          },
+          "text": "This is an information",
+        },
+      ],
+    },
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+  {
+    "body": "",
+    "contentId": undefined,
+    "contentTransferEncoding": "binary",
+    "error": undefined,
+    "headers": {
+      "content-disposition": "attachment; filename="test.txt"",
+      "content-type": "application/json;odata.metadata=minimal",
+      "odata-version": "4.0",
+    },
+    "status": 200,
+    "statusCode": 200,
+    "statusText": "OK",
+  },
+]
+`;
+
+exports[`Monitoring Service Get UI Flow 1`] = `
+{
+  "@odata.context": "$metadata#Job",
+  "@odata.count": 3,
+  "value": [
+    {
+      "criticality": 5,
+      "definition": {
+        "description": "Job Definition 1",
+        "name": "JOB_1",
+      },
+      "definition_name": "JOB_1",
+      "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+      "status": {
+        "code": "requested",
+        "name": "Requested",
+      },
+      "status_code": "requested",
+      "testRun": false,
+      "version": "1",
+    },
+    {
+      "criticality": 5,
+      "definition": {
+        "description": "Job Definition 2",
+        "name": "JOB_2",
+      },
+      "definition_name": "JOB_2",
+      "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
+      "status": {
+        "code": "running",
+        "name": "Running",
+      },
+      "status_code": "running",
+      "testRun": true,
+      "version": "1",
+    },
+    {
+      "criticality": 2,
+      "definition": {
+        "description": "Job Definition 3",
+        "name": "JOB_3",
+      },
+      "definition_name": "JOB_3",
+      "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+      "status": {
+        "code": "completedWithError",
+        "name": "Completed with Error",
+      },
+      "status_code": "completedWithError",
+      "testRun": false,
+      "version": "1",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 2`] = `
+{
+  "@odata.context": "$metadata#Job/$entity",
+  "definition": {
+    "description": "Job Definition 3",
+    "longDescription": "Job Definition 3",
+    "name": "JOB_3",
+    "supportsStartDateTime": false,
+    "supportsTestRun": true,
+  },
+  "definition_name": "JOB_3",
+  "link": "http://localhost:4004/<ID>",
+  "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+  "status": {
+    "code": "completedWithError",
+    "name": "Completed with Error",
+  },
+  "status_code": "completedWithError",
+  "testRun": false,
+  "version": "1",
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 3`] = `
+{
+  "@odata.context": "../$metadata#JobResult",
+  "@odata.count": 3,
+  "value": [
+    {
+      "dataLink": "/odata/v4/job-scheduling/monitoring/JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
+      "filename": "test.txt",
+      "link": null,
+      "mimeType": "text/plain",
+      "name": "Data",
+      "type": {
+        "code": "data",
+        "name": "Data",
+      },
+      "type_code": "data",
+    },
+    {
+      "dataLink": null,
+      "filename": null,
+      "link": "https://sap.com",
+      "mimeType": null,
+      "name": "Link",
+      "type": {
+        "code": "link",
+        "name": "Link",
+      },
+      "type_code": "link",
+    },
+    {
+      "dataLink": null,
+      "filename": null,
+      "link": null,
+      "mimeType": null,
+      "name": "Message",
+      "type": {
+        "code": "message",
+        "name": "Message",
+      },
+      "type_code": "message",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 4`] = `
+{
+  "@odata.context": "../$metadata#JobParameter",
+  "@odata.count": 5,
+  "value": [
+    {
+      "definition": {
+        "dataType": {
+          "code": "string",
+          "name": "String",
+        },
+        "dataType_code": "string",
+        "job_name": "JOB_3",
+        "mappingType": null,
+        "mappingType_code": null,
+        "name": "A",
+        "type": {
+          "code": "writableValue",
+          "name": "Writable Value",
+        },
+        "type_code": "writableValue",
+      },
+      "definition_name": "A",
+      "value": "ABC",
+    },
+    {
+      "definition": {
+        "dataType": {
+          "code": "number",
+          "name": "Number",
+        },
+        "dataType_code": "number",
+        "job_name": "JOB_3",
+        "mappingType": null,
+        "mappingType_code": null,
+        "name": "B",
+        "type": {
+          "code": "readOnlyValue",
+          "name": "Read-Only Value",
+        },
+        "type_code": "readOnlyValue",
+      },
+      "definition_name": "B",
+      "value": "13",
+    },
+    {
+      "definition": {
+        "dataType": {
+          "code": "boolean",
+          "name": "Boolean",
+        },
+        "dataType_code": "boolean",
+        "job_name": "JOB_3",
+        "mappingType": {
+          "code": "testRun",
+          "name": "Test Run",
+        },
+        "mappingType_code": "testRun",
+        "name": "C",
+        "type": {
+          "code": "mapping",
+          "name": "Mapping",
+        },
+        "type_code": "mapping",
+      },
+      "definition_name": "C",
+      "value": "false",
+    },
+    {
+      "definition": {
+        "dataType": {
+          "code": "number",
+          "name": "Number",
+        },
+        "dataType_code": "number",
+        "job_name": "JOB_3",
+        "mappingType": null,
+        "mappingType_code": null,
+        "name": "D",
+        "type": {
+          "code": "writableValue",
+          "name": "Writable Value",
+        },
+        "type_code": "writableValue",
+      },
+      "definition_name": "D",
+      "value": "15",
+    },
+    {
+      "definition": {
+        "dataType": {
+          "code": "datetime",
+          "name": "Date & Time",
+        },
+        "dataType_code": "datetime",
+        "job_name": "JOB_3",
+        "mappingType": null,
+        "mappingType_code": null,
+        "name": "E",
+        "type": {
+          "code": "writableValue",
+          "name": "Writable Value",
+        },
+        "type_code": "writableValue",
+      },
+      "definition_name": "E",
+      "value": "2025-01-02T00:00:00Z",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 5`] = `
+{
+  "@odata.context": "../../$metadata#JobResultMessage",
+  "@odata.count": 3,
+  "value": [
+    {
+      "code": "ERROR_01",
+      "criticality": 1,
+      "severity": {
+        "code": "error",
+        "name": "Error",
+        "numericCode": 4,
+      },
+      "text": "This is an error",
+    },
+    {
+      "code": "WARNING_01",
+      "criticality": 2,
+      "severity": {
+        "code": "warning",
+        "name": "Warning",
+        "numericCode": 3,
+      },
+      "text": "This is a warning",
+    },
+    {
+      "code": "INFO_01",
+      "criticality": 5,
+      "severity": {
+        "code": "info",
+        "name": "Information",
+        "numericCode": 2,
+      },
+      "text": "This is an information",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 6`] = `
+{
+  "@odata.context": "../$metadata#JobResult/$entity",
+  "dataLink": null,
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Message",
+  "type": {
+    "code": "message",
+    "name": "Message",
+  },
+  "type_code": "message",
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 7`] = `
+{
+  "@odata.context": "../../$metadata#JobResultMessage",
+  "@odata.count": 3,
+  "value": [
+    {
+      "code": "ERROR_01",
+      "criticality": 1,
+      "severity": {
+        "code": "error",
+        "name": "Error",
+        "numericCode": 4,
+      },
+      "text": "This is an error",
+    },
+    {
+      "code": "WARNING_01",
+      "criticality": 2,
+      "severity": {
+        "code": "warning",
+        "name": "Warning",
+        "numericCode": 3,
+      },
+      "text": "This is a warning",
+    },
+    {
+      "code": "INFO_01",
+      "criticality": 5,
+      "severity": {
+        "code": "info",
+        "name": "Information",
+        "numericCode": 2,
+      },
+      "text": "This is an information",
+    },
+  ],
+}
+`;
+
+exports[`Monitoring Service Get UI Flow 8`] = `"This is a test"`;

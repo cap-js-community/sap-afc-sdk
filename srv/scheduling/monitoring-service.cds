@@ -32,7 +32,7 @@ extend SchedulingMonitoringService.JobResult with columns {
     when
       #data
     then
-      'odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
+      '/odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
     else
       null
   end as dataLink : String(5000)
