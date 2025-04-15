@@ -120,9 +120,11 @@ async function callBatch(POST, baseUrl, requests, boundary = "boundary") {
     payload.push(`${request.method} ${request.url} HTTP/1.1`);
     payload.push(...(request.headers ?? []));
     if (request.body) {
-      if (!request.headers.find((header) => {
-        return header.startsWith("Content-Type:");
-      })) {
+      if (
+        !request.headers.find((header) => {
+          return header.startsWith("Content-Type:");
+        })
+      ) {
         payload.push("Content-Type: application/json");
       }
       payload.push(JSON.stringify(request.body));
@@ -198,5 +200,5 @@ module.exports = {
   processOutbox,
   connectToWS,
   wait,
-  callBatch
+  callBatch,
 };

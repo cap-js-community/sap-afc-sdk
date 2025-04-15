@@ -106,10 +106,8 @@ describe("Monitoring Service", () => {
       {
         method: "GET",
         url: "JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
-        headers: [
-          "Accept: text/plain",
-        ]
-      }
+        headers: ["Accept: text/plain"],
+      },
     ]);
     expect(cleanData(response.data)).toMatchSnapshot();
   });
