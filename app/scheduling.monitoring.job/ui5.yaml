@@ -34,6 +34,7 @@ builder:
       afterTask: generateVersionInfo
       configuration:
         archiveName: scheduling.monitoring.job
+        relativePaths: true
         additionalFiles:
           - xs-app.json
 ---

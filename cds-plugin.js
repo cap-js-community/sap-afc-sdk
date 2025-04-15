@@ -2,7 +2,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const url = require("url");
 const cds = require("@sap/cds");
 const express = require("express");
 const helmet = require("helmet");
@@ -211,24 +210,6 @@ function serveUIs() {
           .serve(`${uiPath}/${app}`)
           .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
       }
-      cds.app.use(`/${app}/webapp/odata/v4/*`, (req, res) => {
-        res.redirect(
-          308,
-          url.format({
-            pathname: "/odata/v4/" + req.params[0],
-            query: req.query,
-          }),
-        );
-      });
-      cds.app.use(`/${app}/odata/v4/*`, (req, res) => {
-        res.redirect(
-          308,
-          url.format({
-            pathname: "/odata/v4/" + req.params[0],
-            query: req.query,
-          }),
-        );
-      });
     }
   }
 }
