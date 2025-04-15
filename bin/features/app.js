@@ -6,10 +6,7 @@ const path = require("path");
 
 const config = require("../config.json");
 
-const Files = [
-  "appconfig/fioriSandboxConfig.json",
-  "launchpad.html"
-];
+const Files = ["appconfig/fioriSandboxConfig.json", "launchpad.html"];
 
 module.exports = () => {
   try {
