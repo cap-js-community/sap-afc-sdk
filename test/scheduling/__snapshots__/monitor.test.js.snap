@@ -223,7 +223,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <NavigationProperty Name="messages" Type="Collection(SchedulingMonitoringService.JobResultMessage)" Partner="result">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <Property Name="dataLink" Type="Edm.String" MaxLength="5000"/>
       </EntityType>
       <EntityType Name="JobResultMessage">
         <Key>
@@ -1132,7 +1131,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   </Annotation>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="mimeType"/>
+                  <PropertyValue Property="Value" Path="filename"/>
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
@@ -1144,9 +1143,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
                     </If>
                   </Annotation>
                 </Record>
-                <Record Type="UI.DataFieldWithUrl">
-                  <PropertyValue Property="Value" Path="filename"/>
-                  <PropertyValue Property="Url" Path="dataLink"/>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="mimeType"/>
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
@@ -1211,7 +1209,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               </Annotation>
             </Record>
             <Record Type="UI.DataField">
-              <PropertyValue Property="Value" Path="mimeType"/>
+              <PropertyValue Property="Value" Path="filename"/>
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
@@ -1223,9 +1221,8 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 </If>
               </Annotation>
             </Record>
-            <Record Type="UI.DataFieldWithUrl">
-              <PropertyValue Property="Value" Path="filename"/>
-              <PropertyValue Property="Url" Path="dataLink"/>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="mimeType"/>
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
@@ -1362,7 +1359,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="Mime Type"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/filename">
-        <Annotation Term="Common.Label" String="Data"/>
+        <Annotation Term="Common.Label" String="File Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/data">
         <Annotation Term="Core.MediaType" Path="mimeType"/>
@@ -1372,15 +1369,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="Filename" Path="filename"/>
           </Record>
         </Annotation>
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/messages">
         <Annotation Term="Common.Label" String="Messages"/>
-      </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/dataLink">
-        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-        <Annotation Term="Common.Label" String="Data Link"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResultMessage">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
@@ -3327,7 +3320,6 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
       "@odata.count": 3,
       "value": [
         {
-          "dataLink": "/odata/v4/job-scheduling/monitoring/JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
           "filename": "test.txt",
           "link": null,
           "mimeType": "text/plain",
@@ -3339,7 +3331,6 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
           "type_code": "data",
         },
         {
-          "dataLink": null,
           "filename": null,
           "link": "https://sap.com",
           "mimeType": null,
@@ -3351,7 +3342,6 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
           "type_code": "link",
         },
         {
-          "dataLink": null,
           "filename": null,
           "link": null,
           "mimeType": null,
@@ -3547,7 +3537,6 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
   {
     "body": {
       "@odata.context": "../$metadata#JobResult/$entity",
-      "dataLink": null,
       "filename": null,
       "link": null,
       "mimeType": null,
@@ -3720,7 +3709,6 @@ exports[`Monitoring Service Get UI Flow 3`] = `
   "@odata.count": 3,
   "value": [
     {
-      "dataLink": "/odata/v4/job-scheduling/monitoring/JobResult(b2eb590f-9505-4fd6-a5e2-511a1b2ff47f)/data",
       "filename": "test.txt",
       "link": null,
       "mimeType": "text/plain",
@@ -3732,7 +3720,6 @@ exports[`Monitoring Service Get UI Flow 3`] = `
       "type_code": "data",
     },
     {
-      "dataLink": null,
       "filename": null,
       "link": "https://sap.com",
       "mimeType": null,
@@ -3744,7 +3731,6 @@ exports[`Monitoring Service Get UI Flow 3`] = `
       "type_code": "link",
     },
     {
-      "dataLink": null,
       "filename": null,
       "link": null,
       "mimeType": null,
@@ -3913,7 +3899,6 @@ exports[`Monitoring Service Get UI Flow 5`] = `
 exports[`Monitoring Service Get UI Flow 6`] = `
 {
   "@odata.context": "../$metadata#JobResult/$entity",
-  "dataLink": null,
   "filename": null,
   "link": null,
   "mimeType": null,

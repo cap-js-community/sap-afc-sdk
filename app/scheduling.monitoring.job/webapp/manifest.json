@@ -163,6 +163,20 @@
                     "route": "JobResultObjectPage"
                   }
                 }
+              },
+              "controlConfiguration": {
+                "results/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "columns": {
+                    "data": {
+                      "header": "{i18n>Data}",
+                      "position": {
+                        "anchor": "DataFieldWithUrl::mimeType",
+                        "placement": "After"
+                      },
+                      "template": "scheduling.monitoring.job.ext.fragment.data"
+                    }
+                  }
+                }
               }
             }
           }
@@ -185,7 +199,19 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/JobResult"
+              "contextPath": "/JobResult",
+              "content": {
+                "header": {
+                  "actions": {
+                    "download": {
+                      "press": "scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "visible": "{= %{type_code} === 'data'}",
+                      "enabled": true,
+                      "text": "{i18n>Download}"
+                    }
+                  }
+                }
+              }
             }
           }
         }

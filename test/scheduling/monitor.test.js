@@ -50,7 +50,7 @@ describe("Monitoring Service", () => {
     );
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(
-      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
     );
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(
@@ -62,7 +62,7 @@ describe("Monitoring Service", () => {
     );
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(
-      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
+      "/odata/v4/job-scheduling/monitoring/Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
     );
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(
@@ -85,7 +85,7 @@ describe("Monitoring Service", () => {
       },
       {
         method: "GET",
-        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results?$count=true&$orderby=name&$select=ID,filename,link,mimeType,name,type_code&$expand=type($select=code,name)&$skip=0&$top=10",
       },
       {
         method: "GET",
@@ -97,7 +97,7 @@ describe("Monitoring Service", () => {
       },
       {
         method: "GET",
-        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,dataLink,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
+        url: "Job(5a89dfec-59f9-4a91-90fe-3c7ca7407103)/results(c2eb590f-9505-4fd6-a5e2-511a1b2ff47f)?$select=ID,filename,link,mimeType,name,type_code&$expand=type($select=code,name)",
       },
       {
         method: "GET",

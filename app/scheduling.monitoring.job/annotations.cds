@@ -315,15 +315,15 @@ annotate service.JobResult with @(
       },
       {
         $Type         : 'UI.DataField',
-        Value         : mimeType,
+        Value         : filename,
         ![@UI.Hidden] : (type.code != 'data' ? true : false)
       },
       {
-        $Type         : 'UI.DataFieldWithUrl',
-        Value         : filename,
-        Url           : dataLink,
+        $Type         : 'UI.DataField',
+        Value         : mimeType,
         ![@UI.Hidden] : (type.code != 'data' ? true : false)
-      }
+      },
+
     ],
   },
   UI.HeaderFacets        : [{
@@ -354,13 +354,12 @@ annotate service.JobResult with @(
     },
     {
       $Type         : 'UI.DataField',
-      Value         : mimeType,
+      Value         : filename,
       ![@UI.Hidden] : (type.code != 'data' ? true : false)
     },
     {
-      $Type         : 'UI.DataFieldWithUrl',
-      Value         : filename,
-      Url           : dataLink,
+      $Type         : 'UI.DataField',
+      Value         : mimeType,
       ![@UI.Hidden] : (type.code != 'data' ? true : false)
     }
   ],
@@ -386,10 +385,10 @@ annotate service.JobResult with @(
 );
 
 annotate service.JobResult {
-  job      @UI.Hidden;
-  type     @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
-  link     @HTML5.LinkTarget: '_blank';
-  dataLink @HTML5.LinkTarget: '_blank';
+  job   @UI.Hidden;
+  type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
+  link  @HTML5.LinkTarget: '_blank';
+  data  @UI.Hidden;
 };
 
 annotate service.JobResultMessage with @(

@@ -134,7 +134,7 @@ entity JobResult : cuid, {
   @title: '{i18n>MimeType}'
   mimeType : String(255);
 
-  @title: '{i18n>Data}'
+  @title: '{i18n>Filename}'
   filename : String(5000);
 
   @title: '{i18n>Data}'

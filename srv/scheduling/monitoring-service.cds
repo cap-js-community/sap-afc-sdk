@@ -26,18 +26,6 @@ annotate SchedulingMonitoringService.JobResult {
   data     @Core.MediaType: mimeType  @Core.ContentDisposition.Type: 'attachment'  @Core.ContentDisposition.Filename: filename;
 };
 
-extend SchedulingMonitoringService.JobResult with columns {
-  @title: '{i18n>DataLink}'
-  case type.code
-    when
-      #data
-    then
-      '/odata/v4/job-scheduling/monitoring/JobResult(' || ID || ')/data'
-    else
-      null
-  end as dataLink : String(5000)
-};
-
 extend SchedulingMonitoringService.Job with columns {
   @title: '{i18n>Criticality}'
   case status.code
