@@ -6,7 +6,7 @@ sap.ui.define([], function () {
       const baseUrl = this.getModel().getServiceUrl();
       const ID = event.getObject?.()?.ID ?? event.getSource?.().getBindingContext?.().getObject()?.ID;
       if (ID) {
-        window.open(`${baseUrl}/JobResult(${ID})/data`, "_self");
+        window.open(`${baseUrl}JobResult(${ID})/data`, "_self");
       }
     },
   };
