@@ -207,7 +207,8 @@
                       "press": "scheduling.monitoring.job.ext.fragment.data.onPress",
                       "visible": "{= %{type_code} === 'data'}",
                       "enabled": true,
-                      "text": "{i18n>Download}"
+                      "text": "{i18n>Download}",
+                      "icon": "sap-icon://download"
                     }
                   }
                 }
