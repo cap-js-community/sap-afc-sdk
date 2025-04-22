@@ -33,11 +33,11 @@ service SchedulingProviderService {
     },
     {
       Name       : 'name',
-      Description: 'Allows case-sensitive filtering of query results by search on name. Wildcard support at start and end via *. Example: ?name=JOB* (optional)'
+      Description: 'Allows case-sensitive filtering of query results by search on name. Wildcard support at start and end via &ast;. Example: ?name=JOB&ast; (optional)'
     },
     {
       Name       : 'search',
-      Description: 'Allows case-insensitive filtering of query results by search on name, description and long description. Wildcard support at start and end via *. Example: ?search=Job* (optional)'
+      Description: 'Allows case-insensitive filtering of query results by search on name, description and long description. Example: ?search=Job (optional)'
     }
   ]
   @title                                           : null
