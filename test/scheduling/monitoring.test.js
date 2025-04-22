@@ -116,7 +116,7 @@ describe("Monitoring Service", () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);
 
-    let response = await POST(`/odata/v4/job-scheduling/monitoring/Job('${ID}')/cancel`, {});
+    let response = await POST(`/odata/v4/job-scheduling/monitoring/Job(${ID})/cancel`, {});
     expect(response.headers["sap-messages"]).toBe(`[{"code":"200","message":"Job was canceled.","numericSeverity":1}]`);
     expect(response.status).toBe(200);
     expect(response.data.status_code).toBe("cancelRequested");
@@ -185,25 +185,25 @@ describe("Monitoring Service", () => {
 
     it("PUT Job Job Parameter Definitions", async () => {
       await expect(
-        PUT("/odata/v4/job-scheduling/monitoring/JobDefinition/('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
+        PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')/parameters(name='A',job_name='JOB_1')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
     });
 
     it("DELETE Job Job Parameter Definitions", async () => {
       await expect(
-        DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition/JOB_1/parameters(name='A',jobName='JOB_1')", {}),
+        DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition/JOB_1/parameters(name='A',job_name='JOB_1')", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
     });
 
     it("PUT Job", async () => {
       await expect(
-        PUT("/odata/v4/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
+        PUT("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
     it("DELETE Job", async () => {
       await expect(
-        DELETE("/odata/v4/job-scheduling/monitoring/Job('3a89dfec-59f9-4a91-90fe-3c7ca7407103')", {}),
+        DELETE("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
       ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
