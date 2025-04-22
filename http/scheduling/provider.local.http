@@ -1,34 +1,39 @@
+@port=4004
+@host=localhost:{{port}}
+@username=alice
+@password=alice
+
 ### Job Definition
-GET http://localhost:4004/api/job-scheduling/v1/JobDefinition
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/JobDefinition
+Authorization: Basic {{username}} {{password}}
 
 ### Job Definition Parameters
-GET http://localhost:4004/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
+Authorization: Basic {{username}} {{password}}
 
 ### Job
-GET http://localhost:4004/api/job-scheduling/v1/Job
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/Job
+Authorization: Basic {{username}} {{password}}
 
 ### Job Parameters
-GET http://localhost:4004/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+Authorization: Basic {{username}} {{password}}
 
 ### Job Results
-GET http://localhost:4004/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+Authorization: Basic {{username}} {{password}}
 
 ### Job Result Messages
-GET http://localhost:4004/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+Authorization: Basic {{username}} {{password}}
 
 ### Job Result Message Data
-GET http://localhost:4004/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
-Authorization: Basic alice alice
+GET http://{{host}}/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+Authorization: Basic {{username}} {{password}}
 
 ### Create Job
-POST http://localhost:4004/api/job-scheduling/v1/Job
-Authorization: Basic alice alice
+POST http://{{host}}/api/job-scheduling/v1/Job
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -58,6 +63,6 @@ Content-Type: application/json
 }
 
 ### Cancel Job
-POST http://localhost:4004/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
-Authorization: Basic alice alice
+POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json

@@ -1,10 +1,15 @@
+@port=4004
+@host=localhost:{{port}}
+@username=zeus
+@password=zeus
+
 ### Feature Toggles state
-GET http://localhost:4004/rest/feature/state
-Authorization: Basic zeus zeus
+GET http://{{host}}/rest/feature/state
+Authorization: Basic {{username}} {{password}}
 
 ### Event Queue active
-POST http://localhost:4004/rest/feature/redisUpdate
-Authorization: Basic zeus zeus
+POST http://{{host}}/rest/feature/redisUpdate
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -13,8 +18,8 @@ Content-Type: application/json
 }
 
 ### Event Queue instance load limit
-POST http://localhost:4004/rest/feature/redisUpdate
-Authorization: Basic zeus zeus
+POST http://{{host}}/rest/feature/redisUpdate
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -23,8 +28,8 @@ Content-Type: application/json
 }
 
 ### Remove: Event Queue active
-POST http://localhost:4004/rest/feature/redisUpdate
-Authorization: Basic zeus zeus
+POST http://{{host}}/rest/feature/redisUpdate
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -36,8 +41,8 @@ Content-Type: application/json
 }
 
 ### Remove: Event Queue instance load limit
-POST http://localhost:4004/rest/feature/redisUpdate
-Authorization: Basic zeus zeus
+POST http://{{host}}/rest/feature/redisUpdate
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {

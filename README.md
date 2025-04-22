@@ -193,15 +193,16 @@ CAP application.
 
 **SAP Build Code**:
 
-- Open SAP Build Code Lobby
+- Open SAP Build Lobby
 - Press `Create`
-- Select `Build an Application`
-  - Choose `SAP Build Code`
-  - Choose `Full-Stack Application`
-- Provide Project Name
-- Select Development Stack: `Node.js`
+- Select objective `Application`
+- Choose category `Full-Stack`
+- Select type `Full-Stack Node.JS`
+- Provide project name
+- Press `Review`
 - Press `Create`
-- Continue with `cds` CLI, [adding features](#add-features)
+- Open project in SAP Business Application Studio
+- Continue with `cds` CLI, [adding features](#features)
 
 **CDS Command-Line-Interface**:
 

@@ -129,26 +129,26 @@ describe("API", () => {
   it("GET Job Definitions (search)", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition?search=JOB_1");
     expect(response.data).toHaveLength(1);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=JoB_*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=JoB_");
     expect(response.data).toHaveLength(6);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*Ob_2");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=Ob_2");
     expect(response.data).toHaveLength(1);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*OB*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=OB");
     expect(response.data).toHaveLength(6);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*O*B*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=O*B");
     expect(response.data).toHaveLength(0);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=job_1");
     expect(response.data).toHaveLength(1);
 
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job definition 1");
     expect(response.data).toHaveLength(1);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job def*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=Job def");
     expect(response.data).toHaveLength(6);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob definition 1");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=ob definition 1");
     expect(response.data).toHaveLength(1);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob def*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=ob def");
     expect(response.data).toHaveLength(6);
-    response = await GET("/api/job-scheduling/v1/JobDefinition?search=*ob*def*");
+    response = await GET("/api/job-scheduling/v1/JobDefinition?search=ob*def");
     expect(response.data).toHaveLength(0);
     response = await GET("/api/job-scheduling/v1/JobDefinition?search=job definition 1");
     expect(response.data).toHaveLength(1);

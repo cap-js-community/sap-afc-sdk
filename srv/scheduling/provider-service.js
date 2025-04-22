@@ -44,7 +44,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         req.query.where(`name like '${wildcard(req.req.query.name)}'`);
       }
       if (req.req?.query?.search) {
-        const search = wildcard(req.req.query.search);
+        const search = `%${req.req.query.search}%`;
         req.query
           .where(`lower(name) like lower('${search}')`)
           .or(`lower(description) like lower('${search}')`)
