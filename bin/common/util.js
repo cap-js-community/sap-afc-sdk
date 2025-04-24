@@ -9,7 +9,7 @@ function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
-    const newContent = callback(content) || content;
+    const newContent = callback(content) ?? content;
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
       return true;
@@ -22,8 +22,8 @@ function adjustLines(file, callback) {
   return adjustText(file, (content) => {
     const newLines = [];
     for (const line of content.split("\n")) {
-      const adjustedLine = callback(line) || line;
-      if (adjustedLine !== undefined && adjustedLine !== null) {
+      const adjustedLine = callback(line) ?? line;
+      if (adjustedLine !== null) {
         if (Array.isArray(adjustedLine)) {
           newLines.push(...adjustedLine);
         } else {
@@ -52,7 +52,7 @@ function adjustJSON(file, callback) {
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
     const json = JSON.parse(content);
-    const newJson = callback(json) || json;
+    const newJson = callback(json) ?? json;
     const newContent = JSON.stringify(newJson, null, 2);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
@@ -67,7 +67,7 @@ function adjustYAML(file, callback) {
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
     const yml = yaml.parse(content);
-    const newYml = callback(yml) || yml;
+    const newYml = callback(yml) ?? yml;
     const newContent = yaml.stringify(newYml);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
@@ -82,8 +82,34 @@ function adjustYAMLDocument(file, callback) {
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
     const yml = yaml.parseDocument(content);
-    const newYml = callback(yml) || yml;
+    const newYml = callback(yml) ?? yml;
     const newContent = newYml.toString();
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent, "utf8");
+      return true;
+    }
+  }
+  return false;
+}
+
+function adjustYAMLAllDocument(file, callback) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    const ymls = yaml.parseAllDocuments(content);
+    const newYmls = [];
+    for (const yml of ymls) {
+      const newYml = callback(yml);
+      if (newYml === null) {
+        continue;
+      }
+      newYmls.push(newYml ?? yml);
+    }
+    const newContent = newYmls
+      .map((yml) => {
+        return yml.toString();
+      })
+      .join("");
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
       return true;
@@ -122,6 +148,7 @@ module.exports = {
   adjustJSON,
   adjustYAML,
   adjustYAMLDocument,
+  adjustYAMLAllDocument,
   copyTemplate,
   generateHashBrokerPassword,
 };
