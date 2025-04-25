@@ -2,16 +2,32 @@
 
 const cds = require("@sap/cds");
 
-function merge(...objects) {
+function merge(objects, { array = "replace", mergeKey = "id" } = {}) {
   const isObject = (obj) => obj && typeof obj === "object";
   return objects.reduce((result, object) => {
     Object.keys(object).forEach((key) => {
       const currentValue = result[key];
       const objectValue = object[key];
       if (Array.isArray(currentValue) && Array.isArray(objectValue)) {
-        result[key] = currentValue.concat(...objectValue);
+        if (!array || array === "replace") {
+          result[key] = objectValue;
+        } else if (array === "concat") {
+          result[key] = currentValue.concat(...objectValue);
+        } else if (array === "merge" && objectValue.length > 0 && objectValue[0][mergeKey] !== undefined) {
+          for (let i = 0; i < objectValue.length; i++) {
+            const objectEntry = objectValue[i];
+            const currentEntry = currentValue.find((entry) => entry[mergeKey] === objectEntry[mergeKey]);
+            if (currentEntry) {
+              objectValue[i] = merge([currentEntry, objectEntry], { array, mergeKey });
+            } else {
+              currentValue.push(objectEntry);
+            }
+          }
+        } else {
+          result[key] = objectValue;
+        }
       } else if (isObject(currentValue) && isObject(objectValue)) {
-        result[key] = merge(currentValue, objectValue);
+        result[key] = merge([currentValue, objectValue], { array, mergeKey });
       } else {
         result[key] = objectValue;
       }

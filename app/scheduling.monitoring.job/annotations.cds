@@ -1,6 +1,6 @@
-using SchedulingMonitoringService as service from '../../srv/scheduling/monitoring-service';
+using SchedulingMonitoringService from '../../srv/scheduling/monitoring-service';
 
-annotate service.Job with @(
+annotate SchedulingMonitoringService.Job with @(
   UI.Identification            : [{
     $Type             : 'UI.DataFieldForAction',
     Label             : '{i18n>Cancel}',
@@ -179,7 +179,7 @@ annotate service.Job with @(
   ],
 );
 
-annotate service.Job {
+annotate SchedulingMonitoringService.Job {
   status      @Common.ValueListWithFixedValues: true  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
   link        @HTML5.LinkTarget: '_blank';
   definition  @ValueList                      : {
@@ -188,7 +188,7 @@ annotate service.Job {
   }                                                   @Common.Text: definition.description  @Common.TextArrangement: #TextFirst;
 };
 
-annotate service.Job actions {
+annotate SchedulingMonitoringService.Job actions {
   cancel  @Common.IsActionCritical  @Core.OperationAvailable: {$edmJson: {$Or: [
     {$Eq: [
       {$Path: 'in/status_code'},
@@ -201,9 +201,9 @@ annotate service.Job actions {
   ]}}
 };
 
-annotate service.Job with @(UI.LineItem.@UI.Criticality: criticality, );
+annotate SchedulingMonitoringService.Job with @(UI.LineItem.@UI.Criticality: criticality, );
 
-annotate service.JobParameter with @(
+annotate SchedulingMonitoringService.JobParameter with @(
   UI.FieldGroup #Details: {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -281,17 +281,17 @@ annotate service.JobParameter with @(
   UI.SelectionFields    : [definition.name],
 );
 
-annotate service.JobParameter {
+annotate SchedulingMonitoringService.JobParameter {
   job @UI.Hidden;
 }
 
-annotate service.JobParameterDefinition {
+annotate SchedulingMonitoringService.JobParameterDefinition {
   type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
   dataType     @Common.ValueListWithFixedValues: true  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
   mappingType  @Common.ValueListWithFixedValues: true  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate service.JobResult with @(
+annotate SchedulingMonitoringService.JobResult with @(
   UI.FieldGroup #Details : {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -384,14 +384,14 @@ annotate service.JobResult with @(
   UI.SelectionFields     : [],
 );
 
-annotate service.JobResult {
+annotate SchedulingMonitoringService.JobResult {
   job   @UI.Hidden;
   type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
   link  @HTML5.LinkTarget: '_blank';
   data  @UI.Hidden;
 };
 
-annotate service.JobResultMessage with @(
+annotate SchedulingMonitoringService.JobResultMessage with @(
   UI.FieldGroup #Details: {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -457,13 +457,13 @@ annotate service.JobResultMessage with @(
   UI.SelectionFields    : [],
 );
 
-annotate service.JobResultMessage {
+annotate SchedulingMonitoringService.JobResultMessage {
   result    @UI.Hidden;
   severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate service.MessageSeverity {
+annotate SchedulingMonitoringService.MessageSeverity {
   numericCode  @Common.ValueListWithFixedValues: true  @Common.Text: name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate service.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );
+annotate SchedulingMonitoringService.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );

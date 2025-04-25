@@ -12,7 +12,7 @@ const {
 } = require("../../src/util/helper");
 
 describe("Helper", () => {
-  it("merge", async () => {
+  it("merge (array replace)", async () => {
     const objects = [
       {
         a: 1,
@@ -45,7 +45,52 @@ describe("Helper", () => {
         },
       },
     ];
-    expect(merge(...objects)).toEqual({
+    expect(merge(objects)).toEqual({
+      a: 3,
+      b: "3",
+      c: ["3"],
+      d: {
+        da: 3,
+        db: "3",
+        dc: ["3"],
+      },
+    });
+  });
+
+  it("merge (array concat)", async () => {
+    const objects = [
+      {
+        a: 1,
+        b: "1",
+        c: ["1"],
+        d: {
+          da: 1,
+          db: "1",
+          dc: ["1"],
+        },
+      },
+      {
+        a: 2,
+        b: "2",
+        c: ["2"],
+        d: {
+          da: 2,
+          db: "2",
+          dc: ["2"],
+        },
+      },
+      {
+        a: 3,
+        b: "3",
+        c: ["3"],
+        d: {
+          da: 3,
+          db: "3",
+          dc: ["3"],
+        },
+      },
+    ];
+    expect(merge(objects, { array: "concat" })).toEqual({
       a: 3,
       b: "3",
       c: ["1", "2", "3"],
@@ -53,6 +98,116 @@ describe("Helper", () => {
         da: 3,
         db: "3",
         dc: ["1", "2", "3"],
+      },
+    });
+  });
+
+  it("merge (array id)", async () => {
+    let objects = [
+      {
+        a: 1,
+        b: "1",
+        c: [{ id: "1", x: "1" }],
+        d: {
+          da: 1,
+          db: "1",
+          dc: [{ id: "1", x: "1" }],
+        },
+      },
+      {
+        a: 2,
+        b: "2",
+        c: [
+          { id: "1", x: "2" },
+          { id: "2", x: "2" },
+        ],
+        d: {
+          da: 2,
+          db: "2",
+          dc: [
+            { id: "1", x: "2" },
+            { id: "2", x: "2" },
+          ],
+        },
+      },
+      {
+        a: 3,
+        b: "3",
+        c: [
+          { id: "1", x: "3" },
+          { id: "2", x: "3" },
+          { id: "3", x: "3" },
+        ],
+        d: {
+          da: 3,
+          db: "3",
+          dc: [
+            { id: "1", x: "3" },
+            { id: "2", x: "3" },
+            { id: "3", x: "3" },
+          ],
+        },
+      },
+    ];
+    expect(merge(objects, { array: "merge", mergeKey: "id" })).toEqual({
+      a: 3,
+      b: "3",
+      c: [
+        { id: "1", x: "1" },
+        { id: "2", x: "2" },
+        { id: "3", x: "3" },
+      ],
+      d: {
+        da: 3,
+        db: "3",
+        dc: [
+          { id: "1", x: "1" },
+          { id: "2", x: "2" },
+          { id: "3", x: "3" },
+        ],
+      },
+    });
+
+    objects = [
+      {
+        a: 1,
+        b: "1",
+        c: ["1"],
+        d: {
+          da: 1,
+          db: "1",
+          dc: ["1"],
+        },
+      },
+      {
+        a: 2,
+        b: "2",
+        c: ["2"],
+        d: {
+          da: 2,
+          db: "2",
+          dc: ["2"],
+        },
+      },
+      {
+        a: 3,
+        b: "3",
+        c: ["3"],
+        d: {
+          da: 3,
+          db: "3",
+          dc: ["3"],
+        },
+      },
+    ];
+    expect(merge(objects, { array: "merge", mergeKey: "id" })).toEqual({
+      a: 3,
+      b: "3",
+      c: ["3"],
+      d: {
+        da: 3,
+        db: "3",
+        dc: ["3"],
       },
     });
   });

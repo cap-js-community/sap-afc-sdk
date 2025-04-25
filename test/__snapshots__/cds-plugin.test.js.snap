@@ -60,23 +60,6 @@ exports[`CDS Plugin GET App Config 1`] = `
               ],
               "title": "Scheduling",
             },
-            {
-              "id": "Scheduling",
-              "isGroupLocked": false,
-              "isPreset": true,
-              "isVisible": true,
-              "tiles": [
-                {
-                  "id": "JobMonitor",
-                  "properties": {
-                    "targetURL": "#Job-monitor",
-                    "title": "Monitor Scheduling Jobs",
-                  },
-                  "tileType": "sap.ushell.ui.tile.StaticTile",
-                },
-              ],
-              "title": "Scheduling",
-            },
           ],
         },
       },

@@ -5,7 +5,7 @@ const { merge } = require("./src/util/helper");
 
 module.exports = {
   cds: merge(
-    ...[...config.plugins, config.paths.base].map((module) => {
+    [...config.plugins, config.paths.base].map((module) => {
       return require(`${module}/package.json`).cds;
     }),
   ),

@@ -35,6 +35,14 @@ function adjustLines(file, callback) {
   });
 }
 
+function adjustAllLines(file, callback) {
+  return adjustText(file, (content) => {
+    const lines = content.split("\n");
+    const newLines = callback(lines) ?? lines;
+    return newLines.join("\n");
+  });
+}
+
 function replaceTextPart(content, part, replacement, positionPart, restriction) {
   const position = Math.max(positionPart ? content.indexOf(positionPart) : 0, 0);
   if (restriction >= 0 && !content.slice(position, position + restriction).includes(part)) {
@@ -144,6 +152,7 @@ function generateHashBrokerPassword() {
 module.exports = {
   adjustText,
   adjustLines,
+  adjustAllLines,
   replaceTextPart,
   adjustJSON,
   adjustYAML,

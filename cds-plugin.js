@@ -13,7 +13,7 @@ const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
 const { merge, toObject } = require("./src/util/helper");
 
-const config = merge(require("./config.json"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {});
+const config = merge([require("./config.json"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {}]);
 
 const SERVER_SUFFIX = "srv";
 const APPROUTER_SUFFIX = "approuter";
@@ -138,7 +138,7 @@ function serveBroker() {
   let brokerConfig = toObject(cds.env.requires?.["sap-afc-sdk"]?.broker);
   const brokerPath = path.join(cds.root, config.paths.broker);
   try {
-    brokerConfig = merge(require(brokerPath), brokerConfig);
+    brokerConfig = merge([require(brokerPath), brokerConfig]);
   } catch (err) {
     if (Object.keys(brokerConfig).length === 0) {
       cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
@@ -243,7 +243,10 @@ function serveMergedAppConfig(packageRoot, uiPath) {
         inbound.resolutionResult.url = `${uiPath}/${inbound.resolutionResult.url}`;
       }
     }
-    const mergedFioriSandboxConfig = merge(packageFioriSandboxConfig, projectFioriSandboxConfig);
+    const mergedFioriSandboxConfig = merge([packageFioriSandboxConfig, projectFioriSandboxConfig], {
+      array: "merge",
+      mergeKey: "id",
+    });
     res.send(mergedFioriSandboxConfig);
   });
 }
