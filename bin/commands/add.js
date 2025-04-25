@@ -39,12 +39,13 @@ Examples:
   handle: function (argument) {
     const features = (argument ?? "").split(",").map((f) => f.trim());
     const options = this.opts();
-    module.exports.process(features, options);
-    if (!options.xremove) {
+    const success = module.exports.process(features, options);
+    if (!options.xremove && success) {
       console.log("Successfully added features to your project.");
     }
   },
   process: function (features, options) {
+    let success = true;
     for (const feature of features) {
       if (module.exports.dependencies[feature]) {
         for (const dependency of module.exports.dependencies[feature]) {
@@ -72,12 +73,15 @@ Examples:
         continue;
       }
       try {
-        featureFn(options);
+        const featureSuccess = featureFn(options);
+        if (featureSuccess === false) {
+          success = false;
+        }
       } catch (err) {
         console.log(`Adding feature '${feature}' failed: ${err.message}`);
         return false;
       }
     }
-    return true;
+    return success;
   },
 };

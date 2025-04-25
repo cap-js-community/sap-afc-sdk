@@ -44,6 +44,12 @@ Examples:
       );
   },
   handle: function (target) {
+    const packagePath = path.join(process.cwd(), "package.json");
+    if (!fs.existsSync(packagePath)) {
+      console.log(`Project package.json not found at '${packagePath}'.`);
+      return false;
+    }
+
     console.log(`Initializing project`);
     let success = module.exports.process(target);
     if (success) {

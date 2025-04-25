@@ -10,6 +10,7 @@ declare -a paths=(
   "$DEST_ROOT/data/db-csv-translated/*_texts_*.csv                       ../db/data"
   "$DEST_ROOT/db/i18n/i18n_*.properties                                  ../db/i18n"
   "$DEST_ROOT/srv/i18n/messages_*.properties                             ../srv/i18n"
+  "$DEST_ROOT/srv/scheduling/i18n/i18n_*.properties                      ../srv/scheduling/i18n"
   "$DEST_ROOT/srv/scheduling/i18n/messages_*.properties                  ../srv/scheduling/i18n"
 )
 

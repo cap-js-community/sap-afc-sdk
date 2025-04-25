@@ -19,8 +19,14 @@ const Files = ["appconfig/fioriSandboxConfig.json", "launchpad.html"];
 
 module.exports = () => {
   try {
-    const addedApps = [];
+    const packagePath = path.join(process.cwd(), "package.json");
+    if (!fs.existsSync(packagePath)) {
+      console.log(`Project package.json not found at '${packagePath}'.`);
+      return false;
+    }
 
+    const packageJson = require(packagePath);
+    const addedApps = [];
     for (const app of config.apps) {
       const appPath = path.join(process.cwd(), config.appRoot, app);
       if (fs.existsSync(appPath)) {
@@ -31,7 +37,6 @@ module.exports = () => {
       const srcPath = path.join(__dirname, "../../", config.appRoot, app);
       copyFolderSync(srcPath, appPath);
 
-      const packageJson = require(path.join(process.cwd(), "package.json"));
       adjustJSON(path.join(config.appRoot, app, "webapp/manifest.json"), (json) => {
         if (json["sap.app"]?.id && !json["sap.app"].id.startsWith(`${packageJson.name}.`)) {
           json["sap.app"] ??= {};
