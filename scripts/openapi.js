@@ -23,6 +23,7 @@ function processSchedulingProviderService(check) {
 
   // Details
   data.info.version = "1.0.0";
+  data.info.description += ` <a href="https://api.sap.com/api/SSPIV1/overview" target="_blank">See OpenAPI Specification on SAP Business Accelerator Hub</a>.`;
   delete data["x-sap-api-type"];
   delete data["x-odata-version"];
   data["x-sap-direction"] = "outbound";
@@ -135,6 +136,8 @@ function processSchedulingProviderService(check) {
       },
     },
   };
+  const referenceIDParameter = data.paths["/Job"].get.parameters.find((parameter) => parameter.name === "referenceID");
+  referenceIDParameter.schema.format = "uuid";
   for (let pathKey in data.paths) {
     const [entity] = pathKey.substring(1, pathKey.length).split("/");
     const tag = camelCaseToWords(entity);
