@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "SAP Advanced Financial Closing Scheduling Service Provider Interface",
-    "description": "The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.",
+    "description": "The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs. <a href=\"https://api.sap.com/api/SSPIV1/overview\" target=\"_blank\">See OpenAPI Specification on SAP Business Accelerator Hub</a>.",
     "version": "1.0.0"
   },
   "x-sap-shortText": "Defines how an application can integrate with job scheduling provider service",
@@ -52,7 +52,8 @@
             "required": false,
             "description": "Allows filtering of query results by referenceID. Example: ?referenceID=01234567-89ab-cdef-0123-456789abcdef",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {

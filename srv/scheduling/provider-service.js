@@ -75,13 +75,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       const data = await next();
       let parameters = {};
       if (req.data.jobName) {
-        const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
-          jobDefinition.name,
-            jobDefinition.parameters((jobParameterDefinition) => {
-              jobParameterDefinition.name, jobParameterDefinition.dataType;
-            });
-        }).where({ name: req.data.jobName });
-        parameters = toMap(jobDefinition.parameters);
+        parameters = toMap(data);
       }
       if (req.data.jobID) {
         const job = await SELECT.one(DBJob, (job) => {
@@ -89,16 +83,16 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
             job.definition((jobDefinition) => {
               jobDefinition.name,
                 jobDefinition.parameters((jobParameterDefinition) => {
-                  jobParameterDefinition.name, jobParameterDefinition.dataType;
+                  jobParameterDefinition.name, jobParameterDefinition.dataType_code.as("dataType");
                 });
             });
         }).where({ ID: req.data.jobID });
         parameters = toMap(job.definition.parameters);
       }
       for (const row of data) {
-        if (parameters[row.name]?.dataType_code === DataType.boolean) {
+        if (parameters[row.name]?.dataType === DataType.boolean) {
           row.value = row.value === "true";
-        } else if (parameters[row.name]?.dataType_code === DataType.number) {
+        } else if (parameters[row.name]?.dataType === DataType.number) {
           row.value = parseFloat(row.value);
         }
       }
@@ -176,10 +170,10 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         if (parameter.value === undefined) {
           parameter.value = jobParameterDefinition.value;
         }
-        if ((parameter.value === null || parameter.value === undefined) && jobParameterDefinition.required) {
+        if ((parameter.value === undefined || parameter.value === null) && jobParameterDefinition.required) {
           return req.reject(JobSchedulingError.jobParameterValueRequired(parameter.name));
         }
-        if (parameter.value !== null && parameter.value !== undefined) {
+        if (parameter.value !== undefined && parameter.value !== null) {
           switch (jobParameterDefinition.dataType_code) {
             case "string":
             default:
@@ -259,17 +253,6 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.after("CREATE", Job, async (data, req) => {
-      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
-      await schedulingWebsocketService.tx(req).emit(
-        "jobStatusChanged",
-        {
-          IDs: [data.ID],
-          status: data.status,
-        },
-        {
-          "x-eventQueue-referenceEntityKey": data.ID,
-        },
-      );
       const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
       await schedulingProcessingService.tx(req).send(
         "processJob",
@@ -282,46 +265,58 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
+      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+      await schedulingWebsocketService.tx(req).emit(
+        "jobStatusChanged",
+        {
+          IDs: [data.ID],
+          status: data.status,
+        },
+        {
+          "x-eventQueue-referenceEntityKey": data.ID,
+        },
+      );
       delete data.parameters;
     });
 
-    this.on(Job.actions.cancel, Job, async (req) => {
+    this.before(Job.actions.cancel, Job, async (req) => {
       const ID = req.params[0];
       const job = await SELECT.one(Job).where({ ID });
       if (!job) {
         return req.reject(JobSchedulingError.jobNotFound(ID));
       }
-
       if (![JobStatus.requested, JobStatus.running].includes(job.status)) {
         return req.reject(JobSchedulingError.jobCannotBeCanceled(job.status));
       }
+      req.job = job;
+    });
 
-      await UPDATE.entity(DBJob)
-        .set({
-          status_code: JobStatus.cancelRequested,
-        })
-        .where({ ID });
+    this.on(Job.actions.cancel, Job, async (req) => {
+      await this.updateJob(req, req.job, {
+        status_code: JobStatus.cancelRequested,
+      });
+    });
 
-      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
-      await schedulingWebsocketService.tx(req).emit(
-        "jobStatusChanged",
-        {
-          IDs: [job.ID],
-          status: JobStatus.cancelRequested,
-        },
-        {
-          "x-eventQueue-referenceEntityKey": job.ID,
-        },
-      );
-
+    this.after(Job.actions.cancel, Job, async (data, req) => {
       const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
       await schedulingProcessingService.tx(req).send(
         "cancelJob",
         {
-          ID: job.ID,
+          ID: req.job.ID,
         },
         {
-          "x-eventQueue-referenceEntityKey": job.ID,
+          "x-eventQueue-referenceEntityKey": req.job.ID,
+        },
+      );
+      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+      await schedulingWebsocketService.tx(req).emit(
+        "jobStatusChanged",
+        {
+          IDs: [req.job.ID],
+          status: JobStatus.cancelRequested,
+        },
+        {
+          "x-eventQueue-referenceEntityKey": req.job.ID,
         },
       );
     });
@@ -336,8 +331,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.on(JobResult.actions.data, JobResult, async (req) => {
-      const ID = req.params[0];
-      return await this.downloadData(req, ID);
+      return await this.downloadData(req, req.jobResult.ID);
     });
 
     return super.init();
@@ -353,6 +347,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     await INSERT.into(DBJob).entries(job);
   }
 
+  async updateJob(req, job, data) {
+    const { Job: DBJob } = this.entities("scheduling");
+    await UPDATE.entity(DBJob).set(data).where({ ID: job.ID });
+  }
+
   async downloadData(req, ID) {
     const { JobResult: DBJobResult } = this.entities("scheduling");
     const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
@@ -360,7 +359,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       value: data,
       $mediaContentType: req.jobResult.mimeType,
       $mediaContentDispositionFilename: req.jobResult.filename,
-      $mediaContentDispositionType: DBJobResult.elements.data?.["@Core.ContentDisposition.Type"] ?? "attachment",
+      $mediaContentDispositionType: DBJobResult.elements.data?.["@Core.ContentDisposition.Type"],
     };
   }
 };

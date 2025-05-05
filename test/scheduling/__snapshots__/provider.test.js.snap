@@ -294,6 +294,106 @@ exports[`API GET Job 2`] = `
 }
 `;
 
+exports[`API GET Job Definition Parameters 1`] = `
+[
+  {
+    "dataType": "string",
+    "description": "Parameter A",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "A",
+    "required": true,
+    "type": "writableValue",
+    "value": "ABC",
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter B",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "B",
+    "required": false,
+    "type": "readOnlyValue",
+    "value": 21,
+  },
+  {
+    "dataType": "boolean",
+    "description": "Parameter C",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "C",
+    "required": true,
+    "type": "writableValue",
+    "value": false,
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter D",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "D",
+    "required": false,
+    "type": "writableValue",
+    "value": 22,
+  },
+  {
+    "dataType": "datetime",
+    "description": "Parameter E",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "E",
+    "required": false,
+    "type": "writableValue",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API GET Job Definition Parameters 2`] = `
+[
+  {
+    "dataType": "number",
+    "description": "Parameter B",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "B",
+    "required": false,
+    "type": "readOnlyValue",
+    "value": 21,
+  },
+  {
+    "dataType": "boolean",
+    "description": "Parameter C",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "C",
+    "required": true,
+    "type": "writableValue",
+    "value": false,
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter D",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "D",
+    "required": false,
+    "type": "writableValue",
+    "value": 22,
+  },
+  {
+    "dataType": "datetime",
+    "description": "Parameter E",
+    "jobName": "JOB_1",
+    "mappingType": null,
+    "name": "E",
+    "required": false,
+    "type": "writableValue",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
 exports[`API GET Job Definitions 1`] = `
 [
   {
@@ -356,106 +456,6 @@ exports[`API GET Job Definitions 2`] = `
   "supportsTestRun": false,
   "version": "1",
 }
-`;
-
-exports[`API GET Job Parameter Definitions 1`] = `
-[
-  {
-    "dataType": "string",
-    "description": "Parameter A",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "A",
-    "required": true,
-    "type": "writableValue",
-    "value": "ABC",
-  },
-  {
-    "dataType": "number",
-    "description": "Parameter B",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "B",
-    "required": false,
-    "type": "readOnlyValue",
-    "value": 21,
-  },
-  {
-    "dataType": "boolean",
-    "description": "Parameter C",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "C",
-    "required": true,
-    "type": "writableValue",
-    "value": false,
-  },
-  {
-    "dataType": "number",
-    "description": "Parameter D",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "D",
-    "required": false,
-    "type": "writableValue",
-    "value": 22,
-  },
-  {
-    "dataType": "datetime",
-    "description": "Parameter E",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "E",
-    "required": false,
-    "type": "writableValue",
-    "value": "2025-01-01T00:00:00Z",
-  },
-]
-`;
-
-exports[`API GET Job Parameter Definitions 2`] = `
-[
-  {
-    "dataType": "number",
-    "description": "Parameter B",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "B",
-    "required": false,
-    "type": "readOnlyValue",
-    "value": 21,
-  },
-  {
-    "dataType": "boolean",
-    "description": "Parameter C",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "C",
-    "required": true,
-    "type": "writableValue",
-    "value": false,
-  },
-  {
-    "dataType": "number",
-    "description": "Parameter D",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "D",
-    "required": false,
-    "type": "writableValue",
-    "value": 22,
-  },
-  {
-    "dataType": "datetime",
-    "description": "Parameter E",
-    "jobName": "JOB_1",
-    "mappingType": null,
-    "name": "E",
-    "required": false,
-    "type": "writableValue",
-    "value": "2025-01-01T00:00:00Z",
-  },
-]
 `;
 
 exports[`API GET Job Parameters 1`] = `

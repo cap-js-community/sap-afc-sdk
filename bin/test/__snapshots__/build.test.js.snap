@@ -290,7 +290,7 @@ resources:
           instance:
             existing_destinations_policy: update
             destinations:
-              - Name: afcsdk-srv-api
+              - Name: srv-api
                 URL: ~{srv-api/srv-url}
                 Authentication: NoAuthentication
                 Type: HTTP
@@ -613,8 +613,6 @@ approuter:
       serviceInstanceName: html5-apps-repo-runtime
 backendDestinations:
   srv-api:
-    service: srv
-  afcsdk-srv-api:
     service: srv
 html5-apps-repo-host:
   serviceOfferingName: html5-apps-repo

@@ -131,13 +131,17 @@ entity JobResult : cuid, {
   @title: '{i18n>Link}'
   link     : String(5000);
 
-  @title: '{i18n>MimeType}'
+  @title                           : '{i18n>MimeType}'
+  @Core.IsMediaType
   mimeType : String(255);
 
   @title: '{i18n>Filename}'
   filename : String(5000);
 
-  @title: '{i18n>Data}'
+  @title                           : '{i18n>Data}'
+  @Core.MediaType                  : mimeType
+  @Core.ContentDisposition.Type    : 'attachment'
+  @Core.ContentDisposition.Filename: filename
   data     : LargeBinary;
 
   @title: '{i18n>Messages}'

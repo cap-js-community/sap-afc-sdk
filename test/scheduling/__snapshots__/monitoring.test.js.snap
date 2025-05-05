@@ -1362,6 +1362,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Common.Label" String="File Name"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/data">
+        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Core.MediaType" Path="mimeType"/>
         <Annotation Term="Core.ContentDisposition">
           <Record Type="Core.ContentDispositionType">
@@ -1369,7 +1370,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyValue Property="Filename" Path="filename"/>
           </Record>
         </Annotation>
-        <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobResult/messages">

@@ -98,9 +98,7 @@ Examples:
       });
 
       // Project
-      let projectName = "";
       adjustJSON("package.json", (json) => {
-        projectName = json.name;
         if (
           (process.env.APPROUTER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.approuter) ||
           (process.env.SERVER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.server)
@@ -167,9 +165,6 @@ Examples:
           yaml.setIn(["global", "image", "registry"], repository);
         }
         yaml.setIn(["srv", "expose", "enabled"], true);
-        if (projectName) {
-          yaml.setIn(["backendDestinations", `${projectName}-srv-api`, "service"], "srv");
-        }
         yaml.setIn(["xsuaa", "servicePlanName"], "broker");
         return yaml;
       });

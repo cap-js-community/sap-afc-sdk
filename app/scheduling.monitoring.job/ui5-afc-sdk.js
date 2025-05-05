@@ -17,11 +17,4 @@ module.exports = async function () {
       manifest["sap.cloud"].service = `${strippedAppName}.service`;
     }
   });
-  adjustJSON("./xs-app.json", (xsApp) => {
-    for (const route of xsApp.routes) {
-      if (route.destination === "srv-api") {
-        route.destination = `${packageJson.name}-${route.destination}`;
-      }
-    }
-  });
 };

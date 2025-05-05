@@ -21,11 +21,6 @@ service SchedulingMonitoringService {
   entity MessageSeverity @readonly        as projection on scheduling.MessageSeverity;
 };
 
-annotate SchedulingMonitoringService.JobResult {
-  mimeType @Core.IsMediaType;
-  data     @Core.MediaType: mimeType  @Core.ContentDisposition.Type: 'attachment'  @Core.ContentDisposition.Filename: filename;
-};
-
 extend SchedulingMonitoringService.Job with columns {
   @title: '{i18n>Criticality}'
   case status.code

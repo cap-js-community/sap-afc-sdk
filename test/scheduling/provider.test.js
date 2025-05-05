@@ -154,7 +154,7 @@ describe("API", () => {
     expect(response.data).toHaveLength(1);
   });
 
-  it("GET Job Parameter Definitions", async () => {
+  it("GET Job Definition Parameters", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?top=1");
@@ -318,7 +318,7 @@ describe("API", () => {
     expect(response.data.messages).toBeUndefined();
   });
 
-  it("GET Job Result Message Data", async () => {
+  it("GET Job Result Data", async () => {
     await expect(
       GET("/api/job-scheduling/v1/JobResult/x2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data"),
     ).rejects.toThrowAPIError(404, "jobResultNotFound", ["x2eb590f-9505-4fd6-a5e2-511a1b2ff47f"]);
