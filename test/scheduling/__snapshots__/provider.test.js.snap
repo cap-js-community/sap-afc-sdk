@@ -106,6 +106,18 @@ exports[`API Create Job (basic) 1`] = `
 }
 `;
 
+exports[`API Create Job (no parameters) 1`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_5",
+  "referenceID": "4711",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
 exports[`API Create Job (status and duration) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",

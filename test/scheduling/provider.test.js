@@ -414,6 +414,15 @@ describe("API", () => {
     ws.close();
   });
 
+  it("Create Job (no parameters)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_5",
+      referenceID: "4711",
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+  });
+
   it("Create Job (JSON data types)", async () => {
     let response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_2",

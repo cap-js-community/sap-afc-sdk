@@ -329,14 +329,21 @@ function toOpenApiDoc(req, service, name) {
   return openAPI;
 }
 
+let _approuterUrl;
 function approuterUrl() {
+  if (_approuterUrl) {
+    return _approuterUrl;
+  }
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
-    return cds.env.requires["sap-afc-sdk"].endpoints.approuter;
+    return (_approuterUrl = cds.env.requires["sap-afc-sdk"].endpoints.approuter);
   }
   if (process.env.VCAP_APPLICATION) {
-    return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1$2`);
+    return (_approuterUrl = serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1$2`));
   } else {
-    return serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1-${APPROUTER_SUFFIX}$2`);
+    return (_approuterUrl = serverUrl().replace(
+      new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`),
+      `$1-${APPROUTER_SUFFIX}$2`,
+    ));
   }
 }
 
@@ -353,9 +360,11 @@ function approuterWildcardUrl() {
 }
 
 function approuterTenantUrl(req) {
-  const subdomain = req.user?.tokenInfo?.extAttributes?.zdn;
-  if (subdomain) {
-    return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
+  if (cds.env.requires.multitenancy) {
+    const subdomain = req.user?.tokenInfo?.extAttributes?.zdn;
+    if (subdomain) {
+      return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
+    }
   }
   return approuterUrl();
 }
@@ -366,17 +375,21 @@ function approuterUrlRegExp() {
   return RegExp(url + "$");
 }
 
+let _serverUrl;
 function serverUrl() {
+  if (_serverUrl) {
+    return _serverUrl;
+  }
   if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server) {
-    return cds.env.requires["sap-afc-sdk"].endpoints.server;
+    return (_serverUrl = cds.env.requires["sap-afc-sdk"].endpoints.server);
   }
   if (process.env.VCAP_APPLICATION) {
     const url = JSON.parse(process.env.VCAP_APPLICATION).uris?.[0];
     if (url) {
-      return `https://${url}`;
+      return (_serverUrl = `https://${url}`);
     }
   }
-  return cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`;
+  return (_serverUrl = cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`);
 }
 
 function authorizationUrl() {
@@ -421,7 +434,7 @@ function registerAfterReadJobFillLink(db) {
     result = Array.isArray(result) ? result : [result];
     for (const row of result) {
       if (row.ID && row.link === null) {
-        row.link = `${cds.env.requires.multitenancy ? approuterTenantUrl(req) : approuterUrl()}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
+        row.link = `${approuterTenantUrl(req)}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
       }
     }
   });
