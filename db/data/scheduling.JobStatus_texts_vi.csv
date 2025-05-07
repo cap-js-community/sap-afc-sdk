@@ -1,0 +1,9 @@
+locale;code;name;descr
+"vi";requested;Được yêu cầu;Được yêu cầu
+"vi";running;Đang thực hiện;Đang thực hiện
+"vi";completed;Đã hoàn tất;Đã hoàn tất
+"vi";completedWithWarning;Đã hoàn tất nhưng có cảnh báo;Cảnh báo
+"vi";completedWithError;Đã hoàn tất nhưng có lỗi;Lỗi
+"vi";failed;Không thành công;Không thành công
+"vi";cancelRequested;Đã yêu cầu hủy;Được yêu cầu
+"vi";canceled;Đã hủy;Đã hủy

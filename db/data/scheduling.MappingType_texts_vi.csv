@@ -1,0 +1,28 @@
+locale;code;name;descr
+"vi";accountingPrinciple;Nguyên tắc kế toán;Nguyên tắc kế toán
+"vi";companyCode;Mã công ty;Mã công ty
+"vi";plant;Nhà máy;Nhà máy
+"vi";controllingArea;Phạm vi quản trị;Phạm vi quản trị
+"vi";fiscalPeriod;Kỳ tài chính;Kỳ tài chính
+"vi";fiscalYearPeriod;Kỳ năm tài chính;Kỳ năm tài chính
+"vi";fiscalYear;Năm tài chính;Năm tài chính
+"vi";keyDate;Ngày thực hiện;Ngày thực hiện
+"vi";chartOfAccounts;Hệ thống tài khoản;Hệ thống tài khoản
+"vi";fiscalYearVariant;Biến thể năm tài chính;Biến thể năm tài chính
+"vi";ledger;Sổ;Sổ
+"vi";testRun;Chạy thử;Chạy thử
+"vi";postingPeriodVariant;Biến thể kỳ ghi sổ;Biến thể kỳ ghi sổ
+"vi";processingUser;Người dùng xử lý;Người dùng xử lý
+"vi";interestedUser;Người dùng quan tâm;Người dùng quan tâm
+"vi";userResponsible;Người dùng chịu trách nhiệm;Người dùng chịu trách nhiệm
+"vi";processingUserEmail;Email người dùng xử lý;Email người dùng xử lý
+"vi";interestedUserEmail;Email người dùng quan tâm;Email người dùng quan tâm
+"vi";userResponsibleEmail;Email người dùng chịu trách nhiệm;Email người dùng chịu trách nhiệm
+"vi";executionID;ID thực hiện;ID thực hiện
+"vi";customField1;Trường tùy chỉnh 1;Trường tùy chỉnh 1
+"vi";customField2;Trường tùy chỉnh 2;Trường tùy chỉnh 2
+"vi";customField3;Trường tùy chỉnh 3;Trường tùy chỉnh 3
+"vi";taskListID;ID danh sách tác vụ;ID danh sách tác vụ
+"vi";taskListDescription;Mô tả danh sách tác vụ;Mô tả danh sách tác vụ
+"vi";taskID;ID tác vụ;ID tác vụ
+"vi";taskDescription;Mô tả tác vụ;Mô tả tác vụ

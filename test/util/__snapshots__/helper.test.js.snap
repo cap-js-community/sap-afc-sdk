@@ -36,6 +36,7 @@ exports[`Helper labelLocales 1`] = `
   "th",
   "tr",
   "uk",
+  "vi",
   "zh_CN",
   "zh_TW",
 ]
@@ -75,6 +76,7 @@ exports[`Helper messageLocales 1`] = `
   "th",
   "tr",
   "uk",
+  "vi",
   "zh_CN",
   "zh_TW",
 ]
