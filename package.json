@@ -73,7 +73,7 @@
     "http-status-codes": "^2.3.0",
     "openurl": "^1.1.1",
     "prompt-sync": "^4.2.0",
-    "shelljs": "^0.9.2",
+    "shelljs": "^0.10.0",
     "swagger-ui-express": "^5.0.1",
     "verror": "^1.10.1",
     "yaml": "^2.7.1"
