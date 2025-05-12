@@ -380,7 +380,7 @@ describe("Processing Service", () => {
       ]),
     ).resolves.not.toThrow();
     await processOutbox("SchedulingProcessingService");
-    expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary { type: 'cds.LargeBinary' }/s));
+    expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary {.*type: 'cds.LargeBinary'.*}/s));
   });
 
   it("updateJob - processJobUpdate", async () => {
@@ -453,7 +453,7 @@ describe("Processing Service", () => {
   });
 
   it("syncJob", async () => {
-    cds.env.log.levels["periodic"] = "info";
+    cds.env.log.levels["periodic"] = MessageSeverity.info;
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.syncJob()).resolves.not.toThrow();
     await processOutbox("SchedulingProcessingService.syncJob");

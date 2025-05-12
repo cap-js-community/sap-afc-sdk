@@ -8,6 +8,9 @@ const { JobStatus, MappingType, DataType } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
 const { wildcard, toMap } = require("../../src/util/helper");
 
+const isUUID = (input) =>
+  input && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input);
+
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
     const { JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } = this.entities;
@@ -114,6 +117,9 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       if (!req.data.referenceID) {
         return req.reject(JobSchedulingError.referenceIDMissing());
       }
+      if (!isUUID(req.data.referenceID)) {
+        return req.reject(JobSchedulingError.referenceIDNoUUID(req.data.referenceID));
+      }
 
       // Results
       if (req.data.results) {
@@ -174,22 +180,15 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           return req.reject(JobSchedulingError.jobParameterValueRequired(parameter.name));
         }
         if (parameter.value !== undefined && parameter.value !== null) {
+          let parsedValue;
           switch (jobParameterDefinition.dataType_code) {
             case "string":
             default:
-              if (typeof parameter.value !== "string") {
-                return req.reject(
-                  JobSchedulingError.jobParameterValueInvalidType(
-                    parameter.value,
-                    parameter.name,
-                    jobParameterDefinition.dataType_code,
-                  ),
-                );
-              }
               parameter.value = String(parameter.value);
               break;
             case "number":
-              if (String(parseFloat(parameter.value)) !== String(parameter.value)) {
+              parsedValue = parseFloat(parameter.value);
+              if (isNaN(parsedValue)) {
                 return req.reject(
                   JobSchedulingError.jobParameterValueInvalidType(
                     parameter.value,
@@ -198,10 +197,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
-              parameter.value = parseFloat(parameter.value);
+              parameter.value = parsedValue;
               break;
             case "datetime":
-              if (isNaN(new Date(parameter.value).getTime())) {
+              parsedValue = new Date(parameter.value);
+              if (isNaN(parsedValue.getTime())) {
                 return req.reject(
                   JobSchedulingError.jobParameterValueInvalidType(
                     parameter.value,
@@ -210,10 +210,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
-              parameter.value = new Date(parameter.value).toISOString();
+              parameter.value = parsedValue.toISOString();
               break;
             case "boolean":
-              if (!["true", "false"].includes(String(parameter.value))) {
+              parsedValue = String(parameter.value);
+              if (!["true", "false"].includes(parsedValue)) {
                 return req.reject(
                   JobSchedulingError.jobParameterValueInvalidType(
                     parameter.value,
@@ -222,7 +223,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
                   ),
                 );
               }
-              parameter.value = String(parameter.value) === "true";
+              parameter.value = parsedValue === "true";
               break;
           }
         }

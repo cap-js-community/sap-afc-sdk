@@ -59,6 +59,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static referenceIDNoUUID(referenceID) {
+    return new JobSchedulingError("referenceIDNoUUID", {
+      args: [referenceID],
+      httpStatus: 400,
+    });
+  }
+
   static jobResultsReadOnly() {
     return new JobSchedulingError("jobResultsReadOnly", {
       args: [],

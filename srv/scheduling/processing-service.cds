@@ -10,8 +10,14 @@ service SchedulingProcessingService {
     name     : String(255) not null;
     type     : ResultTypeCode not null;
     link     : String(5000);
+
+    @Core.IsMediaType
     mimeType : String(255);
     filename : String(5000);
+
+    @Core.MediaType                  : mimeType
+    @Core.ContentDisposition.Type    : 'attachment'
+    @Core.ContentDisposition.Filename: filename
     data     : LargeBinary;
     messages : many JobResultMessage;
   };

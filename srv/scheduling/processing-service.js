@@ -266,6 +266,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         value += config.status[status];
       }
     }
+
     const durationParameter = req.job.parameters.find((parameter) => parameter.definition_name === "duration");
     if (durationParameter && parseFloat(durationParameter.value) > 0) {
       processingTime = parseFloat(durationParameter.value) * 1000;
@@ -274,6 +275,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (statusParameter && JobStatus[statusParameter.value]) {
       processingStatus = statusParameter.value;
     }
+
     const ID = req.data.ID;
     const updateResults = [];
     switch (processingStatus) {
@@ -348,6 +350,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         });
         break;
     }
+
     await cds.outboxed(this).send(
       "updateJob",
       {
@@ -360,6 +363,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         "x-eventQueue-startAfter": new Date(Date.now() + processingTime),
       },
     );
+
     const mockResults = [];
     if (advancedMock) {
       mockResults.push({

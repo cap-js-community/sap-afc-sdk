@@ -22,7 +22,7 @@ describe("Scheduling Provider", () => {
   it("POST Job", async () => {
     const response = await POST("/api/job-scheduling/v1/Job", {
       name: "JOB_1",
-      referenceID: "4711",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
       parameters: [
         {
           name: "A",

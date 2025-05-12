@@ -4,7 +4,7 @@ exports[`API Create Job (JSON data types) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
@@ -16,7 +16,7 @@ exports[`API Create Job (JSON data types) 2`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
@@ -53,7 +53,7 @@ exports[`API Create Job (advanced) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
@@ -65,7 +65,7 @@ exports[`API Create Job (advanced) 2`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
@@ -98,7 +98,7 @@ exports[`API Create Job (basic) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": null,
   "status": "requested",
   "testRun": null,
@@ -110,7 +110,7 @@ exports[`API Create Job (no parameters) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_5",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": null,
   "status": "requested",
   "testRun": null,
@@ -122,7 +122,7 @@ exports[`API Create Job (status and duration) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_6",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": null,
   "status": "requested",
   "testRun": null,
@@ -134,7 +134,7 @@ exports[`API Create Job (status and duration) 2`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_6",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": null,
   "status": "failed",
   "testRun": null,
@@ -166,7 +166,7 @@ exports[`API Create Job (test run) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
@@ -210,7 +210,7 @@ exports[`API Create Job (translation) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
-  "referenceID": "4711",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": "2025-01-01T12:00:00Z",
   "status": "requested",
   "testRun": true,
