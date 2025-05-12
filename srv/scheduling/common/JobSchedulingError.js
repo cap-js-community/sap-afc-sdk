@@ -206,6 +206,20 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static localeMissing() {
+    return new JobSchedulingError("localeMissing", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
+  static invalidLocale(locale) {
+    return new JobSchedulingError("invalidLocale", {
+      args: [locale],
+      httpStatus: 400,
+    });
+  }
+
   static severityMissing() {
     return new JobSchedulingError("severityMissing", {
       args: [],

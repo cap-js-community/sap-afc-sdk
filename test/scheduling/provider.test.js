@@ -3,7 +3,7 @@
 const cds = require("@sap/cds");
 
 const { authorization, cleanData, clearEventQueue, eventQueueEntry, connectToWS, processOutbox } = require("../helper");
-const { JobStatus, MessageSeverity } = require("../../srv/scheduling/common/codelist");
+const { JobStatus, MessageSeverity, ResultType } = require("../../srv/scheduling/common/codelist");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
@@ -250,10 +250,10 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?top=1");
     expect(response.data).toHaveLength(1);
-    expect(response.data[0].type).toBe("data");
+    expect(response.data[0].type).toBe(ResultType.data);
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1&top=1");
     expect(response.data).toHaveLength(1);
-    expect(response.data[0].type).toBe("link");
+    expect(response.data[0].type).toBe(ResultType.link);
 
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1");
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -557,26 +557,20 @@ describe("API", () => {
     await processOutbox("SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
-    const resultID1 = response.data[0].ID;
-    const resultID2 = response.data[1].ID;
-    expect(cleanData(response.data[0])).toMatchSnapshot();
-    expect(cleanData(response.data[1])).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
-    expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`, {
-      headers: {
-        "Accept-Language": "de",
-      },
-    });
-    expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
-    expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`, {
-      headers: {
-        "Accept-Language": "de",
-      },
-    });
-    expect(cleanData(response.data)).toMatchSnapshot();
+    for (const result of response.data) {
+      const resultID = result.ID;
+      expect(cleanData(result)).toMatchSnapshot();
+      if (result.type === ResultType.message) {
+        response = await GET(`/api/job-scheduling/v1/JobResult/${resultID}/messages`);
+        expect(cleanData(response.data)).toMatchSnapshot();
+        response = await GET(`/api/job-scheduling/v1/JobResult/${resultID}/messages`, {
+          headers: {
+            "Accept-Language": "de",
+          },
+        });
+        expect(cleanData(response.data)).toMatchSnapshot();
+      }
+    }
   });
 
   it("Create Job (status and duration)", async () => {
@@ -965,7 +959,7 @@ describe("API", () => {
           referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
           results: [
             {
-              type: "link",
+              type: ResultType.link,
               link: "https://sap.com",
             },
           ],

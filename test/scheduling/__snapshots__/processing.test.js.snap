@@ -254,6 +254,16 @@ exports[`Processing Service updateJob - translation 3`] = `
   {
     "code": "jobCompleted",
     "severity_code": "info",
+    "text": "Job terminé",
+  },
+]
+`;
+
+exports[`Processing Service updateJob - translation 4`] = `
+[
+  {
+    "code": "jobCompleted",
+    "severity_code": "info",
     "text": "Job abgeschlossen",
   },
 ]

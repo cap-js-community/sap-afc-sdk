@@ -32,7 +32,7 @@ service SchedulingProcessingService {
 
   type JobResultMessageText {
     locale : Locale not null;
-    text   : String(5000) not null;
+    text   : String(5000);
   };
 
   action processJob(ID : String(255), testRun : Boolean);

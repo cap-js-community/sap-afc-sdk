@@ -268,6 +268,9 @@ describe("Processing Service", () => {
                   locale: "de",
                   text: "Job abgeschlossen",
                 },
+                {
+                  locale: "fr",
+                },
               ],
             },
           ],
@@ -282,6 +285,12 @@ describe("Processing Service", () => {
     expect(cleanData(jobResults)).toMatchSnapshot();
     let jobMessages = await SELECT.from("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } });
     expect(cleanData(jobMessages)).toMatchSnapshot();
+    await cds.tx({ locale: "fr" }, async (tx) => {
+      jobMessages = await tx.run(
+        SELECT.localized("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } }),
+      );
+      expect(cleanData(jobMessages)).toMatchSnapshot();
+    });
     await cds.tx({ locale: "de" }, async (tx) => {
       jobMessages = await tx.run(
         SELECT.localized("scheduling.JobResultMessage").where({ result_ID: { in: resultIDs } }),
@@ -995,6 +1004,48 @@ describe("Processing Service", () => {
       expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed/s));
       log.clear();
       await clearEventQueue();
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            type: ResultType.message,
+            name: "Result",
+            messages: [
+              {
+                code: "jobCompleted",
+                severity: MessageSeverity.info,
+                texts: [{}],
+              },
+            ],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("SchedulingProcessingService");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/localeMissing/s));
+
+      await expect(
+        processingService.updateJob(ID, JobStatus.running, [
+          {
+            type: ResultType.message,
+            name: "Result",
+            messages: [
+              {
+                code: "jobCompleted",
+                severity: MessageSeverity.info,
+                texts: [{ locale: "xx" }],
+              },
+            ],
+          },
+        ]),
+      ).resolves.not.toThrow();
+      await processOutbox("SchedulingProcessingService");
+      entry = await eventQueueEntry();
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(3);
+      expect(log.output).toEqual(expect.stringMatching(/invalidLocale.*xx/s));
     });
 
     it("cancelJob", async () => {

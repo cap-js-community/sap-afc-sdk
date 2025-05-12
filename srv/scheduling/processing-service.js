@@ -191,6 +191,18 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
                   text: cds.i18n.messages.at(message.code, locale),
                 };
               });
+            } else {
+              for (const text of message.texts) {
+                if (!text.locale) {
+                  return req.reject(JobSchedulingError.localeMissing());
+                }
+                if (!locales.includes(text.locale)) {
+                  return req.reject(JobSchedulingError.invalidLocale(text.locale));
+                }
+                if (!text.text) {
+                  text.text = cds.i18n.messages.at(message.code, text.locale);
+                }
+              }
             }
             if (!message.severity) {
               return req.reject(JobSchedulingError.severityMissing());

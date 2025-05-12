@@ -166,9 +166,9 @@ annotate SchedulingMonitoringService.Job with @(
   UI.PresentationVariant       : {
     Visualizations: ['@UI.LineItem'],
     SortOrder     : [{
-      $Type     : 'Common.SortOrderType',
-      Property  : createdAt,
-      Descending: true
+      $Type   : 'Common.SortOrderType',
+      Property: createdAt,
+      Descending
     }]
   },
   UI.SelectionFields           : [
@@ -180,12 +180,12 @@ annotate SchedulingMonitoringService.Job with @(
 );
 
 annotate SchedulingMonitoringService.Job {
-  status      @Common.ValueListWithFixedValues: true  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
+  status      @Common.ValueListWithFixedValues  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
   link        @HTML5.LinkTarget: '_blank';
-  definition  @ValueList                      : {
+  definition  @ValueList: {
     entity: 'JobDefinition',
     type  : #Fixed
-  }                                                   @Common.Text: definition.description  @Common.TextArrangement: #TextFirst;
+  }                                             @Common.Text: definition.description  @Common.TextArrangement: #TextFirst;
 };
 
 annotate SchedulingMonitoringService.Job actions {
@@ -286,9 +286,9 @@ annotate SchedulingMonitoringService.JobParameter {
 }
 
 annotate SchedulingMonitoringService.JobParameterDefinition {
-  type         @Common.ValueListWithFixedValues: true  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
-  dataType     @Common.ValueListWithFixedValues: true  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
-  mappingType  @Common.ValueListWithFixedValues: true  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
+  type         @Common.ValueListWithFixedValues  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
+  dataType     @Common.ValueListWithFixedValues  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
+  mappingType  @Common.ValueListWithFixedValues  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
 };
 
 annotate SchedulingMonitoringService.JobResult with @(
@@ -386,7 +386,7 @@ annotate SchedulingMonitoringService.JobResult with @(
 
 annotate SchedulingMonitoringService.JobResult {
   job   @UI.Hidden;
-  type  @Common.ValueListWithFixedValues: true  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
+  type  @Common.ValueListWithFixedValues  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
   link  @HTML5.LinkTarget: '_blank';
   data  @UI.Hidden;
 };
@@ -459,11 +459,11 @@ annotate SchedulingMonitoringService.JobResultMessage with @(
 
 annotate SchedulingMonitoringService.JobResultMessage {
   result    @UI.Hidden;
-  severity  @Common.ValueListWithFixedValues: true  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
+  severity  @Common.ValueListWithFixedValues  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
 };
 
 annotate SchedulingMonitoringService.MessageSeverity {
-  numericCode  @Common.ValueListWithFixedValues: true  @Common.Text: name  @Common.TextArrangement: #TextFirst;
+  numericCode  @Common.ValueListWithFixedValues  @Common.Text: name  @Common.TextArrangement: #TextFirst;
 };
 
 annotate SchedulingMonitoringService.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );

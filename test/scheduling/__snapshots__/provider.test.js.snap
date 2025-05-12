@@ -229,16 +229,6 @@ exports[`API Create Job (translation) 2`] = `
 `;
 
 exports[`API Create Job (translation) 3`] = `
-{
-  "filename": "log.txt",
-  "link": null,
-  "mimeType": "text/plain",
-  "name": "Data",
-  "type": "data",
-}
-`;
-
-exports[`API Create Job (translation) 4`] = `
 [
   {
     "code": "jobBasicMock",
@@ -248,7 +238,7 @@ exports[`API Create Job (translation) 4`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 5`] = `
+exports[`API Create Job (translation) 4`] = `
 [
   {
     "code": "jobBasicMock",
@@ -258,9 +248,95 @@ exports[`API Create Job (translation) 5`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 6`] = `[]`;
+exports[`API Create Job (translation) 5`] = `
+{
+  "filename": "log.txt",
+  "link": null,
+  "mimeType": "text/plain",
+  "name": "Data",
+  "type": "data",
+}
+`;
 
-exports[`API Create Job (translation) 7`] = `[]`;
+exports[`API Create Job (translation) 6`] = `
+{
+  "filename": "log.pdf",
+  "link": null,
+  "mimeType": "application/pdf",
+  "name": "Data",
+  "type": "data",
+}
+`;
+
+exports[`API Create Job (translation) 7`] = `
+{
+  "filename": null,
+  "link": "https://sap.com",
+  "mimeType": null,
+  "name": "Link",
+  "type": "link",
+}
+`;
+
+exports[`API Create Job (translation) 8`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Message",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (translation) 9`] = `
+[
+  {
+    "code": "jobCompleted",
+    "severity": "info",
+    "text": "Job completed successfully",
+  },
+]
+`;
+
+exports[`API Create Job (translation) 10`] = `
+[
+  {
+    "code": "jobCompleted",
+    "severity": "info",
+    "text": "Job erfolgreich abgeschlossen.",
+  },
+]
+`;
+
+exports[`API Create Job (translation) 11`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Test Run",
+  "type": "message",
+}
+`;
+
+exports[`API Create Job (translation) 12`] = `
+[
+  {
+    "code": "jobTestRun",
+    "severity": "info",
+    "text": "Job is running in test mode.",
+  },
+]
+`;
+
+exports[`API Create Job (translation) 13`] = `
+[
+  {
+    "code": "jobTestRun",
+    "severity": "info",
+    "text": "Job läuft im Testmodus.",
+  },
+]
+`;
 
 exports[`API GET Job 1`] = `
 [
