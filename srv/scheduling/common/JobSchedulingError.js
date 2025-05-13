@@ -157,37 +157,37 @@ class JobSchedulingError extends BaseError {
     });
   }
 
-  static linkMissing() {
+  static linkMissing(resultType) {
     return new JobSchedulingError("linkMissing", {
-      args: [],
+      args: [resultType],
       httpStatus: 400,
     });
   }
 
-  static mimeTypeMissing() {
+  static mimeTypeMissing(resultType) {
     return new JobSchedulingError("mimeTypeMissing", {
-      args: [],
+      args: [resultType],
       httpStatus: 400,
     });
   }
 
-  static filenameMissing() {
+  static filenameMissing(resultType) {
     return new JobSchedulingError("filenameMissing", {
-      args: [],
+      args: [resultType],
       httpStatus: 400,
     });
   }
 
-  static dataMissing() {
+  static dataMissing(resultType) {
     return new JobSchedulingError("dataMissing", {
-      args: [],
+      args: [resultType],
       httpStatus: 400,
     });
   }
 
-  static messagesMissing() {
+  static messagesMissing(resultType) {
     return new JobSchedulingError("messagesMissing", {
-      args: [],
+      args: [resultType],
       httpStatus: 400,
     });
   }

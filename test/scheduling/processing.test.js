@@ -442,6 +442,20 @@ describe("Processing Service", () => {
     }
   });
 
+  it("syncJob", async () => {
+    cds.env.log.levels["periodic"] = MessageSeverity.info;
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    await expect(processingService.syncJob()).resolves.not.toThrow();
+    await processOutbox("SchedulingProcessingService.syncJob");
+    expect(log.output).toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
+
+    log.output = "";
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+    await expect(processingService.syncJob()).resolves.not.toThrow();
+    await processOutbox("SchedulingProcessingService.syncJob");
+    expect(log.output).not.toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
+  });
+
   it("cancelJob", async () => {
     const ws = await connectToWS("job-scheduling");
     let message = ws.message("jobStatusChanged");
@@ -459,20 +473,6 @@ describe("Processing Service", () => {
     expect(event.status).toBe(JobStatus.canceled);
 
     ws.close();
-  });
-
-  it("syncJob", async () => {
-    cds.env.log.levels["periodic"] = MessageSeverity.info;
-    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
-    await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService.syncJob");
-    expect(log.output).toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
-
-    log.output = "";
-    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
-    await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService.syncJob");
-    expect(log.output).not.toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
   });
 
   describe("Error Situations", () => {
@@ -576,7 +576,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/linkMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/linkMissing.*link/s));
       log.clear();
       await clearEventQueue();
 
@@ -594,7 +594,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed.*link/s));
       log.clear();
       await clearEventQueue();
 
@@ -612,7 +612,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed.*link/s));
       log.clear();
       await clearEventQueue();
 
@@ -630,7 +630,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed.*link/s));
       log.clear();
       await clearEventQueue();
 
@@ -648,7 +648,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed.*link/s));
       log.clear();
       await clearEventQueue();
 
@@ -673,7 +673,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/mimeTypeMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/mimeTypeMissing.*data/s));
       log.clear();
       await clearEventQueue();
 
@@ -690,7 +690,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/filenameMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/filenameMissing.*data/s));
       log.clear();
       await clearEventQueue();
 
@@ -708,7 +708,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/dataMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/dataMissing.*data/s));
       log.clear();
       await clearEventQueue();
 
@@ -728,7 +728,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed.*data/s));
       log.clear();
       await clearEventQueue();
 
@@ -748,7 +748,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed/s));
+      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed.*data/s));
       log.clear();
       await clearEventQueue();
 
@@ -764,7 +764,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/messagesMissing.*message/s));
       log.clear();
       await clearEventQueue();
 
@@ -798,7 +798,7 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesMissing/s));
+      expect(log.output).toEqual(expect.stringMatching(/messagesMissing.*message/s));
       log.clear();
       await clearEventQueue();
 
@@ -1048,7 +1048,7 @@ describe("Processing Service", () => {
       expect(log.output).toEqual(expect.stringMatching(/invalidLocale.*xx/s));
     });
 
-    it("cancelJob", async () => {
+    it("cancelJob - status", async () => {
       await expect(processingService.cancelJob("XXX")).resolves.not.toThrow();
       await processOutbox("SchedulingProcessingService");
       let entry = await eventQueueEntry();

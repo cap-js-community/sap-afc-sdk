@@ -137,7 +137,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       switch (result.type) {
         case ResultType.link:
           if (!result.link) {
-            return req.reject(JobSchedulingError.linkMissing());
+            return req.reject(JobSchedulingError.linkMissing(result.type));
           }
           if (result.mimeType) {
             return req.reject(JobSchedulingError.mimeTypeNotAllowed(result.type));
@@ -154,13 +154,13 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           break;
         case ResultType.data:
           if (!result.mimeType) {
-            return req.reject(JobSchedulingError.mimeTypeMissing());
+            return req.reject(JobSchedulingError.mimeTypeMissing(result.type));
           }
           if (!result.filename) {
-            return req.reject(JobSchedulingError.filenameMissing());
+            return req.reject(JobSchedulingError.filenameMissing(result.type));
           }
           if (!result.data) {
-            return req.reject(JobSchedulingError.dataMissing());
+            return req.reject(JobSchedulingError.dataMissing(result.type));
           }
           if (result.link) {
             return req.reject(JobSchedulingError.linkNotAllowed(result.type));
@@ -171,7 +171,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           break;
         case ResultType.message:
           if (!(result?.messages?.length > 0)) {
-            return req.reject(JobSchedulingError.messagesMissing());
+            return req.reject(JobSchedulingError.messagesMissing(result.type));
           }
           for (const message of result.messages) {
             if (!message.code) {
