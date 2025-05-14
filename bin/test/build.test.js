@@ -18,7 +18,10 @@ const workingDir = path.join(__dirname, "..", tempDir);
 const projectDir = path.join(workingDir, project);
 
 const Commands = {
-  BEFORE: [`cd ${tempDir}`, `npx cds init ${project}`, `cd ${project}`, "npm install ../../../"],
+  BEFORE: [`cd ${tempDir}`, `cd ${project}`],
+  NODE: [`npx cds init ${project}`],
+  JAVA: [`npx cds init ${project} --java`],
+  INSTALL: ["npm install ../../../"],
   CF: ["afc init cf"],
   KYMA: ["afc init kyma"],
   AFTER: ["afc add -a broker,stub,mock,sample,test,http"],
@@ -28,6 +31,7 @@ const Files = {
   ALL: ["package.json", "app/router/xs-app.json", "srv/broker.json", "srv/catalog.json"],
   CF: ["mta.yaml"],
   KYMA: ["chart/values.yaml", "containerize.yaml"],
+  JAVA: ["pom.xml", "srv/src/main/resources/application.yaml"],
 };
 
 describe("Build", () => {
@@ -44,8 +48,10 @@ describe("Build", () => {
     }
   });
 
-  it("CF", async () => {
-    const code = shelljs.exec([...Commands.BEFORE, ...Commands.CF, ...Commands.AFTER].join(" && ")).code;
+  it("Node / CF", async () => {
+    const code = shelljs.exec(
+      [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.CF, ...Commands.AFTER].join(" && "),
+    ).code;
     expect(code).toBe(0);
     for (const file of [...Files.ALL, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
@@ -53,10 +59,34 @@ describe("Build", () => {
     }
   });
 
-  it("Kyma", async () => {
-    const code = shelljs.exec([...Commands.BEFORE, ...Commands.KYMA, ...Commands.AFTER].join(" && ")).code;
+  it("Node / Kyma", async () => {
+    const code = shelljs.exec(
+      [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.KYMA, ...Commands.AFTER].join(" && "),
+    ).code;
     expect(code).toBe(0);
     for (const file of [...Files.ALL, ...Files.KYMA]) {
+      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
+      expect(content).toMatchSnapshot();
+    }
+  });
+
+  it("Java / CF", async () => {
+    const code = shelljs.exec(
+      [...Commands.BEFORE, ...Commands.JAVA, ...Commands.INSTALL, ...Commands.CF, ...Commands.AFTER].join(" && "),
+    ).code;
+    expect(code).toBe(0);
+    for (const file of [...Files.ALL, ...Files.JAVA, ...Files.CF]) {
+      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
+      expect(content).toMatchSnapshot();
+    }
+  });
+
+  it("Java / Kyma", async () => {
+    const code = shelljs.exec(
+      [...Commands.BEFORE, ...Commands.JAVA, ...Commands.INSTALL, ...Commands.KYMA, ...Commands.AFTER].join(" && "),
+    ).code;
+    expect(code).toBe(0);
+    for (const file of [...Files.ALL, ...Files.JAVA, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }

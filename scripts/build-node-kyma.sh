@@ -15,6 +15,6 @@ cd temp
 npx cds init afcsdk
 cd afcsdk
 npm install github:cap-js-community/sap-afc-sdk
-afc init kyma
-afc add -a broker,stub,mock,sample,test,http
+npx afc init kyma
+npx afc add -a broker,stub,mock,sample,test,http
 npm test

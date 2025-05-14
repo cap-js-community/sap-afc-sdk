@@ -6,13 +6,13 @@ const path = require("path");
 
 const config = require("../config.json");
 
-const { adjustJSON, adjustYAMLAllDocument, adjustAllLines } = require("../common/util");
+const { adjustJSON, adjustYAMLAllDocument, adjustAllLines, copyFolderSync } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
 const Exclude = {
-  Extensions: [],
-  Files: ["ui5-afc-sdk.js"],
-  Tasks: ["ui5-afc-sdk"],
+  extensions: [],
+  files: ["ui5-afc-sdk.js"],
+  tasks: ["ui5-afc-sdk"],
 };
 
 const Files = ["appconfig/fioriSandboxConfig.json", "launchpad.html"];
@@ -50,12 +50,12 @@ module.exports = () => {
       });
 
       adjustYAMLAllDocument(path.join(config.appRoot, app, "ui5.yaml"), (yaml) => {
-        if (yaml.get("type") === "task" && Exclude.Tasks.includes(yaml.getIn(["metadata", "name"]))) {
+        if (yaml.get("type") === "task" && Exclude.tasks.includes(yaml.getIn(["metadata", "name"]))) {
           return null;
         } else if (yaml.get("type") === "application") {
           const customTasks = [];
           for (const task of yaml.getIn(["builder", "customTasks"]).items) {
-            if (!Exclude.Tasks.includes(task.get("name"))) {
+            if (!Exclude.tasks.includes(task.get("name"))) {
               customTasks.push(task);
             }
           }
@@ -75,14 +75,24 @@ module.exports = () => {
       console.log(`Folder '${appPath}' written.`);
     }
 
-    const addedAppUsings = addedApps.map((app) => `using from './${app}';`);
-    const indexCdsPath = path.join(process.cwd(), "app/index.cds");
-    if (!fs.existsSync(indexCdsPath)) {
-      fs.writeFileSync(indexCdsPath, addedAppUsings.join("\n"), "utf8");
-      console.log(`File '${indexCdsPath}' written.`);
-    } else {
-      adjustAllLines("app/index.cds", (lines) => {
-        return lines.concat(addedAppUsings);
+    if (addedApps.length > 0) {
+      const addedAppUsings = addedApps.map((app) => `using from './${app}';`);
+      const indexCdsPath = path.join(process.cwd(), "app/index.cds");
+      if (!fs.existsSync(indexCdsPath)) {
+        fs.writeFileSync(indexCdsPath, addedAppUsings.join("\n"), "utf8");
+        console.log(`File '${indexCdsPath}' written.`);
+      } else {
+        adjustAllLines("app/index.cds", (lines) => {
+          return lines.concat(addedAppUsings);
+        });
+      }
+      adjustJSON("package.json", (json) => {
+        json.sapux ??= [];
+        for (const app of addedApps) {
+          if (!json.sapux.includes(`app/${app}`)) {
+            json.sapux.push(`app/${app}`);
+          }
+        }
       });
     }
 
@@ -111,19 +121,3 @@ module.exports = () => {
     console.error(err.message);
   }
 };
-
-function copyFolderSync(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
-  const files = fs.readdirSync(src, { withFileTypes: true });
-  for (const file of files) {
-    const srcPath = path.join(src, file.name);
-    const destPath = path.join(dest, file.name);
-    if (file.isDirectory()) {
-      copyFolderSync(srcPath, destPath);
-    } else if (!Exclude.Files.includes(file.name) && !Exclude.Extensions.includes(path.extname(file.name))) {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}

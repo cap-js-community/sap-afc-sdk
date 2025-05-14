@@ -4,11 +4,12 @@
 const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
+const YAML = require("yaml");
 
 const config = require("../config.json");
 const commander = require("commander");
 
-const { adjustJSON, adjustYAMLDocument } = require("../common/util");
+const { isJava, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common/util");
 
 module.exports = {
   register: function (program) {
@@ -26,6 +27,7 @@ module.exports = {
           "Add one or more features to the project (comma-separated list)",
         ).choices(["broker", "sample", "http", "add"]),
       )
+      .option("-j, --java", "Java based project")
       .addHelpText(
         "afterAll",
         `
@@ -51,7 +53,7 @@ Examples:
     }
 
     console.log(`Initializing project`);
-    let success = module.exports.process(target);
+    let success = module.exports.process(target, this.opts());
     if (success) {
       const options = this.opts();
       if (options.add) {
@@ -67,129 +69,15 @@ Examples:
       process.exit(-1);
     }
   },
-  process: function (target) {
+  process: function (target, options) {
     try {
       target ||= config.defaultTarget;
-
-      // Create app stubs
-      const appStubs = [];
-      for (const app of config.apps) {
-        const appPath = path.join(process.cwd(), config.appRoot, app);
-        if (!fs.existsSync(appPath)) {
-          fs.mkdirSync(appPath, { recursive: true });
-          appStubs.push(app);
-        }
+      if (!isJava(options)) {
+        processNode(target);
+      } else {
+        processJava(target);
       }
-
-      // Remove previous replacements
-      adjustYAMLDocument("mta.yaml", (yaml) => {
-        for (const app of appStubs) {
-          for (const module of yaml.get("modules").items) {
-            if (module.get("path") === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
-              module.set("path", `app/${app}`);
-              if (module.getIn(["build-parameters", "commands", 0]) === "npm i") {
-                module.setIn(["build-parameters", "commands", 0], "npm ci");
-              }
-              break;
-            }
-          }
-        }
-        return yaml;
-      });
-
-      // Project
-      adjustJSON("package.json", (json) => {
-        if (
-          (process.env.APPROUTER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.approuter) ||
-          (process.env.SERVER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.server)
-        ) {
-          json.cds ??= {};
-          json.cds.requires ??= {};
-          json.cds.requires["sap-afc-sdk"] ??= {};
-          json.cds.requires["sap-afc-sdk"]["[production]"] ??= {};
-          json.cds.requires["sap-afc-sdk"]["[production]"].endpoints ??= {};
-          if (!json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.approuter) {
-            json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.approuter = process.env.APPROUTER_URL;
-          }
-          if (!json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.server) {
-            json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.server = process.env.SERVER_URL;
-          }
-        }
-        json.sapux ??= [];
-        for (const app of config.apps) {
-          if (!json.sapux.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
-            json.sapux.push(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
-          }
-        }
-      });
-
-      // cds add
-      shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
-
-      // Cleanup app stubs
-      for (const app of appStubs) {
-        const appPath = path.join(process.cwd(), config.appRoot, app);
-        if (fs.existsSync(appPath)) {
-          fs.rmSync(appPath, { recursive: true, force: true });
-        }
-      }
-
-      // CF
-      adjustYAMLDocument("mta.yaml", (yaml) => {
-        for (const resource of yaml.get("resources").items) {
-          if (resource.getIn(["parameters", "service"]) === "xsuaa") {
-            resource.setIn(["parameters", "service-plan"], "broker");
-          }
-        }
-        for (const app of appStubs) {
-          for (const module of yaml.get("modules").items) {
-            if (module.get("path") === `app/${app}`) {
-              module.set("path", `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
-              if (module.getIn(["build-parameters", "commands", 0]) === "npm ci") {
-                module.setIn(["build-parameters", "commands", 0], "npm i");
-              }
-              break;
-            }
-          }
-        }
-        return yaml;
-      });
-
-      // Kyma
-      const repository = process.env.CONTAINER_REPOSITORY;
-      adjustYAMLDocument("chart/values.yaml", (yaml) => {
-        if (process.env.GLOBAL_DOMAIN) {
-          yaml.setIn(["global", "domain"], process.env.GLOBAL_DOMAIN);
-        }
-        if (repository) {
-          yaml.setIn(["global", "image", "registry"], repository);
-        }
-        yaml.setIn(["srv", "expose", "enabled"], true);
-        yaml.setIn(["xsuaa", "servicePlanName"], "broker");
-        return yaml;
-      });
-      adjustYAMLDocument("containerize.yaml", (yaml) => {
-        if (repository) {
-          yaml.set("repository", repository);
-        }
-        for (const app of appStubs) {
-          yaml.get("before-all").items.forEach((line, index) => {
-            if (line.value.includes(`app/${app}`)) {
-              yaml.setIn(
-                ["before-all", index],
-                line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),
-              );
-            }
-          });
-        }
-        return yaml;
-      });
-
-      // Approuter
-      adjustJSON("app/router/xs-app.json", (json) => {
-        json.websockets = { enabled: true };
-      });
-
+      processCommon(target);
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);
@@ -197,3 +85,186 @@ Examples:
     return false;
   },
 };
+
+function processNode(target) {
+  // Create app stubs
+  const appStubs = [];
+  for (const app of config.apps) {
+    const appPath = path.join(process.cwd(), config.appRoot, app);
+    if (!fs.existsSync(appPath)) {
+      fs.mkdirSync(appPath, { recursive: true });
+      appStubs.push(app);
+    }
+  }
+
+  // Remove previous replacements
+  adjustYAMLDocument("mta.yaml", (yaml) => {
+    for (const app of appStubs) {
+      for (const module of yaml.get("modules").items) {
+        if (module.get("path") === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
+          module.set("path", `app/${app}`);
+          if (module.getIn(["build-parameters", "commands", 0]) === "npm i") {
+            module.setIn(["build-parameters", "commands", 0], "npm ci");
+          }
+          break;
+        }
+      }
+    }
+    return yaml;
+  });
+
+  // Project
+  adjustJSON("package.json", (json) => {
+    if (
+      (process.env.APPROUTER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.approuter) ||
+      (process.env.SERVER_URL && !json.cds?.requires?.["sap-afc-sdk"]?.["[production]"]?.endpoints?.server)
+    ) {
+      json.cds ??= {};
+      json.cds.requires ??= {};
+      json.cds.requires["sap-afc-sdk"] ??= {};
+      json.cds.requires["sap-afc-sdk"]["[production]"] ??= {};
+      json.cds.requires["sap-afc-sdk"]["[production]"].endpoints ??= {};
+      if (process.env.APPROUTER_URL && !json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.approuter) {
+        json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.approuter = process.env.APPROUTER_URL;
+      }
+      if (process.env.SERVER_URL && !json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.server) {
+        json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.server = process.env.SERVER_URL;
+      }
+    }
+    json.sapux ??= [];
+    for (const app of appStubs) {
+      if (!json.sapux.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
+        json.sapux.push(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
+      }
+    }
+  });
+
+  // cds add
+  shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
+
+  // Cleanup app stubs
+  for (const app of appStubs) {
+    const appPath = path.join(process.cwd(), config.appRoot, app);
+    if (fs.existsSync(appPath)) {
+      fs.rmSync(appPath, { recursive: true, force: true });
+    }
+  }
+
+  // CF
+  adjustYAMLDocument("mta.yaml", (yaml) => {
+    for (const app of appStubs) {
+      for (const module of yaml.get("modules").items) {
+        if (module.get("path") === `app/${app}`) {
+          module.set("path", `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
+          if (module.getIn(["build-parameters", "commands", 0]) === "npm ci") {
+            module.setIn(["build-parameters", "commands", 0], "npm i");
+          }
+          break;
+        }
+      }
+    }
+    return yaml;
+  });
+
+  // Kyma
+  adjustYAMLDocument("containerize.yaml", (yaml) => {
+    for (const app of appStubs) {
+      yaml.get("before-all").items.forEach((line, index) => {
+        if (line.value.includes(`app/${app}`)) {
+          yaml.setIn(
+            ["before-all", index],
+            line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),
+          );
+        }
+      });
+    }
+    return yaml;
+  });
+}
+
+function processJava(target) {
+  // Project
+  adjustJSON("package.json", (json) => {
+    if (json.name.endsWith("-cds")) {
+      json.name = json.name.substring(0, json.name.length - 4);
+    }
+  });
+
+  // POM
+  adjustXML("srv/pom.xml", (xml) => {
+    const dependency = {
+      groupId: ["cap.js.community"],
+      artifactId: ["sap-afc-sdk"],
+    };
+    if (!xml.project.dependencies) {
+      xml.project.dependencies = [{}];
+    }
+    if (
+      !xml.project.dependencies[0].dependency.find(
+        (dep) => dep.groupId[0] === dependency.groupId[0] && dependency.artifactId[0] === dependency.artifactId[0],
+      )
+    ) {
+      xml.project.dependencies[0].dependency.push(dependency);
+    }
+    return xml;
+  });
+
+  // Application
+  adjustYAMLDocument("srv/src/main/resources/application.yaml", (yaml) => {
+    if (
+      (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
+      (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))
+    ) {
+      if (!yaml.getIn(["sap-afc-sdk", "endpoints"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints"], new YAML.YAMLMap());
+      }
+      if (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints", "approuter"], process.env.APPROUTER_URL);
+      }
+      if (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
+      }
+    }
+    return yaml;
+  });
+
+  // cds add
+  shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
+}
+
+function processCommon() {
+  // CF
+  adjustYAMLDocument("mta.yaml", (yaml) => {
+    for (const resource of yaml.get("resources").items) {
+      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
+        resource.setIn(["parameters", "service-plan"], "broker");
+      }
+    }
+    return yaml;
+  });
+
+  // Kyma
+  const repository = process.env.CONTAINER_REPOSITORY;
+  adjustYAMLDocument("chart/values.yaml", (yaml) => {
+    if (process.env.GLOBAL_DOMAIN) {
+      yaml.setIn(["global", "domain"], process.env.GLOBAL_DOMAIN);
+    }
+    if (repository) {
+      yaml.setIn(["global", "image", "registry"], repository);
+    }
+    yaml.setIn(["srv", "expose", "enabled"], true);
+    yaml.setIn(["xsuaa", "servicePlanName"], "broker");
+    return yaml;
+  });
+  adjustYAMLDocument("containerize.yaml", (yaml) => {
+    if (repository) {
+      yaml.set("repository", repository);
+    }
+    return yaml;
+  });
+
+  // Approuter
+  adjustJSON("app/router/xs-app.json", (json) => {
+    json.websockets = { enabled: true };
+  });
+}

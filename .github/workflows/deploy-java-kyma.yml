@@ -1,5 +1,5 @@
-# This workflow will set up a test project based on SDK and deploy to Cloud Foundry
-name: Test Deploy Kyma
+# This workflow will set up a test project based on AFC SDK for CAP Java and deploy to Kyma
+name: Test Deploy Java/Kyma
 permissions:
   contents: read
   pull-requests: write
@@ -28,28 +28,28 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Setup CDS project
-        run: npx cds init afcsdk && cd afcsdk && npm i
+        run: npx cds init afcsdkjava && cd afcsdkjava && npm i
       - name: Install SDK
         run: npm i github:cap-js-community/sap-afc-sdk
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Boostrap SDK
         run: npx afc init kyma
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
         env:
           CONTAINER_REPOSITORY: ${{ secrets.ARTIFACTORY_REPOSITORY }}
           GLOBAL_DOMAIN: ${{ secrets.KYMA_GLOBAL_DOMAIN }}
-          APPROUTER_URL: https://afcsdk-approuter-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
-          SERVER_URL: https://afcsdk-srv-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
+          APPROUTER_URL: https://afcsdkjava-approuter-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
+          SERVER_URL: https://afcsdkjava-srv-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
       - name: Add SDK features
-        run: npx afc add -a broker,stub,mock,sample,test,http
-        working-directory: ./afcsdk
+        run: npx afc add -a app,broker,stub,mock,sample,test,http
+        working-directory: ./afcsdkjava
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_KYMA_HASH }}
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_KYMA_ID }}
           BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_KYMA_PLAN_ID }}
       - name: Unit Test
         run: npm test
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Setup Kyma
         uses: ./.github/actions/kyma-setup
         with:
@@ -62,10 +62,10 @@ jobs:
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: Containerize
         run: ctz containerize.yaml --push --logs
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Upgrade
-        run: helm upgrade --install afcsdk ./gen/chart -n ${{ secrets.KYMA_NAMESPACE }}
-        working-directory: ./afcsdk
+        run: helm upgrade --install afcsdkjava ./gen/chart -n ${{ secrets.KYMA_NAMESPACE }}
+        working-directory: ./afcsdkjava
       - name: Rollout
         run: kubectl rollout restart deployment -n ${{ secrets.KYMA_NAMESPACE }}
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava

@@ -1,5 +1,5 @@
-# This workflow will set up a test project based on SDK and deploy to Cloud Foundry
-name: Test Deploy CF
+# This workflow will set up a test project based on AFC SDK for CAP Node.js and deploy to Cloud Foundry
+name: Test Deploy Node/CF
 permissions:
   contents: read
   pull-requests: write

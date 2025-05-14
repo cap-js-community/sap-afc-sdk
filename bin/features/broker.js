@@ -5,11 +5,13 @@ const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
 
-const { generateHashBrokerPassword } = require("../common/util");
+const { isJava, generateHashBrokerPassword, adjustYAMLDocument } = require("../common/util");
 
 const BROKER_PATH = path.join(process.cwd(), "./srv/broker.json");
 const CATALOG_PATH = path.join(process.cwd(), "./srv/catalog.json");
 const APP_NAME = require(path.join(process.cwd(), "package.json"))?.name ?? "afc-scheduling-provider";
+
+const BROKER_USER = "broker-user";
 
 const BROKER = {
   SBF_SERVICE_CONFIG: {
@@ -35,7 +37,7 @@ const BROKER = {
     },
   },
   SBF_BROKER_CREDENTIALS_HASH: {
-    "broker-user": "",
+    BROKER_USER: "",
   },
 };
 
@@ -78,7 +80,7 @@ function writeFile(path, content) {
   return true;
 }
 
-module.exports = () => {
+module.exports = (options) => {
   // Catalog
   if (process.env.BROKER_SERVICE_ID) {
     CATALOG.services[0].id = process.env.BROKER_SERVICE_ID;
@@ -86,19 +88,43 @@ module.exports = () => {
   if (process.env.BROKER_SERVICE_PLAN_ID) {
     CATALOG.services[0].plans[0].id = process.env.BROKER_SERVICE_PLAN_ID;
   }
-  writeFile(CATALOG_PATH, CATALOG);
 
   // Broker
   let brokerPassword = {};
   if (!fileExists(BROKER_PATH)) {
     if (process.env.BROKER_PASSWORD_HASH) {
-      BROKER.SBF_BROKER_CREDENTIALS_HASH["broker-user"] = process.env.BROKER_PASSWORD_HASH;
+      BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER] = process.env.BROKER_PASSWORD_HASH;
     } else {
       brokerPassword = generateHashBrokerPassword();
-      BROKER.SBF_BROKER_CREDENTIALS_HASH["broker-user"] = brokerPassword.hash;
+      BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER] = brokerPassword.hash;
     }
   }
-  if (writeFile(BROKER_PATH, BROKER) && brokerPassword.clear) {
+
+  let brokerWritten = false;
+  if (!isJava(options)) {
+    writeFile(CATALOG_PATH, CATALOG);
+    if (writeFile(BROKER_PATH, BROKER)) {
+      brokerWritten = true;
+    }
+  } else {
+    adjustYAMLDocument("srv/src/main/resources/application.yaml", (yaml) => {
+      if (!yaml.getIn(["spring", "openservicebroker"])) {
+        yaml.setIn(["spring", "openservicebroker", "catalog"], CATALOG);
+      }
+      if (!yaml.get("broker")) {
+        yaml.set("broker", {
+          user: BROKER_USER,
+          credentialsHash: BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER],
+          endpoints: BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints,
+          "credential-types":
+            BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared["oauth2-configuration"]["credential-types"],
+        });
+        brokerWritten = true;
+      }
+      return yaml;
+    });
+  }
+  if (brokerWritten && brokerPassword.clear) {
     console.log(
       `Keep it safe to create broker and to fetch key after deployment: afc api key -p '${brokerPassword.clear}'`,
     );

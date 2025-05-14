@@ -131,28 +131,25 @@ function adjustXML(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, "utf8");
-    const xml = xml2js.parseString(content);
+    const xmlParser = new xml2js.Parser({
+      async: false,
+    });
+    let xml;
+    xmlParser.parseString(content, (err, _xml) => {
+      if (err) {
+        throw err;
+      }
+      xml = _xml;
+    });
     const newXml = callback(xml) ?? xml;
-    const newContent = xml2js.Builder().includes(newXml);
+    const xmlBuilder = new xml2js.Builder();
+    const newContent = xmlBuilder.buildObject(newXml);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
       return true;
     }
   }
   return false;
-}
-
-function copyTemplate(folder, files) {
-  fs.mkdirSync(folder, { recursive: true });
-  for (const file of files) {
-    const src = path.join(__dirname, "..", "templates", file);
-    const dest = path.join(process.cwd(), file);
-    if (!fs.existsSync(dest)) {
-      fs.copyFileSync(src, dest);
-    }
-  }
-  // eslint-disable-next-line no-console
-  console.log(`Folder '${folder}' written.`);
 }
 
 function generateHashBrokerPassword() {
@@ -165,6 +162,50 @@ function generateHashBrokerPassword() {
   };
 }
 
+function copyFolder(src, dest, exclude) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  const files = fs.readdirSync(src, { withFileTypes: true });
+  for (const file of files) {
+    if ([".DS_Store"].includes(file.name)) {
+      continue;
+    }
+    const srcPath = path.join(src, file.name);
+    const destPath = path.join(dest, file.name);
+    if (file.isDirectory()) {
+      copyFolder(srcPath, destPath, exclude);
+    } else if (!exclude?.files?.includes(file.name) && !exclude?.extensions?.includes(path.extname(file.name))) {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+function copyFolderAdjusted(src, dest, exclude, callback) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  const files = fs.readdirSync(src, { withFileTypes: true });
+  for (const file of files) {
+    if ([".DS_Store"].includes(file.name)) {
+      continue;
+    }
+    const srcPath = path.join(src, file.name);
+    const destPath = path.join(dest, file.name);
+    if (file.isDirectory()) {
+      copyFolderAdjusted(srcPath, destPath, exclude, callback);
+    } else if (!exclude?.files?.includes(file.name) && !exclude?.extensions?.includes(path.extname(file.name))) {
+      const content = fs.readFileSync(srcPath, "utf8");
+      const newContent = callback(content, srcPath, destPath) ?? content;
+      fs.writeFileSync(destPath, newContent, "utf8");
+    }
+  }
+}
+
+function isJava(options) {
+  return fs.existsSync(path.join(process.cwd(), "pom.xml")) || !!options?.java;
+}
+
 module.exports = {
   adjustText,
   adjustLines,
@@ -175,6 +216,8 @@ module.exports = {
   adjustYAMLDocument,
   adjustYAMLAllDocument,
   adjustXML,
-  copyTemplate,
   generateHashBrokerPassword,
+  copyFolder,
+  copyFolderAdjusted,
+  isJava,
 };
