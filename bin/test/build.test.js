@@ -19,9 +19,9 @@ const projectDir = path.join(workingDir, project);
 
 const Commands = {
   BEFORE: [`cd ${tempDir}`, `npx cds init ${project}`, `cd ${project}`, "npm install ../../../"],
-  CF: ["afc init cf"],
-  KYMA: ["afc init kyma"],
-  AFTER: ["afc add -a broker,stub,mock,sample,test,http"],
+  CF: ["npx afc init cf"],
+  KYMA: ["npx afc init kyma"],
+  AFTER: ["npx afc add -a broker,stub,mock,sample,test,http"],
 };
 
 const Files = {
@@ -40,7 +40,7 @@ describe("Build", () => {
 
   afterAll(() => {
     if (fs.existsSync(workingDir)) {
-      fs.rmdirSync(workingDir, { recursive: true });
+      // fs.rmdirSync(workingDir, { recursive: true });
     }
   });
 
