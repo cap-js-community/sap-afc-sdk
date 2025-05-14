@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const yaml = require("yaml");
 const shelljs = require("shelljs");
+const xml2js = require("xml2js");
 
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
@@ -126,6 +127,21 @@ function adjustYAMLAllDocument(file, callback) {
   return false;
 }
 
+function adjustXML(file, callback) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    const xml = xml2js.parseString(content);
+    const newXml = callback(xml) ?? xml;
+    const newContent = xml2js.Builder().includes(newXml);
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent, "utf8");
+      return true;
+    }
+  }
+  return false;
+}
+
 function copyTemplate(folder, files) {
   fs.mkdirSync(folder, { recursive: true });
   for (const file of files) {
@@ -158,6 +174,7 @@ module.exports = {
   adjustYAML,
   adjustYAMLDocument,
   adjustYAMLAllDocument,
+  adjustXML,
   copyTemplate,
   generateHashBrokerPassword,
 };
