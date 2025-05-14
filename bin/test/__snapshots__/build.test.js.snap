@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Build CF 1`] = `
+exports[`Build Node / CF 1`] = `
 "{
   "name": "afcsdk",
   "version": "1.0.0",
@@ -75,7 +75,7 @@ exports[`Build CF 1`] = `
 }"
 `;
 
-exports[`Build CF 2`] = `
+exports[`Build Node / CF 2`] = `
 "{
   "routes": [
     {
@@ -91,7 +91,7 @@ exports[`Build CF 2`] = `
 }"
 `;
 
-exports[`Build CF 3`] = `
+exports[`Build Node / CF 3`] = `
 "{
   "SBF_SERVICE_CONFIG": {
     "afcsdk": {
@@ -127,7 +127,7 @@ exports[`Build CF 3`] = `
 }"
 `;
 
-exports[`Build CF 4`] = `
+exports[`Build Node / CF 4`] = `
 "{
   "services": [
     {
@@ -154,7 +154,7 @@ exports[`Build CF 4`] = `
 }"
 `;
 
-exports[`Build CF 5`] = `
+exports[`Build Node / CF 5`] = `
 "_schema-version: 3.3.0
 ID: afcsdk
 version: 1.0.0
@@ -361,7 +361,7 @@ resources:
 "
 `;
 
-exports[`Build Kyma 1`] = `
+exports[`Build Node / Kyma 1`] = `
 "{
   "name": "afcsdk",
   "version": "1.0.0",
@@ -435,7 +435,7 @@ exports[`Build Kyma 1`] = `
 }"
 `;
 
-exports[`Build Kyma 2`] = `
+exports[`Build Node / Kyma 2`] = `
 "{
   "routes": [
     {
@@ -451,7 +451,7 @@ exports[`Build Kyma 2`] = `
 }"
 `;
 
-exports[`Build Kyma 3`] = `
+exports[`Build Node / Kyma 3`] = `
 "{
   "SBF_SERVICE_CONFIG": {
     "afcsdk": {
@@ -487,7 +487,7 @@ exports[`Build Kyma 3`] = `
 }"
 `;
 
-exports[`Build Kyma 4`] = `
+exports[`Build Node / Kyma 4`] = `
 "{
   "services": [
     {
@@ -514,7 +514,7 @@ exports[`Build Kyma 4`] = `
 }"
 `;
 
-exports[`Build Kyma 5`] = `
+exports[`Build Node / Kyma 5`] = `
 "# yaml-language-server: $schema=./values.schema.json
 
 global:
@@ -651,7 +651,7 @@ cloud-logging:
 "
 `;
 
-exports[`Build Kyma 6`] = `
+exports[`Build Node / Kyma 6`] = `
 "_schema-version: '1.0'
 repository: afcsdk.common.repositories.cloud.sap
 tag: latest

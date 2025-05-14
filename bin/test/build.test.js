@@ -18,20 +18,21 @@ const workingDir = path.join(__dirname, "..", tempDir);
 const projectDir = path.join(workingDir, project);
 
 const Commands = {
-  BEFORE: [`cd ${tempDir}`, `cd ${project}`],
+  BEFORE: [`cd ${tempDir}`],
   NODE: [`npx cds init ${project}`],
   JAVA: [`npx cds init ${project} --java`],
-  INSTALL: ["npm install ../../../"],
-  CF: ["afc init cf"],
-  KYMA: ["afc init kyma"],
-  AFTER: ["afc add -a broker,stub,mock,sample,test,http"],
+  INSTALL: [`cd ${project}`, "npm install ../../../"],
+  CF: ["npx afc init cf"],
+  KYMA: ["npx afc init kyma"],
+  AFTER: ["npx afc add -a broker,stub,mock,sample,test,http"],
 };
 
 const Files = {
-  ALL: ["package.json", "app/router/xs-app.json", "srv/broker.json", "srv/catalog.json"],
+  ALL: ["package.json", "app/router/xs-app.json", ],
+  NODE: ["srv/broker.json", "srv/catalog.json"],
+  JAVA: ["pom.xml", "srv/src/main/resources/application.yaml"],
   CF: ["mta.yaml"],
   KYMA: ["chart/values.yaml", "containerize.yaml"],
-  JAVA: ["pom.xml", "srv/src/main/resources/application.yaml"],
 };
 
 describe("Build", () => {
@@ -53,7 +54,7 @@ describe("Build", () => {
       [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.CF, ...Commands.AFTER].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.CF]) {
+    for (const file of [...Files.ALL, ...Files.NODE, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
@@ -64,7 +65,7 @@ describe("Build", () => {
       [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.KYMA, ...Commands.AFTER].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.KYMA]) {
+    for (const file of [...Files.ALL, ...Files.NODE, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }

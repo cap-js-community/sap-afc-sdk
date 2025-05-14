@@ -14,7 +14,7 @@ mkdir -p temp
 cd temp
 npx cds init afcsdkjava --java
 cd afcsdkjava
-npm install github:cap-js-community/sap-afc-sdk
-# npx afc init kyma
-# npx afc add -a app,broker,stub,mock,sample,test,http
+npm install ../../../ # npm install github:cap-js-community/sap-afc-sdk
+npx afc init kyma
+npx afc add -a app,broker,stub,mock,sample,test,http
 # npx npm test

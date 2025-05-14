@@ -37,7 +37,7 @@ const BROKER = {
     },
   },
   SBF_BROKER_CREDENTIALS_HASH: {
-    BROKER_USER: "",
+    [BROKER_USER]: "",
   },
 };
 
