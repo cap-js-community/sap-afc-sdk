@@ -45,7 +45,7 @@ describe("Build", () => {
 
   afterAll(() => {
     if (fs.existsSync(workingDir)) {
-      fs.rmdirSync(workingDir, { recursive: true });
+      // fs.rmdirSync(workingDir, { recursive: true });
     }
   });
 
