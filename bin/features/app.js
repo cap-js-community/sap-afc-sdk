@@ -6,7 +6,14 @@ const path = require("path");
 const shelljs = require("shelljs");
 const config = require("../config.json");
 
-const { adjustJSON, adjustYAMLAllDocument, adjustAllLines, copyFolder, projectName, adjustYAMLDocument } = require("../common/util");
+const {
+  adjustJSON,
+  adjustYAMLAllDocument,
+  adjustAllLines,
+  copyFolder,
+  projectName,
+  adjustYAMLDocument,
+} = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
 const Exclude = {
@@ -129,12 +136,14 @@ module.exports = () => {
             const requires = module.getIn(["build-parameters", "requires"]);
             requires.flow = false;
             for (const app of addedApps) {
-              if (!requires.items.find(r => r.get("name") === `${name}${app}`)) {
-                requires.items.push(yaml.createNode({
-                  name: `${name}${app}`,
-                  artifacts: [`${app}.zip`],
-                  "target-path": "app/"
-                }));
+              if (!requires.items.find((r) => r.get("name") === `${name}${app}`)) {
+                requires.items.push(
+                  yaml.createNode({
+                    name: `${name}${app}`,
+                    artifacts: [`${app}.zip`],
+                    "target-path": "app/",
+                  }),
+                );
               }
             }
             break;
@@ -142,7 +151,6 @@ module.exports = () => {
         }
       });
     }
-
   } catch (err) {
     console.error(err.message);
   }

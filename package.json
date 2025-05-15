@@ -65,7 +65,7 @@
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.4",
     "@sap/cds-common-content": "^2.1.0",
-    "@sap/sbf": "^6.9.2",
+    "@sap/sbf": "^6.9.3",
     "commander": "^13.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -77,10 +77,10 @@
     "swagger-ui-express": "^5.0.1",
     "verror": "^1.10.1",
     "xml2js": "^0.6.2",
-    "yaml": "^2.7.1"
+    "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@cap-js-community/sap-afc-sdk": "github:cap-js-community/sap-afc-sdk",
+    "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/cds-test": "^0.3.0",
     "@cap-js/sqlite": "^1.11.0",
     "@sap/cds": "^8.9.3",
