@@ -6,6 +6,18 @@ const yaml = require("yaml");
 const shelljs = require("shelljs");
 const xml2js = require("xml2js");
 
+function projectName() {
+  const packagePath = path.join(process.cwd(), "package.json");
+  let name;
+  if (fs.existsSync(packagePath)) {
+    name = require(packagePath).name;
+  }
+  if (isJava() && name?.endsWith("-cds")) {
+    name = name.slice(0, -4);
+  }
+  return name;
+}
+
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
@@ -107,8 +119,9 @@ function adjustYAMLAllDocument(file, callback) {
     const content = fs.readFileSync(filePath, "utf8");
     const ymls = yaml.parseAllDocuments(content);
     const newYmls = [];
+    let i = 0;
     for (const yml of ymls) {
-      const newYml = callback(yml);
+      const newYml = callback(yml, i++);
       if (newYml === null) {
         continue;
       }
@@ -176,7 +189,9 @@ function copyFolder(src, dest, exclude) {
     if (file.isDirectory()) {
       copyFolder(srcPath, destPath, exclude);
     } else if (!exclude?.files?.includes(file.name) && !exclude?.extensions?.includes(path.extname(file.name))) {
-      fs.copyFileSync(srcPath, destPath);
+      if (!fs.existsSync(destPath)) {
+        fs.copyFileSync(srcPath, destPath);
+      }
     }
   }
 }
@@ -195,9 +210,11 @@ function copyFolderAdjusted(src, dest, exclude, callback) {
     if (file.isDirectory()) {
       copyFolderAdjusted(srcPath, destPath, exclude, callback);
     } else if (!exclude?.files?.includes(file.name) && !exclude?.extensions?.includes(path.extname(file.name))) {
-      const content = fs.readFileSync(srcPath, "utf8");
-      const newContent = callback(content, srcPath, destPath) ?? content;
-      fs.writeFileSync(destPath, newContent, "utf8");
+      if (!fs.existsSync(destPath)) {
+        const content = fs.readFileSync(srcPath, "utf8");
+        const newContent = callback(content, srcPath, destPath) ?? content;
+        fs.writeFileSync(destPath, newContent, "utf8");
+      }
     }
   }
 }
@@ -207,6 +224,7 @@ function isJava(options) {
 }
 
 module.exports = {
+  projectName,
   adjustText,
   adjustLines,
   adjustAllLines,

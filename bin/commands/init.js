@@ -2,12 +2,14 @@
 "use strict";
 
 const fs = require("fs");
+const commander = require("commander");
 const path = require("path");
 const shelljs = require("shelljs");
 const YAML = require("yaml");
 
+const { projectName } = require("../common/util");
+
 const config = require("../config.json");
-const commander = require("commander");
 
 const { isJava, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common/util");
 
@@ -46,9 +48,9 @@ Examples:
       );
   },
   handle: function (target) {
-    const packagePath = path.join(process.cwd(), "package.json");
-    if (!fs.existsSync(packagePath)) {
-      console.log(`Project package.json not found at '${packagePath}'.`);
+    const name = projectName();
+    if (!name) {
+      console.log(`CDS project not found`);
       return false;
     }
 
@@ -140,7 +142,7 @@ function processNode(target) {
   });
 
   // cds add
-  shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
+  shelljs.exec(`cds add ${config.features[target].concat(config.features.node).join(",")} ${config.options.cds}`);
 
   // Cleanup app stubs
   for (const app of appStubs) {
@@ -183,13 +185,6 @@ function processNode(target) {
 }
 
 function processJava(target) {
-  // Project
-  adjustJSON("package.json", (json) => {
-    if (json.name.endsWith("-cds")) {
-      json.name = json.name.substring(0, json.name.length - 4);
-    }
-  });
-
   // POM
   adjustXML("srv/pom.xml", (xml) => {
     const dependency = {
@@ -204,7 +199,8 @@ function processJava(target) {
         (dep) => dep.groupId[0] === dependency.groupId[0] && dependency.artifactId[0] === dependency.artifactId[0],
       )
     ) {
-      xml.project.dependencies[0].dependency.push(dependency);
+      // TODO: Build plugin
+      // xml.project.dependencies[0].dependency.push(dependency);
     }
     return xml;
   });
@@ -229,7 +225,7 @@ function processJava(target) {
   });
 
   // cds add
-  shelljs.exec(`cds add ${config.features[target].concat(config.features.cds).join(",")} ${config.options.cds}`);
+  shelljs.exec(`cds add ${config.features[target].concat(config.features.java).join(",")} ${config.options.cds}`);
 }
 
 function processCommon() {

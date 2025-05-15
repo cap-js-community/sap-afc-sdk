@@ -25,6 +25,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
       - run: npm ci
       - name: Setup CDS project
         run: npx cds init afcsdkjava && cd afcsdkjava && npm i

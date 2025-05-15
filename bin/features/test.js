@@ -2,8 +2,8 @@
 "use strict";
 
 const path = require("path");
-const { adjustJSON, isJava, copyFolderAdjusted } = require("../common/util");
-const fs = require("fs");
+const shelljs = require("shelljs");
+const { isJava, adjustJSON, copyFolderAdjusted, projectName } = require("../common/util");
 
 const Files = {
   node: "node/test",
@@ -12,40 +12,48 @@ const Files = {
 
 module.exports = (options) => {
   try {
-    const packagePath = path.join(process.cwd(), "package.json");
-    if (!fs.existsSync(packagePath)) {
-      console.log(`Project package.json not found at '${packagePath}'.`);
+    const name = projectName();
+    if (!name) {
+      console.log(`CDS project not found`);
       return false;
     }
-    const packageJson = require(packagePath);
 
     let srcFolder;
     let destFolder;
     if (!isJava(options)) {
       srcFolder = path.join(__dirname, "..", "templates", Files.node);
-      destFolder = path.join(process.cwd(), "srv");
+      destFolder = path.join(process.cwd(), "test");
     } else {
       srcFolder = path.join(__dirname, "..", "templates", Files.java);
-      destFolder = path.join(process.cwd(), "srv/src/test/java/customer", packageJson.name, "scheduling");
+      destFolder = path.join(process.cwd(), "srv/src/test/java/customer", name, "scheduling");
     }
     copyFolderAdjusted(srcFolder, destFolder, {}, (content) => {
       if (isJava(options)) {
-        content = content.replace("package customer.scheduling;", `package customer.${packageJson.name}.scheduling;`);
+        content = content.replace("package customer.scheduling;", `package customer.${name}.scheduling;`);
       }
       return content;
     });
     console.log(`Folder '${destFolder}' written.`);
 
     if (!isJava(options)) {
+      shelljs.exec(`npm install --save-dev @cap-js/cds-test jest`, { silent: true });
       adjustJSON("package.json", (json) => {
-        json.cds ??= {};
-        json.cds.requires ??= {};
-        json.cds.requires.SchedulingProcessingService ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox.events ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox.events.syncJob ??= {};
-        if (!json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron) {
-          json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron = "*/1 * * * *";
+        json.scripts ??= {};
+        if (!json.scripts.test) {
+          json.scripts.test = "jest";
+        }
+      });
+    } else {
+      adjustJSON("package.json", (json) => {
+        json.scripts ??= {};
+        if (!json.scripts.start) {
+          json.scripts.start = "mvn spring-boot:run";
+        }
+        if (!json.scripts.test) {
+          json.scripts.test = "mvn test";
+        }
+        if (!json.scripts.build) {
+          json.scripts.build = "mvn cds:build";
         }
       });
     }

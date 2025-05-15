@@ -4,6 +4,7 @@
 const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
+const YAML = require("yaml");
 const commander = require("commander");
 const { open } = require("openurl");
 const prompt = require("prompt-sync")();
@@ -309,14 +310,21 @@ function cfLogin() {
 
 function cfService() {
   const brokerPath = path.join(process.cwd(), "srv/broker.json");
-  if (!fs.existsSync(brokerPath)) {
-    console.log(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
-    return false;
+  if (fs.existsSync(brokerPath)) {
+    const broker = require(brokerPath);
+    const service = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
+    if (service) {
+      return service;
+    }
   }
-  const broker = require(brokerPath);
-  const service = Object.keys(broker.SBF_SERVICE_CONFIG)[0];
-  if (service) {
-    return service;
+  const applicationPath = path.join(process.cwd(), "srv/src/main/resources/application.yaml");
+  if (fs.existsSync(applicationPath)) {
+    const content = fs.readFileSync(applicationPath, "utf8");
+    const yaml = YAML.parseAllDocuments(content)?.[0];
+    const service = yaml?.getIn(["broker", "name"]);
+    if (service) {
+      return service;
+    }
   }
   console.log(`No service found in broker configuration. Call 'afc add broker'`);
 }

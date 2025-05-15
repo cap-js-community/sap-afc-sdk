@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class CustomSchedulingProcessingHandler implements EventHandler {
+public class SchedulingProcessingHandler implements EventHandler {
 
     @Autowired
     protected PersistenceService persistenceService;

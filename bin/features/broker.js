@@ -5,11 +5,12 @@ const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
 
-const { isJava, generateHashBrokerPassword, adjustYAMLDocument } = require("../common/util");
+const { projectName, isJava, generateHashBrokerPassword, adjustYAMLAllDocument } = require("../common/util");
 
 const BROKER_PATH = path.join(process.cwd(), "./srv/broker.json");
 const CATALOG_PATH = path.join(process.cwd(), "./srv/catalog.json");
-const APP_NAME = require(path.join(process.cwd(), "package.json"))?.name ?? "afc-scheduling-provider";
+
+const APP_NAME = projectName() ?? "afc-scheduling-provider";
 
 const BROKER_USER = "broker-user";
 
@@ -107,12 +108,16 @@ module.exports = (options) => {
       brokerWritten = true;
     }
   } else {
-    adjustYAMLDocument("srv/src/main/resources/application.yaml", (yaml) => {
+    adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index) => {
+      if (index !== 0) {
+        return yaml;
+      }
       if (!yaml.getIn(["spring", "openservicebroker"])) {
         yaml.setIn(["spring", "openservicebroker", "catalog"], CATALOG);
       }
       if (!yaml.get("broker")) {
         yaml.set("broker", {
+          name: APP_NAME,
           user: BROKER_USER,
           credentialsHash: BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER],
           endpoints: BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints,

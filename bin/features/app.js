@@ -3,10 +3,10 @@
 
 const fs = require("fs");
 const path = require("path");
-
+const shelljs = require("shelljs");
 const config = require("../config.json");
 
-const { adjustJSON, adjustYAMLAllDocument, adjustAllLines, copyFolderSync } = require("../common/util");
+const { adjustJSON, adjustYAMLAllDocument, adjustAllLines, copyFolder, projectName, adjustYAMLDocument } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
 const Exclude = {
@@ -19,13 +19,12 @@ const Files = ["appconfig/fioriSandboxConfig.json", "launchpad.html"];
 
 module.exports = () => {
   try {
-    const packagePath = path.join(process.cwd(), "package.json");
-    if (!fs.existsSync(packagePath)) {
-      console.log(`Project package.json not found at '${packagePath}'.`);
+    const name = projectName();
+    if (!name) {
+      console.log(`CDS project not found`);
       return false;
     }
 
-    const packageJson = require(packagePath);
     const addedApps = [];
     for (const app of config.apps) {
       const appPath = path.join(process.cwd(), config.appRoot, app);
@@ -35,15 +34,15 @@ module.exports = () => {
       }
 
       const srcPath = path.join(__dirname, "../../", config.appRoot, app);
-      copyFolderSync(srcPath, appPath);
+      copyFolder(srcPath, appPath);
 
       adjustJSON(path.join(config.appRoot, app, "webapp/manifest.json"), (json) => {
-        if (json["sap.app"]?.id && !json["sap.app"].id.startsWith(`${packageJson.name}.`)) {
+        if (json["sap.app"]?.id && !json["sap.app"].id.startsWith(`${name}.`)) {
           json["sap.app"] ??= {};
-          json["sap.app"].id = `${packageJson.name}.${json["sap.app"].id}`;
+          json["sap.app"].id = `${name}.${json["sap.app"].id}`;
         }
         if (!json?.["sap.cloud"]?.service) {
-          const strippedAppName = packageJson.name.replace(/-/g, "");
+          const strippedAppName = name.replace(/-/g, "");
           json["sap.cloud"] ??= {};
           json["sap.cloud"].service = `${strippedAppName}.service`;
         }
@@ -117,6 +116,33 @@ module.exports = () => {
       mergeKey: "id",
     });
     fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(mergedFioriSandboxConfig, null, 2), "utf8");
+
+    // cds add
+    shelljs.exec(`cds add html5-repo ${config.options.cds}`);
+
+    // TODO: Remove cap/issue/18449
+    if (addedApps.length > 0) {
+      // CF
+      adjustYAMLDocument("mta.yaml", (yaml) => {
+        for (const module of yaml.get("modules").items) {
+          if (module.get("name").endsWith("-app-deployer")) {
+            const requires = module.getIn(["build-parameters", "requires"]);
+            requires.flow = false;
+            for (const app of addedApps) {
+              if (!requires.items.find(r => r.get("name") === `${name}${app}`)) {
+                requires.items.push(yaml.createNode({
+                  name: `${name}${app}`,
+                  artifacts: [`${app}.zip`],
+                  "target-path": "app/"
+                }));
+              }
+            }
+            break;
+          }
+        }
+      });
+    }
+
   } catch (err) {
     console.error(err.message);
   }

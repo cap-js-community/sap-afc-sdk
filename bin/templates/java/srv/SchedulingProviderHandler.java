@@ -23,7 +23,7 @@ import java.util.*;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class CustomSchedulingProviderHandler implements EventHandler {
+public class SchedulingProviderHandler implements EventHandler {
 
     @Autowired
     private PersistenceService persistenceService;

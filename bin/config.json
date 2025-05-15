@@ -4,10 +4,11 @@
   "appRoot": "app",
   "apps": ["scheduling.monitoring.job"],
   "features": {
-    "cds": ["sqlite", "hana", "xsuaa", "cloud-logging", "approuter", "destination", "html5-repo", "workzone", "redis"],
+    "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"],
+    "node": ["sqlite", "hana", "xsuaa", "cloud-logging", "approuter", "destination", "html5-repo", "workzone", "redis"],
+    "java": ["hana", "xsuaa", "cloud-logging", "approuter", "destination", "html5-repo", "workzone"],
     "cf": ["mta"],
-    "kyma": ["helm", "containerize"],
-    "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"]
+    "kyma": ["helm", "containerize"]
   },
   "options": {
     "cds": "--for production --y"

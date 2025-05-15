@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 "use strict";
 
-const { adjustJSON, adjustYAMLDocument, isJava } = require("../common/util");
+const { adjustJSON, adjustYAMLAllDocument, isJava } = require("../common/util");
 
 module.exports = (options) => {
   if (!isJava(options)) {
@@ -43,7 +43,10 @@ function processNode(options) {
 }
 
 function processJava(options) {
-  adjustYAMLDocument("srv/src/main/resources/application.yaml", (yaml) => {
+  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index) => {
+    if (index !== 0) {
+      return yaml;
+    }
     if (yaml.getIn(["sap-afc-sdk", "mockProcessing"])) {
       if (options.xremove) {
         yaml.deleteIn(["sap-afc-sdk", "mockProcessing"]);

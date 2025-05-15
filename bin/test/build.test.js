@@ -18,43 +18,71 @@ const workingDir = path.join(__dirname, "..", tempDir);
 const projectDir = path.join(workingDir, project);
 
 const Commands = {
-  BEFORE: [`cd ${tempDir}`],
-  NODE: [`npx cds init ${project}`],
-  JAVA: [`npx cds init ${project} --java`],
+  BEGIN: [`cd ${tempDir}`],
+  CDS_NODE: [`npx cds init ${project}`],
+  CDS_JAVA: [`npx cds init ${project} --java`],
   INSTALL: [`cd ${project}`, "npm install ../../../"],
   CF: ["npx afc init cf"],
   KYMA: ["npx afc init kyma"],
-  AFTER: ["npx afc add -a broker,stub,mock,sample,test,http"],
+  AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
+  AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
+  END: [],
 };
 
 const Files = {
-  ALL: ["package.json", "app/router/xs-app.json", ],
-  NODE: ["srv/broker.json", "srv/catalog.json"],
-  JAVA: ["pom.xml", "srv/src/main/resources/application.yaml"],
+  COMMON: [
+    "package.json",
+    "app/router/xs-app.json",
+    "http/scheduling/provider.cloud.http",
+    "http/scheduling/provider.local.http",
+  ],
+  NODE: [
+    "srv/broker.json",
+    "srv/catalog.json",
+    "srv/scheduling-processing-service.cds",
+    "srv/scheduling-processing-service.js",
+    "srv/scheduling-provider-service.cds",
+    "srv/scheduling-provider-service.js",
+    "test/scheduling.provider.test.js",
+  ],
+  JAVA: [
+    "srv/pom.xml",
+    "srv/src/main/resources/application.yaml",
+    "srv/src/main/java/customer/afcsdk/scheduling/SchedulingProcessingHandler.java",
+    "srv/src/main/java/customer/afcsdk/scheduling/SchedulingProviderHandler.java",
+    "srv/src/test/java/customer/afcsdk/scheduling/CustomSchedulingProviderControllerTest.java",
+  ],
   CF: ["mta.yaml"],
-  KYMA: ["chart/values.yaml", "containerize.yaml"],
+  KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],
 };
 
 describe("Build", () => {
   beforeEach(() => {
     if (fs.existsSync(workingDir)) {
-      fs.rmdirSync(workingDir, { recursive: true });
+      fs.rmSync(workingDir, { recursive: true });
     }
     fs.mkdirSync(workingDir);
   });
 
   afterAll(() => {
     if (fs.existsSync(workingDir)) {
-      // fs.rmdirSync(workingDir, { recursive: true });
+      fs.rmSync(workingDir, { recursive: true });
     }
   });
 
   it("Node / CF", async () => {
     const code = shelljs.exec(
-      [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.CF, ...Commands.AFTER].join(" && "),
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_NODE,
+        ...Commands.INSTALL,
+        ...Commands.CF,
+        ...Commands.AFC_NODE,
+        ...Commands.END,
+      ].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.NODE, ...Files.CF]) {
+    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
@@ -62,10 +90,17 @@ describe("Build", () => {
 
   it("Node / Kyma", async () => {
     const code = shelljs.exec(
-      [...Commands.BEFORE, ...Commands.NODE, ...Commands.INSTALL, ...Commands.KYMA, ...Commands.AFTER].join(" && "),
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_NODE,
+        ...Commands.INSTALL,
+        ...Commands.KYMA,
+        ...Commands.AFC_NODE,
+        ...Commands.END,
+      ].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.NODE, ...Files.KYMA]) {
+    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
@@ -73,10 +108,17 @@ describe("Build", () => {
 
   it("Java / CF", async () => {
     const code = shelljs.exec(
-      [...Commands.BEFORE, ...Commands.JAVA, ...Commands.INSTALL, ...Commands.CF, ...Commands.AFTER].join(" && "),
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_JAVA,
+        ...Commands.INSTALL,
+        ...Commands.CF,
+        ...Commands.AFC_JAVA,
+        ...Commands.END,
+      ].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.JAVA, ...Files.CF]) {
+    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
@@ -84,10 +126,17 @@ describe("Build", () => {
 
   it("Java / Kyma", async () => {
     const code = shelljs.exec(
-      [...Commands.BEFORE, ...Commands.JAVA, ...Commands.INSTALL, ...Commands.KYMA, ...Commands.AFTER].join(" && "),
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_JAVA,
+        ...Commands.INSTALL,
+        ...Commands.KYMA,
+        ...Commands.AFC_JAVA,
+        ...Commands.END,
+      ].join(" && "),
     ).code;
     expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.JAVA, ...Files.KYMA]) {
+    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
