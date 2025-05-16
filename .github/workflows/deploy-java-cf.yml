@@ -1,5 +1,5 @@
-# This workflow will set up a test project based on SDK and deploy to Cloud Foundry
-name: Test Deploy CF
+# This workflow will set up a test project based on AFC SDK for CAP Java and deploy to Cloud Foundry
+name: Test Deploy Java/CF
 permissions:
   contents: read
   pull-requests: write
@@ -25,25 +25,30 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
       - run: npm ci
       - name: Setup CDS project
-        run: npx cds init afcsdk && cd afcsdk && npm i
+        run: npx cds init afcsdkjava && cd afcsdkjava && npm i
       - name: Install SDK
         run: npm i github:cap-js-community/sap-afc-sdk
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Boostrap SDK
         run: npx afc init cf
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Add SDK features
-        run: npx afc add -a broker,stub,mock,sample,test,http
-        working-directory: ./afcsdk
+        run: npx afc add -a app,broker,stub,mock,sample,test,http
+        working-directory: ./afcsdkjava
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
           BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
       - name: Unit Test
         run: npm test
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
       - name: Setup CF
@@ -57,10 +62,10 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
       - name: Install MBT
         run: npm i mbt
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: Build MTA
         run: npx mbt build
-        working-directory: ./afcsdk
+        working-directory: ./afcsdkjava
       - name: CF deploy
-        run: cf deploy ./mta_archives/afcsdk_1.0.0.mtar -f --version-rule ALL
-        working-directory: ./afcsdk
+        run: cf deploy ./mta_archives/afcsdkjava_1.0.0.mtar -f --version-rule ALL
+        working-directory: ./afcsdkjava
