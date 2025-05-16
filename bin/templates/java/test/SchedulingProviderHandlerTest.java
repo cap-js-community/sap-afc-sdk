@@ -17,7 +17,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-public class CustomSchedulingProviderControllerTest {
+@SpringBootTest
+public class SchedulingProviderHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;

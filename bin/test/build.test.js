@@ -50,7 +50,7 @@ const Files = {
     "srv/src/main/resources/application.yaml",
     "srv/src/main/java/customer/afcsdk/scheduling/SchedulingProcessingHandler.java",
     "srv/src/main/java/customer/afcsdk/scheduling/SchedulingProviderHandler.java",
-    "srv/src/test/java/customer/afcsdk/scheduling/CustomSchedulingProviderControllerTest.java",
+    "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java",
   ],
   CF: ["mta.yaml"],
   KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],

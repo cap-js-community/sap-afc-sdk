@@ -7,7 +7,7 @@ const path = require("path");
 const shelljs = require("shelljs");
 const YAML = require("yaml");
 
-const { projectName } = require("../common/util");
+const { projectName, adjustYAMLAllDocument } = require("../common/util");
 
 const config = require("../config.json");
 
@@ -188,7 +188,7 @@ function processJava(target) {
   // POM
   adjustXML("srv/pom.xml", (xml) => {
     const dependency = {
-      groupId: ["cap.js.community"],
+      groupId: ["com.github.cap.js.community"],
       artifactId: ["sap-afc-sdk"],
     };
     if (!xml.project.dependencies) {
@@ -206,7 +206,36 @@ function processJava(target) {
   });
 
   // Application
-  adjustYAMLDocument("srv/src/main/resources/application.yaml", (yaml) => {
+  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index) => {
+    if (index !== 0) {
+      return yaml;
+    }
+    if (yaml.getIn(["cds", "index-page", "enabled"]) == null) {
+      yaml.setIn(["cds", "index-page", "enabled"], true);
+    }
+    if (!yaml.getIn(["spring", "autoconfigure", "exclude"])) {
+      yaml.setIn(
+        ["spring", "autoconfigure"],
+        yaml.createNode([
+          "org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration",
+          "org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration",
+        ]),
+      );
+    }
+    if (!yaml.get("springdoc")) {
+      yaml.set(
+        "springdoc",
+        yaml.createNode({
+          "packages-to-scan": ["scheduling.controllers"],
+          "swagger-ui": {
+            path: "/api-docs/api/job-scheduling/v1",
+          },
+        }),
+      );
+    }
+    if (!yaml.getIn(["broker", "enabled"])) {
+      yaml.setIn(["broker", "enabled"], false);
+    }
     if (
       (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
       (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))

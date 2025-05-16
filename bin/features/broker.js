@@ -115,15 +115,29 @@ module.exports = (options) => {
       if (!yaml.getIn(["spring", "openservicebroker"])) {
         yaml.setIn(["spring", "openservicebroker", "catalog"], CATALOG);
       }
-      if (!yaml.get("broker")) {
-        yaml.set("broker", {
-          name: APP_NAME,
-          user: BROKER_USER,
-          credentialsHash: BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER],
-          endpoints: BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints,
-          "credential-types":
+      if (!yaml.getIn(["broker", "enabled"])) {
+        if (!yaml.get("broker")) {
+          yaml.set("broker", yaml.createNode());
+        }
+        yaml.setIn(["broker", "enabled"], true);
+        if (!yaml.getIn(["broker", "name"])) {
+          yaml.setIn(["broker", "name"], APP_NAME);
+        }
+        if (!yaml.getIn(["broker", "user"])) {
+          yaml.setIn(["broker", "user"], BROKER_USER);
+        }
+        if (!yaml.getIn(["broker", "credentialsHash"])) {
+          yaml.setIn(["broker", "credentialsHash"], BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER]);
+        }
+        if (!yaml.getIn(["broker", "endpoints"])) {
+          yaml.setIn(["broker", "endpoints"], BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints);
+        }
+        if (!yaml.getIn(["broker", "credential-types"])) {
+          yaml.setIn(
+            ["broker", "credential-types"],
             BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared["oauth2-configuration"]["credential-types"],
-        });
+          );
+        }
         brokerWritten = true;
       }
       return yaml;

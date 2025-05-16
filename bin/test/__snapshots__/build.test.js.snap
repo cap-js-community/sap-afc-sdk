@@ -8,7 +8,7 @@ exports[`Build Java / CF 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^8.9.2"
+    "@sap/cds-dk": "^8.9.3"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -322,6 +322,9 @@ exports[`Build Java / CF 6`] = `
 spring:
   config.activate.on-profile: default
   sql.init.platform: h2
+  autoconfigure:
+    - org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration
+    - org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration
   openservicebroker:
     catalog:
       services:
@@ -341,6 +344,24 @@ spring:
             longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
 cds:
   data-source.auto-config.enabled: false
+  index-page:
+    enabled: true
+springdoc:
+  packages-to-scan:
+    - scheduling.controllers
+  swagger-ui:
+    path: /api-docs/api/job-scheduling/v1
+broker:
+  enabled: true
+  name: afcsdk
+  user: broker-user
+  credentialsHash: sha256:xxx=:xxx=
+  endpoints:
+    api: /api
+    job-scheduling-v1: /api/job-scheduling/v1
+  credential-types:
+    - binding-secret
+    - x509
 sap-afc-sdk:
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
@@ -354,16 +375,6 @@ sap-afc-sdk:
       completedWithWarning: 0.2
       completedWithError: 0.2
       failed: 0.1
-broker:
-  name: afcsdk
-  user: broker-user
-  credentialsHash: sha256:xxx=:xxx=
-  endpoints:
-    api: /api
-    job-scheduling-v1: /api/job-scheduling/v1
-  credential-types:
-    - binding-secret
-    - x509
 ---
 management:
   endpoint:
@@ -389,52 +400,37 @@ exports[`Build Java / CF 7`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
+import com.sap.cds.services.handler.annotations.*;
 
-import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.On;
-import com.sap.cds.services.handler.annotations.ServiceName;
-import com.sap.cds.services.persistence.PersistenceService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler implements EventHandler {
+public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
 
-    @Autowired
-    protected PersistenceService persistenceService;
-
-    public CustomSchedulingProcessingHandler() {
-        super();
-    }
-
-    @Order(1)
     @On(event = ProcessJobContext.CDS_NAME)
-    public void processJob(ProcessJobContext context) throws IOException {
+    @HandlerOrder(HandlerOrder.EARLY)
+    public void processJob(ProcessJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = UpdateJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void updateJob(UpdateJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = CancelJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void cancelJob(CancelJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = SyncJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void syncJob(SyncJobContext context) {
         // Your logic goes here
         context.proceed();
@@ -445,54 +441,35 @@ public class SchedulingProcessingHandler implements EventHandler {
 exports[`Build Java / CF 8`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
-
 import cds.gen.schedulingproviderservice.*;
-import cds.gen.schedulingproviderservice.Job;
-import cds.gen.schedulingproviderservice.JobResult_;
-import cds.gen.schedulingproviderservice.Job_;
+import com.sap.cds.services.handler.annotations.*;
+import com.sap.cds.services.cds.*;
 
-import com.sap.cds.services.cds.CdsCreateEventContext;
-import com.sap.cds.services.cds.CqnService;
-import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.On;
-import com.sap.cds.services.handler.annotations.ServiceName;
-import com.sap.cds.services.persistence.PersistenceService;
-
-import org.springframework.core.annotation.Order;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 import java.util.*;
+
+import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler implements EventHandler {
+public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
 
-    @Autowired
-    private PersistenceService persistenceService;
-
-    @Autowired
-    private SchedulingProcessingService processingService;
-
-    @Order(1)
     @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void createJob(CdsCreateEventContext context, List<Job> jobs) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void cancelJob(JobCancelContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
-    public void downloadData(JobResultDataContext context) throws IOException {
+    @HandlerOrder(HandlerOrder.EARLY)
+    public void downloadData(JobResultDataContext context) {
         // Your logic goes here
         context.proceed();
     }
@@ -519,7 +496,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-public class CustomSchedulingProviderControllerTest {
+@SpringBootTest
+public class SchedulingProviderHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -781,7 +759,7 @@ exports[`Build Java / Kyma 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^8.9.2"
+    "@sap/cds-dk": "^8.9.3"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -1101,6 +1079,9 @@ exports[`Build Java / Kyma 6`] = `
 spring:
   config.activate.on-profile: default
   sql.init.platform: h2
+  autoconfigure:
+    - org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration
+    - org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration
   openservicebroker:
     catalog:
       services:
@@ -1120,6 +1101,24 @@ spring:
             longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
 cds:
   data-source.auto-config.enabled: false
+  index-page:
+    enabled: true
+springdoc:
+  packages-to-scan:
+    - scheduling.controllers
+  swagger-ui:
+    path: /api-docs/api/job-scheduling/v1
+broker:
+  enabled: true
+  name: afcsdk
+  user: broker-user
+  credentialsHash: sha256:xxx=:xxx=
+  endpoints:
+    api: /api
+    job-scheduling-v1: /api/job-scheduling/v1
+  credential-types:
+    - binding-secret
+    - x509
 sap-afc-sdk:
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
@@ -1133,16 +1132,6 @@ sap-afc-sdk:
       completedWithWarning: 0.2
       completedWithError: 0.2
       failed: 0.1
-broker:
-  name: afcsdk
-  user: broker-user
-  credentialsHash: sha256:xxx=:xxx=
-  endpoints:
-    api: /api
-    job-scheduling-v1: /api/job-scheduling/v1
-  credential-types:
-    - binding-secret
-    - x509
 ---
 management:
   endpoint:
@@ -1168,52 +1157,37 @@ exports[`Build Java / Kyma 7`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
+import com.sap.cds.services.handler.annotations.*;
 
-import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.On;
-import com.sap.cds.services.handler.annotations.ServiceName;
-import com.sap.cds.services.persistence.PersistenceService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler implements EventHandler {
+public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
 
-    @Autowired
-    protected PersistenceService persistenceService;
-
-    public CustomSchedulingProcessingHandler() {
-        super();
-    }
-
-    @Order(1)
     @On(event = ProcessJobContext.CDS_NAME)
-    public void processJob(ProcessJobContext context) throws IOException {
+    @HandlerOrder(HandlerOrder.EARLY)
+    public void processJob(ProcessJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = UpdateJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void updateJob(UpdateJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = CancelJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void cancelJob(CancelJobContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = SyncJobContext.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void syncJob(SyncJobContext context) {
         // Your logic goes here
         context.proceed();
@@ -1224,54 +1198,35 @@ public class SchedulingProcessingHandler implements EventHandler {
 exports[`Build Java / Kyma 8`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
-
 import cds.gen.schedulingproviderservice.*;
-import cds.gen.schedulingproviderservice.Job;
-import cds.gen.schedulingproviderservice.JobResult_;
-import cds.gen.schedulingproviderservice.Job_;
+import com.sap.cds.services.handler.annotations.*;
+import com.sap.cds.services.cds.*;
 
-import com.sap.cds.services.cds.CdsCreateEventContext;
-import com.sap.cds.services.cds.CqnService;
-import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.On;
-import com.sap.cds.services.handler.annotations.ServiceName;
-import com.sap.cds.services.persistence.PersistenceService;
-
-import org.springframework.core.annotation.Order;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 import java.util.*;
+
+import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler implements EventHandler {
+public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
 
-    @Autowired
-    private PersistenceService persistenceService;
-
-    @Autowired
-    private SchedulingProcessingService processingService;
-
-    @Order(1)
     @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void createJob(CdsCreateEventContext context, List<Job> jobs) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
+    @HandlerOrder(HandlerOrder.EARLY)
     public void cancelJob(JobCancelContext context) {
         // Your logic goes here
         context.proceed();
     }
 
-    @Order(1)
     @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
-    public void downloadData(JobResultDataContext context) throws IOException {
+    @HandlerOrder(HandlerOrder.EARLY)
+    public void downloadData(JobResultDataContext context) {
         // Your logic goes here
         context.proceed();
     }
@@ -1298,7 +1253,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-public class CustomSchedulingProviderControllerTest {
+@SpringBootTest
+public class SchedulingProviderHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;

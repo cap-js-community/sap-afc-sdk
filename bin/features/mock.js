@@ -3,6 +3,25 @@
 
 const { adjustJSON, adjustYAMLAllDocument, isJava } = require("../common/util");
 
+const Mock = {
+  Basic: {
+    min: 0,
+    max: 10,
+    default: "completed",
+  },
+  Advanced: {
+    min: 0,
+    max: 10,
+    default: "completed",
+    status: {
+      completed: 0.5,
+      completedWithWarning: 0.2,
+      completedWithError: 0.2,
+      failed: 0.1,
+    },
+  },
+};
+
 module.exports = (options) => {
   if (!isJava(options)) {
     processNode(options);
@@ -21,19 +40,9 @@ function processNode(options) {
         json.cds.requires ??= {};
         json.cds.requires["sap-afc-sdk"] ??= {};
         if (options.advanced) {
-          json.cds.requires["sap-afc-sdk"].mockProcessing = {
-            min: 0,
-            max: 10,
-            default: "completed",
-            status: {
-              completed: 0.5,
-              completedWithWarning: 0.2,
-              completedWithError: 0.2,
-              failed: 0.1,
-            },
-          };
+          json.cds.requires["sap-afc-sdk"].mockProcessing = Mock.Advanced;
         } else {
-          json.cds.requires["sap-afc-sdk"].mockProcessing = true;
+          json.cds.requires["sap-afc-sdk"].mockProcessing = Mock.Basic;
         }
       }
     });
@@ -53,21 +62,9 @@ function processJava(options) {
       }
     } else {
       if (options.advanced) {
-        yaml.setIn(["sap-afc-sdk", "mockProcessing"], {
-          min: 0,
-          max: 10,
-          default: "completed",
-          status: {
-            completed: 0.5,
-            completedWithWarning: 0.2,
-            completedWithError: 0.2,
-            failed: 0.1,
-          },
-        });
+        yaml.setIn(["sap-afc-sdk", "mockProcessing"], Mock.Advanced);
       } else {
-        yaml.setIn(["sap-afc-sdk", "mockProcessing"], {
-          default: "completed",
-        });
+        yaml.setIn(["sap-afc-sdk", "mockProcessing"], Mock.Basic);
       }
     }
   });

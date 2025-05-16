@@ -190,6 +190,9 @@ function copyFolder(src, dest, exclude) {
       copyFolder(srcPath, destPath, exclude);
     } else if (!exclude?.files?.includes(file.name) && !exclude?.extensions?.includes(path.extname(file.name))) {
       if (!fs.existsSync(destPath)) {
+        if (!fs.existsSync(dest)) {
+          fs.mkdirSync(dest, { recursive: true });
+        }
         fs.copyFileSync(srcPath, destPath);
       }
     }
@@ -197,9 +200,6 @@ function copyFolder(src, dest, exclude) {
 }
 
 function copyFolderAdjusted(src, dest, exclude, callback) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
   const files = fs.readdirSync(src, { withFileTypes: true });
   for (const file of files) {
     if ([".DS_Store"].includes(file.name)) {
@@ -213,6 +213,9 @@ function copyFolderAdjusted(src, dest, exclude, callback) {
       if (!fs.existsSync(destPath)) {
         const content = fs.readFileSync(srcPath, "utf8");
         const newContent = callback(content, srcPath, destPath) ?? content;
+        if (!fs.existsSync(dest)) {
+          fs.mkdirSync(dest, { recursive: true });
+        }
         fs.writeFileSync(destPath, newContent, "utf8");
       }
     }

@@ -12,9 +12,16 @@ module.exports = (options) => {
     if (!isJava(options)) {
       fs.cpSync(srcPath, destPath, { recursive: true });
     } else {
-      copyFolderAdjusted(srcPath, destPath, {}, (content) => {
-        return content.replace("@port=4004", "@port=8080");
-      });
+      copyFolderAdjusted(
+        srcPath,
+        destPath,
+        {
+          files: ["toggles.cloud.http", "toggles.local.http"],
+        },
+        (content) => {
+          return content.replace("@port=4004", "@port=8080");
+        },
+      );
     }
     console.log(`Folder '${destPath}' written.`);
   } catch (err) {
