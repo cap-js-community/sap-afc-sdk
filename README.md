@@ -1013,7 +1013,7 @@ A periodic scheduling job synchronization event named `SchedulingProcessingServi
 in Spring scheduling tasks, to perform job synchronization from an external source. The default implementation is a no-op.
 
 The event `syncJob` is registered automatically with interval Spring scheduling configuration.
-To change the  interval, the `application.yaml` configuration can be adjusted in the Spring environment.
+To change the interval, the `application.yaml` configuration can be adjusted in the Spring environment.
 
 **Implementation file:** `srv/src/main/java/customer/scheduling/SchedulingProcessingHandler.java`
 
