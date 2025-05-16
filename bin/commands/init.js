@@ -250,6 +250,9 @@ function processJava(target) {
         yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
       }
     }
+    if (!yaml.getIn(["sap-afc-sdk", "syncJob", "cron"])) {
+      yaml.setIn(["sap-afc-sdk", "syncJob", "cron"], "0 */1 * * * *");
+    }
     return yaml;
   });
 

@@ -366,6 +366,8 @@ sap-afc-sdk:
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
     server: https://afcsdk-srv.cloud.sap
+  syncJob:
+    cron: 0 */1 * * * *
   mockProcessing:
     min: 0
     max: 10
@@ -1123,6 +1125,8 @@ sap-afc-sdk:
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
     server: https://afcsdk-srv.cloud.sap
+  syncJob:
+    cron: 0 */1 * * * *
   mockProcessing:
     min: 0
     max: 10
