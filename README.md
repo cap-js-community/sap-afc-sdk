@@ -644,7 +644,7 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
 - **Outbox**: Provides an Outbox to process and synchronize Jobs (periodically) asynchronously and resiliently (circuit breaker, retry,
   load-balancing, etc.)
-- **Websocket**: Provides websocket preparation to be connected to [Spring Boot Websockets](https://docs.spring.io/spring-framework/reference/web/websocket.html)
+- **Websocket**: Provides websocket connection support to monitor Job processing live
 - **UI**: Provides a UI5 application to monitor and cancel Jobs
 - **Broker**: Implements a service broker to manage service key management to API
 
@@ -661,6 +661,8 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
       - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI Swagger UI](http://localhost:8080/api-docs/api/job-scheduling/v1))
     - OData API (UI)
       - [/odata/v4/job-scheduling/monitoring](http://localhost:4004/odata/v4/job-scheduling/monitoring): Job Scheduling Monitoring ([$metadata](http://localhost:8080/odata/v4/job-scheduling/monitoring/$metadata))
+    - WebSocket API
+      - [/ws/job-scheduling](http://localhost:8080/ws/job-scheduling): Scheduling WebSocket endpoint
     - CDS Internal API
       - `SchedulingProcessingService`: Scheduling Processing service
         ```java
@@ -701,7 +703,7 @@ The following diagram illustrates the high-level architecture of the SAP Advance
   - Retrieves job requests from the Event Queue and executes them.
 - **Scheduling WebSocket Service:**
   - Listens for status updates of scheduled jobs
-  - Notifies the Monitoring Scheduling Job UI via WebSockets when job statuses change (stub implementation)
+  - Notifies the Monitoring Scheduling Job UI via WebSockets when job statuses change
 - **Scheduling Monitoring Service:**
   - Monitoring Scheduling Job UI (SAP Fiori Elements V4 / SAP UI5 application)
   - Reads scheduling job details from the database
