@@ -20,13 +20,13 @@ module.exports = {
         "afterAll",
         `
 Features: 
+  app \t\t\t - add app files
   broker \t\t - expose a broker service
-  stub \t\t\t - add stub implementation
+  http \t\t\t - add .http files
   mock \t\t\t - mock job processing
   sample \t\t - add sample data
-  http \t\t\t - add .http files
+  stub \t\t\t - add stub implementation
   test \t\t\t - add test
-  app \t\t\t - add app files
 
 Examples:
   afc add broker
