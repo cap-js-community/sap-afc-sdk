@@ -61,12 +61,12 @@
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
-    "@cap-js-community/event-queue": "^1.10.3",
+    "@cap-js-community/event-queue": "^1.10.4",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.4",
     "@sap/cds-common-content": "^2.1.0",
     "@sap/sbf": "^6.9.3",
-    "commander": "^13.1.0",
+    "commander": "^14.0.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "helmet": "^8.1.0",
