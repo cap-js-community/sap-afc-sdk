@@ -318,32 +318,7 @@ exports[`Build Java / CF 5`] = `
 `;
 
 exports[`Build Java / CF 6`] = `
-"---
-spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
-  autoconfigure:
-    - org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration
-    - org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration
-  openservicebroker:
-    catalog:
-      services:
-        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
-          name: afcsdk
-          description: AFC Scheduling Provider Service
-          bindable: true
-          plans:
-            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
-              name: standard
-              description: Standard plan
-              free: true
-              bindable: true
-              plan_updateable: true
-          metadata:
-            displayName: AFC Scheduling Provider Service
-            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
-cds:
-  data-source.auto-config.enabled: false
+"cds:
   index-page:
     enabled: true
 springdoc:
@@ -377,6 +352,30 @@ sap-afc-sdk:
       completedWithWarning: 0.2
       completedWithError: 0.2
       failed: 0.1
+spring:
+  openservicebroker:
+    catalog:
+      services:
+        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
+          name: afcsdk
+          description: AFC Scheduling Provider Service
+          bindable: true
+          plans:
+            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
+              name: standard
+              description: Standard plan
+              free: true
+              bindable: true
+              plan_updateable: true
+          metadata:
+            displayName: AFC Scheduling Provider Service
+            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false
 ---
 management:
   endpoint:
@@ -1077,32 +1076,7 @@ exports[`Build Java / Kyma 5`] = `
 `;
 
 exports[`Build Java / Kyma 6`] = `
-"---
-spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
-  autoconfigure:
-    - org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration
-    - org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration
-  openservicebroker:
-    catalog:
-      services:
-        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
-          name: afcsdk
-          description: AFC Scheduling Provider Service
-          bindable: true
-          plans:
-            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
-              name: standard
-              description: Standard plan
-              free: true
-              bindable: true
-              plan_updateable: true
-          metadata:
-            displayName: AFC Scheduling Provider Service
-            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
-cds:
-  data-source.auto-config.enabled: false
+"cds:
   index-page:
     enabled: true
 springdoc:
@@ -1136,6 +1110,30 @@ sap-afc-sdk:
       completedWithWarning: 0.2
       completedWithError: 0.2
       failed: 0.1
+spring:
+  openservicebroker:
+    catalog:
+      services:
+        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
+          name: afcsdk
+          description: AFC Scheduling Provider Service
+          bindable: true
+          plans:
+            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
+              name: standard
+              description: Standard plan
+              free: true
+              bindable: true
+              plan_updateable: true
+          metadata:
+            displayName: AFC Scheduling Provider Service
+            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false
 ---
 management:
   endpoint:

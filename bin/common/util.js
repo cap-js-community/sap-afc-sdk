@@ -121,11 +121,17 @@ function adjustYAMLAllDocument(file, callback) {
     const newYmls = [];
     let i = 0;
     for (const yml of ymls) {
-      const newYml = callback(yml, i++);
+      const newYml = callback(yml, i++, ymls.length);
       if (newYml === null) {
         continue;
       }
-      newYmls.push(newYml ?? yml);
+      if (Array.isArray(newYml)) {
+        for (const ymlItem of newYml) {
+          newYmls.push(ymlItem);
+        }
+      } else {
+        newYmls.push(newYml ?? yml);
+      }
     }
     const newContent = newYmls
       .map((yml) => {

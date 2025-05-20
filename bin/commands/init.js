@@ -206,21 +206,18 @@ function processJava(target) {
   });
 
   // Application
-  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index) => {
+  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index, count) => {
     if (index !== 0) {
       return yaml;
     }
+    let yamls = [yaml];
+    if (count === 1 && yaml.getIn(["spring", "config.activate.on-profile"]) != null) {
+      const newYaml = new YAML.Document();
+      yamls = [newYaml, yaml];
+      yaml = newYaml;
+    }
     if (yaml.getIn(["cds", "index-page", "enabled"]) == null) {
       yaml.setIn(["cds", "index-page", "enabled"], true);
-    }
-    if (!yaml.getIn(["spring", "autoconfigure", "exclude"])) {
-      yaml.setIn(
-        ["spring", "autoconfigure"],
-        yaml.createNode([
-          "org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration",
-          "org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration",
-        ]),
-      );
     }
     if (!yaml.get("springdoc")) {
       yaml.set(
@@ -253,7 +250,7 @@ function processJava(target) {
     if (!yaml.getIn(["sap-afc-sdk", "syncJob", "cron"])) {
       yaml.setIn(["sap-afc-sdk", "syncJob", "cron"], "0 */1 * * * *");
     }
-    return yaml;
+    return yamls;
   });
 
   // cds add
