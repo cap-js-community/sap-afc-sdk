@@ -137,7 +137,7 @@ service SchedulingProviderService {
         data,
       }
       actions {
-        function data() returns LargeBinary;
+        function data() returns @Core.MediaType: 'application/octet-stream' LargeBinary;
       };
 
   @title: null
