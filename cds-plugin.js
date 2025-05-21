@@ -205,11 +205,10 @@ function serveUIs() {
         cds.app
           .serve(`${uiPath}/${app}/webapp`)
           .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
-      } else if (uiShowApp) {
-        cds.app
-          .serve(`${uiPath}/${app}`)
-          .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
       }
+      cds.app
+        .serve(`${uiPath}/${app}`)
+        .from(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, config.paths[app] ?? `${cds.env.folders.app}${app}/webapp`);
     }
   }
 }
