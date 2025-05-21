@@ -1,0 +1,2358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+    <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/HTML5.xml">
+    <edmx:Include Alias="HTML5" Namespace="com.sap.vocabularies.HTML5.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+    <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+    <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="SchedulingMonitoringService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <Annotation Term="Core.Links">
+        <Collection>
+          <Record>
+            <PropertyValue Property="rel" String="author"/>
+            <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+          </Record>
+        </Collection>
+      </Annotation>
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="JobDefinition" EntityType="SchedulingMonitoringService.JobDefinition">
+          <NavigationPropertyBinding Path="parameters" Target="JobParameterDefinition"/>
+          <NavigationPropertyBinding Path="texts" Target="JobDefinition_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobDefinition_texts"/>
+        </EntitySet>
+        <EntitySet Name="JobParameterDefinition" EntityType="SchedulingMonitoringService.JobParameterDefinition">
+          <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
+          <NavigationPropertyBinding Path="type" Target="ParameterType"/>
+          <NavigationPropertyBinding Path="dataType" Target="DataType"/>
+          <NavigationPropertyBinding Path="mappingType" Target="MappingType"/>
+          <NavigationPropertyBinding Path="texts" Target="JobParameterDefinition_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobParameterDefinition_texts"/>
+        </EntitySet>
+        <EntitySet Name="Job" EntityType="SchedulingMonitoringService.Job">
+          <NavigationPropertyBinding Path="definition" Target="JobDefinition"/>
+          <NavigationPropertyBinding Path="status" Target="JobStatus"/>
+          <NavigationPropertyBinding Path="parameters" Target="JobParameter"/>
+          <NavigationPropertyBinding Path="results" Target="JobResult"/>
+        </EntitySet>
+        <EntitySet Name="JobParameter" EntityType="SchedulingMonitoringService.JobParameter">
+          <NavigationPropertyBinding Path="job" Target="Job"/>
+          <NavigationPropertyBinding Path="definition" Target="JobParameterDefinition"/>
+        </EntitySet>
+        <EntitySet Name="JobResult" EntityType="SchedulingMonitoringService.JobResult">
+          <NavigationPropertyBinding Path="job" Target="Job"/>
+          <NavigationPropertyBinding Path="type" Target="ResultType"/>
+          <NavigationPropertyBinding Path="messages" Target="JobResultMessage"/>
+        </EntitySet>
+        <EntitySet Name="JobResultMessage" EntityType="SchedulingMonitoringService.JobResultMessage">
+          <NavigationPropertyBinding Path="result" Target="JobResult"/>
+          <NavigationPropertyBinding Path="severity" Target="MessageSeverity"/>
+          <NavigationPropertyBinding Path="texts" Target="JobResultMessage_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobResultMessage_texts"/>
+        </EntitySet>
+        <EntitySet Name="JobStatus" EntityType="SchedulingMonitoringService.JobStatus">
+          <NavigationPropertyBinding Path="texts" Target="JobStatus_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="JobStatus_texts"/>
+        </EntitySet>
+        <EntitySet Name="ResultType" EntityType="SchedulingMonitoringService.ResultType">
+          <NavigationPropertyBinding Path="texts" Target="ResultType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="ResultType_texts"/>
+        </EntitySet>
+        <EntitySet Name="ParameterType" EntityType="SchedulingMonitoringService.ParameterType">
+          <NavigationPropertyBinding Path="texts" Target="ParameterType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="ParameterType_texts"/>
+        </EntitySet>
+        <EntitySet Name="DataType" EntityType="SchedulingMonitoringService.DataType">
+          <NavigationPropertyBinding Path="texts" Target="DataType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="DataType_texts"/>
+        </EntitySet>
+        <EntitySet Name="MappingType" EntityType="SchedulingMonitoringService.MappingType">
+          <NavigationPropertyBinding Path="texts" Target="MappingType_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="MappingType_texts"/>
+        </EntitySet>
+        <EntitySet Name="MessageSeverity" EntityType="SchedulingMonitoringService.MessageSeverity">
+          <NavigationPropertyBinding Path="texts" Target="MessageSeverity_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="MessageSeverity_texts"/>
+        </EntitySet>
+        <EntitySet Name="JobDefinition_texts" EntityType="SchedulingMonitoringService.JobDefinition_texts"/>
+        <EntitySet Name="JobParameterDefinition_texts" EntityType="SchedulingMonitoringService.JobParameterDefinition_texts">
+          <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
+        </EntitySet>
+        <EntitySet Name="JobResultMessage_texts" EntityType="SchedulingMonitoringService.JobResultMessage_texts"/>
+        <EntitySet Name="JobStatus_texts" EntityType="SchedulingMonitoringService.JobStatus_texts"/>
+        <EntitySet Name="ResultType_texts" EntityType="SchedulingMonitoringService.ResultType_texts"/>
+        <EntitySet Name="ParameterType_texts" EntityType="SchedulingMonitoringService.ParameterType_texts"/>
+        <EntitySet Name="DataType_texts" EntityType="SchedulingMonitoringService.DataType_texts"/>
+        <EntitySet Name="MappingType_texts" EntityType="SchedulingMonitoringService.MappingType_texts"/>
+        <EntitySet Name="MessageSeverity_texts" EntityType="SchedulingMonitoringService.MessageSeverity_texts"/>
+      </EntityContainer>
+      <EntityType Name="JobDefinition">
+        <Key>
+          <PropertyRef Name="name"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="longDescription" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
+        <Property Name="supportsTestRun" Type="Edm.Boolean"/>
+        <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobDefinition_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobDefinition_texts">
+          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="JobParameterDefinition">
+        <Key>
+          <PropertyRef Name="job_name"/>
+          <PropertyRef Name="name"/>
+        </Key>
+        <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false" Partner="parameters">
+          <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
+        </NavigationProperty>
+        <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+        <NavigationProperty Name="type" Type="SchedulingMonitoringService.ParameterType" Nullable="false">
+          <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="dataType" Type="SchedulingMonitoringService.DataType" Nullable="false">
+          <ReferentialConstraint Property="dataType_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="dataType_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="mappingType" Type="SchedulingMonitoringService.MappingType">
+          <ReferentialConstraint Property="mappingType_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="mappingType_code" Type="Edm.String" MaxLength="255"/>
+        <Property Name="value" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="required" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobParameterDefinition_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobParameterDefinition_texts">
+          <ReferentialConstraint Property="job_name" ReferencedProperty="job_name"/>
+          <ReferentialConstraint Property="name" ReferencedProperty="name"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Job">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="referenceID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="startDateTime" Type="Edm.DateTimeOffset"/>
+        <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
+          <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
+        </NavigationProperty>
+        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
+        <NavigationProperty Name="status" Type="SchedulingMonitoringService.JobStatus" Nullable="false">
+          <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="status_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="requested"/>
+        <Property Name="testRun" Type="Edm.Boolean"/>
+        <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameter)" Partner="job">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="results" Type="Collection(SchedulingMonitoringService.JobResult)" Partner="job">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <Property Name="criticality" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="JobParameter">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <NavigationProperty Name="job" Type="SchedulingMonitoringService.Job" Nullable="false" Partner="parameters">
+          <ReferentialConstraint Property="job_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
+        <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobParameterDefinition" Nullable="false">
+          <ReferentialConstraint Property="definition_job_name" ReferencedProperty="job_name"/>
+          <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
+        </NavigationProperty>
+        <Property Name="definition_job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="value" Type="Edm.String" MaxLength="5000"/>
+      </EntityType>
+      <EntityType Name="JobResult">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <NavigationProperty Name="job" Type="SchedulingMonitoringService.Job" Nullable="false" Partner="results">
+          <ReferentialConstraint Property="job_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="type" Type="SchedulingMonitoringService.ResultType" Nullable="false">
+          <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="mimeType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="filename" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="data" Type="Edm.Stream"/>
+        <NavigationProperty Name="messages" Type="Collection(SchedulingMonitoringService.JobResultMessage)" Partner="result">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="JobResultMessage">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <NavigationProperty Name="result" Type="SchedulingMonitoringService.JobResult" Nullable="false" Partner="messages">
+          <ReferentialConstraint Property="result_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="result_ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
+        <NavigationProperty Name="severity" Type="SchedulingMonitoringService.MessageSeverity" Nullable="false">
+          <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <Property Name="severity_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="info"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobResultMessage_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobResultMessage_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="criticality" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="JobStatus">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobStatus_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobStatus_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="ResultType">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ResultType_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.ResultType_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="ParameterType">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ParameterType_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.ParameterType_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="DataType">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.DataType_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.DataType_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="MappingType">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MappingType_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.MappingType_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="MessageSeverity">
+        <Key>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="numericCode" Type="Edm.Int32"/>
+        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MessageSeverity_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.MessageSeverity_texts">
+          <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="JobDefinition_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="name"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="longDescription" Type="Edm.String" MaxLength="5000"/>
+      </EntityType>
+      <EntityType Name="JobParameterDefinition_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="job_name"/>
+          <PropertyRef Name="name"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
+          <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
+        </NavigationProperty>
+        <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="5000"/>
+      </EntityType>
+      <EntityType Name="JobResultMessage_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="JobStatus_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="ResultType_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="ParameterType_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="DataType_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="MappingType_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="MessageSeverity_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="code"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <Action Name="cancel" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="SchedulingMonitoringService.Job"/>
+        <ReturnType Type="SchedulingMonitoringService.Job"/>
+      </Action>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition">
+        <Annotation Term="Common.Label" String="{i18n>JobDefinition}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobDefinition">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/description">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/longDescription">
+        <Annotation Term="Common.Label" String="{i18n>LongDescription}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
+        <Annotation Term="Common.Label" String="{i18n>SupportsStartDateTime}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsTestRun">
+        <Annotation Term="Common.Label" String="{i18n>SupportsTestRun}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
+        <Annotation Term="Common.Label" String="{i18n>Version}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/parameters">
+        <Annotation Term="Common.Label" String="{i18n>Parameters}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition">
+        <Annotation Term="Common.Label" String="{i18n>JobParameterDefinition}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobParameterDefinition">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job">
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job_name">
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/description">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/type">
+        <Annotation Term="Common.Label" String="{i18n>ParameterType}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/type_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="type/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>ParameterType}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>ParameterType}"/>
+            <PropertyValue Property="CollectionPath" String="ParameterType"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="type_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/dataType">
+        <Annotation Term="Common.Label" String="{i18n>DataType}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/dataType_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="dataType/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>DataType}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>DataType}"/>
+            <PropertyValue Property="CollectionPath" String="DataType"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="dataType_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/mappingType">
+        <Annotation Term="Common.Label" String="{i18n>MappingType}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/mappingType_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="mappingType/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>MappingType}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>MappingType}"/>
+            <PropertyValue Property="CollectionPath" String="MappingType"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="mappingType_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/value">
+        <Annotation Term="Common.Label" String="{i18n>Value}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/required">
+        <Annotation Term="Common.Label" String="{i18n>Required}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataFieldForAction">
+              <PropertyValue Property="Label" String="{i18n>Cancel}"/>
+              <PropertyValue Property="Action" String="SchedulingMonitoringService.cancel"/>
+              <PropertyValue Property="InvocationGrouping" EnumMember="UI.OperationGroupingType/Isolated"/>
+              <PropertyValue Property="Criticality" EnumMember="UI.CriticalityType/Negative"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="General">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition_name"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="version"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/description"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/longDescription"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="referenceID"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="status_code"/>
+                </Record>
+                <Record Type="UI.DataFieldWithUrl">
+                  <PropertyValue Property="Value" Path="link"/>
+                  <PropertyValue Property="Url" Path="link"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="testRun"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Administrative">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="modifiedAt"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="modifiedBy"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="createdAt"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="createdBy"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.FieldGroup" Qualifier="Capabilities">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/supportsStartDateTime"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/supportsTestRun"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.HeaderFacets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>General}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#General"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Details}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Administrative}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Administrative"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.Facets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Capabilities}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Capabilities"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Parameters}"/>
+              <PropertyValue Property="Target" AnnotationPath="parameters/@UI.PresentationVariant"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Results}"/>
+              <PropertyValue Property="Target" AnnotationPath="results/@UI.PresentationVariant"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.HeaderInfo">
+          <Record Type="UI.HeaderInfoType">
+            <PropertyValue Property="TypeName" String="{i18n>Job}"/>
+            <PropertyValue Property="TypeNamePlural" String="{i18n>Jobs}"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="{i18n>Job}"/>
+                <PropertyValue Property="Value" Path="ID"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="definition/name"/>
+              </Record>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="true"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.SelectionFields">
+          <Collection>
+            <PropertyPath>referenceID</PropertyPath>
+            <PropertyPath>definition_name</PropertyPath>
+            <PropertyPath>status_code</PropertyPath>
+            <PropertyPath>testRun</PropertyPath>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="ID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="referenceID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition_name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="version"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="status_code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="modifiedAt"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="createdAt"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="testRun"/>
+            </Record>
+          </Collection>
+          <Annotation Term="UI.Criticality" Path="criticality"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+        <Annotation Term="Core.Description" String="Aspect to capture changes by user and name&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-managed"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/Job">
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="true"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/createdAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/createdBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/modifiedAt">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/modifiedBy">
+        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+        <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+        <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/referenceID">
+        <Annotation Term="Common.Label" String="{i18n>ReferenceID}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/startDateTime">
+        <Annotation Term="Common.Label" String="{i18n>StartDateTime}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/definition">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/definition_name">
+        <Annotation Term="Common.Text" Path="definition/description">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>Name}"/>
+            <PropertyValue Property="CollectionPath" String="JobDefinition"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="definition_name"/>
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="description"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="longDescription"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="version"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/version">
+        <Annotation Term="Common.Label" String="{i18n>Version}"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/link">
+        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
+        <Annotation Term="Common.Label" String="{i18n>Link}"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/status">
+        <Annotation Term="Common.Label" String="{i18n>Status}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/status_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="status/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Status}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>Status}"/>
+            <PropertyValue Property="CollectionPath" String="JobStatus"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="status_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/testRun">
+        <Annotation Term="Common.Label" String="{i18n>TestRun}"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/parameters">
+        <Annotation Term="Common.Label" String="{i18n>Parameters}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/results">
+        <Annotation Term="Common.Label" String="{i18n>Results}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/criticality">
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Criticality}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.cancel(SchedulingMonitoringService.Job)">
+        <Annotation Term="Common.IsActionCritical" Bool="true"/>
+        <Annotation Term="Core.OperationAvailable">
+          <Or>
+            <Eq>
+              <Path>in/status_code</Path>
+              <String>requested</String>
+            </Eq>
+            <Eq>
+              <Path>in/status_code</Path>
+              <String>running</String>
+            </Eq>
+          </Or>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="ID"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition_name"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/type_code"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/dataType_code"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/mappingType_code"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="value"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.HeaderFacets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Details}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition_name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition/type_code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition/dataType_code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="definition/mappingType_code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="value"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.HeaderInfo">
+          <Record Type="UI.HeaderInfoType">
+            <PropertyValue Property="TypeName" String="{i18n>JobParameter}"/>
+            <PropertyValue Property="TypeNamePlural" String="{i18n>JobParameters}"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="{i18n>JobParameter}"/>
+                <PropertyValue Property="Value" Path="definition_name"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="definition/type_code"/>
+              </Record>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.SelectionFields">
+          <Collection>
+            <PropertyPath>definition/name</PropertyPath>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>JobParameter}"/>
+        <Annotation Term="Core.Description" String="Aspect for entities with canonical universal IDs&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-cuid"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobParameter">
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="definition_name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/job">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/job_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/definition">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_job_name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameter/value">
+        <Annotation Term="Common.Label" String="{i18n>Value}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="ID"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="name"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="type_code"/>
+                </Record>
+                <Record Type="UI.DataFieldWithUrl">
+                  <PropertyValue Property="Value" Path="link"/>
+                  <PropertyValue Property="Url" Path="link"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>link</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="filename"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>data</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="mimeType"/>
+                  <Annotation Term="UI.Hidden">
+                    <If>
+                      <Ne>
+                        <Path>type/code</Path>
+                        <String>data</String>
+                      </Ne>
+                      <Bool>true</Bool>
+                      <Bool>false</Bool>
+                    </If>
+                  </Annotation>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.HeaderFacets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Details}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.Facets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Messages}"/>
+              <PropertyValue Property="Target" AnnotationPath="messages/@UI.PresentationVariant"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>message</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="type_code"/>
+            </Record>
+            <Record Type="UI.DataFieldWithUrl">
+              <PropertyValue Property="Value" Path="link"/>
+              <PropertyValue Property="Url" Path="link"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>link</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="filename"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>data</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="mimeType"/>
+              <Annotation Term="UI.Hidden">
+                <If>
+                  <Ne>
+                    <Path>type/code</Path>
+                    <String>data</String>
+                  </Ne>
+                  <Bool>true</Bool>
+                  <Bool>false</Bool>
+                </If>
+              </Annotation>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.HeaderInfo">
+          <Record Type="UI.HeaderInfoType">
+            <PropertyValue Property="TypeName" String="{i18n>JobResult}"/>
+            <PropertyValue Property="TypeNamePlural" String="{i18n>JobResults}"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="{i18n>JobResult}"/>
+                <PropertyValue Property="Value" Path="name"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="type/code"/>
+              </Record>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.SelectionFields">
+          <Collection/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>JobResult}"/>
+        <Annotation Term="Core.Description" String="Aspect for entities with canonical universal IDs&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-cuid"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResult">
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="name"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/job">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/job_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/type">
+        <Annotation Term="Common.Label" String="{i18n>Type}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/type_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="type/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Type}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>Type}"/>
+            <PropertyValue Property="CollectionPath" String="ResultType"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="type_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/link">
+        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
+        <Annotation Term="Common.Label" String="{i18n>Link}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/mimeType">
+        <Annotation Term="Core.IsMediaType" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>MimeType}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/filename">
+        <Annotation Term="Common.Label" String="{i18n>Filename}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/data">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Core.MediaType" Path="mimeType"/>
+        <Annotation Term="Core.ContentDisposition">
+          <Record Type="Core.ContentDispositionType">
+            <PropertyValue Property="Type" String="attachment"/>
+            <PropertyValue Property="Filename" Path="filename"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Data}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResult/messages">
+        <Annotation Term="Common.Label" String="{i18n>Messages}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage">
+        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+          <Record Type="UI.FieldGroupType">
+            <PropertyValue Property="Data">
+              <Collection>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="ID"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="severity_code"/>
+                  <PropertyValue Property="Criticality" Path="criticality"/>
+                  <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="text"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.HeaderFacets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="Label" String="{i18n>Details}"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="UI.HeaderInfo">
+          <Record Type="UI.HeaderInfoType">
+            <PropertyValue Property="TypeName" String="{i18n>JobResult}"/>
+            <PropertyValue Property="TypeNamePlural" String="{i18n>JobResults}"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Label" String="{i18n>JobResult}"/>
+                <PropertyValue Property="Value" Path="text"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="severity/code"/>
+              </Record>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="UI.SelectionFields">
+          <Collection/>
+        </Annotation>
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="severity/numericCode"/>
+              <PropertyValue Property="Criticality" Path="criticality"/>
+              <PropertyValue Property="CriticalityRepresentation" EnumMember="UI.CriticalityRepresentationType/WithIcon"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="code"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="text"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="createdAt"/>
+            </Record>
+          </Collection>
+          <Annotation Term="UI.Criticality" Path="criticality"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>JobResultMessage}"/>
+        <Annotation Term="Core.Description" String="Aspect for entities with canonical universal IDs&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-cuid"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResultMessage">
+        <Annotation Term="UI.PresentationVariant">
+          <Record Type="UI.PresentationVariantType">
+            <PropertyValue Property="Visualizations">
+              <Collection>
+                <AnnotationPath>@UI.LineItem</AnnotationPath>
+              </Collection>
+            </PropertyValue>
+            <PropertyValue Property="SortOrder">
+              <Collection>
+                <Record Type="Common.SortOrderType">
+                  <PropertyValue Property="Property" PropertyPath="createdAt"/>
+                  <PropertyValue Property="Descending" Bool="false"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/result">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>JobResult}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/result_ID">
+        <Annotation Term="UI.Hidden" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>JobResult}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/code">
+        <Annotation Term="Common.Label" String="{i18n>Code}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/text">
+        <Annotation Term="Common.Label" String="{i18n>Message}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/severity">
+        <Annotation Term="Common.Label" String="{i18n>Severity}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/severity_code">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="severity/name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Severity}"/>
+        <Annotation Term="Common.ValueList">
+          <Record Type="Common.ValueListType">
+            <PropertyValue Property="Label" String="{i18n>Severity}"/>
+            <PropertyValue Property="CollectionPath" String="MessageSeverity"/>
+            <PropertyValue Property="Parameters">
+              <Collection>
+                <Record Type="Common.ValueListParameterInOut">
+                  <PropertyValue Property="LocalDataProperty" PropertyPath="severity_code"/>
+                  <PropertyValue Property="ValueListProperty" String="code"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="name"/>
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/createdAt">
+        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage/criticality">
+        <Annotation Term="Core.Computed" Bool="true"/>
+        <Annotation Term="Common.Label" String="{i18n>Criticality}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>Status}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobStatus">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus/code">
+        <Annotation Term="Common.Label" String="{i18n>Status}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="requested"/>
+              <PropertyValue Property="Value" String="requested"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="running"/>
+              <PropertyValue Property="Value" String="running"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completed"/>
+              <PropertyValue Property="Value" String="completed"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithWarning"/>
+              <PropertyValue Property="Value" String="completedWithWarning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
+              <PropertyValue Property="Value" String="completedWithError"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="failed"/>
+              <PropertyValue Property="Value" String="failed"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="cancelRequested"/>
+              <PropertyValue Property="Value" String="cancelRequested"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="canceled"/>
+              <PropertyValue Property="Value" String="canceled"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>ResultType}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/ResultType">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType/code">
+        <Annotation Term="Common.Label" String="{i18n>ResultType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="link"/>
+              <PropertyValue Property="Value" String="link"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="data"/>
+              <PropertyValue Property="Value" String="data"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="message"/>
+              <PropertyValue Property="Value" String="message"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>ParameterType}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/ParameterType">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType/code">
+        <Annotation Term="Common.Label" String="{i18n>ParameterType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="readOnlyValue"/>
+              <PropertyValue Property="Value" String="readOnlyValue"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="writableValue"/>
+              <PropertyValue Property="Value" String="writableValue"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="mapping"/>
+              <PropertyValue Property="Value" String="mapping"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>DataType}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/DataType">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType/code">
+        <Annotation Term="Common.Label" String="{i18n>DataType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="string"/>
+              <PropertyValue Property="Value" String="string"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="number"/>
+              <PropertyValue Property="Value" String="number"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="datetime"/>
+              <PropertyValue Property="Value" String="datetime"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="boolean"/>
+              <PropertyValue Property="Value" String="boolean"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>MappingType}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/MappingType">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType/code">
+        <Annotation Term="Common.Label" String="{i18n>MappingType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="accountingPrinciple"/>
+              <PropertyValue Property="Value" String="accountingPrinciple"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="companyCode"/>
+              <PropertyValue Property="Value" String="companyCode"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="plant"/>
+              <PropertyValue Property="Value" String="plant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="controllingArea"/>
+              <PropertyValue Property="Value" String="controllingArea"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalPeriod"/>
+              <PropertyValue Property="Value" String="fiscalPeriod"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYearPeriod"/>
+              <PropertyValue Property="Value" String="fiscalYearPeriod"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYear"/>
+              <PropertyValue Property="Value" String="fiscalYear"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="keyDate"/>
+              <PropertyValue Property="Value" String="keyDate"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="chartOfAccounts"/>
+              <PropertyValue Property="Value" String="chartOfAccounts"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYearVariant"/>
+              <PropertyValue Property="Value" String="fiscalYearVariant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="ledger"/>
+              <PropertyValue Property="Value" String="ledger"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="testRun"/>
+              <PropertyValue Property="Value" String="testRun"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="postingPeriodVariant"/>
+              <PropertyValue Property="Value" String="postingPeriodVariant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="processingUser"/>
+              <PropertyValue Property="Value" String="processingUser"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="interestedUser"/>
+              <PropertyValue Property="Value" String="interestedUser"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="userResponsible"/>
+              <PropertyValue Property="Value" String="userResponsible"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="processingUserEmail"/>
+              <PropertyValue Property="Value" String="processingUserEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="interestedUserEmail"/>
+              <PropertyValue Property="Value" String="interestedUserEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="userResponsibleEmail"/>
+              <PropertyValue Property="Value" String="userResponsibleEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="executionID"/>
+              <PropertyValue Property="Value" String="executionID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField1"/>
+              <PropertyValue Property="Value" String="customField1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField2"/>
+              <PropertyValue Property="Value" String="customField2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField3"/>
+              <PropertyValue Property="Value" String="customField3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListID"/>
+              <PropertyValue Property="Value" String="taskListID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
+              <PropertyValue Property="Value" String="taskListDescription"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskID"/>
+              <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskDescription"/>
+              <PropertyValue Property="Value" String="taskDescription"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity">
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="name"/>
+            </Record>
+          </Collection>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>MessageSeverity}"/>
+        <Annotation Term="Core.Description" String="Aspect for a code list with name and description&#xA;&#xA;See https://cap.cloud.sap/docs/cds/common#aspect-codelist"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.EntityContainer/MessageSeverity">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity/code">
+        <Annotation Term="Common.Label" String="{i18n>MessageSeverity}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" String="success"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="info"/>
+              <PropertyValue Property="Value" String="info"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="warning"/>
+              <PropertyValue Property="Value" String="warning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" String="error"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity/numericCode">
+        <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+        <Annotation Term="Common.Text" Path="name">
+          <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
+        </Annotation>
+        <Annotation Term="Common.Label" String="{i18n>MessageSeverity}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" Int="1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="info"/>
+              <PropertyValue Property="Value" Int="2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="warning"/>
+              <PropertyValue Property="Value" Int="3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" Int="4"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/description">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/longDescription">
+        <Annotation Term="Common.Label" String="{i18n>LongDescription}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job">
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job_name">
+        <Annotation Term="Common.Label" String="{i18n>Job}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/description">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/ID">
+        <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/text">
+        <Annotation Term="Common.Label" String="{i18n>Message}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>Status}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="requested"/>
+              <PropertyValue Property="Value" String="requested"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="running"/>
+              <PropertyValue Property="Value" String="running"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completed"/>
+              <PropertyValue Property="Value" String="completed"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithWarning"/>
+              <PropertyValue Property="Value" String="completedWithWarning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="completedWithError"/>
+              <PropertyValue Property="Value" String="completedWithError"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="failed"/>
+              <PropertyValue Property="Value" String="failed"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="cancelRequested"/>
+              <PropertyValue Property="Value" String="cancelRequested"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="canceled"/>
+              <PropertyValue Property="Value" String="canceled"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ResultType_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>ResultType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="link"/>
+              <PropertyValue Property="Value" String="link"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="data"/>
+              <PropertyValue Property="Value" String="data"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="message"/>
+              <PropertyValue Property="Value" String="message"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>ParameterType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="readOnlyValue"/>
+              <PropertyValue Property="Value" String="readOnlyValue"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="writableValue"/>
+              <PropertyValue Property="Value" String="writableValue"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="mapping"/>
+              <PropertyValue Property="Value" String="mapping"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.DataType_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>DataType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="string"/>
+              <PropertyValue Property="Value" String="string"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="number"/>
+              <PropertyValue Property="Value" String="number"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="datetime"/>
+              <PropertyValue Property="Value" String="datetime"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="boolean"/>
+              <PropertyValue Property="Value" String="boolean"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MappingType_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>MappingType}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="accountingPrinciple"/>
+              <PropertyValue Property="Value" String="accountingPrinciple"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="companyCode"/>
+              <PropertyValue Property="Value" String="companyCode"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="plant"/>
+              <PropertyValue Property="Value" String="plant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="controllingArea"/>
+              <PropertyValue Property="Value" String="controllingArea"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalPeriod"/>
+              <PropertyValue Property="Value" String="fiscalPeriod"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYearPeriod"/>
+              <PropertyValue Property="Value" String="fiscalYearPeriod"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYear"/>
+              <PropertyValue Property="Value" String="fiscalYear"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="keyDate"/>
+              <PropertyValue Property="Value" String="keyDate"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="chartOfAccounts"/>
+              <PropertyValue Property="Value" String="chartOfAccounts"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="fiscalYearVariant"/>
+              <PropertyValue Property="Value" String="fiscalYearVariant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="ledger"/>
+              <PropertyValue Property="Value" String="ledger"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="testRun"/>
+              <PropertyValue Property="Value" String="testRun"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="postingPeriodVariant"/>
+              <PropertyValue Property="Value" String="postingPeriodVariant"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="processingUser"/>
+              <PropertyValue Property="Value" String="processingUser"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="interestedUser"/>
+              <PropertyValue Property="Value" String="interestedUser"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="userResponsible"/>
+              <PropertyValue Property="Value" String="userResponsible"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="processingUserEmail"/>
+              <PropertyValue Property="Value" String="processingUserEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="interestedUserEmail"/>
+              <PropertyValue Property="Value" String="interestedUserEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="userResponsibleEmail"/>
+              <PropertyValue Property="Value" String="userResponsibleEmail"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="executionID"/>
+              <PropertyValue Property="Value" String="executionID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField1"/>
+              <PropertyValue Property="Value" String="customField1"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField2"/>
+              <PropertyValue Property="Value" String="customField2"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="customField3"/>
+              <PropertyValue Property="Value" String="customField3"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListID"/>
+              <PropertyValue Property="Value" String="taskListID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
+              <PropertyValue Property="Value" String="taskListDescription"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskID"/>
+              <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskDescription"/>
+              <PropertyValue Property="Value" String="taskDescription"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/locale">
+        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+        <Annotation Term="Core.Description" String="Type for a language code"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/name">
+        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/descr">
+        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/code">
+        <Annotation Term="Common.Label" String="{i18n>MessageSeverity}"/>
+        <Annotation Term="Validation.AllowedValues">
+          <Collection>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="success"/>
+              <PropertyValue Property="Value" String="success"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="info"/>
+              <PropertyValue Property="Value" String="info"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="warning"/>
+              <PropertyValue Property="Value" String="warning"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="error"/>
+              <PropertyValue Property="Value" String="error"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

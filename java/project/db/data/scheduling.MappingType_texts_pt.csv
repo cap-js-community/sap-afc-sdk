@@ -1,0 +1,28 @@
+locale;code;name;descr
+"pt";accountingPrinciple;Princípio contábil;Princípio contábil
+"pt";companyCode;Empresa;Empresa
+"pt";plant;Centro;Centro
+"pt";controllingArea;Área de contabilidade de custos;Área de contabilidade de custos
+"pt";fiscalPeriod;Período contábil;Período contábil
+"pt";fiscalYearPeriod;Período do exercício;Período do exercício
+"pt";fiscalYear;Exercício fiscal;Exercício fiscal
+"pt";keyDate;Data fixada;Data fixada
+"pt";chartOfAccounts;Plano de contas;Plano de contas
+"pt";fiscalYearVariant;Variante de exercício;Variante de exercício
+"pt";ledger;Ledger;Ledger
+"pt";testRun;Execução de teste;Execução de teste
+"pt";postingPeriodVariant;Variante de período contábil;Variante de período contábil
+"pt";processingUser;Usuário de processamento;Usuário de processamento
+"pt";interestedUser;Usuário interessado;Usuário interessado
+"pt";userResponsible;Usuário responsável;Usuário responsável
+"pt";processingUserEmail;E-mail do usuário de processamento;E-mail do usuário de processamento
+"pt";interestedUserEmail;E-mail do usuário interessado;E-mail do usuário interessado
+"pt";userResponsibleEmail;E-mail do usuário responsável;E-mail do usuário responsável
+"pt";executionID;ID de execução;ID de execução
+"pt";customField1;Campo personalizado 1;Campo personalizado 1
+"pt";customField2;Campo personalizado 2;Campo personalizado 2
+"pt";customField3;Campo personalizado 3;Campo personalizado 3
+"pt";taskListID;ID da lista de tarefas;ID da lista de tarefas
+"pt";taskListDescription;Descrição de lista de tarefas;Descrição de lista de tarefas
+"pt";taskID;ID da tarefa;ID da tarefa
+"pt";taskDescription;Descrição da tarefa;Descrição da tarefa

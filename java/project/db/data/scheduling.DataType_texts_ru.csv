@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ru";string;Строка;Строка
+"ru";number;Число;Число
+"ru";datetime;Дата и время;Дата и время
+"ru";boolean;Логическое значение;Логическое значение

@@ -1,0 +1,9 @@
+locale;code;name;descr
+"el";requested;Ζητήθηκε;Ζητήθηκε
+"el";running;Εκτελείται;Εκτελείται
+"el";completed;Ολοκληρώθηκε;Ολοκληρώθηκε
+"el";completedWithWarning;Ολοκληρώθηκε με Προειδοποίηση;Προειδοποίηση
+"el";completedWithError;Ολοκληρώθηκε με Σφάλμα;Σφάλμα
+"el";failed;Απέτυχε;Απέτυχε
+"el";cancelRequested;Ζητήθηκε Ακύρωση;Ζητήθηκε
+"el";canceled;Ακυρώθηκε;Ακυρώθηκε

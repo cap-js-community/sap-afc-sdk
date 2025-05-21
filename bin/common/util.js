@@ -25,8 +25,8 @@ function adjustText(file, callback) {
     const newContent = callback(content) ?? content;
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }
@@ -77,8 +77,8 @@ function adjustJSON(file, callback) {
     const newContent = JSON.stringify(newJson, null, 2);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }
@@ -92,8 +92,8 @@ function adjustYAML(file, callback) {
     const newContent = yaml.stringify(newYml);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }
@@ -107,8 +107,8 @@ function adjustYAMLDocument(file, callback) {
     const newContent = newYml.toString();
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }
@@ -140,8 +140,8 @@ function adjustYAMLAllDocument(file, callback) {
       .join("");
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }
@@ -165,8 +165,8 @@ function adjustXML(file, callback) {
     const newContent = xmlBuilder.buildObject(newXml);
     if (newContent !== content) {
       fs.writeFileSync(filePath, newContent, "utf8");
-      return true;
     }
+    return true;
   }
   return false;
 }

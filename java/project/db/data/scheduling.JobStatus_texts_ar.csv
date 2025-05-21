@@ -1,0 +1,9 @@
+locale;code;name;descr
+"ar";requested;مطلوب;مطلوب
+"ar";running;قيد التشغيل;قيد التشغيل
+"ar";completed;مكتمل;مكتمل
+"ar";completedWithWarning;مكتمل مع وجود تحذير;تحذير
+"ar";completedWithError;مكتمل مع وجود خطأ;خطأ
+"ar";failed;فشل;فشل
+"ar";cancelRequested;مطلوب الإلغاء;مطلوب
+"ar";canceled;مُلغى;مُلغى

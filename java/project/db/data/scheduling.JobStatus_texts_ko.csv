@@ -1,0 +1,9 @@
+locale;code;name;descr
+"ko";requested;요청됨;요청됨
+"ko";running;실행 중;실행 중
+"ko";completed;완료됨;완료됨
+"ko";completedWithWarning;완료되었으나 경고 발생;경고
+"ko";completedWithError;완료되었으나 오류 발생;오류
+"ko";failed;실패;실패
+"ko";cancelRequested;취소 요청됨;요청됨
+"ko";canceled;취소됨;취소됨

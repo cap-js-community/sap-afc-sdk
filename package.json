@@ -38,18 +38,20 @@
     "afc": "./bin/afc.js"
   },
   "scripts": {
+    "postinstall": "afc update -j",
     "start": "cds-serve",
     "watch": "cds watch",
     "test": "jest --silent",
     "test:update": "npm test -- -u",
     "test:bin": "cd bin && jest --silent",
     "test:bin:update": "npm run test:bin -- -u",
+    "test:java": "cd java/project && npm test",
     "lint": "npm run eslint && npm run prettier && npm run prettier:cds",
     "lint:ci": "npm run eslint:ci && npm run prettier:ci",
     "eslint": "eslint --fix .",
     "eslint:ci": "eslint .",
-    "prettier": "prettier \"**/*.{js,json,md,yml,yaml}\" --write --log-level error",
-    "prettier:ci": "prettier \"**/*.{js,json,md,yml,yaml}\" --check",
+    "prettier": "prettier \"**/*.{js,json,java,md,yml,yaml}\" --write --log-level error",
+    "prettier:ci": "prettier \"**/*.{js,json,java,md,yml,yaml}\" --check",
     "prettier:cds": "format-cds app db srv -f",
     "upgrade-lock": "rm -rf package-lock.json node_modules && npm i",
     "prepareRelease": "npm prune --production",
@@ -58,6 +60,8 @@
     "openapi": "npm run openapi:update && npm run lint",
     "openapi:update": "node scripts/openapi",
     "openapi:check": "node scripts/openapi -c",
+    "java:update": "node scripts/java-plugin",
+    "java:check": "node scripts/java-plugin -c",
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
@@ -93,6 +97,7 @@
     "globals": "^16.1.0",
     "jest": "^29.7.0",
     "prettier": "^3.5.3",
+    "prettier-plugin-java": "^2.6.7",
     "ws": "^8.18.2"
   },
   "cds": {

@@ -1,0 +1,28 @@
+locale;code;name;descr
+"zh_CN";accountingPrinciple;会计准则;会计准则
+"zh_CN";companyCode;公司代码;公司代码
+"zh_CN";plant;工厂;工厂
+"zh_CN";controllingArea;成本控制范围;成本控制范围
+"zh_CN";fiscalPeriod;会计期间;会计期间
+"zh_CN";fiscalYearPeriod;会计年度期间;会计年度期间
+"zh_CN";fiscalYear;会计年度;会计年度
+"zh_CN";keyDate;关键日期;关键日期
+"zh_CN";chartOfAccounts;科目表;科目表
+"zh_CN";fiscalYearVariant;会计年度变式;会计年度变式
+"zh_CN";ledger;分类账;分类账
+"zh_CN";testRun;测试运行;测试运行
+"zh_CN";postingPeriodVariant;过账期间变式;过账期间变式
+"zh_CN";processingUser;处理用户;处理用户
+"zh_CN";interestedUser;关注用户;关注用户
+"zh_CN";userResponsible;负责用户;负责用户
+"zh_CN";processingUserEmail;处理用户电子邮件;处理用户电子邮件
+"zh_CN";interestedUserEmail;关注用户电子邮件;关注用户电子邮件
+"zh_CN";userResponsibleEmail;负责用户电子邮件;负责用户电子邮件
+"zh_CN";executionID;执行标识;执行标识
+"zh_CN";customField1;自定义字段 1;自定义字段 1
+"zh_CN";customField2;自定义字段 2;自定义字段 2
+"zh_CN";customField3;自定义字段 3;自定义字段 3
+"zh_CN";taskListID;任务清单标识;任务清单标识
+"zh_CN";taskListDescription;任务清单描述;任务清单描述
+"zh_CN";taskID;任务标识;任务标识
+"zh_CN";taskDescription;任务描述;任务描述

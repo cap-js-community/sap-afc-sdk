@@ -1,0 +1,9 @@
+locale;code;name;descr
+"en";requested;Requested;Requested
+"en";running;Running;Running
+"en";completed;Completed;Completed
+"en";completedWithWarning;Completed with Warning;Warning
+"en";completedWithError;Completed with Error;Error
+"en";failed;Failed;Failed
+"en";cancelRequested;Cancellation Requested;Requested
+"en";canceled;Canceled;Canceled

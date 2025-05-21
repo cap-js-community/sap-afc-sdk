@@ -52,6 +52,28 @@ jobs:
       - run: npm ci
       - run: npm run openapi:check
 
+  java-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:java
+
+  java-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run java:check
+
   bin:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,5 @@
+locale;code;name;descr
+"ko";string;문자열;문자열
+"ko";number;숫자;숫자
+"ko";datetime;일자 및 시간;일자 및 시간
+"ko";boolean;부울;부울

@@ -185,11 +185,32 @@ function processNode(target) {
 }
 
 function processJava(target) {
+  // cdsrc
+  if (
+    !adjustJSON(".cdsrc.json", (json) => {
+      if (json.requires?.outbox?.kind !== "persistent-outbox") {
+        json.requires ??= {};
+        json.requires.outbox ??= {};
+        json.requires.outbox.kind = "persistent-outbox";
+      }
+    })
+  ) {
+    adjustJSON("package.json", (json) => {
+      if (json.cds?.requires?.outbox?.kind !== "persistent-outbox") {
+        json.cds ??= {};
+        json.cds.requires ??= {};
+        json.cds.requires.outbox ??= {};
+        json.cds.requires.outbox.kind = "persistent-outbox";
+      }
+    });
+  }
+
   // POM
   adjustXML("srv/pom.xml", (xml) => {
     const dependency = {
       groupId: ["com.github.cap.js.community"],
       artifactId: ["sap-afc-sdk"],
+      version: "1.0.0",
     };
     if (!xml.project.dependencies) {
       xml.project.dependencies = [{}];
@@ -199,8 +220,7 @@ function processJava(target) {
         (dep) => dep.groupId[0] === dependency.groupId[0] && dependency.artifactId[0] === dependency.artifactId[0],
       )
     ) {
-      // TODO: Build plugin
-      // xml.project.dependencies[0].dependency.push(dependency);
+      xml.project.dependencies[0].dependency.push(dependency);
     }
     return xml;
   });

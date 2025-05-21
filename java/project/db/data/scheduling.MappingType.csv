@@ -1,0 +1,28 @@
+code;name;descr
+accountingPrinciple;Accounting Principle;Accounting Principle
+companyCode;Company Code;Company Code
+plant;Plant;Plant
+controllingArea;Controlling Area;Controlling Area
+fiscalPeriod;Fiscal Period;Fiscal Period
+fiscalYearPeriod;Fiscal Year Period;Fiscal Year Period
+fiscalYear;Fiscal Year;Fiscal Year
+keyDate;Key Date;Key Date
+chartOfAccounts;Chart Of Accounts;Chart Of Accounts
+fiscalYearVariant;Fiscal Year Variant;Fiscal Year Variant
+ledger;Ledger;Ledger
+testRun;Test Run;Test Run
+postingPeriodVariant;Posting Period Variant;Posting Period Variant
+processingUser;Processing User;Processing User
+interestedUser;Interested User;Interested User
+userResponsible;User Responsible;User Responsible
+processingUserEmail;Processing User Email;Processing User Email
+interestedUserEmail;Interested User Email;Interested User Email
+userResponsibleEmail;User Responsible Email;User Responsible Email
+executionID;Execution ID;Execution ID
+customField1;Custom Field 1;Custom Field 1
+customField2;Custom Field 2;Custom Field 2
+customField3;Custom Field 3;Custom Field 3
+taskListID;Task List ID;Task List ID
+taskListDescription;Task List Description;Task List Description
+taskID;Task ID;Task ID
+taskDescription;Task Description;Task Description

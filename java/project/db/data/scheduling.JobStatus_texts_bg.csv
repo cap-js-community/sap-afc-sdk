@@ -1,0 +1,9 @@
+locale;code;name;descr
+"bg";requested;Заявено;Заявено
+"bg";running;Изпълнява се;Изпълнява се
+"bg";completed;Завършено;Завършено
+"bg";completedWithWarning;Завършено с предупреждение;Предупреждение
+"bg";completedWithError;Завършено с грешка;Грешка
+"bg";failed;Неуспешно;Неуспешно
+"bg";cancelRequested;Заявено анулиране;Заявено
+"bg";canceled;Отменено;Отменено

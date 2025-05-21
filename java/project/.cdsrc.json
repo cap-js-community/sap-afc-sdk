@@ -1,0 +1,10 @@
+{
+    "sql": {
+        "native_hana_associations" : false
+    },
+    "requires": {
+        "outbox": {
+            "kind": "persistent-outbox"
+        }
+    }
+}

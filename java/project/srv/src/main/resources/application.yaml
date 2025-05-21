@@ -1,0 +1,55 @@
+spring:
+  cloud:
+    openservicebroker:
+      catalog:
+        services:
+          - id: c48d9d0b-4320-439e-8f4e-2ab0294bd971
+            name: sap-afc-sdk
+            description: AFC Scheduling Provider Service
+            bindable: true
+            metadata:
+              displayName: AFC Scheduling Provider Service
+              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+            plans:
+              - id: a7609272-ce22-41e0-a605-1ad3318ef2d5
+                name: standard
+                description: Standard plan
+                free: true
+                bindable: true
+                planUpdateable: true
+
+cds:
+  index-page:
+    enabled: true
+
+broker:
+  name: sap-afc-sdk
+  enabled: true
+  user: broker-user
+  credentialsHash: sha256:pg78nhUJXTcWcD2NCOlT6hkQQA8qwxLgsZiQasutisc=:1eBRSsW3Sd7Hm3bukWS399zGNJb7d9IdnDe1uDTkSNU=
+  endpoints:
+    api: /api
+    job-scheduling-v1: /api/job-scheduling/v1
+  credential-types:
+    - binding-secret
+    - x509
+
+springdoc:
+  packages-to-scan:
+    - scheduling.controllers
+  swagger-ui:
+    path: /api-docs/api/job-scheduling/v1
+
+sap-afc-sdk:
+  endpoints:
+    approuter: null
+    server: null
+  sync-job:
+    cron: 0 */1 * * * *
+
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false

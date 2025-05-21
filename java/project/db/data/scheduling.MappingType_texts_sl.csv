@@ -1,0 +1,28 @@
+locale;code;name;descr
+"sl";accountingPrinciple;Računovodski standard;Računovodski standard
+"sl";companyCode;Šifra podjetja;Šifra podjetja
+"sl";plant;Obrat;Obrat
+"sl";controllingArea;Področje kontrolinga;Področje kontrolinga
+"sl";fiscalPeriod;Poslovno obdobje;Poslovno obdobje
+"sl";fiscalYearPeriod;Obdobje poslovnega leta;Obdobje poslovnega leta
+"sl";fiscalYear;Poslovno leto;Poslovno leto
+"sl";keyDate;Ključni datum;Ključni datum
+"sl";chartOfAccounts;Kontni plan;Kontni plan
+"sl";fiscalYearVariant;Različica poslovnega leta;Različica poslovnega leta
+"sl";ledger;Knjiga;Knjiga
+"sl";testRun;Preizkusno izvajanje;Preizkusno izvajanje
+"sl";postingPeriodVariant;Varianta obdobja knjiženja;Varianta obdobja knjiženja
+"sl";processingUser;Uporabnik, ki obdeluje;Uporabnik, ki obdeluje
+"sl";interestedUser;Zainteresirani uporabnik;Zainteresirani uporabnik
+"sl";userResponsible;Odgovorni uporabnik;Odgovorni uporabnik
+"sl";processingUserEmail;E-pošta uporabnika, ki obdeluje;E-pošta uporabnika, ki obdeluje
+"sl";interestedUserEmail;E-pošta zainteresiranega uporabnika;E-pošta zainteresiranega uporabnika
+"sl";userResponsibleEmail;E-pošta odgovornega uporabnika;E-pošta odgovornega uporabnika
+"sl";executionID;ID izvedbe;ID izvedbe
+"sl";customField1;Prilagojeno polje 1;Prilagojeno polje 1
+"sl";customField2;Prilagojeno polje 2;Prilagojeno polje 2
+"sl";customField3;Prilagojeno polje 3;Prilagojeno polje 3
+"sl";taskListID;ID seznama nalog;ID seznama nalog
+"sl";taskListDescription;Opis seznama nalog;Opis seznama nalog
+"sl";taskID;ID naloge;ID naloge
+"sl";taskDescription;Opis naloge;Opis naloge

@@ -1,0 +1,9 @@
+locale;code;name;descr
+"th";requested;ขอแล้ว;ขอแล้ว
+"th";running;กำลังดำเนินการ;กำลังดำเนินการ
+"th";completed;เสร็จสมบูรณ์;เสร็จสมบูรณ์
+"th";completedWithWarning;เสร็จสมบูรณ์โดยมีคำเตือน;คำเตือน
+"th";completedWithError;เสร็จสมบูรณ์โดยมีข้อผิดพลาด;ข้อผิดพลาด
+"th";failed;ล้มเหลว;ล้มเหลว
+"th";cancelRequested;ขอยกเลิกแล้ว;ขอแล้ว
+"th";canceled;ยกเลิกแล้ว;ยกเลิกแล้ว

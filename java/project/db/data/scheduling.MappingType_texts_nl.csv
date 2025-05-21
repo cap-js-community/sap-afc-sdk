@@ -1,0 +1,28 @@
+locale;code;name;descr
+"nl";accountingPrinciple;Regels voor financiële verslaglegging;Regels voor financiële verslaglegging
+"nl";companyCode;Bedrijfsnummer;Bedrijfsnummer
+"nl";plant;Vestiging;Vestiging
+"nl";controllingArea;Controllinggebied;Controllinggebied
+"nl";fiscalPeriod;Boekingsperiode;Boekingsperiode
+"nl";fiscalYearPeriod;Boekjaarperiode;Boekjaarperiode
+"nl";fiscalYear;Boekjaar;Boekjaar
+"nl";keyDate;Peildatum;Peildatum
+"nl";chartOfAccounts;Rekeningschema;Rekeningschema
+"nl";fiscalYearVariant;Boekjaarvariant;Boekjaarvariant
+"nl";ledger;Ledger;Ledger
+"nl";testRun;Testrun;Testrun
+"nl";postingPeriodVariant;Boekingsperiodevariant;Boekingsperiodevariant
+"nl";processingUser;Verwerkende gebruiker;Verwerkende gebruiker
+"nl";interestedUser;Geïnteresseerde gebruiker;Geïnteresseerde gebruiker
+"nl";userResponsible;Verantwoordelijke gebruiker;Verantwoordelijke gebruiker
+"nl";processingUserEmail;E-mail verwerkende gebruiker;E-mail verwerkende gebruiker
+"nl";interestedUserEmail;E-mail geïnteresseerde gebruiker;E-mail geïnteresseerde gebruiker
+"nl";userResponsibleEmail;E-mail verantwoordelijke gebruiker;E-mail verantwoordelijke gebruiker
+"nl";executionID;Uitvoerings-ID;Uitvoerings-ID
+"nl";customField1;Aangepast veld 1;Aangepast veld 1
+"nl";customField2;Aangepast veld 2;Aangepast veld 2
+"nl";customField3;Aangepast veld 3;Aangepast veld 3
+"nl";taskListID;Taakschema-ID;Taakschema-ID
+"nl";taskListDescription;Omschrijving taakschema;Omschrijving taakschema
+"nl";taskID;Taak-ID;Taak-ID
+"nl";taskDescription;Taakomschrijving;Taakomschrijving

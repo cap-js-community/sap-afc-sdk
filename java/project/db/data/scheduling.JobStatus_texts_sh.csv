@@ -1,0 +1,9 @@
+locale;code;name;descr
+"sh";requested;Zahtevano;Zahtevano
+"sh";running;Izvođenje;Izvođenje
+"sh";completed;Završeno;Završeno
+"sh";completedWithWarning;Završeno sa upozorenjem;Upozorenje
+"sh";completedWithError;Završeno s greškom;Greška
+"sh";failed;Neuspešno;Neuspešno
+"sh";cancelRequested;Otkazivanje zahtevano;Zahtevano
+"sh";canceled;Otkazano;Otkazano

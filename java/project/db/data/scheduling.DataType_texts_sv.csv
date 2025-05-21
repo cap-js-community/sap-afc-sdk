@@ -1,0 +1,5 @@
+locale;code;name;descr
+"sv";string;Sträng;Sträng
+"sv";number;Tal;Tal
+"sv";datetime;Datum och tid;Datum och tid
+"sv";boolean;Boolesk;Boolesk

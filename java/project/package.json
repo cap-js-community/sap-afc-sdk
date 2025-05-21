@@ -1,0 +1,19 @@
+{
+  "name": "sap-afc-sdk-java",
+  "version": "1.0.0",
+  "description": "SAP Advanced Financial Closing SDK for CDS",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/cap-js-community/sap-afc-sdk.git",
+  "dependencies": {
+    "@cap-js-community/sap-afc-sdk": "../../"
+  },
+  "scripts": {
+    "install:clean": "mvn clean install",
+    "build": "mvn cds:build",
+    "start": "mvn spring-boot:run",
+    "test": "mvn test",
+    "deploy": "cds deploy --to h2 --with-mocks --dry --out './srv/src/main/resources/schema-h2.sql'",
+    "swagger": "npx --yes open-cli http://localhost:8080/api-docs/api/job-scheduling/v1/swagger-ui/index.html",
+    "openapi": "npx --yes open-cli http://localhost:8080/openai/job-scheduling/v1"
+  }
+}

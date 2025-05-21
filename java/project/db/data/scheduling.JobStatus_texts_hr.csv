@@ -1,0 +1,9 @@
+locale;code;name;descr
+"hr";requested;Zatraženo;Zatraženo
+"hr";running;Izvodi se;Izvodi se
+"hr";completed;Dovršeno;Dovršeno
+"hr";completedWithWarning;Dovršeno s upozorenjem;Upozorenje
+"hr";completedWithError;Dovršeno s pogreškom;Pogreška
+"hr";failed;Nije uspjelo;Nije uspjelo
+"hr";cancelRequested;Zatraženo otkazivanje;Zatraženo
+"hr";canceled;Otkazano;Otkazano

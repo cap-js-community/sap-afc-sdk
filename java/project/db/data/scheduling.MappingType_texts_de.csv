@@ -1,0 +1,28 @@
+locale;code;name;descr
+"de";accountingPrinciple;Rechnungslegungsvorschrift;Rechnungslegungsvorschrift
+"de";companyCode;Buchungskreis;Buchungskreis
+"de";plant;Werk;Werk
+"de";controllingArea;Kostenrechnungskreis;Kostenrechnungskreis
+"de";fiscalPeriod;Geschäftsperiode;Geschäftsperiode
+"de";fiscalYearPeriod;Geschäftsjahresperiode;Geschäftsjahresperiode
+"de";fiscalYear;Geschäftsjahr;Geschäftsjahr
+"de";keyDate;Stichtag;Stichtag
+"de";chartOfAccounts;Kontenplan;Kontenplan
+"de";fiscalYearVariant;Geschäftsjahresvariante;Geschäftsjahresvariante
+"de";ledger;Ledger;Ledger
+"de";testRun;Testlauf;Testlauf
+"de";postingPeriodVariant;Buchungsperiodenvariante;Buchungsperiodenvariante
+"de";processingUser;Ausführender Benutzer;Ausführender Benutzer
+"de";interestedUser;Interessierter Benutzer;Interessierter Benutzer
+"de";userResponsible;Verantwortlicher Benutzer;Verantwortlicher Benutzer
+"de";processingUserEmail;E-Mail des ausführenden Benutzers;E-Mail des ausführenden Benutzers
+"de";interestedUserEmail;E-Mail des interessierten Benutzers;E-Mail des interessierten Benutzers
+"de";userResponsibleEmail;E-Mail des verantwortlichen Benutzers;E-Mail des verantwortlichen Benutzers
+"de";executionID;Ausführungs-ID;Ausführungs-ID
+"de";customField1;Benutzerdefiniertes Feld 1;Benutzerdefiniertes Feld 1
+"de";customField2;Benutzerdefiniertes Feld 2;Benutzerdefiniertes Feld 2
+"de";customField3;Benutzerdefiniertes Feld 3;Benutzerdefiniertes Feld 3
+"de";taskListID;Aufgabenplan-ID;Aufgabenplan-ID
+"de";taskListDescription;Aufgabenplanbeschreibung;Aufgabenplanbeschreibung
+"de";taskID;Aufgaben-ID;Aufgaben-ID
+"de";taskDescription;Aufgabenbeschreibung;Aufgabenbeschreibung

@@ -668,11 +668,13 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
         ```java
         @Autowired
         private SchedulingProcessingService processingService;
+
         ```
       - `SchedulingWebsocketService`: Scheduling Websocket service
         ```java
         @Autowired
         private SchedulingWebsocketService websocketService;
+
         ```
 
 ### Architecture
@@ -806,7 +808,6 @@ package customer.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
 import com.sap.cds.services.handler.annotations.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -841,6 +842,7 @@ public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingP
     context.proceed();
   }
 }
+
 ```
 
 A stub implementation for custom scheduling processing service can be generated via command:
@@ -955,11 +957,9 @@ To implement a custom job provider extend the job provider service definition as
 package customer.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.handler.annotations.*;
 import com.sap.cds.services.cds.*;
-
+import com.sap.cds.services.handler.annotations.*;
 import java.util.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -987,6 +987,7 @@ public class SchedulingProviderHandler extends scheduling.handlers.SchedulingPro
     context.proceed();
   }
 }
+
 ```
 
 A stub implementation for custom scheduling provider service can be generated via command:
@@ -1032,7 +1033,6 @@ package customer.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
 import com.sap.cds.services.handler.annotations.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -1046,6 +1046,7 @@ public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingP
     context.proceed();
   }
 }
+
 ```
 
 A stub implementation for periodic job sync can be generated via command:

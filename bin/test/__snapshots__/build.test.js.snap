@@ -189,6 +189,26 @@ Content-Type: application/json
 `;
 
 exports[`Build Java / CF 5`] = `
+"{
+  "sql": {
+    "native_hana_associations": false
+  },
+  "requires": {
+    "outbox": {
+      "kind": "persistent-outbox"
+    },
+    "[production]": {
+      "auth": "xsuaa",
+      "db": "hana",
+      "destinations": true,
+      "html5-runtime": true
+    }
+  }
+}
+"
+`;
+
+exports[`Build Java / CF 6`] = `
 "<?xml version="1.0" encoding="UTF-8" standalone="yes"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -223,6 +243,11 @@ exports[`Build Java / CF 5`] = `
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.cap.js.community</groupId>
+      <artifactId>sap-afc-sdk</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
   	<dependency>
@@ -317,7 +342,7 @@ exports[`Build Java / CF 5`] = `
 </project>"
 `;
 
-exports[`Build Java / CF 6`] = `
+exports[`Build Java / CF 7`] = `
 "cds:
   index-page:
     enabled: true
@@ -397,151 +422,148 @@ management:
 "
 `;
 
-exports[`Build Java / CF 7`] = `
+exports[`Build Java / CF 8`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
 import com.sap.cds.services.handler.annotations.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
 public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
 
-    @On(event = ProcessJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void processJob(ProcessJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = ProcessJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void processJob(ProcessJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = UpdateJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void updateJob(UpdateJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = UpdateJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void updateJob(UpdateJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = CancelJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void cancelJob(CancelJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = CancelJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void cancelJob(CancelJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = SyncJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void syncJob(SyncJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
-}"
+  @On(event = SyncJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void syncJob(SyncJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
+}
+"
 `;
 
-exports[`Build Java / CF 8`] = `
+exports[`Build Java / CF 9`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.handler.annotations.*;
 import com.sap.cds.services.cds.*;
-
+import com.sap.cds.services.handler.annotations.*;
 import java.util.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
 
-    @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void createJob(CdsCreateEventContext context, List<Job> jobs) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void createJob(CdsCreateEventContext context, List<Job> jobs) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void cancelJob(JobCancelContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void cancelJob(JobCancelContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void downloadData(JobResultDataContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
-}"
+  @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void downloadData(JobResultDataContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
+}
+"
 `;
 
-exports[`Build Java / CF 9`] = `
+exports[`Build Java / CF 10`] = `
 "package customer.afcsdk.scheduling;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SchedulingProviderHandlerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
-    @Test
-    @WithMockUser("authenticated")
-    public void getJobDefinitions() throws Exception {
-        mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition"))
-                .andExpect(status().isOk());
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void getJobDefinitions() throws Exception {
+    mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition")).andExpect(status().isOk());
+  }
 
-    @Test
-    @WithMockUser("authenticated")
-    public void getJobs() throws Exception {
-        mockMvc.perform(get("/api/job-scheduling/v1/Job"))
-                .andExpect(status().isOk());
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void getJobs() throws Exception {
+    mockMvc.perform(get("/api/job-scheduling/v1/Job")).andExpect(status().isOk());
+  }
 
-    @Test
-    @WithMockUser("authenticated")
-    public void createJobBasic() throws Exception {
-        JSONObject job = new JSONObject(Map.of(
-                "name", "JOB_1",
-                "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327",
-                "parameters", new JSONArray(List.of(
-                        new JSONObject(Map.of(
-                                "name", "A",
-                                "value", "abc")),
-                        new JSONObject(Map.of(
-                                "name", "C",
-                                "value", "true")))
-                ))
-        );
-        mockMvc.perform(post("/api/job-scheduling/v1/Job").contentType("application/json")
-                        .content(job.toString()))
-                .andExpect(status().isCreated());
-
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void createJobBasic() throws Exception {
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_1",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abc")),
+            new JSONObject(Map.of("name", "C", "value", "true"))
+          )
+        )
+      )
+    );
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated());
+  }
 }
 "
 `;
 
-exports[`Build Java / CF 10`] = `
+exports[`Build Java / CF 11`] = `
 "_schema-version: 3.3.0
 ID: afcsdk
 version: 1.0.0-SNAPSHOT
@@ -941,6 +963,26 @@ Content-Type: application/json
 `;
 
 exports[`Build Java / Kyma 5`] = `
+"{
+  "sql": {
+    "native_hana_associations": false
+  },
+  "requires": {
+    "outbox": {
+      "kind": "persistent-outbox"
+    },
+    "[production]": {
+      "auth": "xsuaa",
+      "db": "hana",
+      "destinations": true,
+      "html5-runtime": true
+    }
+  }
+}
+"
+`;
+
+exports[`Build Java / Kyma 6`] = `
 "<?xml version="1.0" encoding="UTF-8" standalone="yes"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -975,6 +1017,11 @@ exports[`Build Java / Kyma 5`] = `
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.cap.js.community</groupId>
+      <artifactId>sap-afc-sdk</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
   	<dependency>
@@ -1075,7 +1122,7 @@ exports[`Build Java / Kyma 5`] = `
 </project>"
 `;
 
-exports[`Build Java / Kyma 6`] = `
+exports[`Build Java / Kyma 7`] = `
 "cds:
   index-page:
     enabled: true
@@ -1155,151 +1202,148 @@ management:
 "
 `;
 
-exports[`Build Java / Kyma 7`] = `
+exports[`Build Java / Kyma 8`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
 import com.sap.cds.services.handler.annotations.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
 public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
 
-    @On(event = ProcessJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void processJob(ProcessJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = ProcessJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void processJob(ProcessJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = UpdateJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void updateJob(UpdateJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = UpdateJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void updateJob(UpdateJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = CancelJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void cancelJob(CancelJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = CancelJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void cancelJob(CancelJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = SyncJobContext.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void syncJob(SyncJobContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
-}"
+  @On(event = SyncJobContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void syncJob(SyncJobContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
+}
+"
 `;
 
-exports[`Build Java / Kyma 8`] = `
+exports[`Build Java / Kyma 9`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.handler.annotations.*;
 import com.sap.cds.services.cds.*;
-
+import com.sap.cds.services.handler.annotations.*;
 import java.util.*;
-
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
 
-    @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void createJob(CdsCreateEventContext context, List<Job> jobs) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void createJob(CdsCreateEventContext context, List<Job> jobs) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void cancelJob(JobCancelContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
+  @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void cancelJob(JobCancelContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 
-    @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
-    @HandlerOrder(HandlerOrder.EARLY)
-    public void downloadData(JobResultDataContext context) {
-        // Your logic goes here
-        context.proceed();
-    }
-}"
+  @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void downloadData(JobResultDataContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
+}
+"
 `;
 
-exports[`Build Java / Kyma 9`] = `
+exports[`Build Java / Kyma 10`] = `
 "package customer.afcsdk.scheduling;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SchedulingProviderHandlerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
-    @Test
-    @WithMockUser("authenticated")
-    public void getJobDefinitions() throws Exception {
-        mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition"))
-                .andExpect(status().isOk());
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void getJobDefinitions() throws Exception {
+    mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition")).andExpect(status().isOk());
+  }
 
-    @Test
-    @WithMockUser("authenticated")
-    public void getJobs() throws Exception {
-        mockMvc.perform(get("/api/job-scheduling/v1/Job"))
-                .andExpect(status().isOk());
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void getJobs() throws Exception {
+    mockMvc.perform(get("/api/job-scheduling/v1/Job")).andExpect(status().isOk());
+  }
 
-    @Test
-    @WithMockUser("authenticated")
-    public void createJobBasic() throws Exception {
-        JSONObject job = new JSONObject(Map.of(
-                "name", "JOB_1",
-                "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327",
-                "parameters", new JSONArray(List.of(
-                        new JSONObject(Map.of(
-                                "name", "A",
-                                "value", "abc")),
-                        new JSONObject(Map.of(
-                                "name", "C",
-                                "value", "true")))
-                ))
-        );
-        mockMvc.perform(post("/api/job-scheduling/v1/Job").contentType("application/json")
-                        .content(job.toString()))
-                .andExpect(status().isCreated());
-
-    }
+  @Test
+  @WithMockUser("authenticated")
+  public void createJobBasic() throws Exception {
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_1",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abc")),
+            new JSONObject(Map.of("name", "C", "value", "true"))
+          )
+        )
+      )
+    );
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated());
+  }
 }
 "
 `;
 
-exports[`Build Java / Kyma 10`] = `
+exports[`Build Java / Kyma 11`] = `
 "apiVersion: v2
 name: afcsdk
 description: A simple CAP project.
@@ -1339,7 +1383,7 @@ dependencies:
 "
 `;
 
-exports[`Build Java / Kyma 11`] = `
+exports[`Build Java / Kyma 12`] = `
 "# yaml-language-server: $schema=./values.schema.json
 
 global:
@@ -1478,7 +1522,7 @@ cloud-logging:
 "
 `;
 
-exports[`Build Java / Kyma 12`] = `
+exports[`Build Java / Kyma 13`] = `
 "_schema-version: '1.0'
 repository: afcsdk.common.repositories.cloud.sap
 tag: latest

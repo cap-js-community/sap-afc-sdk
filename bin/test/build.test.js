@@ -46,6 +46,7 @@ const Files = {
     "test/scheduling.provider.test.js",
   ],
   JAVA: [
+    ".cdsrc.json",
     "srv/pom.xml",
     "srv/src/main/resources/application.yaml",
     "srv/src/main/java/customer/afcsdk/scheduling/SchedulingProcessingHandler.java",

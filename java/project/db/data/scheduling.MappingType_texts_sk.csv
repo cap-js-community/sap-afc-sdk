@@ -1,0 +1,28 @@
+locale;code;name;descr
+"sk";accountingPrinciple;Účtovný predpis;Účtovný predpis
+"sk";companyCode;Účtovný okruh;Účtovný okruh
+"sk";plant;Závod;Závod
+"sk";controllingArea;Nákladový okruh;Nákladový okruh
+"sk";fiscalPeriod;Fiškálne obdobie;Fiškálne obdobie
+"sk";fiscalYearPeriod;Obdobie fiškálneho roka;Obdobie fiškálneho roka
+"sk";fiscalYear;Fiškálny rok;Fiškálny rok
+"sk";keyDate;Rozhodujúci deň;Rozhodujúci deň
+"sk";chartOfAccounts;Účtová osnova;Účtová osnova
+"sk";fiscalYearVariant;Variant fiškálneho roka;Variant fiškálneho roka
+"sk";ledger;Účtovná kniha;Účtovná kniha
+"sk";testRun;Testovací chod;Testovací chod
+"sk";postingPeriodVariant;Variant účtovného obdobia;Variant účtovného obdobia
+"sk";processingUser;Spracovávajúci používateľ;Spracovávajúci používateľ
+"sk";interestedUser;Zapojený používateľ;Zapojený používateľ
+"sk";userResponsible;Zodpovedný používateľ;Zodpovedný používateľ
+"sk";processingUserEmail;Spracovávajúci používateľ - e-mail;Spracovávajúci používateľ - e-mail
+"sk";interestedUserEmail;Zapojený používateľ - e-mail;Zapojený používateľ - e-mail
+"sk";userResponsibleEmail;Zodpovedný používateľ - e-mail;Zodpovedný používateľ - e-mail
+"sk";executionID;ID vykonania;ID vykonania
+"sk";customField1;Vlastné pole 1;Vlastné pole 1
+"sk";customField2;Vlastné pole 2;Vlastné pole 2
+"sk";customField3;Vlastné pole 3;Vlastné pole 3
+"sk";taskListID;ID zoznamu úloh;ID zoznamu úloh
+"sk";taskListDescription;Popis zoznamu úloh;Popis zoznamu úloh
+"sk";taskID;ID úlohy;ID úlohy
+"sk";taskDescription;Popis úlohy;Popis úlohy

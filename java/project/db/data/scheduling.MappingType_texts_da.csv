@@ -1,0 +1,28 @@
+locale;code;name;descr
+"da";accountingPrinciple;Regel for regnskabsaflæggelse;Regel for regnskabsaflæggelse
+"da";companyCode;Firmakode;Firmakode
+"da";plant;Fabrik;Fabrik
+"da";controllingArea;CO-område;CO-område
+"da";fiscalPeriod;Regnskabsperiode;Regnskabsperiode
+"da";fiscalYearPeriod;Regnskabsårsperiode;Regnskabsårsperiode
+"da";fiscalYear;Regnskabsår;Regnskabsår
+"da";keyDate;Skæringsdato;Skæringsdato
+"da";chartOfAccounts;Kontoplan;Kontoplan
+"da";fiscalYearVariant;Regnskabsårsvariant;Regnskabsårsvariant
+"da";ledger;Ledger;Ledger
+"da";testRun;Testkørsel;Testkørsel
+"da";postingPeriodVariant;Bogføringsperiodevariant;Bogføringsperiodevariant
+"da";processingUser;Behandlende bruger;Behandlende bruger
+"da";interestedUser;Interesseret bruger;Interesseret bruger
+"da";userResponsible;Ansvarlig bruger;Ansvarlig bruger
+"da";processingUserEmail;E-mail til behandlende bruger;E-mail til behandlende bruger
+"da";interestedUserEmail;E-mail til interesseret bruger;E-mail til interesseret bruger
+"da";userResponsibleEmail;E-mail til ansvarlig bruger;E-mail til ansvarlig bruger
+"da";executionID;Udførelses-id;Udførelses-id
+"da";customField1;Brugerdefineret felt 1;Brugerdefineret felt 1
+"da";customField2;Brugerdefineret felt 2;Brugerdefineret felt 2
+"da";customField3;Brugerdefineret felt 3;Brugerdefineret felt 3
+"da";taskListID;Opgaveplan-id;Opgaveplan-id
+"da";taskListDescription;Opgaveplanbeskrivelse;Opgaveplanbeskrivelse
+"da";taskID;Opgave-id;Opgave-id
+"da";taskDescription;Opgavebeskrivelse;Opgavebeskrivelse
