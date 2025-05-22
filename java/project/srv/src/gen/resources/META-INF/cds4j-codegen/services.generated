@@ -1,5 +1,0 @@
-cds.gen.featureservice.FeatureService
-cds.gen.schedulingprocessingservice.SchedulingProcessingService
-cds.gen.schedulingwebsocketservice.SchedulingWebsocketService
-cds.gen.schedulingmonitoringservice.SchedulingMonitoringService
-cds.gen.schedulingproviderservice.SchedulingProviderService

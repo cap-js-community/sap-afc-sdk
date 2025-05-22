@@ -10,7 +10,5 @@ java/plugin/.flattened-pom.xml
 java/project/.flattened-pom.xml
 java/project/srv/.flattened-pom.xml
 java/project/srv/target
-!java/project/srv/src/gen/
-!java/project/srv/src/gen/java/gen
 java/project/srv/src/main/resources/edmx
 java/project/srv/src/main/resources/schema-h2.sql

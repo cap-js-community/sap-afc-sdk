@@ -60,8 +60,8 @@
     "openapi": "npm run openapi:update && npm run lint",
     "openapi:update": "node scripts/openapi",
     "openapi:check": "node scripts/openapi -c",
-    "java:update": "node scripts/java-plugin",
-    "java:check": "node scripts/java-plugin -c",
+    "java:update": "npm run test:java && node scripts/java-plugin",
+    "java:check": "npm run test:java && node scripts/java-plugin -c",
     "audit": "npm audit --only=prod"
   },
   "dependencies": {
