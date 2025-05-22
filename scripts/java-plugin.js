@@ -18,6 +18,7 @@ const Plugins = {
 })();
 
 function packagePlugin(check) {
+  let hashSource = "";
   let hashTarget = "";
   const sourcePath = path.join(process.cwd(), Plugins.source, Plugins.file);
   const targetPath = path.join(process.cwd(), Plugins.target, Plugins.file);
@@ -45,6 +46,14 @@ function packagePlugin(check) {
   // Build
   shelljs.exec("mvn package");
 
+  if (check) {
+    // Check
+    hashSource = hashFile(sourcePath);
+  } else {
+    // Copy
+    shelljs.cp(sourcePath, targetPath);
+  }
+
   // Clean-up
   shelljs.rm("-rf", "src");
   shelljs.rm("-rf", "target");
@@ -52,15 +61,7 @@ function packagePlugin(check) {
 
   shelljs.popd();
 
-  // Copy
-  if (!check) {
-    shelljs.cp(sourcePath, targetPath);
-    return;
-  }
-
-  // Check
-  const hashSource = hashFile(sourcePath);
-  if (hashSource !== hashTarget) {
+  if (check && hashSource !== hashTarget) {
     // eslint-disable-next-line no-console
     console.log(`Java maven plugin at ${targetPath} is not up-to-date.`);
     // eslint-disable-next-line n/no-process-exit
