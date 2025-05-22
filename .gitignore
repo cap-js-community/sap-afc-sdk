@@ -4,7 +4,7 @@ node_modules/
 reports/
 temp/
 gen/
-java/plugin/main
+java/plugin/src
 java/plugin/target
 java/plugin/.flattened-pom.xml
 java/project/.flattened-pom.xml
