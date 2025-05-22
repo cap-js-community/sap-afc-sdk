@@ -7,7 +7,7 @@ const Plugins = {
   file: "sap-afc-sdk-1.0.0.jar",
   folder: "java/plugin",
   source: "java/plugin/target",
-  target: "bin/lib",
+  target: "bin/builds",
 };
 
 (() => {

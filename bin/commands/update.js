@@ -73,7 +73,7 @@ function processNode() {}
 function processJava() {
   for (const name in Plugins) {
     const plugin = Plugins[name];
-    const pluginPath = path.join(__dirname, "../lib", plugin.file);
+    const pluginPath = path.join(__dirname, "../builds", plugin.file);
     const args = [
       "install:install-file",
       `-Dfile=${pluginPath}`,
