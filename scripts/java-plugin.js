@@ -1,8 +1,6 @@
 "use strict";
 
-const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
 const shelljs = require("shelljs");
 
 const Plugins = {
@@ -18,23 +16,19 @@ const Plugins = {
 })();
 
 function packagePlugin(check) {
-  let hashSource = "";
-  let hashTarget = "";
   const sourcePath = path.join(process.cwd(), Plugins.source, Plugins.file);
   const targetPath = path.join(process.cwd(), Plugins.target, Plugins.file);
-  if (check && fs.existsSync(targetPath)) {
-    hashTarget = hashFile(targetPath);
-  }
+
   shelljs.pushd(Plugins.folder);
 
   // Prepare
   shelljs.rm("-rf", "src");
-  // Java
+  // - Java
   shelljs.mkdir("-p", "src/main/java");
   shelljs.cp("-R", "../project/srv/src/gen/java/cds", "src/main/java");
   shelljs.cp("-R", "../project/srv/src/main/java/com", "src/main/java");
   shelljs.rm("-f", "src/main/java/com/github/cap/js/community/sapafcsdk/Application.java");
-  // Resources
+  // - Resources
   shelljs.mkdir("-p", "src/main/resources");
   shelljs.cp("-R", "../project/srv/src/main/resources/META-INF", "src/main/resources");
   shelljs.mkdir("-p", "src/main/resources/i18n");
@@ -48,7 +42,12 @@ function packagePlugin(check) {
 
   if (check) {
     // Check
-    hashSource = hashFile(sourcePath);
+    if (!compareJars(sourcePath, targetPath)) {
+      // eslint-disable-next-line no-console
+      console.log(`Java plugin at ${targetPath} is not up-to-date.`);
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1);
+    }
   } else {
     // Copy
     shelljs.cp(sourcePath, targetPath);
@@ -60,18 +59,18 @@ function packagePlugin(check) {
   shelljs.rm("-r", ".flattened-pom.xml");
 
   shelljs.popd();
-
-  if (check && hashSource !== hashTarget) {
-    // eslint-disable-next-line no-console
-    console.log(`Java maven plugin at ${targetPath} is not up-to-date.`);
-    // eslint-disable-next-line n/no-process-exit
-    process.exit(-1);
-  }
 }
 
-function hashFile(filePath, algorithm = "sha256") {
-  const fileBuffer = fs.readFileSync(filePath);
-  const hash = crypto.createHash(algorithm);
-  hash.update(fileBuffer);
-  return hash.digest("hex");
+function compareJars(sourcePath, targetPath) {
+  let result = true;
+  shelljs.mkdir("-p", "temp");
+  shelljs.pushd("temp");
+  shelljs.exec(`unzip -d source ${sourcePath}`, { silent: true });
+  shelljs.exec(`unzip -d target ${targetPath}`, { silent: true });
+  if (shelljs.exec("diff -r source target").code !== 0) {
+    result = false;
+  }
+  shelljs.popd();
+  shelljs.rm("-rf", "temp");
+  return result;
 }
