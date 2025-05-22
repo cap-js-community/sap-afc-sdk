@@ -36,7 +36,7 @@ broker:
 
 springdoc:
   packages-to-scan:
-    - scheduling.controllers
+    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 

@@ -1,2 +1,2 @@
-com.github.cap.js.community.scheduling.index.APIIndexContentProviderFactory
-com.github.cap.js.community.scheduling.index.WSIndexContentProviderFactory
+com.github.cap.js.community.sapafcsdk.scheduling.index.APIIndexContentProviderFactory
+com.github.cap.js.community.sapafcsdk.scheduling.index.WSIndexContentProviderFactory

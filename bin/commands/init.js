@@ -258,7 +258,7 @@ function processJava(target, auth) {
       yaml.set(
         "springdoc",
         yaml.createNode({
-          "packages-to-scan": ["scheduling.controllers"],
+          "packages-to-scan": ["com.github.cap.js.community.sapafcsdk.scheduling.controllers"],
           "swagger-ui": {
             path: "/api-docs/api/job-scheduling/v1",
           },
