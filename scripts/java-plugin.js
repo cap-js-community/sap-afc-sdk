@@ -30,13 +30,16 @@ function packagePlugin(check) {
   shelljs.rm("-rf", "src");
   // Java
   shelljs.mkdir("-p", "src/main/java");
+  shelljs.cp("-R", "../project/srv/src/gen/java/cds", "src/main/java");
   shelljs.cp("-R", "../project/srv/src/main/java/com", "src/main/java");
   shelljs.rm("-f", "src/main/java/com/github/cap/js/community/sapafcsdk/Application.java");
   // Resources
   shelljs.mkdir("-p", "src/main/resources");
   shelljs.cp("-R", "../project/srv/src/main/resources/META-INF", "src/main/resources");
-  shelljs.cp("-R", "../project/srv/src/main/resources/i18n", "src/main/resources");
-  shelljs.cp("-R", "../project/srv/src/main/resources/scheduling/i18n", "src/main/resources/scheduling");
+  shelljs.mkdir("-p", "src/main/resources/i18n");
+  shelljs.cp("-R", "../project/srv/src/main/resources/i18n/messages_*.properties", "src/main/resources/i18n");
+  shelljs.mkdir("-p", "src/main/resources/scheduling/i18n");
+  shelljs.cp("-R", "../project/srv/src/main/resources/scheduling/i18n/messages_*.properties", "src/main/resources/scheduling/i18n");
   shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
 
   // Build
