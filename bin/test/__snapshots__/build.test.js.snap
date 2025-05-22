@@ -348,7 +348,7 @@ exports[`Build Java / CF 7`] = `
     enabled: true
 springdoc:
   packages-to-scan:
-    - scheduling.controllers
+    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 broker:
@@ -426,12 +426,15 @@ exports[`Build Java / CF 8`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
-import com.sap.cds.services.handler.annotations.*;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
+public class SchedulingProcessingHandler
+  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -468,14 +471,18 @@ exports[`Build Java / CF 9`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.cds.*;
-import com.sap.cds.services.handler.annotations.*;
-import java.util.*;
+import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CqnService;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
+public class SchedulingProviderHandler
+  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -504,8 +511,9 @@ public class SchedulingProviderHandler extends scheduling.handlers.SchedulingPro
 exports[`Build Java / CF 10`] = `
 "package customer.afcsdk.scheduling;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 import java.util.Map;
@@ -1128,7 +1136,7 @@ exports[`Build Java / Kyma 7`] = `
     enabled: true
 springdoc:
   packages-to-scan:
-    - scheduling.controllers
+    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 broker:
@@ -1206,12 +1214,15 @@ exports[`Build Java / Kyma 8`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
-import com.sap.cds.services.handler.annotations.*;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
+public class SchedulingProcessingHandler
+  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -1248,14 +1259,18 @@ exports[`Build Java / Kyma 9`] = `
 "package customer.afcsdk.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.cds.*;
-import com.sap.cds.services.handler.annotations.*;
-import java.util.*;
+import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CqnService;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
+public class SchedulingProviderHandler
+  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -1284,8 +1299,9 @@ public class SchedulingProviderHandler extends scheduling.handlers.SchedulingPro
 exports[`Build Java / Kyma 10`] = `
 "package customer.afcsdk.scheduling;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 import java.util.Map;

@@ -6,7 +6,7 @@ const { isJava, adjustJSON, copyFolderAdjusted, projectName } = require("../comm
 
 const Files = {
   node: "node/srv",
-  java: "java/srv",
+  java: "java/main",
 };
 
 module.exports = (options) => {

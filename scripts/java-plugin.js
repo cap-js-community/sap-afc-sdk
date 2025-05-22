@@ -25,18 +25,43 @@ function packagePlugin(check) {
     hashTarget = hashFile(targetPath);
   }
   shelljs.pushd(Plugins.folder);
+
+  // Prepare
+  shelljs.rm("-rf", "src");
+  // Java
+  shelljs.mkdir("-p", "src/main/java");
+  shelljs.cp("-R", "../project/srv/src/main/java/com", "src/main/java");
+  shelljs.rm("-f", "src/main/java/com/github/cap/js/community/sapafcsdk/Application.java");
+  // Resources
+  shelljs.mkdir("-p", "src/main/resources");
+  shelljs.cp("-R", "../project/srv/src/main/resources/META-INF", "src/main/resources");
+  shelljs.cp("-R", "../project/srv/src/main/resources/i18n", "src/main/resources");
+  shelljs.cp("-R", "../project/srv/src/main/resources/scheduling/i18n", "src/main/resources/scheduling");
+  shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
+
+  // Build
   shelljs.exec("mvn package");
+
+  // Clean-up
+  shelljs.rm("-rf", "src");
+  shelljs.rm("-rf", "target");
+  shelljs.rm("-r", ".flattened-pom.xml");
+
   shelljs.popd();
-  if (check) {
-    const hashSource = hashFile(sourcePath);
-    if (hashSource !== hashTarget) {
-      // eslint-disable-next-line no-console
-      console.log(`Java maven plugin at ${targetPath} is not up-to-date.`);
-      // eslint-disable-next-line n/no-process-exit
-      process.exit(-1);
-    }
-  } else {
+
+  // Copy
+  if (!check) {
     shelljs.cp(sourcePath, targetPath);
+    return;
+  }
+
+  // Check
+  const hashSource = hashFile(sourcePath);
+  if (hashSource !== hashTarget) {
+    // eslint-disable-next-line no-console
+    console.log(`Java maven plugin at ${targetPath} is not up-to-date.`);
+    // eslint-disable-next-line n/no-process-exit
+    process.exit(-1);
   }
 }
 
