@@ -74,9 +74,16 @@ function processJava() {
   for (const name in Plugins) {
     const plugin = Plugins[name];
     const pluginPath = path.join(__dirname, "../lib", plugin.file);
-    shelljs.exec(
-      `mvn install:install-file -Dfile=${pluginPath} -DgroupId=${plugin.group} -DartifactId=${plugin.artifact} -Dversion=${plugin.version} -Dpackaging=${plugin.packaging} -DgeneratePom=${plugin.pom}`,
-    );
+    const args = [
+      "install:install-file",
+      `-Dfile=${pluginPath}`,
+      `-DgroupId=${plugin.group}`,
+      `-DartifactId=${plugin.artifact}`,
+      `-Dversion=${plugin.version}`,
+      `-Dpackaging=${plugin.packaging}`,
+      `-DgeneratePom=${plugin.pom}`,
+    ];
+    shelljs.exec(`mvn ${args.join(" ")}`);
   }
 }
 
