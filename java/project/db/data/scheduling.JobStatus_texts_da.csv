@@ -1,9 +1,0 @@
-locale;code;name;descr
-"da";requested;Anmodet;Anmodet
-"da";running;Kører;Kører
-"da";completed;Afsluttet;Afsluttet
-"da";completedWithWarning;Afsluttet med advarsel;Advarsel
-"da";completedWithError;Afsluttet med fejl;Fejl
-"da";failed;Mislykkedes;Mislykkedes
-"da";cancelRequested;Annullering anmodet;Anmodet
-"da";canceled;Annulleret;Annulleret

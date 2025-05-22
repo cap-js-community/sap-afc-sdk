@@ -1,9 +1,0 @@
-locale;code;name;descr
-"pt";requested;Solicitado;Solicitado
-"pt";running;Executando;Executando
-"pt";completed;Concluído;Concluído
-"pt";completedWithWarning;Concluído com advertência;Aviso
-"pt";completedWithError;Concluído com erro;Erro
-"pt";failed;Falhado;Falhado
-"pt";cancelRequested;Cancelamento solicitado;Solicitado
-"pt";canceled;Cancelado;Cancelado

@@ -1,9 +1,0 @@
-locale;code;name;descr
-"ms";requested;Diminta;Diminta
-"ms";running;Sedang Berjalan;Sedang Berjalan
-"ms";completed;Selesai;Selesai
-"ms";completedWithWarning;Selesai dengan Amaran;Amaran
-"ms";completedWithError;Selesai dengan Ralat;Ralat
-"ms";failed;Gagal;Gagal
-"ms";cancelRequested;Pembatalan Diminta;Diminta
-"ms";canceled;Dibatalkan;Dibatalkan

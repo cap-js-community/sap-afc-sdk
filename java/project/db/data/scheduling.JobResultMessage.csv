@@ -1,4 +1,0 @@
-ID;result_ID;code;text;severity_code;createdAt
-af4556ce-5758-486d-9e22-5ddfbc577949;c2eb590f-9505-4fd6-a5e2-511a1b2ff47f;ERROR_01;This is an error;error;2025-01-01T12:00:01.000Z
-bf4556ce-5758-486d-9e22-5ddfbc577949;c2eb590f-9505-4fd6-a5e2-511a1b2ff47f;WARNING_01;This is a warning;warning;2025-01-01T12:00:02.000Z
-cf4556ce-5758-486d-9e22-5ddfbc577949;c2eb590f-9505-4fd6-a5e2-511a1b2ff47f;INFO_01;This is an information;info;2025-01-01T12:00:03.000Z

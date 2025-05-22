@@ -1,9 +1,0 @@
-locale;code;name;descr
-"zh_CN";requested;已请求;已请求
-"zh_CN";running;运行中;运行中
-"zh_CN";completed;已完成;已完成
-"zh_CN";completedWithWarning;已完成，但有警告;警告
-"zh_CN";completedWithError;已完成，但有错误;错误
-"zh_CN";failed;失败;失败
-"zh_CN";cancelRequested;已请求取消;已请求
-"zh_CN";canceled;已取消;已取消

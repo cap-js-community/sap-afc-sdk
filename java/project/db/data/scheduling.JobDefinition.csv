@@ -1,7 +1,0 @@
-name;description;longDescription;version;supportsStartDateTime;supportsTestRun
-JOB_1;Job Definition 1;Job Definition 1;1;false;false
-JOB_2;Job Definition 2;Job Definition 2;1;true;true
-JOB_3;Job Definition 3;Job Definition 3;1;false;true
-JOB_4;Job Definition 4;Job Definition 4;1;false;false
-JOB_5;Job Definition 5;Job Definition 5;1;false;false
-JOB_6;Job Definition 6;Job Definition 6;1;false;false

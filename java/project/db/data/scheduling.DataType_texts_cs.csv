@@ -1,5 +1,0 @@
-locale;code;name;descr
-"cs";string;Řetězec;Řetězec
-"cs";number;Číslo;Číslo
-"cs";datetime;Datum a čas;Datum a čas
-"cs";boolean;Logická hodnota;Logická hodnota

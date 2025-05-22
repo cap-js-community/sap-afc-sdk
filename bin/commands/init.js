@@ -19,35 +19,45 @@ module.exports = {
       .command("init")
       .description("Initialize project for target platform")
       .addArgument(
-        new commander.Argument("[target]", "Initialize project for target platform (cf, kyma)")
-          .choices(["cf", "kyma"])
-          .default("cf"),
+        new commander.Argument("[target]", `Initialize project for target platform (${config.targets.join(", ")})`)
+          .choices(config.targets)
+          .default(config.defaults.target),
+      )
+      .addArgument(
+        new commander.Argument("[auth]", `Initialize project for authorization type (${config.auths.join(", ")})`)
+          .choices(config.auths)
+          .default(config.defaults.auth),
       )
       .addOption(
         new commander.Option(
           "-a, --add <features>",
           "Add one or more features to the project (comma-separated list)",
-        ).choices(["broker", "sample", "http", "add"]),
+        ).choices(["app", "broker", "http", "mock", "sample", "stub", "test"]),
       )
       .option("-j, --java", "Java based project")
       .addHelpText(
         "afterAll",
         `
 Features: 
+  app \t\t\t - add app files
   broker \t\t - expose a broker service
-  sample \t\t - add sample data
   http \t\t\t - add .http files
-  add \t\t\t - add app files
+  mock \t\t\t - mock job processing
+  sample \t\t - add sample data
+  stub \t\t\t - add stub implementation
+  test \t\t\t - add test
 
 Examples:
   afc init cf
+  afc init cf ias
   afc init kyma
+  afc init kyma xsuaa
   afc init cf --add broker,sample,http
   afc init kyma --add broker,sample,http
 `,
       );
   },
-  handle: function (target) {
+  handle: function (target, auth) {
     const name = projectName();
     if (!name) {
       console.log(`CDS project not found`);
@@ -55,7 +65,7 @@ Examples:
     }
 
     console.log(`Initializing project`);
-    let success = module.exports.process(target, this.opts());
+    let success = module.exports.process(target, auth, this.opts());
     if (success) {
       const options = this.opts();
       if (options.add) {
@@ -71,15 +81,16 @@ Examples:
       process.exit(-1);
     }
   },
-  process: function (target, options) {
+  process: function (target, auth, options) {
     try {
-      target ||= config.defaultTarget;
+      target ||= config.defaults.target;
+      auth ||= config.defaults.auth;
       if (!isJava(options)) {
-        processNode(target);
+        processNode(target, auth);
       } else {
-        processJava(target);
+        processJava(target, auth);
       }
-      processCommon(target);
+      processCommon(target, auth);
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);
@@ -88,7 +99,7 @@ Examples:
   },
 };
 
-function processNode(target) {
+function processNode(target, auth) {
   // Create app stubs
   const appStubs = [];
   for (const app of config.apps) {
@@ -142,7 +153,11 @@ function processNode(target) {
   });
 
   // cds add
-  shelljs.exec(`cds add ${config.features[target].concat(config.features.node).join(",")} ${config.options.cds}`);
+  const cdsFeatures = config.features.common
+    .concat(config.features[target])
+    .concat(config.features[auth])
+    .concat(config.features.node);
+  shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 
   // Cleanup app stubs
   for (const app of appStubs) {
@@ -184,7 +199,7 @@ function processNode(target) {
   });
 }
 
-function processJava(target) {
+function processJava(target, auth) {
   // cdsrc
   if (
     !adjustJSON(".cdsrc.json", (json) => {
@@ -273,8 +288,11 @@ function processJava(target) {
     return yamls;
   });
 
-  // cds add
-  shelljs.exec(`cds add ${config.features[target].concat(config.features.java).join(",")} ${config.options.cds}`);
+  const cdsFeatures = config.features.common
+    .concat(config.features[target])
+    .concat(config.features[auth])
+    .concat(config.features.java);
+  shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 }
 
 function processCommon() {
@@ -298,7 +316,9 @@ function processCommon() {
       yaml.setIn(["global", "image", "registry"], repository);
     }
     yaml.setIn(["srv", "expose", "enabled"], true);
-    yaml.setIn(["xsuaa", "servicePlanName"], "broker");
+    if (yaml.getIn(["xsuaa", "servicePlanName"])) {
+      yaml.setIn(["xsuaa", "servicePlanName"], "broker");
+    }
     return yaml;
   });
   adjustYAMLDocument("containerize.yaml", (yaml) => {

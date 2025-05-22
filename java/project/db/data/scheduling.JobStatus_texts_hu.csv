@@ -1,9 +1,0 @@
-locale;code;name;descr
-"hu";requested;Kérelmezve;Kérelmezve
-"hu";running;Jelenleg fut;Jelenleg fut
-"hu";completed;Befejezve;Befejezve
-"hu";completedWithWarning;Figyelmeztetéssel befejezve;Figyelmeztetés
-"hu";completedWithError;Hibákkal befejezve;Hiba
-"hu";failed;Sikertelen;Sikertelen
-"hu";cancelRequested;Visszavonás igényelve;Kérelmezve
-"hu";canceled;Visszavonva;Visszavonva

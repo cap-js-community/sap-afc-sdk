@@ -4,8 +4,11 @@ node_modules/
 reports/
 temp/
 gen/
+java/plugin/main
 java/plugin/target
 java/plugin/.flattened-pom.xml
 java/project/.flattened-pom.xml
-java/project/srv/target
 java/project/srv/.flattened-pom.xml
+java/project/srv/target
+java/project/srv/src/main/resources/edmx
+java/project/srv/src/main/resources/schema-h2.sql

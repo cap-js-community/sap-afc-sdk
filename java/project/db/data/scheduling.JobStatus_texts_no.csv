@@ -1,9 +1,0 @@
-locale;code;name;descr
-"no";requested;Ønsket;Ønsket
-"no";running;Kjører;Kjører
-"no";completed;Fullført;Fullført
-"no";completedWithWarning;Fullført med advarsel;Advarsel
-"no";completedWithError;Fullført med feil;Feil
-"no";failed;Mislyktes;Mislyktes
-"no";cancelRequested;Annullering ønsket;Ønsket
-"no";canceled;Avbrutt;Avbrutt

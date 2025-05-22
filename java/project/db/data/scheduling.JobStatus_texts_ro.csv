@@ -1,9 +1,0 @@
-locale;code;name;descr
-"ro";requested;Solicitat;Solicitat
-"ro";running;În execuție;În execuție
-"ro";completed;Terminat;Terminat
-"ro";completedWithWarning;Terminat cu avertizare;Avertizare
-"ro";completedWithError;Terminat cu eroare;Eroare
-"ro";failed;Nereușit;Nereușit
-"ro";cancelRequested;Anulare solicitată;Solicitat
-"ro";canceled;Anulat;Anulat

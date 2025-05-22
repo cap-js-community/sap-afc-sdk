@@ -1,9 +1,0 @@
-locale;code;name;descr
-"sk";requested;Požadované;Požadované
-"sk";running;Prebieha;Prebieha
-"sk";completed;Dokončené;Dokončené
-"sk";completedWithWarning;Dokončené s upozornením;Upozornenie
-"sk";completedWithError;Dokončené s chybou;Chyba
-"sk";failed;Neúspešné;Neúspešné
-"sk";cancelRequested;Vyžaduje sa storno;Požadované
-"sk";canceled;Stornované;Stornované
