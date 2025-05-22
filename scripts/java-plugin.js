@@ -34,7 +34,11 @@ function packagePlugin(check) {
   shelljs.mkdir("-p", "src/main/resources/i18n");
   shelljs.cp("-R", "../project/srv/src/main/resources/i18n/messages_*.properties", "src/main/resources/i18n");
   shelljs.mkdir("-p", "src/main/resources/scheduling/i18n");
-  shelljs.cp("-R", "../project/srv/src/main/resources/scheduling/i18n/messages_*.properties", "src/main/resources/scheduling/i18n");
+  shelljs.cp(
+    "-R",
+    "../project/srv/src/main/resources/scheduling/i18n/messages_*.properties",
+    "src/main/resources/scheduling/i18n",
+  );
   shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
 
   // Build
