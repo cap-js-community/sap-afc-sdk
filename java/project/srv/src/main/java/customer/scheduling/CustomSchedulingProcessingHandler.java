@@ -15,28 +15,28 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandl
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void processJob(ProcessJobContext context) {
+  public void customProcessJob(ProcessJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = UpdateJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void updateJob(UpdateJobContext context) {
+  public void customUpdateJob(UpdateJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = CancelJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void cancelJob(CancelJobContext context) {
+  public void customCancelJob(CancelJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = SyncJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void syncJob(SyncJobContext context) {
+  public void customSyncJob(SyncJobContext context) {
     // Your logic goes here
     context.proceed();
   }

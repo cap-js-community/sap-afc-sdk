@@ -827,28 +827,28 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandl
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void processJob(ProcessJobContext context) {
+  public void customProcessJob(ProcessJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = UpdateJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void updateJob(UpdateJobContext context) {
+  public void customUpdateJob(UpdateJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = CancelJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void cancelJob(CancelJobContext context) {
+  public void customCancelJob(CancelJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = SyncJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void syncJob(SyncJobContext context) {
+  public void customSyncJob(SyncJobContext context) {
     // Your logic goes here
     context.proceed();
   }
@@ -985,21 +985,21 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void createJob(CdsCreateEventContext context, List<Job> jobs) {
+  public void customCreateJob(CdsCreateEventContext context, List<Job> jobs) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void cancelJob(JobCancelContext context) {
+  public void customCancelJob(JobCancelContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void downloadData(JobResultDataContext context) {
+  public void customDownloadData(JobResultDataContext context) {
     // Your logic goes here
     context.proceed();
   }
