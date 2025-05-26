@@ -813,12 +813,15 @@ To implement a custom job processing extend the job processing service definitio
 package customer.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
-import com.sap.cds.services.handler.annotations.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -848,7 +851,6 @@ public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingP
     context.proceed();
   }
 }
-
 ```
 
 A stub implementation for custom scheduling processing service can be generated via command:
@@ -963,14 +965,18 @@ To implement a custom job provider extend the job provider service definition as
 package customer.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
-import com.sap.cds.services.cds.*;
-import com.sap.cds.services.handler.annotations.*;
-import java.util.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler;
+import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CqnService;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler extends scheduling.handlers.SchedulingProviderHandler {
+public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -993,7 +999,6 @@ public class SchedulingProviderHandler extends scheduling.handlers.SchedulingPro
     context.proceed();
   }
 }
-
 ```
 
 A stub implementation for custom scheduling provider service can be generated via command:
