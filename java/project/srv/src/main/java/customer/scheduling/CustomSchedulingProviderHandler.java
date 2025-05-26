@@ -8,8 +8,10 @@ import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
 import java.util.List;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {

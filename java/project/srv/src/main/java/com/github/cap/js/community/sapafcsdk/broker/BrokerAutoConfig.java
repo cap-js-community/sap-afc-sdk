@@ -9,12 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnProperty(name = "broker.enabled", havingValue = "true")
-@ComponentScan({
-        "com.github.cap.js.community.sapafcsdk.broker"
-})
-@ImportAutoConfiguration({
-        ServiceBrokerAutoConfiguration.class,
-        ServiceBrokerWebMvcAutoConfiguration.class
-})
-public class BrokerAutoConfig {
-}
+@ComponentScan({ "com.github.cap.js.community.sapafcsdk.broker" })
+@ImportAutoConfiguration({ ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
+public class BrokerAutoConfig {}

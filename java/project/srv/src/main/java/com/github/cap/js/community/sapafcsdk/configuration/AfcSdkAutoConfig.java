@@ -6,10 +6,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan({
-        "com.github.cap.js.community.sapafcsdk.common",
-        "com.github.cap.js.community.sapafcsdk.configuration",
-        "com.github.cap.js.community.sapafcsdk.scheduling"
-})
-public class AfcSdkAutoConfig {
-}
+@ComponentScan(
+  {
+    "com.github.cap.js.community.sapafcsdk.common",
+    "com.github.cap.js.community.sapafcsdk.configuration",
+    "com.github.cap.js.community.sapafcsdk.scheduling",
+  }
+)
+public class AfcSdkAutoConfig {}

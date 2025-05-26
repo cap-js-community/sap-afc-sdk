@@ -817,8 +817,10 @@ import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProce
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
@@ -851,6 +853,7 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandl
     context.proceed();
   }
 }
+
 ```
 
 A stub implementation for custom scheduling processing service can be generated via command:
@@ -972,8 +975,10 @@ import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
 import java.util.List;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
@@ -999,6 +1004,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
     context.proceed();
   }
 }
+
 ```
 
 A stub implementation for custom scheduling provider service can be generated via command:

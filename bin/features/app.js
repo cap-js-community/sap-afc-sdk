@@ -127,7 +127,7 @@ module.exports = () => {
     // cds add
     shelljs.exec(`cds add html5-repo ${config.options.cds}`);
 
-    // TODO: Remove cap/issue/18449
+    // TODO: Remove (cap/issue/18449)
     if (addedApps.length > 0) {
       // CF
       adjustYAMLDocument("mta.yaml", (yaml) => {

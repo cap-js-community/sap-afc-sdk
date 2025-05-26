@@ -20,6 +20,7 @@ import cds.gen.schedulingwebsocketservice.SchedulingWebsocketService;
 import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingError;
+import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
@@ -230,23 +231,25 @@ public class SchedulingProviderHandler implements EventHandler {
       }
     }
 
-    context.setCqn(Insert.into(JOB).entry(job));
+    context.put("job", job);
   }
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   public void createJob(CdsCreateEventContext context, List<Job> jobs) {
-    persistenceService.run(context.getCqn());
-    Job job = Job.of(context.getCqn().entries().get(0));
+    cds.gen.scheduling.Job job = (cds.gen.scheduling.Job) context.get("job");
+    Result result = persistenceService.run(Insert.into(JOB).entry(job));
+    cds.gen.scheduling.Job createdJob = result.single(cds.gen.scheduling.Job.class);
+    context.put("job", createdJob);
     Select<cds.gen.schedulingproviderservice.Job_> read = Select.from(
       cds.gen.schedulingproviderservice.SchedulingProviderService_.JOB
-    ).byId(job.getId());
+    ).byId(createdJob.getId());
     context.setResult(context.getService().run(read));
     context.setCompleted();
   }
 
   @After(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   public void afterCreateJob(CdsCreateEventContext context, List<Job> jobs) {
-    Job job = Job.of(context.getCqn().entries().get(0));
+    cds.gen.scheduling.Job job = (cds.gen.scheduling.Job) context.get("job");
 
     SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(job.getId(), job.getTestRun());

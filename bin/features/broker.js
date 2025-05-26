@@ -112,8 +112,8 @@ module.exports = (options) => {
       if (index !== 0) {
         return yaml;
       }
-      if (!yaml.getIn(["spring", "openservicebroker"])) {
-        yaml.setIn(["spring", "openservicebroker", "catalog"], CATALOG);
+      if (!yaml.getIn(["spring", "cloud", "openservicebroker"])) {
+        yaml.setIn(["spring", "cloud", "openservicebroker", "catalog"], CATALOG);
       }
       if (!yaml.getIn(["broker", "enabled"])) {
         if (!yaml.get("broker")) {

@@ -5,8 +5,10 @@ import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProce
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
