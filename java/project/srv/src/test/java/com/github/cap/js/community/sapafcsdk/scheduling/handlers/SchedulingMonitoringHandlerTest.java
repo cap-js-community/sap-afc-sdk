@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import cds.gen.scheduling.Job;
 import cds.gen.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;

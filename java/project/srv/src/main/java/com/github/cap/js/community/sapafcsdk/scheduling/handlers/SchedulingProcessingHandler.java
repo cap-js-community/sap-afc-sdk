@@ -10,7 +10,7 @@ import cds.gen.schedulingprocessingservice.JobResultMessage;
 import cds.gen.schedulingwebsocketservice.JobStatusChanged;
 import cds.gen.schedulingwebsocketservice.JobStatusChangedContext;
 import cds.gen.schedulingwebsocketservice.SchedulingWebsocketService;
-import com.github.cap.js.community.sapafcsdk.configuration.AFCSDKProperties;
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingError;
 import com.sap.cds.ql.CQL;
@@ -101,7 +101,7 @@ public class SchedulingProcessingHandler implements EventHandler {
   protected PersistenceService persistenceService;
 
   @Autowired
-  protected AFCSDKProperties afcsdkProperties;
+  protected AfcSdkProperties afcsdkProperties;
 
   @Autowired
   @Qualifier(OutboxConfig.OUTBOX_SERVICE)
@@ -127,7 +127,7 @@ public class SchedulingProcessingHandler implements EventHandler {
   @On(event = ProcessJobContext.CDS_NAME)
   public void processJob(ProcessJobContext context) throws IOException {
     List<JobResult> results = new ArrayList<>();
-    AFCSDKProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
+    AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
     if (processingConfig != null) {
       results = this.mockJobProcessing(context);
     }
@@ -149,7 +149,7 @@ public class SchedulingProcessingHandler implements EventHandler {
 
   @On(event = SyncJobContext.CDS_NAME)
   public void syncJob(SyncJobContext context) {
-    AFCSDKProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
+    AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
     if (processingConfig != null) {
       mockJobSync(context);
     }
@@ -366,8 +366,8 @@ public class SchedulingProcessingHandler implements EventHandler {
     return dbResults;
   }
 
-  protected List<JobResult> mockJobProcessing(EventContext context) throws IOException {
-    AFCSDKProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
+  protected List<JobResult> mockJobProcessing(EventContext context) {
+    AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
     List<JobResult> updateResults = new ArrayList<>();
 
     double min = processingConfig.getMin() != null ? processingConfig.getMin() : 0;

@@ -222,20 +222,31 @@ function processJava(target, auth) {
 
   // POM
   adjustXML("srv/pom.xml", (xml) => {
-    const dependency = {
-      groupId: ["com.github.cap.js.community"],
-      artifactId: ["sap-afc-sdk"],
-      version: "1.0.0",
-    };
+    const version = require(path.join(__dirname, "../../package.json")).version;
+    const dependencies = [
+      {
+        groupId: "org.springframework.security",
+        artifactId: "spring-security-test",
+        version: "6.4.4",
+        scope: "test",
+      },
+      {
+        groupId: "com.github.cap.js.community",
+        artifactId: "sap-afc-sdk",
+        version,
+      },
+    ];
     if (!xml.project.dependencies) {
       xml.project.dependencies = [{}];
     }
-    if (
-      !xml.project.dependencies[0].dependency.find(
-        (dep) => dep.groupId[0] === dependency.groupId[0] && dependency.artifactId[0] === dependency.artifactId[0],
-      )
-    ) {
-      xml.project.dependencies[0].dependency.push(dependency);
+    for (const dependency of dependencies) {
+      if (
+        !xml.project.dependencies[0].dependency.find(
+          (dep) => dep.groupId[0] === dependency.groupId && dep.artifactId[0] === dependency.artifactId,
+        )
+      ) {
+        xml.project.dependencies[0].dependency.push(dependency);
+      }
     }
     return xml;
   });

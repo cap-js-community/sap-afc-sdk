@@ -1,15 +1,16 @@
 package com.github.cap.js.community.sapafcsdk.configuration;
 
 import cds.gen.scheduling.JobStatusCode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Component
 @ConfigurationProperties(prefix = "sap-afc-sdk")
-public class AFCSDKProperties {
+public class AfcSdkProperties {
 
   private Endpoints endpoints;
   private Boolean broker = false;
@@ -67,7 +68,6 @@ public class AFCSDKProperties {
   }
 
   public static class Endpoints {
-
     private String approuter;
     private String server;
 
@@ -89,7 +89,6 @@ public class AFCSDKProperties {
   }
 
   public static class MockProcessing {
-
     private Integer min = 0;
     private Integer max = 0;
     private String defaultStatus = JobStatusCode.COMPLETED;
@@ -129,7 +128,6 @@ public class AFCSDKProperties {
   }
 
   public static class SyncJob {
-
     private String cron = "0 */1 * * * *";
 
     public String getCron() {
@@ -142,7 +140,6 @@ public class AFCSDKProperties {
   }
 
   public static class TenantCache {
-
     private String cron = "0 */30 * * * *";
 
     public String getCron() {

@@ -2,8 +2,10 @@ package com.github.cap.js.community.sapafcsdk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration;
+import org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
 public class Application {
 
   public static void main(String[] args) {

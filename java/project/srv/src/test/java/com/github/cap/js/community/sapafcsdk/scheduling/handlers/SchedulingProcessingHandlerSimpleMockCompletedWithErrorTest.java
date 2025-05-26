@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import cds.gen.scheduling.*;
 import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.AFCSDKTestSimpleCompletedWithErrorConfig;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedWithErrorConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
@@ -29,7 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-@ContextConfiguration(classes = { OutboxTestConfig.class, AFCSDKTestSimpleCompletedWithErrorConfig.class })
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedWithErrorConfig.class })
 public class SchedulingProcessingHandlerSimpleMockCompletedWithErrorTest {
 
   @Autowired

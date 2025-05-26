@@ -9,7 +9,7 @@ import cds.gen.scheduling.MessageSeverityCode;
 import cds.gen.scheduling.ResultTypeCode;
 import cds.gen.scheduling.Scheduling_;
 import cds.gen.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Delete;

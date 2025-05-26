@@ -245,6 +245,12 @@ exports[`Build Java / CF 6`] = `
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>6.4.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.cap.js.community</groupId>
       <artifactId>sap-afc-sdk</artifactId>
       <version>1.0.0</version>
@@ -1025,6 +1031,12 @@ exports[`Build Java / Kyma 6`] = `
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>6.4.4</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.github.cap.js.community</groupId>

@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import com.sap.cds.services.runtime.CdsRuntime;
 import com.sap.cloud.environment.servicebinding.api.ServiceBinding;
+import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -35,25 +37,26 @@ public class XsuaaClient {
     private static final String DELETE_URI = CLONES_URI + "/%s";
   }
 
-  private final CdsRuntime cdsRuntime;
-  private final WebClient webClient;
-  private final XsuaaData xsuaaData;
-  private final BrokerProperties brokerProperties;
+  @Autowired
+  private CdsRuntime cdsRuntime;
 
-  public XsuaaClient(CdsRuntime cdsRuntime, BrokerProperties brokerProperties) {
+  @Autowired
+  private BrokerProperties brokerProperties;
+
+  private XsuaaData xsuaaData;
+  private WebClient webClient;
+
+  public XsuaaClient() {
     super();
-    this.cdsRuntime = cdsRuntime;
-    this.xsuaaData = new XsuaaData();
-    this.brokerProperties = brokerProperties;
-    this.webClient = initWebClient();
-    this.initXsuaa();
   }
 
-  protected void initXsuaa() {
+  @PostConstruct
+  public void init() {
+    this.xsuaaData = new XsuaaData();
     Optional<ServiceBinding> service = cdsRuntime
       .getEnvironment()
       .getServiceBindings()
-      .filter(binding -> binding.getServiceName().get().equals("xsuaa"))
+      .filter(binding -> binding.getServiceName().isPresent() && "xsuaa".equals(binding.getServiceName().get()))
       .findFirst();
     if (service.isPresent()) {
       Map<String, Object> credentials = service.get().getCredentials();
@@ -63,6 +66,7 @@ public class XsuaaClient {
       this.xsuaaData.setXsappname(credentials.get("xsappname").toString());
       this.xsuaaData.setSubaccountId(credentials.get("subaccountid").toString());
     }
+    this.webClient = initWebClient();
   }
 
   public Mono<Void> createXsuaaClone(String serviceInstanceId, String orgId) {

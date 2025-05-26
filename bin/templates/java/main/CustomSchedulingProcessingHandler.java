@@ -1,6 +1,7 @@
 package customer.scheduling;
 
 import cds.gen.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -8,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler
-  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)

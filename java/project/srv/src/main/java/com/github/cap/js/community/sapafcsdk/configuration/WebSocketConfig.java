@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
   private WebSocketHandler webSocketHandler;
 
   @Autowired
-  private AFCSDKProperties afcsdkProperties;
+  private AfcSdkProperties afcsdkProperties;
 
   @Autowired
   private CdsModel cdsModel;

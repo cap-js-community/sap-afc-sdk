@@ -8,8 +8,8 @@ import cds.gen.scheduling.Job;
 import cds.gen.scheduling.JobStatusCode;
 import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.AFCSDKTestAdvancedConfig;
-import com.github.cap.js.community.sapafcsdk.scheduling.configuration.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
+import com.github.cap.js.community.sapafcsdk.test.TestAdvancedConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
@@ -31,7 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-@ContextConfiguration(classes = { OutboxTestConfig.class, AFCSDKTestAdvancedConfig.class })
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestAdvancedConfig.class })
 public class SchedulingProcessingHandlerAdvancedMockTest {
 
   @Autowired

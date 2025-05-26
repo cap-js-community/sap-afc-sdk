@@ -65,7 +65,7 @@ public class OpenAPIConfig {
     Optional<ServiceBinding> service = cdsRuntime
       .getEnvironment()
       .getServiceBindings()
-      .filter(binding -> binding.getServiceName().get().equals("xsuaa"))
+      .filter(binding -> binding.getServiceName().isPresent() && "xsuaa".equals(binding.getServiceName().get()))
       .findFirst();
     if (service.isPresent()) {
       Map<String, Object> credentials = service.get().getCredentials();

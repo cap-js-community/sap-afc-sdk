@@ -1,6 +1,7 @@
 package customer.scheduling;
 
 import cds.gen.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class SchedulingProviderHandler
-  extends com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler {
+public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)

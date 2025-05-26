@@ -1,10 +1,13 @@
 "use strict";
 
 const path = require("path");
+const fs = require("fs");
 const shelljs = require("shelljs");
+const { adjustXML } = require("../bin/common/util");
 
 const Plugins = {
-  file: "sap-afc-sdk-1.0.0.jar",
+  file: "sap-afc-sdk",
+  extension: "jar",
   folder: "java/plugin",
   source: "java/plugin/target",
   target: "bin/builds",
@@ -16,8 +19,12 @@ const Plugins = {
 })();
 
 function packagePlugin(check) {
-  const sourcePath = path.join(process.cwd(), Plugins.source, Plugins.file);
-  const targetPath = path.join(process.cwd(), Plugins.target, Plugins.file);
+  const packagePath = path.join(process.cwd(), "package.json");
+  const version = require(packagePath).version;
+  const sourceFolder = path.join(process.cwd(), Plugins.source);
+  const sourcePath = path.join(sourceFolder, `${Plugins.file}-${version}.${Plugins.extension}`);
+  const targetFolder = path.join(process.cwd(), Plugins.target);
+  const targetPath = path.join(targetFolder, `${Plugins.file}-${version}.${Plugins.extension}`);
 
   shelljs.pushd(Plugins.folder);
 
@@ -41,18 +48,25 @@ function packagePlugin(check) {
   );
   shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
 
+  // POM.xml
+  adjustXML("pom.xml", (xml) => {
+    xml.project.properties[0].revision = version;
+    return xml;
+  });
   // Build
   shelljs.exec("mvn package");
 
   if (check) {
     // Check
-    if (!compareJars(sourcePath, targetPath)) {
+    if (!fs.existsSync(targetPath) || !compareJars(sourcePath, targetPath)) {
       // eslint-disable-next-line no-console
       console.log(`Java plugin at ${targetPath} is not up-to-date.`);
       // eslint-disable-next-line n/no-process-exit
       process.exit(-1);
     }
   } else {
+    // Remove previous versions
+    shelljs.rm("-f", path.join(targetFolder, `${Plugins.file}-*.${Plugins.extension}`));
     // Copy
     shelljs.cp(sourcePath, targetPath);
   }

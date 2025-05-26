@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.configuration;
+package com.github.cap.js.community.sapafcsdk.test;
 
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.sap.cds.services.outbox.OutboxService;

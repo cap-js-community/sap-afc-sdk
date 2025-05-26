@@ -1,19 +1,19 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.configuration;
+package com.github.cap.js.community.sapafcsdk.test;
 
 import cds.gen.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.configuration.AFCSDKProperties;
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import java.util.Map;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
-public class AFCSDKTestAdvancedConfig {
+public class TestAdvancedConfig {
 
   @Bean
-  public AFCSDKProperties afcsdkProperties() {
-    AFCSDKProperties properties = new AFCSDKProperties();
+  public AfcSdkProperties afcsdkProperties() {
+    AfcSdkProperties properties = new AfcSdkProperties();
 
-    AFCSDKProperties.MockProcessing mockProcessing = new AFCSDKProperties.MockProcessing();
+    AfcSdkProperties.MockProcessing mockProcessing = new AfcSdkProperties.MockProcessing();
     mockProcessing.setMin(0);
     mockProcessing.setMax(10);
     mockProcessing.setDefault(JobStatusCode.COMPLETED);

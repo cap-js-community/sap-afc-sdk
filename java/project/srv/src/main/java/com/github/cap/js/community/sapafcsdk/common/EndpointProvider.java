@@ -3,7 +3,7 @@ package com.github.cap.js.community.sapafcsdk.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.cap.js.community.sapafcsdk.configuration.AFCSDKProperties;
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.request.UserInfo;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ public class EndpointProvider {
   private Environment env;
 
   @Autowired
-  private AFCSDKProperties afcsdkProperties;
+  private AfcSdkProperties afcsdkProperties;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 

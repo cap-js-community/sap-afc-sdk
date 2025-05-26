@@ -3,6 +3,7 @@ package com.github.cap.js.community.sapafcsdk.broker;
 import static java.lang.String.format;
 
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.Context;
 import org.springframework.cloud.servicebroker.model.instance.*;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceService;
@@ -12,13 +13,10 @@ import reactor.core.publisher.Mono;
 @Service
 public class ServiceInstanceServiceImpl implements ServiceInstanceService {
 
-  private final XsuaaClient xsuaaClient;
-
   private final String INSTANCE_NOT_FOUND_ERROR = "Service instance with ID %s was not found";
 
-  public ServiceInstanceServiceImpl(XsuaaClient xsuaaClient) {
-    this.xsuaaClient = xsuaaClient;
-  }
+  @Autowired
+  private XsuaaClient xsuaaClient;
 
   @Override
   public Mono<CreateServiceInstanceResponse> createServiceInstance(CreateServiceInstanceRequest request) {

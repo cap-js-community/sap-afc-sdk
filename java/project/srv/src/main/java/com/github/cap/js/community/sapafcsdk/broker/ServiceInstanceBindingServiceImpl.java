@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.binding.*;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceBindingService;
 import org.springframework.stereotype.Service;
@@ -12,15 +13,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBindingService {
 
-  private final XsuaaClient xsuaaClient;
-  private final BrokerProperties brokerProperties;
-
   private final String BINDING_NOT_FOUND_ERROR = "Service binding with ID %s was not found";
 
-  public ServiceInstanceBindingServiceImpl(XsuaaClient xsuaaClient, BrokerProperties brokerProperties) {
-    this.xsuaaClient = xsuaaClient;
-    this.brokerProperties = brokerProperties;
-  }
+  @Autowired
+  private XsuaaClient xsuaaClient;
+
+  @Autowired
+  private BrokerProperties brokerProperties;
 
   @Override
   public Mono<CreateServiceInstanceBindingResponse> createServiceInstanceBinding(
