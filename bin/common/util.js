@@ -182,9 +182,6 @@ function generateHashBrokerPassword() {
 }
 
 function copyFolder(src, dest, exclude) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
   const files = fs.readdirSync(src, { withFileTypes: true });
   for (const file of files) {
     if ([".DS_Store"].includes(file.name)) {
@@ -228,6 +225,26 @@ function copyFolderAdjusted(src, dest, exclude, callback) {
   }
 }
 
+function copyFile(srcPath, destPath) {
+  if (!fs.existsSync(destPath)) {
+    if (!fs.existsSync(path.dirname(destPath))) {
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    }
+    fs.copyFileSync(srcPath, destPath);
+  }
+}
+
+function copyFileAdjusted(srcPath, destPath, callback) {
+  if (!fs.existsSync(destPath)) {
+    const content = fs.readFileSync(srcPath, "utf8");
+    const newContent = callback(content, srcPath, destPath) ?? content;
+    if (!fs.existsSync(path.dirname(destPath))) {
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    }
+    fs.writeFileSync(destPath, newContent, "utf8");
+  }
+}
+
 function isJava(options) {
   return fs.existsSync(path.join(process.cwd(), "pom.xml")) || !!options?.java;
 }
@@ -246,5 +263,7 @@ module.exports = {
   generateHashBrokerPassword,
   copyFolder,
   copyFolderAdjusted,
+  copyFile,
+  copyFileAdjusted,
   isJava,
 };

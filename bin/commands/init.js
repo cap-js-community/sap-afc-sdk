@@ -7,7 +7,7 @@ const path = require("path");
 const shelljs = require("shelljs");
 const YAML = require("yaml");
 
-const { projectName, adjustYAMLAllDocument } = require("../common/util");
+const { projectName, adjustYAMLAllDocument, adjustText, copyFileAdjusted } = require("../common/util");
 
 const config = require("../config.json");
 
@@ -336,6 +336,14 @@ function processJava(target, auth) {
     }
     return yamls;
   });
+  const name = projectName();
+  copyFileAdjusted(
+    path.join(__dirname, "..", "templates/java/ApplicationConfig.java"),
+    path.join(process.cwd(), `srv/src/main/java/customer/${name}/ApplicationConfig.java`),
+    (content) => {
+      return content.replace("package customer;", `package customer.${name};`);
+    },
+  );
 
   const cdsFeatures = config.features.common
     .concat(config.features[target])

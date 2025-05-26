@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan(
   {
+    "com.github.cap.js.community.sapafcsdk.broker",
     "com.github.cap.js.community.sapafcsdk.common",
     "com.github.cap.js.community.sapafcsdk.configuration",
     "com.github.cap.js.community.sapafcsdk.scheduling",
