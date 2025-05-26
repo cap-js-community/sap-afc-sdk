@@ -6,14 +6,13 @@ const shelljs = require("shelljs");
 
 const { projectName, isJava, adjustXML } = require("../common/util");
 
-const Plugins = {
-  sapafcsdk: {
-    group: "com.github.cap.js.community",
-    artifact: "sap-afc-sdk",
+const Plugins = [
+  {
+    groupId: "com.github.cap.js.community",
+    artifactId: "sap-afc-sdk",
     packaging: "jar",
-    pom: true,
   },
-};
+];
 
 module.exports = {
   register: function (program) {
@@ -66,26 +65,23 @@ function processNode() {}
 
 function processJava(version) {
   // Maven
-  for (const name in Plugins) {
-    const plugin = Plugins[name];
-    const pluginPath = path.join(__dirname, "../builds", `${plugin.artifact}-${version}.${plugin.packaging}`);
+  for (const plugin of Plugins) {
+    const pluginPath = path.join(__dirname, "../builds", `${plugin.artifactId}-${version}.${plugin.packaging}`);
     const args = [
       "install:install-file",
       `-Dfile=${pluginPath}`,
-      `-DgroupId=${plugin.group}`,
-      `-DartifactId=${plugin.artifact}`,
+      `-DgroupId=${plugin.groupId}`,
+      `-DartifactId=${plugin.artifactId}`,
       `-Dversion=${version}`,
       `-Dpackaging=${plugin.packaging}`,
-      `-DgeneratePom=${plugin.pom}`,
     ];
     shelljs.exec(`mvn ${args.join(" ")}`);
   }
   // POM
   adjustXML("srv/pom.xml", (xml) => {
-    for (const name in Plugins) {
-      const plugin = Plugins[name];
+    for (const plugin of Plugins) {
       const dependency = xml.project.dependencies[0].dependency.find(
-        (dep) => dep.groupId[0] === plugin.group && dep.artifactId[0] === plugin.artifact,
+        (dep) => dep.groupId[0] === plugin.groupId && dep.artifactId[0] === plugin.artifactId,
       );
       if (dependency) {
         dependency.version = version;

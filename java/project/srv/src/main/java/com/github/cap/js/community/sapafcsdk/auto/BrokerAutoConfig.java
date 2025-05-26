@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.broker;
+package com.github.cap.js.community.sapafcsdk.auto;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

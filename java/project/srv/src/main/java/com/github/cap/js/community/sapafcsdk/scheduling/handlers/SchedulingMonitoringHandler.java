@@ -1,11 +1,11 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import cds.gen.schedulingmonitoringservice.Job;
-import cds.gen.schedulingmonitoringservice.JobCancelContext;
-import cds.gen.schedulingmonitoringservice.Job_;
-import cds.gen.schedulingmonitoringservice.SchedulingMonitoringService_;
-import cds.gen.schedulingproviderservice.SchedulingProviderService;
 import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
+import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.Job;
+import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.JobCancelContext;
+import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.Job_;
+import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.SchedulingMonitoringService_;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.cqn.CqnAnalyzer;
 import com.sap.cds.services.EventContext;
@@ -50,9 +50,9 @@ public class SchedulingMonitoringHandler implements EventHandler {
       .targetKeys()
       .get("ID")
       .toString();
-    cds.gen.schedulingproviderservice.Job_ job = CQL.entity(cds.gen.schedulingproviderservice.Job_.class).filter(j ->
-      j.ID().eq(ID)
-    );
+    com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.Job_ job = CQL.entity(
+      com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.Job_.class
+    ).filter(j -> j.ID().eq(ID));
     this.schedulingProviderService.cancel(job);
     context.setResult(persistenceService.run(context.getCqn()).single(Job.class));
     context.getMessages().success("cancelJobSuccess").code("200");

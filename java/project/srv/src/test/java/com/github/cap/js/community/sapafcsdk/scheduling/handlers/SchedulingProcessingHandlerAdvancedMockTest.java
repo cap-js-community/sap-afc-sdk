@@ -1,13 +1,13 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import static cds.gen.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import cds.gen.scheduling.Job;
-import cds.gen.scheduling.JobStatusCode;
-import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.github.cap.js.community.sapafcsdk.test.TestAdvancedConfig;
 import com.sap.cds.Result;

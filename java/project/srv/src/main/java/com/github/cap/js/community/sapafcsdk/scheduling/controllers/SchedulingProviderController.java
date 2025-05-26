@@ -1,9 +1,9 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
-import static cds.gen.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
 
-import cds.gen.scheduling.DataTypeCode;
-import cds.gen.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.DataTypeCode;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
 import com.sap.cds.CdsException;
 import com.sap.cds.impl.parser.StructDataParser;
 import com.sap.cds.ql.CQL;
@@ -273,17 +273,19 @@ public class SchedulingProviderController {
     @PathVariable(name = "ID", required = true) String ID,
     HttpServletResponse response
   ) {
-    Select<cds.gen.scheduling.JobResult_> query = Select.from(cds.gen.scheduling.Scheduling_.JOB_RESULT).byId(ID);
-    Optional<cds.gen.scheduling.JobResult> _jobResult = persistenceService
+    Select<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult_> query = Select.from(
+      com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT
+    ).byId(ID);
+    Optional<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> _jobResult = persistenceService
       .run(query)
-      .first(cds.gen.scheduling.JobResult.class);
+      .first(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.class);
     if (_jobResult.isEmpty()) {
       response.setStatus(HttpStatus.NOT_FOUND.value());
       return null;
     }
-    cds.gen.scheduling.JobResult jobResult = _jobResult.get();
+    com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult jobResult = _jobResult.get();
     String dispositionType = cdsModel
-      .getEntity(cds.gen.scheduling.JobResult_.CDS_NAME)
+      .getEntity(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult_.CDS_NAME)
       .getElement("data")
       .getAnnotationValue("@Core.ContentDisposition.Type", "attachment");
     response.setContentType(jobResult.getMimeType());

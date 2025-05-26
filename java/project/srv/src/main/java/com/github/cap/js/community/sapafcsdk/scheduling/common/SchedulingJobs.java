@@ -1,11 +1,11 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.common;
 
-import static cds.gen.cds.outbox.Outbox_.MESSAGES;
+import static com.github.cap.js.community.sapafcsdk.model.cds.outbox.Outbox_.MESSAGES;
 
-import cds.gen.cds.outbox.Messages;
-import cds.gen.cds.outbox.Messages_;
-import cds.gen.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
+import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages;
+import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages_;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.mt.TenantProviderService;

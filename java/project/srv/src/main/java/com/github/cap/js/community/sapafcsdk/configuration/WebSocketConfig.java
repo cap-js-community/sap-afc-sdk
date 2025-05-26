@@ -5,6 +5,7 @@ import com.sap.cds.reflect.CdsModel;
 import com.sap.cds.reflect.CdsService;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -27,7 +28,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
   private CdsModel cdsModel;
 
   @Override
-  public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+  public void registerWebSocketHandlers(@NotNull WebSocketHandlerRegistry registry) {
     for (CdsService service : cdsModel.services().toList()) {
       String protocol = service.getAnnotationValue("protocol", null);
       if (

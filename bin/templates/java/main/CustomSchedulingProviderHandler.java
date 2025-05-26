@@ -1,7 +1,7 @@
 package customer.scheduling;
 
-import cds.gen.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -14,25 +14,25 @@ import org.springframework.stereotype.Component;
 @Primary
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
+public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customCreateJob(CdsCreateEventContext context, List<Job> jobs) {
+  public void createJob(CdsCreateEventContext context, List<Job> jobs) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customCancelJob(JobCancelContext context) {
+  public void cancelJob(JobCancelContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = JobResultDataContext.CDS_NAME, entity = JobResult_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customDownloadData(JobResultDataContext context) {
+  public void downloadData(JobResultDataContext context) {
     // Your logic goes here
     context.proceed();
   }

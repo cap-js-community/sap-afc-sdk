@@ -5,6 +5,8 @@ const fs = require("fs");
 const shelljs = require("shelljs");
 const { adjustXML } = require("../bin/common/util");
 
+const BasePath = "com/github/cap/js/community/sapafcsdk";
+
 const Plugins = {
   file: "sap-afc-sdk",
   extension: "jar",
@@ -31,10 +33,10 @@ function packagePlugin(check) {
   // Prepare
   shelljs.rm("-rf", "src");
   // - Java
-  shelljs.mkdir("-p", "src/main/java");
-  shelljs.cp("-R", "../project/srv/src/gen/java/cds", "src/main/java");
-  shelljs.cp("-R", "../project/srv/src/main/java/com", "src/main/java");
-  shelljs.rm("-f", "src/main/java/com/github/cap/js/community/sapafcsdk/Application.java");
+  shelljs.mkdir("-p", `src/main/java/${BasePath}`);
+  shelljs.cp("-R", `../project/srv/src/main/java/${BasePath}`, `src/main/java/${BasePath}/../`);
+  shelljs.cp("-R", `../project/srv/src/gen/java/${BasePath}/model`, `src/main/java/${BasePath}`);
+  shelljs.rm("-f", `src/main/java/${BasePath}/Application.java`);
   // - Resources
   shelljs.mkdir("-p", "src/main/resources");
   shelljs.cp("-R", "../project/srv/src/main/resources/META-INF", "src/main/resources");
@@ -47,6 +49,7 @@ function packagePlugin(check) {
     "src/main/resources/scheduling/i18n",
   );
   shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
+  shelljs.cp("-R", "../project/srv/src/gen/resources/META-INF/cds4j-codegen", "src/main/resources/META-INF");
 
   // POM.xml
   adjustXML("pom.xml", (xml) => {

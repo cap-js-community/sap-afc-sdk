@@ -1,2 +1,4 @@
-com.github.cap.js.community.sapafcsdk.configuration.AfcSdkAutoConfig
-com.github.cap.js.community.sapafcsdk.broker.BrokerAutoConfig
+com.github.cap.js.community.sapafcsdk.auto.AutoConfig
+com.github.cap.js.community.sapafcsdk.auto.BrokerAutoConfig
+
+

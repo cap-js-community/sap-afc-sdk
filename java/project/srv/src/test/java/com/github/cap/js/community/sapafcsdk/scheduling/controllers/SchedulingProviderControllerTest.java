@@ -1,14 +1,14 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
-import static cds.gen.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import cds.gen.scheduling.Job;
-import cds.gen.scheduling.JobStatusCode;
-import cds.gen.scheduling.MessageSeverityCode;
-import cds.gen.scheduling.ResultTypeCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.MessageSeverityCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.ResultTypeCode;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedConfig;
 import com.sap.cds.Result;

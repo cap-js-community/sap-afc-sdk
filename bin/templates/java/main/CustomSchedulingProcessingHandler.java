@@ -1,7 +1,7 @@
 package customer.scheduling;
 
-import cds.gen.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -11,32 +11,32 @@ import org.springframework.stereotype.Component;
 @Primary
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customProcessJob(ProcessJobContext context) {
+  public void processJob(ProcessJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = UpdateJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customUpdateJob(UpdateJobContext context) {
+  public void updateJob(UpdateJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = CancelJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customCancelJob(CancelJobContext context) {
+  public void cancelJob(CancelJobContext context) {
     // Your logic goes here
     context.proceed();
   }
 
   @On(event = SyncJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
-  public void customSyncJob(SyncJobContext context) {
+  public void syncJob(SyncJobContext context) {
     // Your logic goes here
     context.proceed();
   }

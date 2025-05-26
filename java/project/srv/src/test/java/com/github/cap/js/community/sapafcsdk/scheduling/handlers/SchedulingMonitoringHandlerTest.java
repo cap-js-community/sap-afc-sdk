@@ -1,12 +1,12 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import static cds.gen.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import cds.gen.scheduling.Job;
-import cds.gen.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;

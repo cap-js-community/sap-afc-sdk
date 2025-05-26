@@ -97,6 +97,7 @@
             <version>2.3.232</version>
             <scope>runtime</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -180,7 +181,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <basePackage>cds.gen</basePackage>
+                            <basePackage>com.github.cap.js.community.sapafcsdk.model</basePackage>
                         </configuration>
                     </execution>
                 </executions>

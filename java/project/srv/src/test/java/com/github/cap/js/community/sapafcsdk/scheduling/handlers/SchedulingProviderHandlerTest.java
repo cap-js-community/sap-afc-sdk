@@ -1,14 +1,14 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import static cds.gen.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import cds.gen.scheduling.JobStatusCode;
-import cds.gen.scheduling.MessageSeverityCode;
-import cds.gen.scheduling.ResultTypeCode;
-import cds.gen.scheduling.Scheduling_;
-import cds.gen.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.MessageSeverityCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.ResultTypeCode;
+import com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
@@ -178,20 +178,21 @@ public class SchedulingProviderHandlerTest {
   @Test
   @WithMockUser("authenticated")
   void cancelJob() {
-    cds.gen.scheduling.Job job = cds.gen.scheduling.Job.of(
-      Map.of(
-        "definition_name",
-        "JOB_5",
-        "referenceID",
-        "c1253940-5f25-4a0b-8585-f62bd085b327",
-        "status_code",
-        JobStatusCode.REQUESTED,
-        "version",
-        "1"
-      )
-    );
+    com.github.cap.js.community.sapafcsdk.model.scheduling.Job job =
+      com.github.cap.js.community.sapafcsdk.model.scheduling.Job.of(
+        Map.of(
+          "definition_name",
+          "JOB_5",
+          "referenceID",
+          "c1253940-5f25-4a0b-8585-f62bd085b327",
+          "status_code",
+          JobStatusCode.REQUESTED,
+          "version",
+          "1"
+        )
+      );
     Result result = persistenceService.run(Insert.into(Scheduling_.JOB).entry(job));
-    String ID = result.single().as(cds.gen.scheduling.Job.class).getId();
+    String ID = result.single().as(com.github.cap.js.community.sapafcsdk.model.scheduling.Job.class).getId();
 
     Job_ jobRef = CQL.entity(Job_.class).filter(j -> j.ID().eq(ID));
     providerService.cancel(jobRef);

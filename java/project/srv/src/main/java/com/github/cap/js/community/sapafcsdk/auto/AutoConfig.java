@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.configuration;
+package com.github.cap.js.community.sapafcsdk.auto;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,4 +14,4 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     "com.github.cap.js.community.sapafcsdk.scheduling",
   }
 )
-public class AfcSdkAutoConfig {}
+public class AutoConfig {}

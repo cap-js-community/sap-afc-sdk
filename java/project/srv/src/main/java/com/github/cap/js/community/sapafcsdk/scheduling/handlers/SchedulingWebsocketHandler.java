@@ -1,8 +1,8 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import cds.gen.schedulingwebsocketservice.JobStatusChangedContext;
-import cds.gen.schedulingwebsocketservice.SchedulingWebsocketService_;
 import com.github.cap.js.community.sapafcsdk.common.WebSocketHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
+import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService_;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;

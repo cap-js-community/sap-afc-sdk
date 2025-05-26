@@ -7,11 +7,30 @@ const path = require("path");
 const shelljs = require("shelljs");
 const YAML = require("yaml");
 
-const { projectName, adjustYAMLAllDocument, adjustText, copyFileAdjusted } = require("../common/util");
+const { projectName, adjustYAMLAllDocument, copyFileAdjusted } = require("../common/util");
 
 const config = require("../config.json");
 
 const { isJava, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common/util");
+
+const Version = require(path.join(__dirname, "../../package.json")).version;
+
+const Dependencies = {
+  Node: [],
+  Java: [
+    {
+      groupId: "com.github.cap.js.community",
+      artifactId: "sap-afc-sdk",
+      version: Version,
+    },
+    {
+      groupId: "org.springframework.security",
+      artifactId: "spring-security-test",
+      version: "6.4.4",
+      scope: "test",
+    },
+  ],
+};
 
 module.exports = {
   register: function (program) {
@@ -222,55 +241,10 @@ function processJava(target, auth) {
 
   // POM
   adjustXML("srv/pom.xml", (xml) => {
-    const version = require(path.join(__dirname, "../../package.json")).version;
-    // TODO: Remove transitive dependencies
-    const dependencies = [
-      {
-        groupId: "com.github.cap.js.community",
-        artifactId: "sap-afc-sdk",
-        version,
-      },
-      {
-        groupId: "com.sap.cds",
-        artifactId: "cds-feature-identity",
-        version: "3.10.1",
-      },
-      {
-        groupId: "org.springdoc",
-        artifactId: "springdoc-openapi-starter-webmvc-ui",
-        version: "2.8.6",
-      },
-      {
-        groupId: "org.springframework.cloud",
-        artifactId: "spring-cloud-starter-open-service-broker",
-        version: "4.3.1",
-      },
-      {
-        groupId: "org.springframework.boot",
-        artifactId: "spring-boot-starter-webflux",
-        version: "3.4.1",
-      },
-      {
-        groupId: "org.springframework.boot",
-        artifactId: "spring-boot-starter-security",
-        version: "3.4.5",
-      },
-      {
-        groupId: "org.springframework.security",
-        artifactId: "spring-security-test",
-        version: "6.4.4",
-        scope: "test",
-      },
-      {
-        groupId: "org.springframework.boot",
-        artifactId: "spring-boot-starter-websocket",
-        version: "3.4.4",
-      },
-    ];
     if (!xml.project.dependencies) {
       xml.project.dependencies = [{}];
     }
-    for (const dependency of dependencies) {
+    for (const dependency of Dependencies.Java) {
       if (
         !xml.project.dependencies[0].dependency.find(
           (dep) => dep.groupId[0] === dependency.groupId && dep.artifactId[0] === dependency.artifactId,
@@ -278,13 +252,6 @@ function processJava(target, auth) {
       ) {
         xml.project.dependencies[0].dependency.push(dependency);
       }
-    }
-    // TODO: Keep spring-boot-devtools
-    const index = xml.project.dependencies[0].dependency.findIndex(
-      (dep) => dep.groupId[0] === "org.springframework.boot" && dep.artifactId[0] === "spring-boot-devtools",
-    );
-    if (index >= 0) {
-      xml.project.dependencies[0].dependency.splice(index, 1);
     }
     return xml;
   });
@@ -351,7 +318,7 @@ function processJava(target, auth) {
     .concat(config.features.java);
   shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 
-  // TODO: Remove (cap/issues/2161)
+  // TODO: Remove (cap/issues/18263)
   shelljs.exec(`ln -s ${__dirname}/../../db/data ${process.cwd()}/db/csv`);
 }
 
