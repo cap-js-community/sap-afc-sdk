@@ -230,11 +230,11 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
   - `mockProcessing.max: Number`: Maximum processing time in seconds. Default `10`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
-  - `mockProcessing.status: Object`: Status distribution values
-    - `mockProcessing.status.completed: Number`: Completed status distribution value
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
-    - `mockProcessing.status.failed: Number`: Failed status distribution value
+  - `mockProcessing.status: Object`: Status distribution values. Default `{}`
+    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default `0`
+    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default `0`
+    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default `0`
+    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default `0`
 - `config: Object`: Advanced SDK configuration. See [config.json](./config.json)
 
 ### Implement
@@ -734,17 +734,21 @@ Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` sectio
   - `enabled: Boolean`: Is broker enabled. Default is `false`
   - `user: String`: Name of the broker user. Default is `broker-user`
   - `credentialsHash: String`: Credentials hash of the broker user. Default is generated
-  - `endpoints: Object`: Endpoints of the broker Default is `/api` and `/api/job-scheduling/v1`
-  - `credential-types: String[]`: Credential types of the broker. Default is `binding-secret` and `x509`
+  - `endpoints: Object`: Endpoints of the broker. Default is `{ api: "/api", job-scheduling-v1: "/api/job-scheduling/v1" }`
+  - `credential-types: String[]`: Credential types of the broker. Default is `["binding-secret", "x509"]`
 - `mockProcessing: Object`: Activate mocked job processing. Default `{}`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
   - `mockProcessing.max: Number`: Maximum processing time in seconds. Default `10`
   - `mockProcessing.default: String`: Default processing status. Default `completed`
-  - `mockProcessing.status: Object`: Status distribution values
-    - `mockProcessing.status.completed: Number`: Completed status distribution value
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value
-    - `mockProcessing.status.failed: Number`: Failed status distribution value
+  - `mockProcessing.status: Object`: Status distribution values. Default `{}`
+    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default `0`
+    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default `0`
+    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default `0`
+    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default `0`
+- `syncJob: Object`: Sync job configuration. Default `{}`
+  - `cron: String`: Sync job cron interval. Default `0 */1 * * * *`
+- `tenantCache: Object`: Tenant cache configuration. Default `{}`
+  - `cron: String`: Tenant cache invalidation cron interval. Default `0 */30 * * * *`
 
 ### Implement
 
@@ -817,10 +821,8 @@ import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessin
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Primary
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
@@ -975,10 +977,8 @@ import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
 import java.util.List;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Primary
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderBase {

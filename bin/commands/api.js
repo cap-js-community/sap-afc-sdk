@@ -321,7 +321,7 @@ function cfService() {
   if (fs.existsSync(applicationPath)) {
     const content = fs.readFileSync(applicationPath, "utf8");
     const yaml = YAML.parseAllDocuments(content)?.[0];
-    const service = yaml?.getIn(["broker", "name"]);
+    const service = yaml?.getIn(["sap-afc-sdk", "broker", "name"]);
     if (service) {
       return service;
     }

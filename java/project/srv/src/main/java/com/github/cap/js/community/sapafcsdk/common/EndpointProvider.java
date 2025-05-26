@@ -34,7 +34,10 @@ public class EndpointProvider {
     if (this._serverUrl != null) {
       return this._serverUrl;
     }
-    String serverUrl = afcsdkProperties.getEndpoints().getServer();
+    String serverUrl = null;
+    if (afcsdkProperties.getEndpoints() != null) {
+      serverUrl = afcsdkProperties.getEndpoints().getServer();
+    }
     if (serverUrl != null && !serverUrl.isEmpty()) {
       return this._serverUrl = serverUrl;
     }
@@ -63,7 +66,9 @@ public class EndpointProvider {
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
       return this._approuterUrl = approuterEndpoint;
     }
-    approuterEndpoint = afcsdkProperties.getEndpoints().getApprouter();
+    if (afcsdkProperties.getEndpoints() != null) {
+      approuterEndpoint = afcsdkProperties.getEndpoints().getApprouter();
+    }
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
       return this._approuterUrl = approuterEndpoint;
     }

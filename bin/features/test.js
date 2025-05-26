@@ -3,7 +3,7 @@
 
 const path = require("path");
 const shelljs = require("shelljs");
-const { isJava, adjustJSON, copyFolderAdjusted, projectName } = require("../common/util");
+const { isJava, adjustJSON, copyFolderAdjusted, projectName, derivePackageName } = require("../common/util");
 
 const Files = {
   node: "node/test",
@@ -20,16 +20,17 @@ module.exports = (options) => {
 
     let srcFolder;
     let destFolder;
+    const packageName = derivePackageName(name);
     if (!isJava(options)) {
       srcFolder = path.join(__dirname, "..", "templates", Files.node);
       destFolder = path.join(process.cwd(), "test");
     } else {
       srcFolder = path.join(__dirname, "..", "templates", Files.java);
-      destFolder = path.join(process.cwd(), "srv/src/test/java/customer", name, "scheduling");
+      destFolder = path.join(process.cwd(), "srv/src/test/java/customer", packageName, "scheduling");
     }
     copyFolderAdjusted(srcFolder, destFolder, {}, (content) => {
       if (isJava(options)) {
-        content = content.replace("package customer.scheduling;", `package customer.${name}.scheduling;`);
+        content = content.replace("package customer.scheduling;", `package customer.${packageName}.scheduling;`);
       }
       return content;
     });

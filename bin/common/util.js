@@ -18,6 +18,14 @@ function projectName() {
   return name;
 }
 
+function deriveServiceName(name) {
+  return name.replace(/-/g, "");
+}
+
+function derivePackageName(name) {
+  return name.replace(/-/g, "_");
+}
+
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
@@ -135,7 +143,26 @@ function adjustYAMLAllDocument(file, callback) {
     }
     const newContent = newYmls
       .map((yml) => {
-        return yml.toString();
+        return yml.toString({ directives: true });
+      })
+      .join("");
+    if (newContent !== content) {
+      fs.writeFileSync(filePath, newContent, "utf8");
+    }
+    return true;
+  }
+  return false;
+}
+
+function adjustYAMLAllDocuments(file, callback) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    const ymls = yaml.parseAllDocuments(content);
+    const newYmls = callback(ymls) ?? ymls;
+    const newContent = newYmls
+      .map((yml) => {
+        return yml.toString({ directives: true });
       })
       .join("");
     if (newContent !== content) {
@@ -251,6 +278,8 @@ function isJava(options) {
 
 module.exports = {
   projectName,
+  deriveServiceName,
+  derivePackageName,
   adjustText,
   adjustLines,
   adjustAllLines,
@@ -259,6 +288,7 @@ module.exports = {
   adjustYAML,
   adjustYAMLDocument,
   adjustYAMLAllDocument,
+  adjustYAMLAllDocuments,
   adjustXML,
   generateHashBrokerPassword,
   copyFolder,

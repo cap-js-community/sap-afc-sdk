@@ -13,6 +13,7 @@ const {
   copyFolder,
   projectName,
   adjustYAMLDocument,
+  deriveServiceName,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
@@ -49,9 +50,8 @@ module.exports = () => {
           json["sap.app"].id = `${name}.${json["sap.app"].id}`;
         }
         if (!json?.["sap.cloud"]?.service) {
-          const strippedAppName = name.replace(/-/g, "");
           json["sap.cloud"] ??= {};
-          json["sap.cloud"].service = `${strippedAppName}.service`;
+          json["sap.cloud"].service = `${deriveServiceName(name)}.service`;
         }
       });
 

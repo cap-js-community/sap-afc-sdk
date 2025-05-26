@@ -7,6 +7,6 @@ import org.springframework.cloud.servicebroker.autoconfigure.web.servlet.Service
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(name = "broker.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "sap-afc-sdk.broker.enabled", havingValue = "true")
 @ImportAutoConfiguration({ ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
 public class BrokerAutoConfig {}

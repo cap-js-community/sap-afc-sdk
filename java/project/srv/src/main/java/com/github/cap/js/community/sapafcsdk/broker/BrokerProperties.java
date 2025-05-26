@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "broker")
+@ConfigurationProperties(prefix = "sap-afc-sdk.broker")
 public class BrokerProperties {
 
   private String name;

@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 "use strict";
 
-const { adjustJSON, adjustYAMLAllDocument, isJava } = require("../common/util");
+const { adjustJSON, adjustYAMLAllDocuments, isJava } = require("../common/util");
+const YAML = require("yaml");
 
 const Mock = {
   Basic: {
@@ -52,9 +53,11 @@ function processNode(options) {
 }
 
 function processJava(options) {
-  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index) => {
-    if (index !== 0) {
-      return yaml;
+  adjustYAMLAllDocuments("srv/src/main/resources/application.yaml", (yamls) => {
+    let yaml = yamls.find((yaml) => !yaml.getIn(["spring", "config.activate.on-profile"]));
+    if (!yaml) {
+      yaml = new YAML.Document();
+      yamls.unshift(yaml);
     }
     if (yaml.getIn(["sap-afc-sdk", "mockProcessing"])) {
       if (options.xremove) {
@@ -67,5 +70,6 @@ function processJava(options) {
         yaml.setIn(["sap-afc-sdk", "mockProcessing"], Mock.Basic);
       }
     }
+    return yamls;
   });
 }

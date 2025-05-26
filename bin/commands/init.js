@@ -7,7 +7,7 @@ const path = require("path");
 const shelljs = require("shelljs");
 const YAML = require("yaml");
 
-const { projectName, adjustYAMLAllDocument, copyFileAdjusted } = require("../common/util");
+const { projectName, adjustYAMLAllDocuments, copyFileAdjusted, derivePackageName } = require("../common/util");
 
 const config = require("../config.json");
 
@@ -257,58 +257,61 @@ function processJava(target, auth) {
   });
 
   // Application
-  adjustYAMLAllDocument("srv/src/main/resources/application.yaml", (yaml, index, count) => {
-    if (index !== 0) {
-      return yaml;
+  adjustYAMLAllDocuments("srv/src/main/resources/application.yaml", (yamls) => {
+    if (process.env.APPROUTER_URL || process.env.SERVER_URL) {
+      let yaml = yamls.find((yaml) => yaml.getIn(["spring", "config.activate.on-profile"]) === "cloud");
+      if (!yaml) {
+        yaml = new YAML.Document();
+        yaml.setIn(["spring", "config.activate.on-profile"], "cloud");
+        yamls.unshift(yaml);
+      }
+      if (
+        (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
+        (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))
+      ) {
+        if (!yaml.getIn(["sap-afc-sdk", "endpoints"])) {
+          yaml.setIn(["sap-afc-sdk", "endpoints"], new YAML.YAMLMap());
+        }
+        if (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) {
+          yaml.setIn(["sap-afc-sdk", "endpoints", "approuter"], process.env.APPROUTER_URL);
+        }
+        if (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"])) {
+          yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
+        }
+      }
     }
-    let yamls = [yaml];
-    if (count === 1 && yaml.getIn(["spring", "config.activate.on-profile"]) != null) {
-      const newYaml = new YAML.Document();
-      yamls = [newYaml, yaml];
-      yaml = newYaml;
+    let yaml = yamls.find((yaml) => !yaml.getIn(["spring", "config.activate.on-profile"]));
+    if (!yaml) {
+      yaml = new YAML.Document();
+      yamls.unshift(yaml);
     }
     if (yaml.getIn(["cds", "index-page", "enabled"]) == null) {
       yaml.setIn(["cds", "index-page", "enabled"], true);
     }
     if (!yaml.get("springdoc")) {
-      yaml.set(
-        "springdoc",
-        yaml.createNode({
-          "packages-to-scan": ["com.github.cap.js.community.sapafcsdk.scheduling.controllers"],
-          "swagger-ui": {
-            path: "/api-docs/api/job-scheduling/v1",
-          },
-        }),
-      );
+      const packagesToScan = new YAML.YAMLSeq();
+      packagesToScan.flow = false;
+      packagesToScan.items.push("com.github.cap.js.community.sapafcsdk.scheduling.controllers");
+      yaml.setIn(["springdoc", "packages-to-scan"], packagesToScan);
+      yaml.setIn(["springdoc", "swagger-ui"], {
+        path: "/api-docs/api/job-scheduling/v1",
+      });
     }
-    if (!yaml.getIn(["broker", "enabled"])) {
-      yaml.setIn(["broker", "enabled"], false);
-    }
-    if (
-      (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
-      (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))
-    ) {
-      if (!yaml.getIn(["sap-afc-sdk", "endpoints"])) {
-        yaml.setIn(["sap-afc-sdk", "endpoints"], new YAML.YAMLMap());
-      }
-      if (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) {
-        yaml.setIn(["sap-afc-sdk", "endpoints", "approuter"], process.env.APPROUTER_URL);
-      }
-      if (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"])) {
-        yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
-      }
+    if (!yaml.getIn(["sap-afc-sdk", "broker", "enabled"])) {
+      yaml.setIn(["sap-afc-sdk", "broker", "enabled"], false);
     }
     if (!yaml.getIn(["sap-afc-sdk", "syncJob", "cron"])) {
       yaml.setIn(["sap-afc-sdk", "syncJob", "cron"], "0 */1 * * * *");
     }
     return yamls;
   });
-  const name = projectName();
+
+  const packageName = derivePackageName(projectName());
   copyFileAdjusted(
     path.join(__dirname, "..", "templates/java/ApplicationConfig.java"),
-    path.join(process.cwd(), `srv/src/main/java/customer/${name}/ApplicationConfig.java`),
+    path.join(process.cwd(), `srv/src/main/java/customer/${packageName}/ApplicationConfig.java`),
     (content) => {
-      return content.replace("package customer;", `package customer.${name};`);
+      return content.replace("package customer;", `package customer.${packageName};`);
     },
   );
 

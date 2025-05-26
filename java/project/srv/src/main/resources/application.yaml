@@ -17,36 +17,35 @@ spring:
                 free: true
                 bindable: true
                 planUpdateable: true
-
 cds:
   index-page:
     enabled: true
-
-broker:
-  name: sap-afc-sdk
-  enabled: true
-  user: broker-user
-  credentialsHash: sha256:pg78nhUJXTcWcD2NCOlT6hkQQA8qwxLgsZiQasutisc=:1eBRSsW3Sd7Hm3bukWS399zGNJb7d9IdnDe1uDTkSNU=
-  endpoints:
-    api: /api
-    job-scheduling-v1: /api/job-scheduling/v1
-  credential-types:
-    - binding-secret
-    - x509
-
 springdoc:
   packages-to-scan:
     - com.github.cap.js.community.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
-
 sap-afc-sdk:
-  endpoints:
-    approuter: null
-    server: null
   sync-job:
     cron: 0 */1 * * * *
-
+  broker:
+    name: sap-afc-sdk
+    enabled: true
+    user: broker-user
+    credentialsHash: sha256:pg78nhUJXTcWcD2NCOlT6hkQQA8qwxLgsZiQasutisc=:1eBRSsW3Sd7Hm3bukWS399zGNJb7d9IdnDe1uDTkSNU=
+    endpoints:
+      api: /api
+      job-scheduling-v1: /api/job-scheduling/v1
+    credential-types:
+      - binding-secret
+      - x509
+---
+spring:
+  config.activate.on-profile: cloud
+sap-afc-sdk:
+  endpoints:
+    approuter: https://afcsdkjava-approuter-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
+    server: https://afcsdkjava-srv-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
 ---
 spring:
   config.activate.on-profile: default

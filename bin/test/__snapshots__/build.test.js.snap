@@ -245,15 +245,15 @@ exports[`Build Java / CF 6`] = `
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.cap.js.community</groupId>
+      <artifactId>sap-afc-sdk</artifactId>
+      <version>0.2.9</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
       <version>6.4.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.cap.js.community</groupId>
-      <artifactId>sap-afc-sdk</artifactId>
-      <version>0.2.9</version>
     </dependency>
 
   	<dependency>
@@ -349,65 +349,10 @@ exports[`Build Java / CF 6`] = `
 `;
 
 exports[`Build Java / CF 7`] = `
-"cds:
+"---
+cds:
   index-page:
     enabled: true
-springdoc:
-  packages-to-scan:
-    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
-  swagger-ui:
-    path: /api-docs/api/job-scheduling/v1
-broker:
-  enabled: true
-  name: afcsdk
-  user: broker-user
-  credentialsHash: sha256:xxx=:xxx=
-  endpoints:
-    api: /api
-    job-scheduling-v1: /api/job-scheduling/v1
-  credential-types:
-    - binding-secret
-    - x509
-sap-afc-sdk:
-  endpoints:
-    approuter: https://afcsdk-approuter.cloud.sap
-    server: https://afcsdk-srv.cloud.sap
-  syncJob:
-    cron: 0 */1 * * * *
-  mockProcessing:
-    min: 0
-    max: 10
-    default: completed
-    status:
-      completed: 0.5
-      completedWithWarning: 0.2
-      completedWithError: 0.2
-      failed: 0.1
-spring:
-  openservicebroker:
-    catalog:
-      services:
-        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
-          name: afcsdk
-          description: AFC Scheduling Provider Service
-          bindable: true
-          plans:
-            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
-              name: standard
-              description: Standard plan
-              free: true
-              bindable: true
-              plan_updateable: true
-          metadata:
-            displayName: AFC Scheduling Provider Service
-            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
----
-spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
-cds:
-  data-source.auto-config.enabled: false
----
 management:
   endpoint:
     health:
@@ -425,14 +370,73 @@ management:
       enabled: true
     db:
       enabled: true
+springdoc:
+  packages-to-scan[0]: com.github.cap.js.community.sapafcsdk.scheduling.controllers
+  swagger-ui:
+    path: /api-docs/api/job-scheduling/v1
+sap-afc-sdk:
+  syncJob:
+    cron: 0 */1 * * * *
+  broker:
+    enabled: true
+    name: afcsdk
+    user: broker-user
+    credentialsHash: sha256:xxx=:xxx=
+    endpoints:
+      api: /api
+      job-scheduling-v1: /api/job-scheduling/v1
+    credential-types:
+      - binding-secret
+      - x509
+  mockProcessing:
+    min: 0
+    max: 10
+    default: completed
+    status:
+      completed: 0.5
+      completedWithWarning: 0.2
+      completedWithError: 0.2
+      failed: 0.1
+spring:
+  cloud:
+    openservicebroker:
+      catalog:
+        services:
+          - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
+            name: afcsdk
+            description: AFC Scheduling Provider Service
+            bindable: true
+            plans:
+              - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
+                name: standard
+                description: Standard plan
+                free: true
+                bindable: true
+                plan_updateable: true
+            metadata:
+              displayName: AFC Scheduling Provider Service
+              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+---
+spring:
+  config.activate.on-profile: cloud
+sap-afc-sdk:
+  endpoints:
+    approuter: https://afcsdk-approuter.cloud.sap
+    server: https://afcsdk-srv.cloud.sap
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false
 "
 `;
 
 exports[`Build Java / CF 8`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -440,7 +444,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -476,8 +480,8 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandl
 exports[`Build Java / CF 9`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -488,7 +492,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
+public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -1033,15 +1037,15 @@ exports[`Build Java / Kyma 6`] = `
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.cap.js.community</groupId>
+      <artifactId>sap-afc-sdk</artifactId>
+      <version>0.2.9</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
       <version>6.4.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.cap.js.community</groupId>
-      <artifactId>sap-afc-sdk</artifactId>
-      <version>0.2.9</version>
     </dependency>
 
   	<dependency>
@@ -1143,65 +1147,10 @@ exports[`Build Java / Kyma 6`] = `
 `;
 
 exports[`Build Java / Kyma 7`] = `
-"cds:
+"---
+cds:
   index-page:
     enabled: true
-springdoc:
-  packages-to-scan:
-    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
-  swagger-ui:
-    path: /api-docs/api/job-scheduling/v1
-broker:
-  enabled: true
-  name: afcsdk
-  user: broker-user
-  credentialsHash: sha256:xxx=:xxx=
-  endpoints:
-    api: /api
-    job-scheduling-v1: /api/job-scheduling/v1
-  credential-types:
-    - binding-secret
-    - x509
-sap-afc-sdk:
-  endpoints:
-    approuter: https://afcsdk-approuter.cloud.sap
-    server: https://afcsdk-srv.cloud.sap
-  syncJob:
-    cron: 0 */1 * * * *
-  mockProcessing:
-    min: 0
-    max: 10
-    default: completed
-    status:
-      completed: 0.5
-      completedWithWarning: 0.2
-      completedWithError: 0.2
-      failed: 0.1
-spring:
-  openservicebroker:
-    catalog:
-      services:
-        - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
-          name: afcsdk
-          description: AFC Scheduling Provider Service
-          bindable: true
-          plans:
-            - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
-              name: standard
-              description: Standard plan
-              free: true
-              bindable: true
-              plan_updateable: true
-          metadata:
-            displayName: AFC Scheduling Provider Service
-            longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
----
-spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
-cds:
-  data-source.auto-config.enabled: false
----
 management:
   endpoint:
     health:
@@ -1219,14 +1168,73 @@ management:
       enabled: true
     db:
       enabled: true
+springdoc:
+  packages-to-scan[0]: com.github.cap.js.community.sapafcsdk.scheduling.controllers
+  swagger-ui:
+    path: /api-docs/api/job-scheduling/v1
+sap-afc-sdk:
+  syncJob:
+    cron: 0 */1 * * * *
+  broker:
+    enabled: true
+    name: afcsdk
+    user: broker-user
+    credentialsHash: sha256:xxx=:xxx=
+    endpoints:
+      api: /api
+      job-scheduling-v1: /api/job-scheduling/v1
+    credential-types:
+      - binding-secret
+      - x509
+  mockProcessing:
+    min: 0
+    max: 10
+    default: completed
+    status:
+      completed: 0.5
+      completedWithWarning: 0.2
+      completedWithError: 0.2
+      failed: 0.1
+spring:
+  cloud:
+    openservicebroker:
+      catalog:
+        services:
+          - id: e25a901f-43d1-43c0-bbd6-48b9c6aecb61
+            name: afcsdk
+            description: AFC Scheduling Provider Service
+            bindable: true
+            plans:
+              - id: 958cbd91-af93-4fdd-a793-16c82ae9e70b
+                name: standard
+                description: Standard plan
+                free: true
+                bindable: true
+                plan_updateable: true
+            metadata:
+              displayName: AFC Scheduling Provider Service
+              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+---
+spring:
+  config.activate.on-profile: cloud
+sap-afc-sdk:
+  endpoints:
+    approuter: https://afcsdk-approuter.cloud.sap
+    server: https://afcsdk-srv.cloud.sap
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false
 "
 `;
 
 exports[`Build Java / Kyma 8`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProcessingHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -1234,7 +1242,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
@@ -1270,8 +1278,8 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingHandl
 exports[`Build Java / Kyma 9`] = `
 "package customer.afcsdk.scheduling;
 
-import cds.gen.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.handlers.SchedulingProviderHandler;
+import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -1282,7 +1290,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
-public class CustomSchedulingProviderHandler extends SchedulingProviderHandler {
+public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
