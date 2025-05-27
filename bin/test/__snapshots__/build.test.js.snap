@@ -255,17 +255,15 @@ exports[`Build Java / CF 6`] = `
       <version>6.4.4</version>
       <scope>test</scope>
     </dependency>
-
-  	<dependency>
-  		<groupId>com.sap.cds</groupId>
-  		<artifactId>cds-starter-cloudfoundry</artifactId>
-  		<scope>runtime</scope>
-  	</dependency>
-
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-actuator</artifactId>
-  	</dependency>
+    <dependency>
+      <groupId>com.sap.cds</groupId>
+      <artifactId>cds-starter-cloudfoundry</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <finalName>\${project.artifactId}</finalName>
@@ -794,15 +792,6 @@ resources:
       config:
         ingest_otlp:
           enabled: true
-  - name: afcsdk-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: application
-      path: ./xs-security.json
-      config:
-        xsappname: afcsdk-\${org}-\${space}
-        tenant-mode: dedicated
 "
 `;
 
@@ -1061,23 +1050,20 @@ exports[`Build Java / Kyma 6`] = `
       <version>6.4.4</version>
       <scope>test</scope>
     </dependency>
-
-  	<dependency>
-  		<groupId>com.sap.cds</groupId>
-  		<artifactId>cds-starter-k8s</artifactId>
-  		<scope>runtime</scope>
-  	</dependency>
-
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-actuator</artifactId>
-  	</dependency>
-
-  	<dependency>
-  		<groupId>com.sap.cds</groupId>
-  		<artifactId>cds-starter-cloudfoundry</artifactId>
-  		<scope>runtime</scope>
-  	</dependency>
+    <dependency>
+      <groupId>com.sap.cds</groupId>
+      <artifactId>cds-starter-k8s</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.cds</groupId>
+      <artifactId>cds-starter-cloudfoundry</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>\${project.artifactId}</finalName>

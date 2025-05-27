@@ -104,12 +104,13 @@ Examples:
     try {
       target ||= config.defaults.target;
       auth ||= config.defaults.auth;
+      processCommonBefore(target, auth);
       if (!isJava(options)) {
         processNode(target, auth);
       } else {
         processJava(target, auth);
       }
-      processCommon(target, auth);
+      processCommonAfter(target, auth);
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);
@@ -206,7 +207,7 @@ function processNode(target, auth) {
   adjustYAMLDocument("containerize.yaml", (yaml) => {
     for (const app of appStubs) {
       yaml.get("before-all").items.forEach((line, index) => {
-        if (line.value.includes(`app/${app}`)) {
+        if (line.value.includes(`app/${app}`) && !line.value.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
           yaml.setIn(
             ["before-all", index],
             line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),
@@ -321,10 +322,25 @@ function processJava(target, auth) {
   shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 
   // TODO: Remove (cap/issues/18263)
-  shelljs.exec(`ln -s ${__dirname}/../../db/data ${process.cwd()}/db/csv`);
+  const sourcePath = path.resolve(__dirname, "../../db/data");
+  const targetPath = path.resolve(process.cwd(), "db/csv");
+  if (!fs.existsSync(targetPath)) {
+    fs.symlinkSync(sourcePath, targetPath, "dir");
+  }
 }
 
-function processCommon() {
+function processCommonBefore() {
+  adjustYAMLDocument("mta.yaml", (yaml) => {
+    for (const resource of yaml.get("resources").items) {
+      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
+        resource.setIn(["parameters", "service-plan"], "application");
+      }
+    }
+    return yaml;
+  });
+}
+
+function processCommonAfter() {
   // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {
     for (const resource of yaml.get("resources").items) {

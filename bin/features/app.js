@@ -127,6 +127,17 @@ module.exports = () => {
     // cds add
     shelljs.exec(`cds add html5-repo ${config.options.cds}`);
 
+    // CF
+    adjustYAMLDocument("mta.yaml", (yaml) => {
+      for (let i = 0; i < yaml.get("resources").items.length; i++) {
+        const resource = yaml.get("resources").items[i];
+        if (resource.getIn(["parameters", "service"]) === "xsuaa" && resource.getIn(["parameters", "service-plan"]) === "application") {
+          yaml.deleteIn(["resources", i]);
+        }
+      }
+      return yaml;
+    });
+
     // TODO: Remove (cap/issue/18449)
     if (addedApps.length > 0) {
       // CF

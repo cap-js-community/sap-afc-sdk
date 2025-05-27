@@ -22,8 +22,8 @@ const Commands = {
   CDS_NODE: [`npx cds init ${project}`],
   CDS_JAVA: [`npx cds init ${project} --java`],
   INSTALL: [`cd ${project}`, "npm install ../../../"],
-  CF: ["npx afc init cf"],
-  KYMA: ["npx afc init kyma"],
+  AFC_CF: ["npx afc init cf"],
+  AFC_KYMA: ["npx afc init kyma"],
   AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
   AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
   END: [],
@@ -73,17 +73,20 @@ describe("Build", () => {
   });
 
   it("Node / CF", async () => {
-    const code = shelljs.exec(
+    const result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_NODE,
         ...Commands.INSTALL,
-        ...Commands.CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_NODE,
         ...Commands.AFC_NODE,
         ...Commands.END,
       ].join(" && "),
-    ).code;
-    expect(code).toBe(0);
+    );
+    expect(result.stderr).toBe("");
+    expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
@@ -91,17 +94,20 @@ describe("Build", () => {
   });
 
   it("Node / Kyma", async () => {
-    const code = shelljs.exec(
+    const result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_NODE,
         ...Commands.INSTALL,
-        ...Commands.KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_NODE,
         ...Commands.AFC_NODE,
         ...Commands.END,
       ].join(" && "),
-    ).code;
-    expect(code).toBe(0);
+    );
+    expect(result.stderr).toMatch(/'cds add redis' is not available for Kyma yet/);
+    expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
@@ -109,17 +115,20 @@ describe("Build", () => {
   });
 
   it("Java / CF", async () => {
-    const code = shelljs.exec(
+    const result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_JAVA,
         ...Commands.INSTALL,
-        ...Commands.CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_JAVA,
         ...Commands.AFC_JAVA,
         ...Commands.END,
       ].join(" && "),
-    ).code;
-    expect(code).toBe(0);
+    );
+    expect(result.stderr).toBe("");
+    expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
@@ -127,17 +136,20 @@ describe("Build", () => {
   });
 
   it("Java / Kyma", async () => {
-    const code = shelljs.exec(
+    const result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_JAVA,
         ...Commands.INSTALL,
-        ...Commands.KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_JAVA,
         ...Commands.AFC_JAVA,
         ...Commands.END,
       ].join(" && "),
-    ).code;
-    expect(code).toBe(0);
+    );
+    expect(result.stderr).toBe("");
+    expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
