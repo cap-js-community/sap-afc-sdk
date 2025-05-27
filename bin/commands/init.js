@@ -289,12 +289,11 @@ function processJava(target, auth) {
       yaml.setIn(["cds", "index-page", "enabled"], true);
     }
     if (!yaml.get("springdoc")) {
-      const packagesToScan = new YAML.YAMLSeq();
-      packagesToScan.flow = false;
-      packagesToScan.items.push("com.github.cap.js.community.sapafcsdk.scheduling.controllers");
-      yaml.setIn(["springdoc", "packages-to-scan"], packagesToScan);
-      yaml.setIn(["springdoc", "swagger-ui"], {
-        path: "/api-docs/api/job-scheduling/v1",
+      yaml.set("springdoc", {
+        "packages-to-scan": ["com.github.cap.js.community.sapafcsdk.scheduling.controllers"],
+        "swagger-ui": {
+          path: "/api-docs/api/job-scheduling/v1",
+        },
       });
     }
     if (!yaml.getIn(["sap-afc-sdk", "broker", "enabled"])) {

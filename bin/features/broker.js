@@ -133,7 +133,10 @@ module.exports = (options) => {
           yaml.setIn(["sap-afc-sdk", "broker", "credentialsHash"], BROKER.SBF_BROKER_CREDENTIALS_HASH[BROKER_USER]);
         }
         if (!yaml.getIn(["sap-afc-sdk", "broker", "endpoints"])) {
-          yaml.setIn(["sap-afc-sdk", "broker", "endpoints"], BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints);
+          yaml.setIn(
+            ["sap-afc-sdk", "broker", "endpoints"],
+            BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints,
+          );
         }
         if (!yaml.getIn(["sap-afc-sdk", "broker", "credential-types"])) {
           yaml.setIn(

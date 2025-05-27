@@ -49,6 +49,7 @@ const Files = {
     ".cdsrc.json",
     "srv/pom.xml",
     "srv/src/main/resources/application.yaml",
+    "srv/src/main/java/customer/afcsdk/ApplicationConfig.java",
     "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java",
     "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java",
     "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java",

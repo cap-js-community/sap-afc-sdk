@@ -433,6 +433,20 @@ cds:
 `;
 
 exports[`Build Java / CF 8`] = `
+"package customer.afcsdk;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration;
+import org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableAutoConfiguration(exclude = { ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
+public class ApplicationConfig {}
+"
+`;
+
+exports[`Build Java / CF 9`] = `
 "package customer.afcsdk.scheduling;
 
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
@@ -477,7 +491,7 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 "
 `;
 
-exports[`Build Java / CF 9`] = `
+exports[`Build Java / CF 10`] = `
 "package customer.afcsdk.scheduling;
 
 import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
@@ -518,7 +532,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 "
 `;
 
-exports[`Build Java / CF 10`] = `
+exports[`Build Java / CF 11`] = `
 "package customer.afcsdk.scheduling;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -581,7 +595,7 @@ public class SchedulingProviderHandlerTest {
 "
 `;
 
-exports[`Build Java / CF 11`] = `
+exports[`Build Java / CF 12`] = `
 "_schema-version: 3.3.0
 ID: afcsdk
 version: 1.0.0-SNAPSHOT
@@ -1231,6 +1245,20 @@ cds:
 `;
 
 exports[`Build Java / Kyma 8`] = `
+"package customer.afcsdk;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.servicebroker.autoconfigure.web.ServiceBrokerAutoConfiguration;
+import org.springframework.cloud.servicebroker.autoconfigure.web.servlet.ServiceBrokerWebMvcAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableAutoConfiguration(exclude = { ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
+public class ApplicationConfig {}
+"
+`;
+
+exports[`Build Java / Kyma 9`] = `
 "package customer.afcsdk.scheduling;
 
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
@@ -1275,7 +1303,7 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 "
 `;
 
-exports[`Build Java / Kyma 9`] = `
+exports[`Build Java / Kyma 10`] = `
 "package customer.afcsdk.scheduling;
 
 import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
@@ -1316,7 +1344,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 "
 `;
 
-exports[`Build Java / Kyma 10`] = `
+exports[`Build Java / Kyma 11`] = `
 "package customer.afcsdk.scheduling;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -1379,7 +1407,7 @@ public class SchedulingProviderHandlerTest {
 "
 `;
 
-exports[`Build Java / Kyma 11`] = `
+exports[`Build Java / Kyma 12`] = `
 "apiVersion: v2
 name: afcsdk
 description: A simple CAP project.
@@ -1419,7 +1447,7 @@ dependencies:
 "
 `;
 
-exports[`Build Java / Kyma 12`] = `
+exports[`Build Java / Kyma 13`] = `
 "# yaml-language-server: $schema=./values.schema.json
 
 global:
@@ -1558,7 +1586,7 @@ cloud-logging:
 "
 `;
 
-exports[`Build Java / Kyma 13`] = `
+exports[`Build Java / Kyma 14`] = `
 "_schema-version: '1.0'
 repository: afcsdk.common.repositories.cloud.sap
 tag: latest
