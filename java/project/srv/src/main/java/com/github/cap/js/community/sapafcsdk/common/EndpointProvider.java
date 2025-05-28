@@ -23,7 +23,7 @@ public class EndpointProvider {
   private Environment env;
 
   @Autowired
-  private AfcSdkProperties afcsdkProperties;
+  private AfcSdkProperties afcSdkProperties;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -35,8 +35,8 @@ public class EndpointProvider {
       return this._serverUrl;
     }
     String serverUrl = null;
-    if (afcsdkProperties.getEndpoints() != null) {
-      serverUrl = afcsdkProperties.getEndpoints().getServer();
+    if (afcSdkProperties.getEndpoints() != null) {
+      serverUrl = afcSdkProperties.getEndpoints().getServer();
     }
     if (serverUrl != null && !serverUrl.isEmpty()) {
       return this._serverUrl = serverUrl;
@@ -66,8 +66,8 @@ public class EndpointProvider {
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
       return this._approuterUrl = approuterEndpoint;
     }
-    if (afcsdkProperties.getEndpoints() != null) {
-      approuterEndpoint = afcsdkProperties.getEndpoints().getApprouter();
+    if (afcSdkProperties.getEndpoints() != null) {
+      approuterEndpoint = afcSdkProperties.getEndpoints().getApprouter();
     }
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
       return this._approuterUrl = approuterEndpoint;
@@ -102,10 +102,9 @@ public class EndpointProvider {
     return "*." + this.approuterDomain();
   }
 
-  public String approuterTenantUrl(EventContext eventContext) {
+  public String approuterTenantUrl(UserInfo userInfo) {
     if (env.getProperty("cds.multi-tenancy.endpoint.enabled", "false").equals("true")) {
       try {
-        UserInfo userInfo = eventContext.getUserInfo();
         String subdomain = (String) userInfo.getClass().getMethod("getSubDomain").invoke(userInfo);
         if (subdomain != null && !subdomain.isEmpty()) {
           String separator = env.getProperty("cds.multi-tenancy.app-ui.tenant-separator", ".");

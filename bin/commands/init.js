@@ -259,29 +259,30 @@ function processJava(target, auth) {
 
   // Application
   adjustYAMLAllDocuments("srv/src/main/resources/application.yaml", (yamls) => {
-    if (process.env.APPROUTER_URL || process.env.SERVER_URL) {
-      let yaml = yamls.find((yaml) => yaml.getIn(["spring", "config.activate.on-profile"]) === "cloud");
-      if (!yaml) {
-        yaml = new YAML.Document();
-        yaml.setIn(["spring", "config.activate.on-profile"], "cloud");
-        yamls.unshift(yaml);
+    let yaml = yamls.find((yaml) => yaml.getIn(["spring", "config.activate.on-profile"]) === "cloud");
+    if (!yaml) {
+      yaml = new YAML.Document();
+      yaml.setIn(["spring", "config.activate.on-profile"], "cloud");
+      yamls.unshift(yaml);
+    }
+    if (yaml.getIn(["sap-afc-sdk", "ui", "enabled"]) === undefined) {
+      yaml.setIn(["sap-afc-sdk", "ui", "enabled"], true);
+    }
+    if (
+      (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
+      (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))
+    ) {
+      if (!yaml.getIn(["sap-afc-sdk", "endpoints"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints"], new YAML.YAMLMap());
       }
-      if (
-        (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) ||
-        (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"]))
-      ) {
-        if (!yaml.getIn(["sap-afc-sdk", "endpoints"])) {
-          yaml.setIn(["sap-afc-sdk", "endpoints"], new YAML.YAMLMap());
-        }
-        if (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) {
-          yaml.setIn(["sap-afc-sdk", "endpoints", "approuter"], process.env.APPROUTER_URL);
-        }
-        if (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"])) {
-          yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
-        }
+      if (process.env.APPROUTER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "approuter"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints", "approuter"], process.env.APPROUTER_URL);
+      }
+      if (process.env.SERVER_URL && !yaml.getIn(["sap-afc-sdk", "endpoints", "server"])) {
+        yaml.setIn(["sap-afc-sdk", "endpoints", "server"], process.env.SERVER_URL);
       }
     }
-    let yaml = yamls.find((yaml) => !yaml.getIn(["spring", "config.activate.on-profile"]));
+    yaml = yamls.find((yaml) => !yaml.getIn(["spring", "config.activate.on-profile"]));
     if (!yaml) {
       yaml = new YAML.Document();
       yamls.unshift(yaml);

@@ -1,10 +1,10 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.index;
+package com.github.cap.js.community.sapafcsdk.index;
 
 import com.sap.cds.adapter.IndexContentProvider;
 import com.sap.cds.adapter.IndexContentProviderFactory;
 import java.io.PrintWriter;
 
-public class WSIndexContentProviderFactory implements IndexContentProviderFactory {
+public class WsIndexContentProviderFactory implements IndexContentProviderFactory {
 
   @Override
   public IndexContentProvider create() {
@@ -32,6 +32,11 @@ public class WSIndexContentProviderFactory implements IndexContentProviderFactor
     @Override
     public void writeContent(PrintWriter writer, String contextPath) {
       writer.print(HEADER);
+    }
+
+    @Override
+    public int order() {
+      return -10;
     }
   }
 }

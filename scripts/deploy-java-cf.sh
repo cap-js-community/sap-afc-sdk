@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd temp/afcsdkjava
-mbt build
-cf deploy mta_archives/afcsdkjava_1.0.0.mtar
+cd temp/afcjdk
+# mbt build
+cf deploy mta_archives/afcjdk_1.0.0-SNAPSHOT.mtar

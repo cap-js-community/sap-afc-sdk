@@ -32,23 +32,23 @@ jobs:
           cache: maven
       - run: npm ci
       - name: Setup CDS project
-        run: npx cds init afcsdkjava && cd afcsdkjava && npm i
+        run: npx cds init afcjdk && cd afcjdk && npm i
       - name: Install SDK
         run: npm i github:cap-js-community/sap-afc-sdk
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
       - name: Boostrap SDK
         run: npx afc init cf
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
       - name: Add SDK features
         run: npx afc add -a app,broker,stub,mock,sample,test,http
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
           BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
       - name: Unit Test
         run: npm test
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
       - name: Setup CF
@@ -62,10 +62,10 @@ jobs:
           space: ${{ secrets.CF_SPACE }}
       - name: Install MBT
         run: npm i mbt
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
       - name: Build MTA
         run: npx mbt build
-        working-directory: ./afcsdkjava
+        working-directory: ./afcjdk
       - name: CF deploy
-        run: cf deploy ./mta_archives/afcsdkjava_1.0.0.mtar -f --version-rule ALL
-        working-directory: ./afcsdkjava
+        run: cf deploy ./mta_archives/afcjdk_1.0.0.mtar -f --version-rule ALL
+        working-directory: ./afcjdk

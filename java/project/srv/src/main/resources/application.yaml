@@ -43,9 +43,11 @@ sap-afc-sdk:
 spring:
   config.activate.on-profile: cloud
 sap-afc-sdk:
+  ui:
+    enabled: true
   endpoints:
-    approuter: https://afcsdkjava-approuter-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
-    server: https://afcsdkjava-srv-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
+    approuter: https://afcjdk-approuter-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
+    server: https://afcjdk-srv-afc-sdk-dev.c-589f01f.stage.kyma.ondemand.com
 ---
 spring:
   config.activate.on-profile: default

@@ -726,6 +726,8 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` section:
 
+- `ui: Object`: UI configuration. Default `{}`
+  - `enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
 - `endpoints: Object`: Endpoint configuration. Default `{}`
   - `endpoints.approuter: String`: Url of approuter. Default `null` (derived from conventions `<app>-srv`)
   - `endpoints.server: String`: Url of server. Default `null` (derived from environment, e.g. CF)

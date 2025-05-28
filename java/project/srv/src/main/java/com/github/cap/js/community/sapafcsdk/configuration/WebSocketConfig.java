@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
   private WebSocketHandler webSocketHandler;
 
   @Autowired
-  private AfcSdkProperties afcsdkProperties;
+  private AfcSdkProperties afcSdkProperties;
 
   @Autowired
   private CdsModel cdsModel;
@@ -41,7 +41,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         if (!path.isEmpty()) {
           List<String> paths = new ArrayList<String>();
           paths.add(WS_PATH + "/" + path);
-          for (String app : afcsdkProperties.getApps()) {
+          for (String app : afcSdkProperties.getUi().getApps()) {
             paths.add("/" + app + "/webapp" + WS_PATH + "/" + path);
           }
           registry.addHandler(webSocketHandler, paths.toArray(new String[0])).setAllowedOrigins("*");

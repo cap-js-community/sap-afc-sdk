@@ -418,6 +418,8 @@ spring:
 spring:
   config.activate.on-profile: cloud
 sap-afc-sdk:
+  ui:
+    enabled: true
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
     server: https://afcsdk-srv.cloud.sap
@@ -685,7 +687,7 @@ modules:
         - name: afcsdkscheduling.monitoring.job
           artifacts:
             - scheduling.monitoring.job.zip
-          target-path: app/
+          target-path: resources
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -1218,6 +1220,8 @@ spring:
 spring:
   config.activate.on-profile: cloud
 sap-afc-sdk:
+  ui:
+    enabled: true
   endpoints:
     approuter: https://afcsdk-approuter.cloud.sap
     server: https://afcsdk-srv.cloud.sap

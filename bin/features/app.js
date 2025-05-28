@@ -42,7 +42,7 @@ module.exports = () => {
       }
 
       const srcPath = path.join(__dirname, "../../", config.appRoot, app);
-      copyFolder(srcPath, appPath);
+      copyFolder(srcPath, appPath, Exclude);
 
       adjustJSON(path.join(config.appRoot, app, "webapp/manifest.json"), (json) => {
         if (json["sap.app"]?.id && !json["sap.app"].id.startsWith(`${name}.`)) {
@@ -152,7 +152,7 @@ module.exports = () => {
                   yaml.createNode({
                     name: `${name}${app}`,
                     artifacts: [`${app}.zip`],
-                    "target-path": "app/",
+                    "target-path": "resources",
                   }),
                 );
               }

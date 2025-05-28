@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "sap-afc-sdk")
 public class AfcSdkProperties {
 
+  public static List<String> APPS = List.of("scheduling.monitoring.job");
+
   private Endpoints endpoints;
-  private Boolean broker = false;
   private MockProcessing mockProcessing;
   private SyncJob syncJob;
   private TenantCache tenantCache;
-  private List<String> apps = List.of("scheduling.monitoring.job");
+  private Ui ui = new Ui();
 
   public Endpoints getEndpoints() {
     return endpoints;
@@ -24,14 +25,6 @@ public class AfcSdkProperties {
 
   public void setEndpoints(Endpoints endpoints) {
     this.endpoints = endpoints;
-  }
-
-  public Boolean isBroker() {
-    return broker;
-  }
-
-  public void setBroker(Boolean broker) {
-    this.broker = broker;
   }
 
   public MockProcessing getMockProcessing() {
@@ -58,12 +51,12 @@ public class AfcSdkProperties {
     this.tenantCache = tenantCache;
   }
 
-  public List<String> getApps() {
-    return apps;
+  public Ui getUi() {
+    return ui;
   }
 
-  public void setApps(List<String> apps) {
-    this.apps = apps;
+  public void setUi(Ui ui) {
+    this.ui = ui;
   }
 
   public static class Endpoints {
@@ -151,6 +144,28 @@ public class AfcSdkProperties {
 
     public void setCron(String cron) {
       this.cron = cron;
+    }
+  }
+
+  public static class Ui {
+    private boolean enabled = false;
+
+    private List<String> apps = APPS;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public List<String> getApps() {
+      return apps;
+    }
+
+    public void setApps(List<String> apps) {
+      this.apps = apps;
     }
   }
 }
