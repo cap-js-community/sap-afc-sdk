@@ -46,7 +46,10 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     for (Job job : jobs) {
       if (job.getLink() == null) {
         job.setLink(
-          endpointProvider.approuterTenantUrl(context.getUserInfo()) + "/launchpad.html#Job-monitor&/Job(" + job.getId() + ")"
+          endpointProvider.approuterTenantUrl(context.getUserInfo()) +
+          "/launchpad.html#Job-monitor&/Job(" +
+          job.getId() +
+          ")"
         );
       }
     }

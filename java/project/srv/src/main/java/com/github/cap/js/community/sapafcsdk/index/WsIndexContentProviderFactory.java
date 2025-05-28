@@ -36,7 +36,7 @@ public class WsIndexContentProviderFactory implements IndexContentProviderFactor
 
     @Override
     public int order() {
-      return -10;
+      return -20;
     }
   }
 }

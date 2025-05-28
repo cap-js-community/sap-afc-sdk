@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
-import com.sap.cds.services.EventContext;
 import com.sap.cds.services.request.UserInfo;
 import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Matcher;

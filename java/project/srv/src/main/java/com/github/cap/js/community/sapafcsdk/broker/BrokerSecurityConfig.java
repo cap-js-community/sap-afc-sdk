@@ -1,7 +1,5 @@
 package com.github.cap.js.community.sapafcsdk.broker;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +23,13 @@ public class BrokerSecurityConfig {
   private BrokerAuthenticationProvider brokerAuthenticationProvider;
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain brokerFilterChain(HttpSecurity http) throws Exception {
     return http
       .csrf(AbstractHttpConfigurer::disable)
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .securityMatcher("/broker/**")
       .authenticationManager(authenticationManager())
-      .authorizeHttpRequests(request -> request.requestMatchers(antMatcher("/broker/**")).authenticated())
+      .authorizeHttpRequests(request -> request.anyRequest().authenticated())
       .httpBasic(Customizer.withDefaults())
       .build();
   }

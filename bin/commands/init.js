@@ -207,7 +207,10 @@ function processNode(target, auth) {
   adjustYAMLDocument("containerize.yaml", (yaml) => {
     for (const app of appStubs) {
       yaml.get("before-all").items.forEach((line, index) => {
-        if (line.value.includes(`app/${app}`) && !line.value.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
+        if (
+          line.value.includes(`app/${app}`) &&
+          !line.value.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)
+        ) {
           yaml.setIn(
             ["before-all", index],
             line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),

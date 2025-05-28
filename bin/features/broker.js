@@ -8,8 +8,8 @@ const cds = require("@sap/cds");
 const { projectName, isJava, generateHashBrokerPassword, adjustYAMLAllDocuments } = require("../common/util");
 const YAML = require("yaml");
 
-const BROKER_PATH = path.join(process.cwd(), "./srv/broker.json");
-const CATALOG_PATH = path.join(process.cwd(), "./srv/catalog.json");
+const BROKER_PATH = path.join(process.cwd(), "srv/broker.json");
+const CATALOG_PATH = path.join(process.cwd(), "srv/catalog.json");
 
 const APP_NAME = projectName() ?? "afc-scheduling-provider";
 

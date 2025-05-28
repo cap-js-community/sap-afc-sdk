@@ -1,14 +1,12 @@
 package com.github.cap.js.community.sapafcsdk.index;
 
+import static com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties.APPS;
+
 import com.sap.cds.adapter.IndexContentProvider;
 import com.sap.cds.adapter.IndexContentProviderFactory;
 import com.sap.cds.services.runtime.CdsRuntime;
 import com.sap.cds.services.runtime.CdsRuntimeAware;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-
 import java.io.PrintWriter;
-
-import static com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties.APPS;
 
 public class AppIndexContentProviderFactory implements IndexContentProviderFactory, CdsRuntimeAware {
 
@@ -56,7 +54,8 @@ public class AppIndexContentProviderFactory implements IndexContentProviderFacto
     public void writeContent(PrintWriter writer, String contextPath) {
       writer.print(ENDPOINT_START);
       writer.printf(ENDPOINT, contextPath + "/launchpad.html", "/launchpad.html");
-      for (String app : this.runtime.getEnvironment().getProperty("sap-afc-sdk.ui.apps", String[].class, APPS.toArray(new String[0]))) {
+      for (String app : this.runtime.getEnvironment()
+        .getProperty("sap-afc-sdk.ui.apps", String[].class, APPS.toArray(new String[0]))) {
         writer.printf(ENDPOINT, contextPath + "/" + app + "/webapp/index.html", "/" + app);
       }
       writer.print(ENDPOINT_END);
@@ -64,7 +63,7 @@ public class AppIndexContentProviderFactory implements IndexContentProviderFacto
 
     @Override
     public int order() {
-      return -100;
+      return -40;
     }
   }
 }

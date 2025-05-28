@@ -21,7 +21,7 @@ public class ApiIndexContentProviderFactory implements IndexContentProviderFacto
     private static final String HEADER =
       "" +
       "                <h3 class=\"header\">\n" +
-      "                    <a href=\"/api/job-scheduling/v1\"><span>/api/job-scheduling/v1</span></a><span>/</span><a href=\"/api-docs/api/job-scheduling/v1\"><span class=\"metadata\">Open API</span></a>\n" +
+      "                    <a href=\"/api/job-scheduling/v1\"><span>/api/job-scheduling/v1</span></a><span>/</span><a target=\"_blank\" href=\"/api-docs/api/job-scheduling/v1\"><span class=\"metadata\">Open API</span></a>\n" +
       "                </h3>\n";
 
     private static final String ENDPOINT_START = "" + "                <ul>\n";
@@ -30,7 +30,7 @@ public class ApiIndexContentProviderFactory implements IndexContentProviderFacto
       "" +
       "                    <li>\n" +
       "                        <div><a href=\"%s\"><span>%s</span></a></div>\n" +
-      "                        <div><a href=\"/api-docs/api/job-scheduling/v1\"><span class=\"metadata\">Open API</span></a></div>\n" +
+      "                        <div><a target=\"_blank\" href=\"/api-docs/api/job-scheduling/v1\"><span class=\"metadata\">Open API</span></a></div>\n" +
       "                    </li>\n";
 
     private static final String ENDPOINT_END = "" + "                </ul>\n";
@@ -55,7 +55,7 @@ public class ApiIndexContentProviderFactory implements IndexContentProviderFacto
 
     @Override
     public int order() {
-      return -10;
+      return -30;
     }
   }
 }

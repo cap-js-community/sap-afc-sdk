@@ -131,7 +131,10 @@ module.exports = () => {
     adjustYAMLDocument("mta.yaml", (yaml) => {
       for (let i = 0; i < yaml.get("resources").items.length; i++) {
         const resource = yaml.get("resources").items[i];
-        if (resource.getIn(["parameters", "service"]) === "xsuaa" && resource.getIn(["parameters", "service-plan"]) === "application") {
+        if (
+          resource.getIn(["parameters", "service"]) === "xsuaa" &&
+          resource.getIn(["parameters", "service-plan"]) === "application"
+        ) {
           yaml.deleteIn(["resources", i]);
         }
       }

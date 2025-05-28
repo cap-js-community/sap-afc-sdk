@@ -148,6 +148,7 @@ public class AfcSdkProperties {
   }
 
   public static class Ui {
+
     private boolean enabled = false;
 
     private List<String> apps = APPS;
