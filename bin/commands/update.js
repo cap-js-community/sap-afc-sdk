@@ -81,7 +81,7 @@ function processJava(version) {
     } else {
       console.error(`Failed to install ${plugin.artifactId} version ${version} to local Maven repository.`);
       // eslint-disable-next-line n/no-process-exit
-      process.exit(-1)
+      process.exit(-1);
     }
   }
   // POM

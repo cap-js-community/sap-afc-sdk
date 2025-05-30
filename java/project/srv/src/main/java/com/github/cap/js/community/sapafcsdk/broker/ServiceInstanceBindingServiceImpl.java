@@ -28,7 +28,9 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
     UUID bindingId = UUID.fromString(request.getBindingId());
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
     return Mono.justOrEmpty(xsuaaClient.getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId)))
-      .map(serviceInstance -> createBindingResponse(null, true))
+      .flatMap(existing ->
+        generateCredentials(serviceInstanceId, bindingId).map(credentials -> createBindingResponse(credentials, true))
+      )
       .switchIfEmpty(createNewBinding(serviceInstanceId, bindingId));
   }
 
