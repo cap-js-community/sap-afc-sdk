@@ -45,21 +45,15 @@ Examples:
     }
   },
   process: function (options) {
-    try {
-      const version = require(path.join(__dirname, "../../package.json")).version;
-      console.log("###", process.cwd(), isJava(options));
-      process.exit(-1);
-      if (!isJava(options)) {
-        processNode(version);
-      } else {
-        processJava(version);
-      }
-      processCommon(version);
-      return true;
-    } catch (err) {
-      console.error("Project update failed: ", err.message);
+    const version = require(path.join(__dirname, "../../package.json")).version;
+    throw new Error("###, " + process.cwd() + "#" + isJava(options));
+    if (!isJava(options)) {
+      processNode(version);
+    } else {
+      processJava(version);
     }
-    return false;
+    processCommon(version);
+    return true;
   },
 };
 
