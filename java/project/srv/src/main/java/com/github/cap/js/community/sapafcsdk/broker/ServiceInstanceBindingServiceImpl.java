@@ -27,9 +27,13 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   ) {
     UUID bindingId = UUID.fromString(request.getBindingId());
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
-    return Mono.justOrEmpty(xsuaaClient.getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId)))
-      .flatMap(existing ->
-        generateCredentials(serviceInstanceId, bindingId).map(credentials -> createBindingResponse(credentials, true))
+    return xsuaaClient
+      .getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId))
+      .map(xsuaaData ->
+        (CreateServiceInstanceBindingResponse) CreateServiceInstanceAppBindingResponse.builder()
+          .credentials(xsuaaData.credentials())
+          .bindingExisted(true)
+          .build()
       )
       .switchIfEmpty(createNewBinding(serviceInstanceId, bindingId));
   }
@@ -51,12 +55,11 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   public Mono<GetServiceInstanceBindingResponse> getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
     UUID bindingId = UUID.fromString(request.getBindingId());
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
-
     return xsuaaClient
       .getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId))
-      .map(xsuaaProperties ->
+      .map(xsuaaData ->
         (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
-          .credentials(xsuaaProperties.credentials())
+          .credentials(xsuaaData.credentials())
           .build()
       )
       .switchIfEmpty(Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId))));
@@ -65,10 +68,10 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   private Mono<Map<String, Object>> generateCredentials(UUID serviceInstanceId, UUID bindingId) {
     return xsuaaClient
       .getXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
-      .map(xsuaaProperties ->
+      .map(xsuaaData ->
         Map.of(
           "credentials",
-          Map.of("client-id", xsuaaProperties.getClientId(), "client-secret", xsuaaProperties.getClientSecret()),
+          Map.of("client-id", xsuaaData.getClientId(), "client-secret", xsuaaData.getClientSecret()),
           "endpoints",
           brokerProperties.getEndpoints(),
           "service-instance-id",

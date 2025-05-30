@@ -8,7 +8,8 @@
     "@sap/cds-dk": "^8.9.0"
   },
   "dependencies": {
-    "@cap-js-community/sap-afc-sdk": "../../"
+    "@cap-js-community/sap-afc-sdk": "../../",
+    "clean": "^4.0.2"
   },
   "scripts": {
     "clean": "mvn clean install",

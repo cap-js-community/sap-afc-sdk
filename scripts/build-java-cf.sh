@@ -11,7 +11,7 @@ mkdir -p temp
 cd temp
 npx cds init afcjdk --java
 cd afcjdk
-npm install ../../../ # npm install github:cap-js-community/sap-afc-sdk
+npm install github:cap-js-community/sap-afc-sdk#fb-java
 npx afc init cf
 npx afc add -a app,broker,stub,mock,sample,test,http
 npm test
