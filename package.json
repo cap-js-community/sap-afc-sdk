@@ -62,7 +62,7 @@
     "java:update": "npm run test:java && node scripts/java-plugin",
     "java:check": "npm run test:java && node scripts/java-plugin -c",
     "audit": "npm audit --only=prod",
-    "update": "npm run upgrade-lock && npm run i18n:pull && npm run lint && npm run openapi && npm test && npm run java:update && npm run test:java && npm run test:bin"
+    "all": "npm run upgrade-lock && npm run i18n:pull && npm run lint && npm run openapi && npm test && npm run java:update && npm run test:java && npm run test:bin"
   },
   "dependencies": {
     "@cap-js-community/event-queue": "^1.10.4",
