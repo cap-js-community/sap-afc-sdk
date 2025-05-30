@@ -224,24 +224,29 @@ function processNode(target, auth) {
 
 function processJava(target, auth) {
   // cdsrc
-  if (
-    !adjustJSON(".cdsrc.json", (json) => {
-      if (json.requires?.outbox?.kind !== "persistent-outbox") {
-        json.requires ??= {};
-        json.requires.outbox ??= {};
-        json.requires.outbox.kind = "persistent-outbox";
-      }
-    })
-  ) {
-    adjustJSON("package.json", (json) => {
+  const cdsrc = adjustJSON(".cdsrc.json", (json) => {
+    if (json.requires?.outbox?.kind !== "persistent-outbox") {
+      json.requires ??= {};
+      json.requires.outbox ??= {};
+      json.requires.outbox.kind = "persistent-outbox";
+    }
+  });
+  adjustJSON("package.json", (json) => {
+    if (!cdsrc) {
       if (json.cds?.requires?.outbox?.kind !== "persistent-outbox") {
         json.cds ??= {};
         json.cds.requires ??= {};
         json.cds.requires.outbox ??= {};
         json.cds.requires.outbox.kind = "persistent-outbox";
       }
-    });
-  }
+    }
+    if (!json.scripts?.postinstall) {
+      json.scripts ??= {};
+      json.scripts.postinstall = "afc update";
+    } else if (!json.scripts.postinstall.includes("afc update")) {
+      json.scripts.postinstall += " && afc update";
+    }
+  });
 
   // POM
   adjustXML("srv/pom.xml", (xml) => {
