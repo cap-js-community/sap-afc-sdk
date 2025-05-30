@@ -18,6 +18,7 @@ public class AfcSdkProperties {
   private SyncJob syncJob;
   private TenantCache tenantCache;
   private Ui ui = new Ui();
+  private Api api = new Api();
 
   public Endpoints getEndpoints() {
     return endpoints;
@@ -57,6 +58,14 @@ public class AfcSdkProperties {
 
   public void setUi(Ui ui) {
     this.ui = ui;
+  }
+
+  public Api getApi() {
+    return api;
+  }
+
+  public void setApi(Api api) {
+    this.api = api;
   }
 
   public static class Endpoints {
@@ -167,6 +176,19 @@ public class AfcSdkProperties {
 
     public void setApps(List<String> apps) {
       this.apps = apps;
+    }
+  }
+
+  public static class Api {
+
+    private Map<String, Object> cors;
+
+    public Map<String, Object> getCors() {
+      return cors;
+    }
+
+    public void setCors(Map<String, Object> cors) {
+      this.cors = cors;
     }
   }
 }

@@ -212,30 +212,31 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` section:
 
-- `endpoints: Object`: Endpoint configuration. Default `{}`
-  - `endpoints.approuter: String`: Url of approuter. Default `null` (derived from conventions `<app>-srv`)
-  - `endpoints.server: String`: Url of server. Default `null` (derived from environment, e.g. CF)
-- `api: Object`: API configuration. Default `{}`
-  - `api.csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default `true` for default configuration
-  - `api.cors: Object | Boolean`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `true` for default configuration
-- `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default `{}`
-  - `ui.path: String`: Path to the served UI5 application. Default `''`
-  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default `true`
-  - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default `true`
-    - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default `true`
-  - `ui.launchpad: Boolean`: Serve launchpad. Default `true`
-  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately, if no Launchpad is served. Default `true`
-- `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default `false` and `true` in `production`
-- `mockProcessing: Boolean | Object`: Activate mocked job processing. Default `false`
-  - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
-  - `mockProcessing.max: Number`: Maximum processing time in seconds. Default `10`
-  - `mockProcessing.default: String`: Default processing status. Default `completed`
-  - `mockProcessing.status: Object`: Status distribution values. Default `{}`
-    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default `0`
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default `0`
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default `0`
-    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default `0`
-- `config: Object`: Advanced SDK configuration. See [config.json](./config.json)
+- `endpoints: Object`: Endpoint configuration. Default is `{}`
+  - `endpoints.approuter: String`: Url of approuter. Default is `null` (derived from conventions `<app>-srv`)
+  - `endpoints.server: String`: Url of server. Default is `null` (derived from environment, e.g. CF)
+- `api: Object`: API configuration on `/api` paths. Default see below
+  - `api.cors: Boolean | Object`: Cross-Origin Resource Sharing (CORS) configuration for [cors](https://github.com/expressjs/cors) module on `/api` paths. Default is `{ origin: true }`
+    - `api.cors.origin: Boolean | String | String[]`: Cross-Origin Resource Sharing (CORS) origin configuration. Default is `true` (allow approuter url)
+  - `api.csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default is `false`
+- `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default is `{}`
+  - `ui.path: String`: Path to the served UI5 application. Default is `''`
+  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default is `true`
+  - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default is `true`
+    - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
+  - `ui.launchpad: Boolean`: Serve launchpad. Default is `true`
+  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately, if no Launchpad is served. Default is `true`
+- `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default is `false` and `true` in `production`
+- `mockProcessing: Boolean | Object`: Activate mocked job processing. Default is `false`
+  - `mockProcessing.min: Number`: Minimum processing time in seconds. Default is `0`
+  - `mockProcessing.max: Number`: Maximum processing time in seconds. Default is `10`
+  - `mockProcessing.default: String`: Default processing status. Default is `completed`
+  - `mockProcessing.status: Object`: Status distribution values. Default is `{}`
+    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default is `0`
+    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default is `0`
+- `config: Object`: Advanced SDK configuration. See [config.json](./config.json). Default is `{}`
 
 ### Implement
 
@@ -726,31 +727,37 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` section:
 
-- `ui: Object`: UI configuration. Default `{}`
-  - `enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
-- `endpoints: Object`: Endpoint configuration. Default `{}`
-  - `endpoints.approuter: String`: Url of approuter. Default `null` (derived from conventions `<app>-srv`)
-  - `endpoints.server: String`: Url of server. Default `null` (derived from environment, e.g. CF)
-- `broker: Object`: Service broker configuration. Default `{}`
-  - `name: String`: Name of the broker. Default is `<project name>`
-  - `enabled: Boolean`: Is broker enabled. Default is `false`
-  - `user: String`: Name of the broker user. Default is `broker-user`
-  - `credentialsHash: String`: Credentials hash of the broker user. Default is generated
-  - `endpoints: Object`: Endpoints of the broker. Default is `{ api: "/api", job-scheduling-v1: "/api/job-scheduling/v1" }`
-  - `credential-types: String[]`: Credential types of the broker. Default is `["binding-secret", "x509"]`
-- `mockProcessing: Object`: Activate mocked job processing. Default `{}`
-  - `mockProcessing.min: Number`: Minimum processing time in seconds. Default `0`
-  - `mockProcessing.max: Number`: Maximum processing time in seconds. Default `10`
-  - `mockProcessing.default: String`: Default processing status. Default `completed`
-  - `mockProcessing.status: Object`: Status distribution values. Default `{}`
-    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default `0`
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default `0`
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default `0`
-    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default `0`
-- `syncJob: Object`: Sync job configuration. Default `{}`
-  - `cron: String`: Sync job cron interval. Default `0 */1 * * * *`
-- `tenantCache: Object`: Tenant cache configuration. Default `{}`
-  - `cron: String`: Tenant cache invalidation cron interval. Default `0 */30 * * * *`
+- `endpoints: Object`: Endpoint configuration. Default is `{}`
+  - `endpoints.approuter: String`: Url of approuter. Default is `null` (derived from conventions `<app>-srv`)
+  - `endpoints.server: String`: Url of server. Default is `null` (derived from environment, e.g. CF)
+- `api: Object`: API configuration on `/api` paths. Default see below
+  - `api.cors: Object`: Cross-Origin Resource Sharing (CORS) configuration cors module on `/api` paths. Default is `{ origin: true }`
+    - `api.cors.origin: Boolean | String | String[]`: Cross-Origin Resource Sharing (CORS) origin configuration. Default is `true` (allow approuter url)
+    - `api.cors.methods: String | String[]`: Cross-Origin Resource Sharing (CORS) allow methods configuration. Default is ``
+    - `api.cors.heqaders: String | String[]`: Cross-Origin Resource Sharing (CORS) allow headers configuration. Default is ``
+    - `api.cors.credentials: Boolean`: Cross-Origin Resource Sharing (CORS) allow credentials configuration. Default is `true`
+- `ui: Object`: UI configuration. Default is `{}`
+  - `ui.enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
+- `broker: Object`: Service broker configuration. Default is `{}`
+  - `broker.name: String`: Name of the broker. Default is `<project name>`
+  - `broker.enabled: Boolean`: Is broker enabled. Default is `false`
+  - `broker.user: String`: Name of the broker user. Default is `broker-user`
+  - `broker.credentialsHash: String`: Credentials hash of the broker user. Default is generated
+  - `broker.endpoints: Object`: Endpoints of the broker. Default is `{ api: "/api", job-scheduling-v1: "/api/job-scheduling/v1" }`
+  - `broker.credential-types: String[]`: Credential types of the broker. Default is `["binding-secret", "x509"]`
+- `mockProcessing: Object`: Activate mocked job processing. Default is `{}`
+  - `mockProcessing.min: Number`: Minimum processing time in seconds. Default is `0`
+  - `mockProcessing.max: Number`: Maximum processing time in seconds. Default is `10`
+  - `mockProcessing.default: String`: Default processing status. Default is `completed`
+  - `mockProcessing.status: Object`: Status distribution values. Default is `{}`
+    - `mockProcessing.status.completed: Number`: Completed status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default is `0`
+    - `mockProcessing.status.failed: Number`: Failed status distribution value. Default is `0`
+- `syncJob: Object`: Sync job configuration. Default see below
+  - `cron: String`: Sync job cron interval. Default is `0 */1 * * * *`
+- `tenantCache: Object`: Tenant cache configuration. Default see below
+  - `cron: String`: Tenant cache invalidation cron interval. Default is `0 */30 * * * *`
 
 ### Implement
 

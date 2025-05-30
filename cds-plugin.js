@@ -44,12 +44,10 @@ cds.on("listening", () => {
 function secureRoutes() {
   if (cds.env.requires?.["sap-afc-sdk"]?.api?.cors) {
     const corsOptions = toObject(cds.env.requires?.["sap-afc-sdk"]?.api?.cors);
-    const origin =
-      corsOptions.origin !== undefined && corsOptions.origin !== null
-        ? corsOptions.origin
-        : cds.env.requires.multitenancy
-          ? approuterUrlRegExp()
-          : approuterUrl();
+    let origin = cds.env.requires.multitenancy ? approuterUrlRegExp() : approuterUrl();
+    if (corsOptions.origin === false || typeof corsOptions.origin !== "boolean") {
+      origin = corsOptions.origin;
+    }
     cds.app.use(
       "/api",
       cors({
@@ -329,6 +327,7 @@ function toOpenApiDoc(req, service, name) {
 }
 
 let _approuterUrl;
+
 function approuterUrl() {
   if (_approuterUrl) {
     return _approuterUrl;
@@ -375,6 +374,7 @@ function approuterUrlRegExp() {
 }
 
 let _serverUrl;
+
 function serverUrl() {
   if (_serverUrl) {
     return _serverUrl;

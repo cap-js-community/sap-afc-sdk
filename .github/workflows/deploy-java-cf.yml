@@ -67,5 +67,5 @@ jobs:
         run: npx mbt build
         working-directory: ./afcjdk
       - name: CF deploy
-        run: cf deploy ./mta_archives/afcjdk_1.0.0.mtar -f --version-rule ALL
+        run: cf deploy ./mta_archives/afcjdk_1.0.0-SNAPSHOT.mtar -f --version-rule ALL
         working-directory: ./afcjdk

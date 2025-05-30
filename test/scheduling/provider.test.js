@@ -11,6 +11,8 @@ process.env.VCAP_APPLICATION = JSON.stringify({
   uris: ["sap-afc-sdk-srv.sap.com"],
 });
 
+cds.env.requires["sap-afc-sdk"].api.csp = true;
+
 process.env.PORT = 0; // Random
 
 describe("API", () => {
@@ -65,7 +67,7 @@ describe("API", () => {
         },
       });
       expect(response.headers).toMatchObject({
-        "access-control-allow-origin": "https://example.com",
+        "access-control-allow-origin": "https://sap-afc-sdk.sap.com",
         vary: "Origin",
       });
     });
