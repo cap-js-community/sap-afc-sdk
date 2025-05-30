@@ -320,10 +320,11 @@ function cfService() {
   const applicationPath = path.join(process.cwd(), "srv/src/main/resources/application.yaml");
   if (fs.existsSync(applicationPath)) {
     const content = fs.readFileSync(applicationPath, "utf8");
-    const yaml = YAML.parseAllDocuments(content)?.[0];
-    const service = yaml?.getIn(["sap-afc-sdk", "broker", "name"]);
-    if (service) {
-      return service;
+    for (const yaml of YAML.parseAllDocuments(content)) {
+      const service = yaml?.getIn(["sap-afc-sdk", "broker", "name"]);
+      if (service) {
+        return service;
+      }
     }
   }
   console.log(`No service found in broker configuration. Call 'afc add broker'`);
