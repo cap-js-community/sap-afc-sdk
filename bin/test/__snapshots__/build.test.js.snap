@@ -13,6 +13,12 @@ exports[`Build Java / CF 1`] = `
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
   },
+  "scripts": {
+    "postinstall": "afc update",
+    "start": "mvn spring-boot:run",
+    "test": "mvn test",
+    "build": "mvn cds:build"
+  },
   "cds": {
     "requires": {
       "workzone": true
@@ -20,12 +26,7 @@ exports[`Build Java / CF 1`] = `
   },
   "sapux": [
     "app/scheduling.monitoring.job"
-  ],
-  "scripts": {
-    "start": "mvn spring-boot:run",
-    "test": "mvn test",
-    "build": "mvn cds:build"
-  }
+  ]
 }"
 `;
 
@@ -209,7 +210,8 @@ exports[`Build Java / CF 5`] = `
 `;
 
 exports[`Build Java / CF 6`] = `
-"<?xml version="1.0" encoding="UTF-8" standalone="yes"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>afcsdk-parent</artifactId>
@@ -810,6 +812,12 @@ exports[`Build Java / Kyma 1`] = `
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
   },
+  "scripts": {
+    "postinstall": "afc update",
+    "start": "mvn spring-boot:run",
+    "test": "mvn test",
+    "build": "mvn cds:build"
+  },
   "cds": {
     "requires": {
       "workzone": true
@@ -817,12 +825,7 @@ exports[`Build Java / Kyma 1`] = `
   },
   "sapux": [
     "app/scheduling.monitoring.job"
-  ],
-  "scripts": {
-    "start": "mvn spring-boot:run",
-    "test": "mvn test",
-    "build": "mvn cds:build"
-  }
+  ]
 }"
 `;
 
@@ -1006,7 +1009,8 @@ exports[`Build Java / Kyma 5`] = `
 `;
 
 exports[`Build Java / Kyma 6`] = `
-"<?xml version="1.0" encoding="UTF-8" standalone="yes"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+"<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>afcsdk-parent</artifactId>

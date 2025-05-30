@@ -72,7 +72,7 @@ function processJava(version) {
     ];
     const result = shelljs.exec(`mvn ${args.join(" ")}`);
     if (result.code === 0) {
-      console.error(`Successfully installed ${plugin.artifactId} version ${version} to local Maven repository.`);
+      console.log(`Successfully installed ${plugin.artifactId} version ${version} to local Maven repository.`);
     } else {
       console.error(`Failed to install ${plugin.artifactId} version ${version} to local Maven repository.`);
       // eslint-disable-next-line n/no-process-exit
