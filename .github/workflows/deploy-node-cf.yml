@@ -1,0 +1,66 @@
+# This workflow will set up a test project based on AFC SDK for CAP Node.js and deploy to Cloud Foundry
+name: Test Deploy Node/CF
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_run:
+    workflows: ["Main CI"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_OPTIONS: --use-openssl-ca
+jobs:
+  default:
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Setup CDS project
+        run: npx cds init afcsdk && cd afcsdk && npm i
+      - name: Install SDK
+        run: npm i github:cap-js-community/sap-afc-sdk
+        working-directory: ./afcsdk
+      - name: Boostrap SDK
+        run: npx afc init cf
+        working-directory: ./afcsdk
+      - name: Add SDK features
+        run: npx afc add -a broker,stub,mock,sample,test,http
+        working-directory: ./afcsdk
+        env:
+          BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
+          BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
+      - name: Unit Test
+        run: npm test
+        working-directory: ./afcsdk
+      - name: Install CF actions
+        run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
+      - name: Setup CF
+        uses: ./.github/actions/cf-setup
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        with:
+          api: ${{ secrets.CF_API }}
+          org: ${{ secrets.CF_ORG }}
+          space: ${{ secrets.CF_SPACE }}
+      - name: Install MBT
+        run: npm i mbt
+        working-directory: ./afcsdk
+      - name: Build MTA
+        run: npx mbt build
+        working-directory: ./afcsdk
+      - name: CF deploy
+        run: cf deploy ./mta_archives/afcsdk_1.0.0.mtar -f --version-rule ALL
+        working-directory: ./afcsdk

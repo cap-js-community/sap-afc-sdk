@@ -6,7 +6,7 @@ const program = new commander.Command();
 
 const packageJSON = require("../package.json");
 
-const COMMANDS = ["init", "add", "api"];
+const COMMANDS = ["init", "update", "add", "api"];
 
 process.argv = process.argv.map((arg) => {
   return arg.toLowerCase();

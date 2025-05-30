@@ -11,6 +11,7 @@ module.exports = {
     "**/src/**/*.js",
     "**/srv/**/*.js",
     "!**/bin/**/*.js",
+    "!**/java/**/*.js",
     "!**/gen/**/*.js",
     "!**/scripts/**/*.js",
   ],
