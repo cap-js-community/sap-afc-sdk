@@ -70,7 +70,7 @@ function processJava(version) {
       `-Dversion=${version}`,
       `-Dpackaging=${plugin.packaging}`,
     ];
-    const result = shelljs.execFile("mvn", args);
+    const result = shelljs.exec(`mvn ${args.join(" ")}`);
     if (result.code === 0) {
       console.log(`Successfully installed ${plugin.artifactId} version ${version} to local Maven repository.`);
     } else {
