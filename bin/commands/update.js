@@ -47,7 +47,8 @@ Examples:
   process: function (options) {
     try {
       const version = require(path.join(__dirname, "../../package.json")).version;
-      console.error(process.cwd(), isJava(options))
+      console.log("###", process.cwd(), isJava(options));
+      process.exit(-1);
       if (!isJava(options)) {
         processNode(version);
       } else {
