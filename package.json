@@ -38,7 +38,7 @@
     "afc": "./bin/afc.js"
   },
   "scripts": {
-    "postinstall": "afc update -j",
+    "postinstall": "afc update",
     "start": "cds-serve",
     "watch": "cds watch",
     "test": "jest --silent",
