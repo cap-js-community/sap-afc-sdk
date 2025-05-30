@@ -75,7 +75,14 @@ function processJava(version) {
       `-Dversion=${version}`,
       `-Dpackaging=${plugin.packaging}`,
     ];
-    shelljs.exec(`mvn ${args.join(" ")}`);
+    const result = shelljs.exec(`mvn ${args.join(" ")}`);
+    if (result.code === 0) {
+      console.error(`Successfully installed ${plugin.artifactId} version ${version} to local Maven repository.`);
+    } else {
+      console.error(`Failed to install ${plugin.artifactId} version ${version} to local Maven repository.`);
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1)
+    }
   }
   // POM
   adjustXML("srv/pom.xml", (xml) => {
