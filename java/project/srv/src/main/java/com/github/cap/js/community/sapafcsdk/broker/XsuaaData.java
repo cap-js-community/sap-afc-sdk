@@ -1,16 +1,19 @@
 package com.github.cap.js.community.sapafcsdk.broker;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
-import java.util.Map;
 
 public class XsuaaData {
 
+  @JsonProperty("xsappname")
   private String xsappname;
+
+  @JsonProperty("url")
   private String url;
+
+  @JsonProperty("subaccountid")
   private String subaccountId;
 
-  @JsonProperty("serviceinstanceid")
+  @JsonProperty("serviceInstanceId")
   private String serviceInstanceId;
 
   @JsonProperty("clientid")
@@ -18,6 +21,45 @@ public class XsuaaData {
 
   @JsonProperty("clientsecret")
   private String clientSecret;
+
+  @JsonProperty("credential-type")
+  private String credentialType;
+
+  @JsonProperty("identityzone")
+  private String identityZone;
+
+  @JsonProperty("identityzoneid")
+  private String identityZoneId;
+
+  @JsonProperty("sburl")
+  private String sbUrl;
+
+  @JsonProperty("apiurl")
+  private String apiUrl;
+
+  @JsonProperty("tenantid")
+  private String tenantId;
+
+  @JsonProperty("tenantmode")
+  private String tenantMode;
+
+  @JsonProperty("uaadomain")
+  private String uaaDomain;
+
+  @JsonProperty("verificationkey")
+  private String verificationKey;
+
+  @JsonProperty("zoneid")
+  private String zoneId;
+
+  @JsonProperty("certificate")
+  private String certificate;
+
+  @JsonProperty("key")
+  private String key;
+
+  @JsonProperty("certurl")
+  private String certUrl;
 
   public String getXsappname() {
     return xsappname;
@@ -35,20 +77,12 @@ public class XsuaaData {
     this.url = url;
   }
 
-  public String getSubaccountId() {
-    return subaccountId;
+  public String getApiUrl() {
+    return apiUrl;
   }
 
-  public void setSubaccountId(String subaccountId) {
-    this.subaccountId = subaccountId;
-  }
-
-  public String getServiceInstanceId() {
-    return serviceInstanceId;
-  }
-
-  public void setServiceInstanceId(String serviceInstanceId) {
-    this.serviceInstanceId = serviceInstanceId;
+  public void setApiUrl(String apiUrl) {
+    this.apiUrl = apiUrl;
   }
 
   public String getClientId() {
@@ -67,10 +101,115 @@ public class XsuaaData {
     this.clientSecret = clientSecret;
   }
 
-  public Map<String, Object> credentials() {
-    Map<String, Object> map = new HashMap<>();
-    map.put("clientid", clientId);
-    map.put("clientsecret", clientSecret);
-    return map;
+  public String getCredentialType() {
+    return credentialType;
+  }
+
+  public void setCredentialType(String credentialType) {
+    this.credentialType = credentialType;
+  }
+
+  public String getIdentityZone() {
+    return identityZone;
+  }
+
+  public void setIdentityZone(String identityZone) {
+    this.identityZone = identityZone;
+  }
+
+  public String getIdentityZoneId() {
+    return identityZoneId;
+  }
+
+  public void setIdentityZoneId(String identityZoneId) {
+    this.identityZoneId = identityZoneId;
+  }
+
+  public String getSbUrl() {
+    return sbUrl;
+  }
+
+  public void setSbUrl(String sbUrl) {
+    this.sbUrl = sbUrl;
+  }
+
+  public String getServiceInstanceId() {
+    return serviceInstanceId;
+  }
+
+  public void setServiceInstanceId(String serviceInstanceId) {
+    this.serviceInstanceId = serviceInstanceId;
+  }
+
+  public String getSubaccountId() {
+    return subaccountId;
+  }
+
+  public void setSubaccountId(String subaccountId) {
+    this.subaccountId = subaccountId;
+  }
+
+  public String getTenantId() {
+    return tenantId;
+  }
+
+  public void setTenantId(String tenantId) {
+    this.tenantId = tenantId;
+  }
+
+  public String getTenantMode() {
+    return tenantMode;
+  }
+
+  public void setTenantMode(String tenantMode) {
+    this.tenantMode = tenantMode;
+  }
+
+  public String getUaaDomain() {
+    return uaaDomain;
+  }
+
+  public void setUaaDomain(String uaaDomain) {
+    this.uaaDomain = uaaDomain;
+  }
+
+  public String getVerificationKey() {
+    return verificationKey;
+  }
+
+  public void setVerificationKey(String verificationKey) {
+    this.verificationKey = verificationKey;
+  }
+
+  public String getZoneId() {
+    return zoneId;
+  }
+
+  public void setZoneId(String zoneId) {
+    this.zoneId = zoneId;
+  }
+
+  public String getCertificate() {
+    return certificate;
+  }
+
+  public void setCertificate(String certificate) {
+    this.certificate = certificate;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public void setKey(String key) {
+    this.key = key;
+  }
+
+  public String getCertUrl() {
+    return certUrl;
+  }
+
+  public void setCertUrl(String certUrl) {
+    this.certUrl = certUrl;
   }
 }

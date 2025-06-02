@@ -14,7 +14,8 @@ public class BrokerProperties {
   private String user;
   private String credentialsHash;
   private Map<String, String> endpoints;
-  private List<String> credentialTypes;
+  private List<String> credentialTypes = List.of("binding-secret", "x509");
+  private List<String> authorities;
 
   public String getName() {
     return name;
@@ -62,5 +63,13 @@ public class BrokerProperties {
 
   public void setCredentialTypes(List<String> credentialTypes) {
     this.credentialTypes = credentialTypes;
+  }
+
+  public List<String> getAuthorities() {
+    return authorities;
+  }
+
+  public void setAuthorities(List<String> authorities) {
+    this.authorities = authorities;
   }
 }

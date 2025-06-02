@@ -5,14 +5,26 @@ using scheduling from '../../db/scheduling';
   BatchSupported       : false
 }
 @Authorization       : {
-  Authorizations : [{
-    $Type      : 'Auth.OAuth2ClientCredentials',
-    Name       : 'oauth2',
-    Description: 'To access this API, use the OAuth 2.0 client credentials grant flow.',
-    Scopes     : [],
-    TokenUrl   : 'https://{subdomain}.authentication.{region}.hana.ondemand.com/oauth/token'
-  }],
-  SecuritySchemes: [{Authorization: 'oauth2'}]
+  Authorizations : [
+    {
+      $Type      : 'Auth.OAuth2ClientCredentials',
+      Name       : 'oauth2',
+      Description: 'To access this API, use the OAuth 2.0 client credentials grant flow.',
+      Scopes     : [],
+      TokenUrl   : 'https://{subdomain}.authentication.{region}.hana.ondemand.com/oauth/token'
+    },
+    {
+      $Type       : 'Auth.Http',
+      Name        : 'bearer',
+      Scheme      : 'bearer',
+      BearerFormat: 'JWT',
+      Description : 'To access this API, use the HTTP bearer authentication.'
+    }
+  ],
+  SecuritySchemes: [
+    {Authorization: 'oauth2'},
+    {Authorization: 'bearer'}
+  ]
 }
 @openapi             : 'SchedulingProviderV1Service'
 @protocol            : 'rest'

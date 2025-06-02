@@ -2,6 +2,7 @@ package com.github.cap.js.community.sapafcsdk.broker;
 
 import static java.lang.String.format;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBindingService {
 
-  private final String BINDING_NOT_FOUND_ERROR = "Service binding with ID %s was not found";
+  private final String BINDING_NOT_FOUND_ERROR = "Service binding with ID %s for service instance with ID %s not found";
 
   @Autowired
   private XsuaaClient xsuaaClient;
@@ -25,74 +26,49 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   public Mono<CreateServiceInstanceBindingResponse> createServiceInstanceBinding(
     CreateServiceInstanceBindingRequest request
   ) {
-    UUID bindingId = UUID.fromString(request.getBindingId());
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
+    UUID bindingId = UUID.fromString(request.getBindingId());
     return xsuaaClient
-      .getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId))
+      .bindXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
       .map(xsuaaData ->
-        (CreateServiceInstanceBindingResponse) CreateServiceInstanceAppBindingResponse.builder()
-          .credentials(xsuaaData.credentials())
-          .bindingExisted(true)
+        CreateServiceInstanceAppBindingResponse.builder()
+          .credentials(credentials(xsuaaData))
+          .bindingExisted(false)
+          .build()
+      );
+  }
+
+  @Override
+  public Mono<GetServiceInstanceBindingResponse> getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
+    UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
+    UUID bindingId = UUID.fromString(request.getBindingId());
+    return xsuaaClient
+      .bindXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
+      .map(xsuaaData ->
+        (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
+          .credentials(credentials(xsuaaData))
           .build()
       )
-      .switchIfEmpty(createNewBinding(serviceInstanceId, bindingId));
+      .switchIfEmpty(
+        Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId, serviceInstanceId)))
+      );
   }
 
   @Override
   public Mono<DeleteServiceInstanceBindingResponse> deleteServiceInstanceBinding(
     DeleteServiceInstanceBindingRequest request
   ) {
-    UUID bindingId = UUID.fromString(request.getBindingId());
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
-    return Mono.justOrEmpty(xsuaaClient.getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId)))
-      .flatMap(serviceInstance -> {
-        return Mono.fromCallable(() -> DeleteServiceInstanceBindingResponse.builder().operation("delete").build());
-      })
-      .switchIfEmpty(Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId))));
-  }
-
-  @Override
-  public Mono<GetServiceInstanceBindingResponse> getServiceInstanceBinding(GetServiceInstanceBindingRequest request) {
     UUID bindingId = UUID.fromString(request.getBindingId());
-    UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
     return xsuaaClient
-      .getXsuaaClone(String.valueOf(serviceInstanceId), String.valueOf(bindingId))
-      .map(xsuaaData ->
-        (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
-          .credentials(xsuaaData.credentials())
-          .build()
-      )
-      .switchIfEmpty(Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId))));
-  }
-
-  private Mono<Map<String, Object>> generateCredentials(UUID serviceInstanceId, UUID bindingId) {
-    return xsuaaClient
-      .getXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
-      .map(xsuaaData ->
-        Map.of(
-          "credentials",
-          Map.of("client-id", xsuaaData.getClientId(), "client-secret", xsuaaData.getClientSecret()),
-          "endpoints",
-          brokerProperties.getEndpoints(),
-          "service-instance-id",
-          serviceInstanceId
-        )
+      .unbindXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
+      .thenReturn(DeleteServiceInstanceBindingResponse.builder().operation("delete").build())
+      .switchIfEmpty(
+        Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId, serviceInstanceId)))
       );
   }
 
-  private CreateServiceInstanceBindingResponse createBindingResponse(
-    Map<String, Object> credentials,
-    boolean bindingExisted
-  ) {
-    return CreateServiceInstanceAppBindingResponse.builder()
-      .credentials(credentials)
-      .bindingExisted(bindingExisted)
-      .build();
-  }
-
-  private Mono<CreateServiceInstanceAppBindingResponse> createNewBinding(UUID serviceInstanceId, UUID bindingId) {
-    return generateCredentials(serviceInstanceId, bindingId).map(credentials ->
-      (CreateServiceInstanceAppBindingResponse) createBindingResponse(credentials, false)
-    );
+  public Map<String, Object> credentials(XsuaaData xsuaaData) {
+    return Map.of("uaa", xsuaaData);
   }
 }

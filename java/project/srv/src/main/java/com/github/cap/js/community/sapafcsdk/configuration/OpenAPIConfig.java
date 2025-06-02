@@ -22,8 +22,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfig {
 
-  final String securitySchemeName = "oauth2";
-
   @Autowired
   private EndpointProvider endpointProvider;
 
@@ -48,15 +46,24 @@ public class OpenAPIConfig {
           .description("SAP Advanced Financial Closing SDK for CDS")
           .url("https://github.com/cap-js-community/sap-afc-sdk")
       )
-      .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+      .addSecurityItem(new SecurityRequirement().addList("oauth2"))
+      .addSecurityItem(new SecurityRequirement().addList("bearer"))
       .components(
         new io.swagger.v3.oas.models.Components()
           .addSecuritySchemes(
-            securitySchemeName,
+            "oauth2",
             new io.swagger.v3.oas.models.security.SecurityScheme()
               .type(SecurityScheme.Type.OAUTH2)
               .description("To access this API, use the OAuth 2.0 client credentials grant flow.")
               .flows(new OAuthFlows().clientCredentials(new OAuthFlow().tokenUrl(getXsuaaTokenUrl())))
+          )
+          .addSecuritySchemes(
+            "bearer",
+            new io.swagger.v3.oas.models.security.SecurityScheme()
+              .type(SecurityScheme.Type.HTTP)
+              .scheme("bearer")
+              .bearerFormat("JWT")
+              .description("To access this API, use the HTTP bearer authentication.")
           )
       );
   }
