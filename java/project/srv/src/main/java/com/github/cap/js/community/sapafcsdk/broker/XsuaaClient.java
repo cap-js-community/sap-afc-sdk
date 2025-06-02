@@ -101,7 +101,7 @@ public class XsuaaClient {
   public Mono<Void> createXsuaaClone(String serviceInstanceId, String orgId) {
     String subaccountId = xsuaaData.getSubaccountId();
     log.info(
-      "Creating xsuaa clone for Service Instance id '{}', org id '{}', subaccount id '{}' clone xsAppName '{}'",
+      "Creating xsuaa clone for service instance id '{}', org id '{}', subaccount id '{}' clone xsappname '{}'",
       serviceInstanceId,
       orgId,
       subaccountId,
@@ -120,7 +120,7 @@ public class XsuaaClient {
         .bodyToMono(Void.class)
         .doOnSuccess(e ->
           log.info(
-            "Created xsuaa clone for Service Instance id '{}', org id '{}', subaccount id '{}' clone xsAppName '{}'",
+            "Created xsuaa clone successfully for service instance id '{}', org id '{}', subaccount id '{}' clone xsappname '{}'",
             serviceInstanceId,
             orgId,
             subaccountId,
@@ -129,7 +129,7 @@ public class XsuaaClient {
         )
         .doOnError(e ->
           log.error(
-            "Create request failed for xsuaa clone for Service Instance id '{}', reason: '{}'",
+            "Creating xsuaa clone failed for service instance id '{}', reason: '{}'",
             serviceInstanceId,
             e.getMessage()
           )
@@ -138,21 +138,18 @@ public class XsuaaClient {
   }
 
   public Mono<XsuaaData> getXsuaaClone(String serviceInstanceId) {
-    log.info("Getting xsuaa clone for Service Instance id '{}'", serviceInstanceId);
+    log.info("Getting xsuaa clone for service instance id '{}'", serviceInstanceId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.put()
+      this.webClient.get()
         .uri(format(Endpoints.INSTANCE_URI, serviceInstanceId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
-        .bodyValue(Map.of())
         .retrieve()
         .bodyToMono(XsuaaData.class)
-        .doOnSuccess(e ->
-          log.info("Existence check successful for xsuaa clone for Service Instance id '{}'", serviceInstanceId)
-        )
+        .doOnSuccess(e -> log.info("Got xsuaa clone successfully for service instance id '{}'", serviceInstanceId))
         .doOnError(e ->
           log.error(
-            "Get request failed for xsuaa clone for Service Instance id '{}', reason: '{}'",
+            "Getting xsuaa clone failed for service instance id '{}', reason: '{}'",
             serviceInstanceId,
             e.getMessage()
           )
@@ -161,7 +158,7 @@ public class XsuaaClient {
   }
 
   public Mono<Void> deleteXsuaaClone(String serviceInstanceId) {
-    log.info("Deleting xsuaa clone for Service Instance id '{}'", serviceInstanceId);
+    log.info("Deleting xsuaa clone for service instance id '{}'", serviceInstanceId);
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.delete()
         .uri(format(Endpoints.INSTANCE_URI, serviceInstanceId))
@@ -169,12 +166,10 @@ public class XsuaaClient {
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
         .retrieve()
         .bodyToMono(Void.class)
-        .doOnSuccess(e ->
-          log.info("Deleting successful for xsuaa clone for Service Instance id '{}'", serviceInstanceId)
-        )
+        .doOnSuccess(e -> log.info("Deleted xsuaa clone successfully for service instance id '{}'", serviceInstanceId))
         .doOnError(e ->
           log.error(
-            "Deletion failed for xsuaa clone for Service Instance id '{}', reason: '{}'",
+            "Deleting xsuaa clone failed for service instance id '{}', reason: '{}'",
             serviceInstanceId,
             e.getMessage()
           )
@@ -183,7 +178,7 @@ public class XsuaaClient {
   }
 
   public Mono<XsuaaData> bindXsuaaClone(String serviceInstanceId, String bindingId) {
-    log.info("Getting xsuaa clone credentials for Service Instance id '{}'", serviceInstanceId);
+    log.info("Binding xsuaa clone for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.put()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
@@ -193,12 +188,44 @@ public class XsuaaClient {
         .retrieve()
         .bodyToMono(XsuaaData.class)
         .doOnSuccess(e ->
-          log.info("Get request successful for xsuaa clone credentials for Service Instance id '{}'", serviceInstanceId)
+          log.info(
+            "Bound xsuaa clone successfully for service instance id '{}' binding id '{}'",
+            serviceInstanceId,
+            bindingId
+          )
         )
         .doOnError(e ->
           log.error(
-            "Get request failed for xsuaa clone credentials for Service Instance id '{}', reason: '{}'",
+            "Binding xsuaa clone failed for service instance id '{}' binding id '{}', reason: '{}'",
             serviceInstanceId,
+            bindingId,
+            e.getMessage()
+          )
+        )
+    );
+  }
+
+  public Mono<XsuaaData> getXsuaaCloneBinding(String serviceInstanceId, String bindingId) {
+    log.info("Getting xsuaa clone binding for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
+    return getOauthToken(xsuaaData).flatMap(token ->
+      this.webClient.get()
+        .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+        .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
+        .retrieve()
+        .bodyToMono(XsuaaData.class)
+        .doOnSuccess(e ->
+          log.info(
+            "Got xsuaa clone binding successfully for service instance id '{}' binding id '{}'",
+            serviceInstanceId,
+            bindingId
+          )
+        )
+        .doOnError(e ->
+          log.error(
+            "Getting xsuaa clone binding for Service Instance id '{}' binding id '{}', reason: '{}'",
+            serviceInstanceId,
+            bindingId,
             e.getMessage()
           )
         )
@@ -206,7 +233,7 @@ public class XsuaaClient {
   }
 
   public Mono<Void> unbindXsuaaClone(String serviceInstanceId, String bindingId) {
-    log.info("Deleting xsuaa clone credentials for Service Instance id '{}'", serviceInstanceId);
+    log.info("Unbind xsuaa clone for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.delete()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
@@ -215,12 +242,17 @@ public class XsuaaClient {
         .retrieve()
         .bodyToMono(Void.class)
         .doOnSuccess(e ->
-          log.info("Deleting successful for xsuaa clone credentials for Service Instance id '{}'", serviceInstanceId)
+          log.info(
+            "Unbinding xsuaa clone successfully for service instance id '{}' binding id '{}'",
+            serviceInstanceId,
+            bindingId
+          )
         )
         .doOnError(e ->
           log.error(
-            "Deletion failed for xsuaa clone credentials for Service Instance id '{}', reason: '{}'",
+            "Unbinding xsuaa clone failed for service instance id '{}' binding id '{}', reason: '{}'",
             serviceInstanceId,
+            bindingId,
             e.getMessage()
           )
         )
@@ -241,15 +273,12 @@ public class XsuaaClient {
   }
 
   private Map<String, Object> buildCreateBody(String xsappname) {
-    List<String> credentialsTypes = brokerProperties.getCredentialTypes();
     Map<String, Object> data = new HashMap<>(
       Map.of(
         "xsappname",
         xsappname,
-        "endpoints",
-        brokerProperties.getEndpoints(),
         "oauth2-configuration",
-        Map.of("credential-types", credentialsTypes)
+        Map.of("credential-types", brokerProperties.getOauth2Configuration().getCredentialTypes())
       )
     );
     List<String> authorities = brokerProperties.getAuthorities();

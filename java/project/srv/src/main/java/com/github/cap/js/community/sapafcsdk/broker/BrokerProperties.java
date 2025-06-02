@@ -14,7 +14,7 @@ public class BrokerProperties {
   private String user;
   private String credentialsHash;
   private Map<String, String> endpoints;
-  private List<String> credentialTypes = List.of("binding-secret", "x509");
+  private Oauth2Configuration oauth2Configuration = new Oauth2Configuration();
   private List<String> authorities;
 
   public String getName() {
@@ -57,12 +57,12 @@ public class BrokerProperties {
     this.endpoints = endpoints;
   }
 
-  public List<String> getCredentialTypes() {
-    return credentialTypes;
+  public Oauth2Configuration getOauth2Configuration() {
+    return oauth2Configuration;
   }
 
-  public void setCredentialTypes(List<String> credentialTypes) {
-    this.credentialTypes = credentialTypes;
+  public void setOauth2Configuration(Oauth2Configuration oauth2Configuration) {
+    this.oauth2Configuration = oauth2Configuration;
   }
 
   public List<String> getAuthorities() {
@@ -71,5 +71,18 @@ public class BrokerProperties {
 
   public void setAuthorities(List<String> authorities) {
     this.authorities = authorities;
+  }
+
+  public static class Oauth2Configuration {
+
+    private List<String> credentialTypes = List.of("binding-secret", "x509");
+
+    public List<String> getCredentialTypes() {
+      return credentialTypes;
+    }
+
+    public void setCredentialTypes(List<String> credentialTypes) {
+      this.credentialTypes = credentialTypes;
+    }
   }
 }

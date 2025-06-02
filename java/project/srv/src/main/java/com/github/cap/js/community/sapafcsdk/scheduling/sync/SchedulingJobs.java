@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.common;
+package com.github.cap.js.community.sapafcsdk.scheduling.sync;
 
 import static com.github.cap.js.community.sapafcsdk.model.cds.outbox.Outbox_.MESSAGES;
 

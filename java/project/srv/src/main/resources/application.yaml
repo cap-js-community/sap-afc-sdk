@@ -36,9 +36,10 @@ sap-afc-sdk:
     endpoints:
       api: /api
       job-scheduling-v1: /api/job-scheduling/v1
-    credential-types:
-      - binding-secret
-      - x509
+    oauth2-configuration:
+      credential-types:
+        - binding-secret
+        - x509
 ---
 spring:
   config.activate.on-profile: cloud

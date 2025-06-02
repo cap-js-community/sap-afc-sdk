@@ -30,7 +30,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+@SpringBootTest
 @ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedConfig.class })
 public class SchedulingProcessingHandlerSimpleMockCompletedTest {
 

@@ -744,7 +744,7 @@ Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` sectio
   - `broker.user: String`: Name of the broker user. Default is `broker-user`
   - `broker.credentialsHash: String`: Credentials hash of the broker user. Default is generated
   - `broker.endpoints: Object`: Endpoints of the broker. Default is `{ api: "/api", job-scheduling-v1: "/api/job-scheduling/v1" }`
-  - `broker.credential-types: String[]`: Credential types of the broker. Default is `["binding-secret", "x509"]`
+  - `broker.oauth2-configuration.credential-types: String[]`: Credential types of the broker oauth2 configuration. Default is `["binding-secret", "x509"]`
   - `broker.authorities: String[]`: Scope authorities. Default is `[]`
 - `mockProcessing: Object`: Activate mocked job processing. Default is `{}`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default is `0`

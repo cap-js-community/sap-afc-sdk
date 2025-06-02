@@ -138,9 +138,9 @@ module.exports = (options) => {
             BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared.endpoints,
           );
         }
-        if (!yaml.getIn(["sap-afc-sdk", "broker", "credential-types"])) {
+        if (!yaml.getIn(["sap-afc-sdk", "broker", "oauth2-configuration", "credential-types"])) {
           yaml.setIn(
-            ["sap-afc-sdk", "broker", "credential-types"],
+            ["sap-afc-sdk", "broker", "oauth2-configuration", "credential-types"],
             BROKER.SBF_SERVICE_CONFIG[APP_NAME].extend_credentials.shared["oauth2-configuration"]["credential-types"],
           );
         }

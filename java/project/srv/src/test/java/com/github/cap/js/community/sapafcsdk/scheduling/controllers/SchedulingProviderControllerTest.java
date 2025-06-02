@@ -16,6 +16,7 @@ import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.services.messages.LocalizedMessageProvider;
 import com.sap.cds.services.persistence.PersistenceService;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
 import org.json.JSONArray;
@@ -32,7 +33,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @AutoConfigureMockMvc
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+@SpringBootTest
 @ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedConfig.class })
 public class SchedulingProviderControllerTest {
 
@@ -580,7 +581,7 @@ public class SchedulingProviderControllerTest {
     assertEquals("C", parameters.getJSONObject(1).get("name"));
     assertEquals(true, parameters.getJSONObject(1).get("value"));
     assertEquals("D", parameters.getJSONObject(2).get("name"));
-    assertEquals(32.0, parameters.getJSONObject(2).get("value"));
+    assertEquals(new BigDecimal("32.0"), parameters.getJSONObject(2).get("value"));
     assertEquals("E", parameters.getJSONObject(3).get("name"));
     assertEquals("2025-01-01T00:00:00Z", parameters.getJSONObject(3).get("value"));
 
@@ -655,11 +656,11 @@ public class SchedulingProviderControllerTest {
       "A",
       "abcd",
       "B",
-      23.0,
+      new BigDecimal("23.0"),
       "C",
       true,
       "D",
-      32.0,
+      new BigDecimal("32.0"),
       "E",
       "2025-01-01T00:00:00Z"
     );

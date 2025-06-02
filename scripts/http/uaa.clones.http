@@ -1,0 +1,51 @@
+@auth=<auth>
+@clientId=<clientId>
+@clientSecret=<clientSecret>
+@token=<token>
+
+### Token
+POST https://{{auth}}/oauth/token?grant_type=client_credentials
+Accept: application/json
+Authorization: Basic {{clientId}} {{clientSecret}}
+
+### Get Clones
+GET https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones
+Authorization: Bearer {{token}}
+
+### Get Clone
+GET https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones/f53610c8-189e-4f3c-808b-ddbe3bc6fb3
+Authorization: Bearer {{token}}
+
+### Create Clone
+POST https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones?serviceinstanceid=f53610c8-189e-4f3c-808b-ddbe3bc6fb3&subaccountid=b07cc881-e90b-4c18-82c4-94aad87c2bb9
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "xsappname": "f53610c8-189e-4f3c-808b-ddbe3bc6fb3",
+  "oauth2-configuration": {
+    "credential-types": ["binding-secret", "x509"]
+  }
+}
+
+### Delete Clone
+DELETE https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones/f53610c8-189e-4f3c-808b-ddbe3bc6fb3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Bind Clone
+PUT https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones/f53610c8-189e-4f3c-808b-ddbe3bc6fb3/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### Get Clone Binding
+GET https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones/f53610c8-189e-4f3c-808b-ddbe3bc6fb3/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Unbind Clone
+DELETE https://skysand.authentication.sap.hana.ondemand.com/sap/rest/broker/clones/f53610c8-189e-4f3c-808b-ddbe3bc6fb3/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+Authorization: Bearer {{token}}
+Content-Type: application/json

@@ -2,7 +2,6 @@ package com.github.cap.js.community.sapafcsdk.broker;
 
 import static java.lang.String.format;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBindingService {
 
-  private final String BINDING_NOT_FOUND_ERROR = "Service binding with ID %s for service instance with ID %s not found";
+  private final String BINDING_NOT_FOUND_ERROR =
+    "Service binding with id '%s' for service instance with id '%s' not found";
 
   @Autowired
   private XsuaaClient xsuaaClient;
@@ -43,7 +43,7 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
     UUID bindingId = UUID.fromString(request.getBindingId());
     return xsuaaClient
-      .bindXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
+      .getXsuaaCloneBinding(serviceInstanceId.toString(), bindingId.toString())
       .map(xsuaaData ->
         (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
           .credentials(credentials(xsuaaData))
@@ -69,6 +69,13 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   }
 
   public Map<String, Object> credentials(XsuaaData xsuaaData) {
-    return Map.of("uaa", xsuaaData);
+    return Map.of(
+      "endpoints",
+      brokerProperties.getEndpoints(),
+      "oauth2-configuration",
+      Map.of("credential-types", brokerProperties.getOauth2Configuration().getCredentialTypes()),
+      "uaa",
+      xsuaaData
+    );
   }
 }

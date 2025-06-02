@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class ServiceInstanceServiceImpl implements ServiceInstanceService {
 
-  private final String INSTANCE_NOT_FOUND_ERROR = "Service instance with ID %s not found";
+  private final String INSTANCE_NOT_FOUND_ERROR = "Service instance with id '%s' not found";
 
   @Autowired
   private XsuaaClient xsuaaClient;

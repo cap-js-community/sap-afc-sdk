@@ -26,7 +26,7 @@ const Commands = {
   AFC_KYMA: ["npx afc init kyma"],
   AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
   AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
-  END: [],
+  END: [], // ["npm test"]
 };
 
 const Files = {
