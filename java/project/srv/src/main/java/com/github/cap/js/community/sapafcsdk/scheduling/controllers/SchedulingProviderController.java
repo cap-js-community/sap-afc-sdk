@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
-@RequestMapping("/api/job-scheduling/v1")
+@RequestMapping(value = "/api/job-scheduling/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SchedulingProviderController {
 
   @Autowired

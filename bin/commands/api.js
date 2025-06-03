@@ -140,6 +140,10 @@ function managePasscode(options) {
     console.log("Command only supported for CF apps");
     return;
   }
+  if (!config.app) {
+    config.app = prompt.hide("App name: ");
+    config.url ??= fetchServerUrl(config.app) || options.server;
+  }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
   config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   open(`${config.authUrl}/passcode`);
@@ -150,6 +154,10 @@ async function manageInternal(options) {
   if (!config.cf) {
     console.log("Command only supported for CF apps");
     return;
+  }
+  if (!config.app) {
+    config.app = prompt.hide("App name: ");
+    config.url ??= fetchServerUrl(config.app) || options.server;
   }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
   config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
@@ -287,8 +295,15 @@ function fetchAppInfo(options, service) {
     cf = true;
     const mta = fs.readFileSync(mtaPath, "utf8");
     app = /- name: (.*)\n\s*type: nodejs\n\s*path: gen\/srv/s.exec(mta)?.[1];
-    const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
-    serverUrl = /routes:\s*(.*)/.exec(result)?.[1];
+    if (!app) {
+      app = /- name: (.*)\n\s*type: java\n\s*path: srv/s.exec(mta)?.[1];
+    }
+    if (app) {
+      const appServerUrl = fetchServerUrl(app);
+      if (appServerUrl) {
+        serverUrl = appServerUrl;
+      }
+    }
   }
   serverUrl = ensureHttps(serverUrl);
   return {
@@ -297,6 +312,11 @@ function fetchAppInfo(options, service) {
     service,
     url: serverUrl,
   };
+}
+
+function fetchServerUrl(app) {
+  const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
+  return /routes:\s*(.*)/.exec(result)?.[1];
 }
 
 function cfLogin() {
