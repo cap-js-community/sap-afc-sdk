@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.binding.*;
+import org.springframework.cloud.servicebroker.model.instance.OperationState;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceBindingService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
+@Primary
 public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBindingService {
 
   private final String BINDING_NOT_FOUND_ERROR =
@@ -52,6 +55,11 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
       .switchIfEmpty(
         Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId, serviceInstanceId)))
       );
+  }
+
+  @Override
+  public Mono<GetLastServiceBindingOperationResponse> getLastOperation(GetLastServiceBindingOperationRequest request) {
+    return Mono.just(GetLastServiceBindingOperationResponse.builder().operationState(OperationState.SUCCEEDED).build());
   }
 
   @Override

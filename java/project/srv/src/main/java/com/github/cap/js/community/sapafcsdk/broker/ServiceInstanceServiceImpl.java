@@ -6,10 +6,12 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.instance.*;
 import org.springframework.cloud.servicebroker.service.ServiceInstanceService;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
+@Primary
 public class ServiceInstanceServiceImpl implements ServiceInstanceService {
 
   private final String INSTANCE_NOT_FOUND_ERROR = "Service instance with id '%s' not found";
@@ -32,6 +34,11 @@ public class ServiceInstanceServiceImpl implements ServiceInstanceService {
       .getXsuaaClone(instanceId.toString())
       .thenReturn(GetServiceInstanceResponse.builder().build())
       .switchIfEmpty(Mono.error(new IllegalArgumentException(format(INSTANCE_NOT_FOUND_ERROR, instanceId))));
+  }
+
+  @Override
+  public Mono<GetLastServiceOperationResponse> getLastOperation(GetLastServiceOperationRequest request) {
+    return Mono.just(GetLastServiceOperationResponse.builder().operationState(OperationState.SUCCEEDED).build());
   }
 
   @Override
