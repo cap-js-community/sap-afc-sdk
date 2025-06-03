@@ -64,7 +64,7 @@
     "@cap-js-community/event-queue": "^1.10.4",
     "@cap-js-community/feature-toggle-library": "^1.2.5",
     "@cap-js-community/websocket": "^1.6.4",
-    "@sap/cds-common-content": "^2.1.0",
+    "@sap/cds-common-content": "^3.0.1",
     "@sap/sbf": "^6.9.2",
     "commander": "^14.0.0",
     "cors": "^2.8.5",
