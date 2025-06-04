@@ -158,5 +158,10 @@ describe("Build", () => {
 });
 
 function cleanErr(err) {
-  return err.replace(/\(node:.*\) \[DEP0040] DeprecationWarning: The `punycode` module is deprecated\. Please use a userland alternative instead.*\n.*\(Use `node --trace-deprecation \.\.\.` to show where the warning was created\)\n?/gi, "").trim();
+  return err
+    .replace(
+      /\(node:.*\) \[DEP0040] DeprecationWarning: The `punycode` module is deprecated\. Please use a userland alternative instead.*\n.*\(Use `node --trace-deprecation \.\.\.` to show where the warning was created\)\n?/gi,
+      "",
+    )
+    .trim();
 }
