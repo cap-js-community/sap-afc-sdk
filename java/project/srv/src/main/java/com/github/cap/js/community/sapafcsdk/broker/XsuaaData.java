@@ -21,6 +21,7 @@ public class XsuaaData {
   private String clientId;
 
   @JsonProperty("clientsecret")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String clientSecret;
 
   @JsonProperty("credential-type")
@@ -64,6 +65,14 @@ public class XsuaaData {
   @JsonProperty("certurl")
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String certUrl;
+
+  @JsonProperty("clientx509enabled")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private boolean clientX509Enabled;
+
+  @JsonProperty("certificate-pinning")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private boolean certificatePinning;
 
   public String getXsappname() {
     return xsappname;
@@ -215,5 +224,21 @@ public class XsuaaData {
 
   public void setCertUrl(String certUrl) {
     this.certUrl = certUrl;
+  }
+
+  public boolean isClientX509Enabled() {
+    return clientX509Enabled;
+  }
+
+  public void setClientX509Enabled(boolean clientX509Enabled) {
+    this.clientX509Enabled = clientX509Enabled;
+  }
+
+  public boolean isCertificatePinning() {
+    return certificatePinning;
+  }
+
+  public void setCertificatePinning(boolean certificatePinning) {
+    this.certificatePinning = certificatePinning;
   }
 }

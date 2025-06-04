@@ -177,14 +177,14 @@ public class XsuaaClient {
     );
   }
 
-  public Mono<XsuaaData> bindXsuaaClone(String serviceInstanceId, String bindingId) {
+  public Mono<XsuaaData> bindXsuaaClone(String serviceInstanceId, String bindingId, Map<String, Object> parameters) {
     log.info("Binding xsuaa clone for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.put()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
-        .bodyValue(Map.of())
+        .bodyValue(buildBindBody(parameters))
         .retrieve()
         .bodyToMono(XsuaaData.class)
         .doOnSuccess(e ->
@@ -286,6 +286,26 @@ public class XsuaaClient {
       data.put("authorities", authorities);
     }
     return data;
+  }
+
+  private Map<String, Object> buildBindBody(Map<String, Object> parameters) {
+    Map<String, Object> body = Map.of();
+    if (parameters != null && parameters.containsKey("xsuaa") && parameters.get("xsuaa") instanceof Map) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> xsuaa = (Map<String, Object>) parameters.get("xsuaa");
+      Map<String, Object> xsuaaParameters = new HashMap<>();
+      if (xsuaa.containsKey("X.509")) {
+        xsuaaParameters.put("X.509", xsuaa.get("X.509"));
+      }
+      if (xsuaa.containsKey("x509")) {
+        xsuaaParameters.put("x509", xsuaa.get("x509"));
+      }
+      if (xsuaa.containsKey("credential-type")) {
+        xsuaaParameters.put("credential-type", xsuaa.get("credential-type"));
+      }
+      body = Map.of("parameters", xsuaaParameters);
+    }
+    return body;
   }
 
   private WebClient initWebClient() {

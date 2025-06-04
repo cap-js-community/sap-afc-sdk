@@ -2,10 +2,9 @@ package com.github.cap.js.community.sapafcsdk.broker;
 
 import static java.lang.String.format;
 
+import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import java.util.Map;
 import java.util.UUID;
-
-import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.binding.*;
 import org.springframework.cloud.servicebroker.model.instance.OperationState;
@@ -37,7 +36,7 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
     UUID serviceInstanceId = UUID.fromString(request.getServiceInstanceId());
     UUID bindingId = UUID.fromString(request.getBindingId());
     return xsuaaClient
-      .bindXsuaaClone(serviceInstanceId.toString(), bindingId.toString())
+      .bindXsuaaClone(serviceInstanceId.toString(), bindingId.toString(), request.getParameters())
       .map(xsuaaData ->
         CreateServiceInstanceAppBindingResponse.builder()
           .credentials(credentials(xsuaaData))

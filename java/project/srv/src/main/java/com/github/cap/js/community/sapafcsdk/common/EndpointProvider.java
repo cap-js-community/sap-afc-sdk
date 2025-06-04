@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -124,10 +123,10 @@ public class EndpointProvider {
 
   public Map<String, String> getApiEndpoints() {
     String serverUrl = this.serverUrl();
-    return brokerProperties.getEndpoints().entrySet().stream()
-            .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> serverUrl + entry.getValue()
-            ));
+    return brokerProperties
+      .getEndpoints()
+      .entrySet()
+      .stream()
+      .collect(Collectors.toMap(Map.Entry::getKey, entry -> serverUrl + entry.getValue()));
   }
 }
