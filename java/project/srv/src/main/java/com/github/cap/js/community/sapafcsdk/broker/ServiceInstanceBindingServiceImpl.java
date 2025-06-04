@@ -4,6 +4,8 @@ import static java.lang.String.format;
 
 import java.util.Map;
 import java.util.UUID;
+
+import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.model.binding.*;
 import org.springframework.cloud.servicebroker.model.instance.OperationState;
@@ -24,6 +26,9 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
 
   @Autowired
   private BrokerProperties brokerProperties;
+
+  @Autowired
+  private EndpointProvider endpointProvider;
 
   @Override
   public Mono<CreateServiceInstanceBindingResponse> createServiceInstanceBinding(
@@ -79,7 +84,7 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
   public Map<String, Object> credentials(XsuaaData xsuaaData) {
     return Map.of(
       "endpoints",
-      brokerProperties.getEndpoints(),
+      endpointProvider.getApiEndpoints(),
       "oauth2-configuration",
       Map.of("credential-types", brokerProperties.getOauth2Configuration().getCredentialTypes()),
       "uaa",

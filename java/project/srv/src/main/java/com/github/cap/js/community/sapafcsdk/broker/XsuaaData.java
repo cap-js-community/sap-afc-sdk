@@ -1,5 +1,6 @@
 package com.github.cap.js.community.sapafcsdk.broker;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class XsuaaData {
@@ -53,12 +54,15 @@ public class XsuaaData {
   private String zoneId;
 
   @JsonProperty("certificate")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String certificate;
 
   @JsonProperty("key")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String key;
 
   @JsonProperty("certurl")
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String certUrl;
 
   public String getXsappname() {

@@ -141,7 +141,7 @@ function managePasscode(options) {
     return;
   }
   if (!config.app) {
-    config.app = prompt.hide("App name: ");
+    config.app = prompt("App name: ");
     config.url ??= fetchServerUrl(config.app) || options.server;
   }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
@@ -156,7 +156,7 @@ async function manageInternal(options) {
     return;
   }
   if (!config.app) {
-    config.app = prompt.hide("App name: ");
+    config.app = prompt("App name: ");
     config.url ??= fetchServerUrl(config.app) || options.server;
   }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;

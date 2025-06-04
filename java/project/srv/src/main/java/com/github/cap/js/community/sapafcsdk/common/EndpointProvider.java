@@ -3,11 +3,16 @@ package com.github.cap.js.community.sapafcsdk.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.cap.js.community.sapafcsdk.broker.BrokerProperties;
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.sap.cds.services.request.UserInfo;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -23,6 +28,9 @@ public class EndpointProvider {
 
   @Autowired
   private AfcSdkProperties afcSdkProperties;
+
+  @Autowired
+  private BrokerProperties brokerProperties;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -112,5 +120,14 @@ public class EndpointProvider {
       } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
     }
     return approuterUrl();
+  }
+
+  public Map<String, String> getApiEndpoints() {
+    String serverUrl = this.serverUrl();
+    return brokerProperties.getEndpoints().entrySet().stream()
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry -> serverUrl + entry.getValue()
+            ));
   }
 }
