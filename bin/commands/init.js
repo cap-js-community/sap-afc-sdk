@@ -11,7 +11,7 @@ const { projectName, adjustYAMLAllDocuments, copyFileAdjusted, derivePackageName
 
 const config = require("../config.json");
 
-const { isJava, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common/util");
+const { isNode, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common/util");
 
 const Version = require(path.join(__dirname, "../../package.json")).version;
 
@@ -53,7 +53,8 @@ module.exports = {
           "Add one or more features to the project (comma-separated list)",
         ).choices(["app", "broker", "http", "mock", "sample", "stub", "test"]),
       )
-      .option("-j, --java", "Java based project")
+      .option("-n, --node", "Node flavor")
+      .option("-j, --java", "Java flavor")
       .addHelpText(
         "afterAll",
         `
@@ -105,7 +106,7 @@ Examples:
       target ||= config.defaults.target;
       auth ||= config.defaults.auth;
       processCommonBefore(target, auth);
-      if (!isJava(options)) {
+      if (isNode(options)) {
         processNode(target, auth);
       } else {
         processJava(target, auth);

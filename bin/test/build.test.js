@@ -85,7 +85,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(result.stderr).toBe("");
+    expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
@@ -106,7 +106,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(result.stderr).toMatch(/'cds add redis' is not available for Kyma yet/);
+    expect(cleanErr(result.stderr)).toMatch(/'cds add redis' is not available for Kyma yet/);
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
@@ -127,7 +127,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(result.stderr).toBe("");
+    expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
@@ -148,7 +148,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(result.stderr).toBe("");
+    expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
@@ -156,3 +156,7 @@ describe("Build", () => {
     }
   });
 });
+
+function cleanErr(err) {
+  return err.replace(/\(node:.*\) \[DEP0040] DeprecationWarning: The `punycode` module is deprecated\. Please use a userland alternative instead.*\n.*\(Use `node --trace-deprecation \.\.\.` to show where the warning was created\)\n?/gi, "").trim();
+}

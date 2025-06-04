@@ -3,13 +3,13 @@
 
 const fs = require("fs");
 const path = require("path");
-const { isJava, copyFolderAdjusted } = require("../common/util");
+const { isNode, copyFolderAdjusted } = require("../common/util");
 
 module.exports = (options) => {
   try {
     const srcPath = path.join(__dirname, "../../http");
     const destPath = path.join(process.cwd(), "http");
-    if (!isJava(options)) {
+    if (isNode(options)) {
       fs.cpSync(srcPath, destPath, { recursive: true });
     } else {
       copyFolderAdjusted(

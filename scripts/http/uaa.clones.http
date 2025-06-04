@@ -1,8 +1,3 @@
-@auth=<auth>
-@clientId=<clientId>
-@clientSecret=<clientSecret>
-@token=<token>
-
 ### Token
 POST https://{{auth}}/oauth/token?grant_type=client_credentials
 Accept: application/json
@@ -13,56 +8,56 @@ GET https://{{auth}}/sap/rest/broker/clones
 Authorization: Bearer {{token}}
 
 ### Get Clone
-GET https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}
 Authorization: Bearer {{token}}
 
 ### Create Clone
-POST https://{{auth}}/sap/rest/broker/clones?serviceinstanceid=7563e79e-21a7-41bc-8c9f-ea85e66bf79b&subaccountid=b07cc881-e90b-4c18-82c4-94aad87c2bb9
+POST https://{{auth}}/sap/rest/broker/clones?serviceinstanceid={{instanceId}}&subaccountid={{subaccountId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "xsappname": "7563e79e-21a7-41bc-8c9f-ea85e66bf79b",
+  "xsappname": "{{instanceId}}",
   "oauth2-configuration": {
     "credential-types": ["binding-secret", "x509"]
   }
 }
 
 ### Delete Clone
-DELETE https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b
+DELETE https://{{auth}}/sap/rest/broker/clones/{{instanceId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### Bind Clone
-PUT https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+PUT https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {}
 
 ### Bind Clone (X509)
-PUT https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+PUT https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
    "parameters": {
      "credential-type": "x509",
-     "x509": { "key-length": 2048, "validity": 365, "validity-type": "DAYS" }
+     "x509": { "key-length": 2048, "validity": {{validityDays}}, "validity-type": "DAYS" }
    }
 }
 
 ### Get Clone Bindings
-GET https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b/bindings
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/bindings
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### Get Clone Binding
-GET https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### Unbind Clone
-DELETE https://{{auth}}/sap/rest/broker/clones/7563e79e-21a7-41bc-8c9f-ea85e66bf79b/binding/a53610c8-189e-4f3c-808b-ddbe3bc6fb3
+DELETE https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json

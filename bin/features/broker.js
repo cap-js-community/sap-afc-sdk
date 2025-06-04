@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
 
-const { projectName, isJava, generateHashBrokerPassword, adjustYAMLAllDocuments } = require("../common/util");
+const { projectName, isNode, generateHashBrokerPassword, adjustYAMLAllDocuments } = require("../common/util");
 const YAML = require("yaml");
 
 const BROKER_PATH = path.join(process.cwd(), "srv/broker.json");
@@ -103,7 +103,7 @@ module.exports = (options) => {
   }
 
   let brokerWritten = false;
-  if (!isJava(options)) {
+  if (isNode(options)) {
     writeFile(CATALOG_PATH, CATALOG);
     if (writeFile(BROKER_PATH, BROKER)) {
       brokerWritten = true;

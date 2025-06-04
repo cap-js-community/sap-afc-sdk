@@ -4,6 +4,8 @@
 const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
+const fetch = require("node-fetch");
+const https = require("https");
 const YAML = require("yaml");
 const commander = require("commander");
 const { open } = require("openurl");
@@ -15,6 +17,8 @@ const PLAN_NAME = "standard";
 const INTERNAL_SUFFIX = "internal";
 const SERVICE_SUFFIX = "api";
 const SERVICE_KEY_SUFFIX = "key";
+
+const DEFAULT_VALIDITY = 365; // days
 
 const PLACEHOLDERS = {
   host: {
@@ -75,6 +79,7 @@ module.exports = {
       .option("-e, --endpoint <endpoint>", "API endpoint path")
       .option("-j, --jobscheduling", "Job Scheduling Provider API endpoint path")
       .option("-c, --clear", "Clear .http files placeholders")
+      .option("-z, --certificate [days]", "x509 certificate (2048 bytes) days valid (default: 365)")
       .option("-r, --reset", "Reset API management")
       .option("-x, --xreset", "Reset API management")
       .option("-g, --generate", "Generate broker password and hash")
@@ -160,19 +165,30 @@ async function manageInternal(options) {
     config.url ??= fetchServerUrl(config.app) || options.server;
   }
   const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
-  config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
+  config.certUrl = /"xsuaa": \[.*"credentials": \{.*"certurl": "(.*?)"/s.exec(result)?.[1];
+  config.authUrl = config.certUrl || /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   config.auth = stripHTTPS(config.authUrl);
   config.tokenUrl = `${config.authUrl}/oauth/token`;
   config.internalClientId = /"xsuaa": \[.*"credentials": \{.*"clientid": "(.*?)"/s.exec(result)?.[1];
   config.internalClientSecret = /"xsuaa": \[.*"credentials": \{.*"clientsecret": "(.*?)"/s.exec(result)?.[1];
-  if (!(config.auth && config.internalClientId && config.internalClientSecret)) {
+  config.internalCertificate = /"xsuaa": \[.*"credentials": \{.*"certificate": "(.*?)"/s.exec(result)?.[1];
+  config.internalKey = /"xsuaa": \[.*"credentials": \{.*"key": "(.*?)"/s.exec(result)?.[1];
+  if (!(config.auth && config.internalClientId)) {
     console.log(`Failed to retrieve internal credentials`, { app: config.app });
     return;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
     console.log(`url: ${config.tokenUrl}`);
     console.log(`clientId (internal): ${config.internalClientId}`);
-    console.log(`clientSecret (internal): ${config.internalClientSecret}`);
+    if (config.internalClientSecret) {
+      console.log(`clientSecret (internal): ${config.internalClientSecret}`);
+    }
+    if (config.internalCertificate) {
+      console.log(`certificate (internal): ${config.internalCertificate}`);
+    }
+    if (config.internalKey) {
+      console.log(`key (internal): ${config.internalKey}`);
+    }
   }
   if (options.destination) {
     serverUrl(config);
@@ -187,7 +203,13 @@ async function manageInternal(options) {
     );
   }
   if (options.token || options.bearer || options.http) {
-    config.internalToken = await fetchOAuthToken(config.authUrl, config.internalClientId, config.internalClientSecret);
+    config.internalToken = await fetchOAuthToken(
+      config.authUrl,
+      config.internalClientId,
+      config.internalClientSecret,
+      config.internalCertificate,
+      config.internalKey,
+    );
     if (!config.internalToken) {
       return;
     }
@@ -235,14 +257,28 @@ async function manageKey(options) {
     console.log(`api: ${config.api}`);
     console.log(`auth: ${config.tokenUrl}`);
     console.log(`clientId: ${config.clientId}`);
-    console.log(`clientSecret: ${config.clientSecret}`);
+    if (config.clientSecret) {
+      console.log(`clientSecret: ${config.clientSecret}`);
+    }
+    if (config.certificate) {
+      console.log(`certificate: ${config.certificate}`);
+    }
+    if (config.key) {
+      console.log(`key: ${config.key}`);
+    }
   }
   if (options.destination) {
     const destinationName = `${config.service}${options.label ? `-${options.label}` : ""}-${SERVICE_SUFFIX}`;
     createDestination(destinationName, config.api, config.tokenUrl, config.clientId, config.clientSecret, options);
   }
   if (options.token || options.bearer || options.http) {
-    config.token = await fetchOAuthToken(config.authUrl, config.clientId, config.clientSecret);
+    config.token = await fetchOAuthToken(
+      config.authUrl,
+      config.clientId,
+      config.clientSecret,
+      config.certificate,
+      config.key,
+    );
     if (!config.token) {
       return;
     }
@@ -401,7 +437,17 @@ function cfServiceKey(options, config, optional) {
     (options.new ? `-${options.new === true ? Date.now() : options.new}` : "");
   const regexServiceKey = new RegExp(`(${serviceKeyName})`);
   const cfCreateServiceKeyCommand = `cf service-keys ${config.serviceInstance}`;
-  const cfServiceKeyCommand = `cf create-service-key ${config.serviceInstance} ${serviceKeyName}`;
+  let cfServiceKeyCommand = `cf create-service-key ${config.serviceInstance} ${serviceKeyName}`;
+  if (options.certificate) {
+    const validity = options.certificate === true ? DEFAULT_VALIDITY : options.certificate;
+    const config = {
+      xsuaa: {
+        "credential-type": "x509",
+        x509: { "key-length": 2048, validity, "validity-type": "DAYS" },
+      },
+    };
+    cfServiceKeyCommand += ` -c '${JSON.stringify(config)}'`;
+  }
   let result = shelljs.exec(cfCreateServiceKeyCommand, { silent: true }).stdout;
   let cfServiceKey = regexServiceKey.exec(result)?.[1];
   if (!cfServiceKey && !optional) {
@@ -420,18 +466,21 @@ function cfServiceKey(options, config, optional) {
 function cfServiceCredentials(options, config) {
   const cfServiceKeyCommand = `cf service-key ${config.serviceInstance} ${config.serviceKey}`;
   const result = shelljs.exec(cfServiceKeyCommand, { silent: true }).stdout;
-  config.authUrl = /"url": "(.*?)"/.exec(result)?.[1];
+  config.certUrl = /"certurl": "(.*?)"/.exec(result)?.[1];
+  config.authUrl = config.certUrl || /"url": "(.*?)"/.exec(result)?.[1];
   config.auth = stripHTTPS(config.authUrl);
   config.tokenUrl = `${config.authUrl}/oauth/token`;
   config.clientId = /"clientid": "(.*?)"/.exec(result)?.[1];
   config.clientSecret = /"clientsecret": "(.*?)"/.exec(result)?.[1];
+  config.certificate = /"certificate": "(.*?)"/.exec(result)?.[1];
+  config.key = /"key": "(.*?)"/.exec(result)?.[1];
   config.api = /"api": "(.*?)"/.exec(result)?.[1];
   if (options.endpoint) {
     config.api = `${config.api}/${options.endpoint}}`;
   } else if (options.jobscheduling) {
     config.api = `${config.api}/job-scheduling/v1`;
   }
-  if (config.auth && config.clientId && config.clientSecret) {
+  if (config.auth && config.clientId) {
     return true;
   }
   console.log(`Failed to retrieve service key via command: '${cfServiceKeyCommand}'`);
@@ -505,6 +554,9 @@ function serverUrl(config) {
 }
 
 function createDestination(name, serverUrl, authUrl, clientId, clientSecret, options) {
+  if (!clientSecret) {
+    console.log(`Destinations only supported for client secrets`);
+  }
   const destination = {
     destination: {
       Name: name,
@@ -532,19 +584,39 @@ function createDestination(name, serverUrl, authUrl, clientId, clientSecret, opt
   }
 }
 
-async function fetchOAuthToken(url, clientId, clientSecret) {
-  const result = await fetch(`${url}/oauth/token?grant_type=client_credentials`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
-    },
-  });
-  if (result.ok) {
+async function fetchOAuthToken(url, clientId, clientSecret, certificate, key) {
+  let result;
+  if (clientSecret) {
+    result = await fetch(`${url}/oauth/token?grant_type=client_credentials`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+      },
+    });
+  } else if (certificate && key) {
+    certificate = certificate.split("\\n").join("\n");
+    key = key.split("\\n").join("\n");
+    const form = new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+    });
+    result = await fetch(`${url}/oauth/token`, {
+      method: "POST",
+      agent: new https.Agent({ key, cert: certificate }),
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+      },
+      body: form,
+    });
+  }
+  if (result?.ok) {
     const data = await result.json();
     if (data.access_token) {
       return data.access_token;
     }
+  } else {
+    console.log(await result.text());
   }
   console.log("Failed to fetch OAuth token");
 }

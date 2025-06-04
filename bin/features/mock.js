@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 "use strict";
 
-const { adjustJSON, adjustYAMLAllDocuments, isJava } = require("../common/util");
+const { adjustJSON, adjustYAMLAllDocuments, isNode } = require("../common/util");
 const YAML = require("yaml");
 
 const Mock = {
@@ -24,7 +24,7 @@ const Mock = {
 };
 
 module.exports = (options) => {
-  if (!isJava(options)) {
+  if (isNode(options)) {
     processNode(options);
   } else {
     processJava(options);

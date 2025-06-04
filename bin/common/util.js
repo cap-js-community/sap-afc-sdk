@@ -272,8 +272,12 @@ function copyFileAdjusted(srcPath, destPath, callback) {
   }
 }
 
+function isNode(options) {
+  return !options?.java && !isJava(options);
+}
+
 function isJava(options) {
-  return fs.existsSync(path.join(process.cwd(), "pom.xml")) || !!options?.java;
+  return !options?.node && (fs.existsSync(path.join(process.cwd(), "pom.xml")) || !!options?.java);
 }
 
 module.exports = {
@@ -295,5 +299,6 @@ module.exports = {
   copyFolderAdjusted,
   copyFile,
   copyFileAdjusted,
+  isNode,
   isJava,
 };

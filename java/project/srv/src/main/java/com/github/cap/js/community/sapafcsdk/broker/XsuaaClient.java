@@ -12,11 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +176,12 @@ public class XsuaaClient {
   }
 
   public Mono<XsuaaData> bindXsuaaClone(String serviceInstanceId, String bindingId, Map<String, Object> parameters) {
-    log.info("Binding xsuaa clone for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
+    log.info(
+      "Binding xsuaa clone for service instance id '{}' binding id '{}' parameters '{}'",
+      serviceInstanceId,
+      bindingId,
+      stringifyMap(parameters)
+    );
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.put()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
@@ -366,6 +369,29 @@ public class XsuaaClient {
       return SslContextBuilder.forClient().keyManager(certificateInputStream, privateKeyInputStream).build();
     } catch (IOException e) {
       throw new RuntimeException("Could not provide ssl context from certificate and key", e);
+    }
+  }
+
+  public static String stringifyMap(Map<?, ?> map) {
+    if (map == null) {
+      return "null";
+    }
+    return map
+      .entrySet()
+      .stream()
+      .map(entry -> entry.getKey() + "=" + stringify(entry.getValue()))
+      .collect(Collectors.joining(", ", "{", "}"));
+  }
+
+  private static String stringify(Object value) {
+    if (value instanceof Map<?, ?> nestedMap) {
+      return stringifyMap(nestedMap);
+    } else if (value instanceof Collection<?> collection) {
+      return collection.stream().map(XsuaaClient::stringify).collect(Collectors.joining(", ", "[", "]"));
+    } else if (value instanceof Object[] array) {
+      return Arrays.stream(array).map(XsuaaClient::stringify).collect(Collectors.joining(", ", "[", "]"));
+    } else {
+      return String.valueOf(value);
     }
   }
 }

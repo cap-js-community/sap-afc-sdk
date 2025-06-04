@@ -15,7 +15,8 @@ module.exports = {
       )
       .option("-b, --basic", "Basic mock support (default)")
       .option("-a, --advanced", "Advanced mock support")
-      .option("-j, --java", "Java based project")
+      .option("-n, --node", "Node flavor")
+      .option("-j, --java", "Java flavor")
       .option("-x, --xremove", "Remove feature (supported for mock)")
       .addHelpText(
         "afterAll",

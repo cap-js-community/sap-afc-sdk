@@ -4,7 +4,7 @@
 const path = require("path");
 const shelljs = require("shelljs");
 
-const { projectName, isJava, adjustXML } = require("../common/util");
+const { projectName, isNode, adjustXML } = require("../common/util");
 
 const Plugins = [
   {
@@ -19,7 +19,8 @@ module.exports = {
     return program
       .command("update")
       .description("Update project")
-      .option("-j, --java", "Java based project")
+      .option("-n, --node", "Node flavor")
+      .option("-j, --java", "Java flavor")
       .addHelpText(
         "afterAll",
         `
@@ -46,7 +47,7 @@ Examples:
   },
   process: function (options) {
     const version = require(path.join(__dirname, "../../package.json")).version;
-    if (!isJava(options)) {
+    if (isNode(options)) {
       processNode(version);
     } else {
       processJava(version);

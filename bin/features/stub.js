@@ -2,7 +2,7 @@
 "use strict";
 
 const path = require("path");
-const { isJava, adjustJSON, copyFolderAdjusted, projectName, derivePackageName } = require("../common/util");
+const { isNode, isJava, adjustJSON, copyFolderAdjusted, projectName, derivePackageName } = require("../common/util");
 
 const Files = {
   node: "node/srv",
@@ -20,7 +20,7 @@ module.exports = (options) => {
     let srcFolder;
     let destFolder;
     const packageName = derivePackageName(name);
-    if (!isJava(options)) {
+    if (isNode(options)) {
       srcFolder = path.join(__dirname, "..", "templates", Files.node);
       destFolder = path.join(process.cwd(), "srv");
     } else {
@@ -35,7 +35,7 @@ module.exports = (options) => {
     });
     console.log(`Folder '${destFolder}' written.`);
 
-    if (!isJava(options)) {
+    if (isNode(options)) {
       adjustJSON("package.json", (json) => {
         json.cds ??= {};
         json.cds.requires ??= {};

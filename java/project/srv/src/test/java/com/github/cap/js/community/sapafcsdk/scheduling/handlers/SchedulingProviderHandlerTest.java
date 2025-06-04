@@ -145,7 +145,8 @@ public class SchedulingProviderHandlerTest {
   @Test
   @WithMockUser("authenticated")
   void getJobResultData() {
-    JobResult_ jobResultRef = CQL.entity(JobResult_.class).filter(j -> j.ID().eq("b2eb590f-9505-4fd6-a5e2-511a1b2ff47f")
+    JobResult_ jobResultRef = CQL.entity(JobResult_.class).filter(j ->
+      j.ID().eq("b2eb590f-9505-4fd6-a5e2-511a1b2ff47f")
     );
     byte[] data = providerService.data(jobResultRef);
     assertEquals("This is a test", new String(data));
