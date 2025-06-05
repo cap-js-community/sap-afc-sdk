@@ -433,6 +433,10 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
 
     mockMvc
+            .perform(get("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f"))
+            .andExpect(status().isOk());
+
+    mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages"))
       .andExpect(status().isOk());
 

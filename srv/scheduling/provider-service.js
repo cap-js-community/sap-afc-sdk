@@ -22,6 +22,12 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
     });
 
+    this.before("READ", [JobResult], (req) => {
+      if (req.params.length === 0) {
+        return req.reject(JobSchedulingError.accessOnlyByKey());
+      }
+    });
+
     this.before("READ", (req) => {
       req.query.SELECT.where = undefined;
       req.query.SELECT.orderBy = Object.keys(req.target.keys).reduce((orderBy, key) => {

@@ -1,15 +1,13 @@
 "use strict";
 
-// eslint-disable-next-line no-unused-vars
-const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
     const { processJob, updateJob, cancelJob, syncJob } = this.operations;
 
     this.on(processJob, async (req, next) => {
-      // Your logic goes here. Check req.data.testRun
-      // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
+      // Your logic goes here
       await next();
     });
 

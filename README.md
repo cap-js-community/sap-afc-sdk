@@ -136,7 +136,7 @@ Furthermore, it brings the following out-of-the-box features:
   - Access welcome page at http://localhost:4004
   - Access Applications
     - [/launchpad.html](http://localhost:4004/launchpad.html): Sandbox Launchpad
-    - [/scheduling.monitoring.job/webapp](http://localhost:4004/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
+    - [/scheduling.monitoring.job](http://localhost:4004/scheduling.monitoring.job): Standalone Scheduling Monitoring Job UI
   - Access Service Endpoints
     - Public API
       - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI Swagger UI](http://localhost:4004/api-docs/api/job-scheduling/v1))
@@ -337,8 +337,7 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     const { processJob, updateJob, cancelJob, syncJob } = this.operations;
 
     this.on(processJob, async (req, next) => {
-      // Your logic goes here. Check req.data.testRun
-      // await this.processJobUpdate(req, JobStatus.completed, [{ ... }]);
+      // Your logic goes here
       await next();
     });
 
@@ -416,12 +415,12 @@ type MessageSeverityCode : String enum {
 };
 
 type JobResult {
-  name     :      String(255) not null;
-  type     :      ResultTypeCode not null;
-  link     :      String(5000);
-  mimeType :      String(255);
-  filename :      String(5000);
-  data     :      LargeBinary;
+  name     : String(255) not null;
+  type     : ResultTypeCode not null;
+  link     : String(5000);
+  mimeType : String(255);
+  filename : String(5000);
+  data     : LargeBinary;
   messages : many JobResultMessage;
 };
 
@@ -435,7 +434,7 @@ type JobResultMessage {
 
 type JobResultMessageText {
   locale : Locale not null;
-  text   : String(5000) not null;
+  text   : String(5000);
 };
 ```
 
@@ -571,7 +570,7 @@ annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-ser
 **Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
-const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
@@ -609,6 +608,8 @@ After adding the broker to project via `afc add broker`, the default configurati
 
 In addition, the broker configuration can be provided via options
 as part of CDS environment in `cds.requires.sap-afc-sdk.broker` section.
+
+More details on how to use the service broker can be found in the [Service Broker](#service-broker) section.
 
 ### Redis
 
@@ -657,7 +658,7 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
   - Access welcome page at http://localhost:8080
   - Access Applications
     - [/launchpad.html](http://localhost:8080/launchpad.html): Sandbox Launchpad
-    - [/scheduling.monitoring.job/webapp](http://localhost:8080/scheduling.monitoring.job/webapp): Standalone Scheduling Monitoring Job UI
+    - [/scheduling.monitoring.job](http://localhost:8080/scheduling.monitoring.job): Standalone Scheduling Monitoring Job UI
   - Access Service Endpoints
 
     - Public API
@@ -733,8 +734,8 @@ Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` sectio
 - `api: Object`: API configuration on `/api` paths. Default see below
   - `api.cors: Object`: Cross-Origin Resource Sharing (CORS) configuration cors module on `/api` paths. Default is `{ origin: true }`
     - `api.cors.origin: Boolean | String | String[]`: Cross-Origin Resource Sharing (CORS) origin configuration. Default is `true` (allow approuter url)
-    - `api.cors.methods: String | String[]`: Cross-Origin Resource Sharing (CORS) allow methods configuration. Default is ``
-    - `api.cors.heqaders: String | String[]`: Cross-Origin Resource Sharing (CORS) allow headers configuration. Default is ``
+    - `api.cors.methods: String | String[]`: Cross-Origin Resource Sharing (CORS) allow methods configuration. Default is `[]`
+    - `api.cors.heqaders: String | String[]`: Cross-Origin Resource Sharing (CORS) allow headers configuration. Default is `[]`
     - `api.cors.credentials: Boolean`: Cross-Origin Resource Sharing (CORS) allow credentials configuration. Default is `true`
 - `ui: Object`: UI configuration. Default is `{}`
   - `ui.enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
@@ -919,12 +920,12 @@ type MessageSeverityCode : String enum {
 };
 
 type JobResult {
-  name     :      String(255) not null;
-  type     :      ResultTypeCode not null;
-  link     :      String(5000);
-  mimeType :      String(255);
-  filename :      String(5000);
-  data     :      LargeBinary;
+  name     : String(255) not null;
+  type     : ResultTypeCode not null;
+  link     : String(5000);
+  mimeType : String(255);
+  filename : String(5000);
+  data     : LargeBinary;
   messages : many JobResultMessage;
 };
 
@@ -938,7 +939,7 @@ type JobResultMessage {
 
 type JobResultMessageText {
   locale : Locale not null;
-  text   : String(5000) not null;
+  text   : String(5000);
 };
 ```
 
@@ -1101,6 +1102,8 @@ spring:
 
 For details see [Spring Cloud Open Service Broker](https://docs.spring.io/spring-cloud-open-service-broker) documentation.
 
+More details on how to use the service broker can be found in the [Service Broker](#service-broker) section.
+
 ## Deployment
 
 To fully test the application, also accessing APIs from external, a deployment needs to be performed.
@@ -1136,7 +1139,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 ## Service Broker
 
 An Open Service Broker compliant broker implementation can be added to the CAP project.
-The broker is used to manage service key management to the API.
+The broker is used to manage service key management to the API in a Cloud Foundry environment.
 
 - Add broker and service configuration (already part of [Adding SDK](#adding-sdk))
   - Terminal: `afc add broker`

@@ -89,7 +89,7 @@
     "@cap-js/cds-test": "^0.3.0",
     "@cap-js/sqlite": "^1.11.1",
     "@sap/cds": "^8.9.4",
-    "@sap/cds-dk": "^8.9.4",
+    "@sap/cds-dk": "^8.9.5",
     "@sap/cds-lsp": "^8.9.1",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
