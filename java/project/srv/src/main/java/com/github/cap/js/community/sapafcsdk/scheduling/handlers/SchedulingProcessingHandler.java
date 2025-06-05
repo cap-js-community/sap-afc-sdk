@@ -8,7 +8,7 @@ import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.Job_;
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
-import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingError;
+import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.EventContext;
@@ -32,7 +32,7 @@ public class SchedulingProcessingHandler extends SchedulingProcessingBase implem
     Select<Job_> query = Select.from(JOB).columns(CQL.star(), CQL.to("parameters").expand()).byId(ID);
     Optional<Job> _job = persistenceService.run(query).first(Job.class);
     if (_job.isEmpty()) {
-      throw JobSchedulingError.jobNotFound(ID);
+      throw JobSchedulingException.jobNotFound(ID);
     }
     context.put("job", _job.get());
   }

@@ -4,6 +4,7 @@ import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderserv
 
 import com.github.cap.js.community.sapafcsdk.model.scheduling.DataTypeCode;
 import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.CdsException;
 import com.sap.cds.impl.parser.StructDataParser;
 import com.sap.cds.ql.CQL;
@@ -13,6 +14,7 @@ import com.sap.cds.ql.StructuredType;
 import com.sap.cds.reflect.CdsModel;
 import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.persistence.PersistenceService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -98,6 +100,37 @@ public class SchedulingProviderController {
     return null;
   }
 
+  @Hidden
+  @GetMapping("/JobParameterDefinition")
+  public ResponseEntity<?> jobParameterDefinition(
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
+  @Hidden
+  @GetMapping("/JobParameterDefinition/{name}")
+  public ResponseEntity<?> jobParameterDefinition(
+    @PathVariable(name = "name", required = true) String name,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
   @Tag(name = "Job Definition")
   @GetMapping("/JobDefinition/{name}/parameters")
   public List<JobParameterDefinition> jobDefinitionParameters(
@@ -166,6 +199,37 @@ public class SchedulingProviderController {
     return null;
   }
 
+  @Hidden
+  @GetMapping("/JobParameter")
+  public ResponseEntity<?> jobParameter(
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
+  @Hidden
+  @GetMapping("/JobParameter/{ID}")
+  public ResponseEntity<?> jobParameter(
+    @PathVariable(name = "ID", required = true) String name,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
   @Tag(name = "Job")
   @GetMapping("/Job/{ID}/parameters")
   public List<JobParameter> jobParameters(
@@ -232,6 +296,22 @@ public class SchedulingProviderController {
     return providerService.run(query).listOf(JobParameter.class);
   }
 
+  @Hidden
+  @GetMapping("/JobResult")
+  public ResponseEntity<?> jobResult(
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyByKey();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
   @Tag(name = "Job Result")
   @GetMapping("/JobResult/{ID}")
   public JobResult jobResult(@PathVariable(name = "ID", required = true) String ID, HttpServletResponse response) {
@@ -242,6 +322,37 @@ public class SchedulingProviderController {
     }
     response.setStatus(HttpStatus.NOT_FOUND.value());
     return null;
+  }
+
+  @Hidden
+  @GetMapping("/JobResultMessage")
+  public ResponseEntity<?> jobResultMessage(
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
+  @Hidden
+  @GetMapping("/JobResultMessage/{ID}")
+  public ResponseEntity<?> jobResultMessage(
+    @PathVariable(name = "ID", required = true) String name,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
   }
 
   @Tag(name = "Job Result")
@@ -353,7 +464,18 @@ public class SchedulingProviderController {
         T result = action.get();
         return ResponseEntity.status(okStatus).contentType(MediaType.APPLICATION_JSON).body(result);
       } catch (Exception exception) {
-        if (exception instanceof CdsException) {
+        if (exception instanceof JobSchedulingException) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+              Map.of(
+                "code",
+                ((JobSchedulingException) exception).getCode(),
+                "message",
+                ((JobSchedulingException) exception).getLocalizedMessage(request.getLocale())
+              )
+            );
+        } else if (exception instanceof CdsException) {
           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .contentType(MediaType.APPLICATION_JSON)
             .body(Map.of("code", "parserError", "message", exception.getMessage()));

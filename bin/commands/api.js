@@ -83,6 +83,7 @@ module.exports = {
       .option("-r, --reset", "Reset API management")
       .option("-x, --xreset", "Reset API management")
       .option("-g, --generate", "Generate broker password and hash")
+      .option("-v, --verbose", "Verbose log output")
       .addHelpText(
         "afterAll",
         `
@@ -108,27 +109,36 @@ Examples:
     if (options.properties) {
       options.destination = true;
     }
-    await module.exports.process(action, options);
+    const success = await module.exports.process(action, options);
+    if (success) {
+      if (options.xreset || options.reset) {
+        console.log("Successfully reset API management.");
+      }
+    } else {
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1);
+    }
   },
   process: async function (action, options) {
+    let success = true;
     switch (action) {
       case "key":
         if (options.generate) {
-          manageBroker(options);
+          success = manageBroker(options);
         } else if (options.passcode) {
-          managePasscode(options);
+          success = managePasscode(options);
         } else if (options.reset || options.xreset) {
-          manageClear(options);
-          manageReset(options);
+          success = manageClear(options) && manageReset(options);
         } else if (options.clear) {
-          manageClear(options);
+          success = manageClear(options);
         } else if (options.internal) {
-          await manageInternal(options);
+          success = await manageInternal(options);
         } else {
-          await manageKey(options);
+          success = await manageKey(options);
         }
         break;
     }
+    return success;
   },
 };
 
@@ -137,34 +147,48 @@ function manageBroker() {
   console.log(
     `Keep it safe to create broker and to fetch key after deployment: afc api key -p '${brokerPassword.clear}'`,
   );
+  return true;
 }
 
 function managePasscode(options) {
+  if (!cfLogin(options)) {
+    return false;
+  }
   const config = fetchAppInfo(options);
   if (!config.cf) {
     console.log("Command only supported for CF apps");
-    return;
+    return false;
   }
   if (!config.app) {
     config.app = prompt("App name: ");
-    config.url ??= fetchServerUrl(config.app) || options.server;
+    config.url ??= fetchServerUrl(config.app, options) || options.server;
   }
-  const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
+  const result = cfExec(`cf env ${config.app}`, options);
+  if (result === false) {
+    return false;
+  }
   config.authUrl = /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   open(`${config.authUrl}/passcode`);
+  return true;
 }
 
 async function manageInternal(options) {
+  if (!cfLogin(options)) {
+    return false;
+  }
   const config = fetchAppInfo(options);
   if (!config.cf) {
     console.log("Command only supported for CF apps");
-    return;
+    return false;
   }
   if (!config.app) {
     config.app = prompt("App name: ");
-    config.url ??= fetchServerUrl(config.app) || options.server;
+    config.url ??= fetchServerUrl(config.app, options) || options.server;
   }
-  const result = shelljs.exec(`cf env ${config.app}`, { silent: true }).stdout;
+  const result = cfExec(`cf env ${config.app}`, options);
+  if (result === false) {
+    return false;
+  }
   config.certUrl = /"xsuaa": \[.*"credentials": \{.*"certurl": "(.*?)"/s.exec(result)?.[1];
   config.authUrl = config.certUrl || /"xsuaa": \[.*"credentials": \{.*"url": "(.*?)"/s.exec(result)?.[1];
   config.auth = stripHTTPS(config.authUrl);
@@ -175,7 +199,7 @@ async function manageInternal(options) {
   config.internalKey = /"xsuaa": \[.*"credentials": \{.*"key": "(.*?)"/s.exec(result)?.[1];
   if (!(config.auth && config.internalClientId)) {
     console.log(`Failed to retrieve internal credentials`, { app: config.app });
-    return;
+    return false;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
     console.log(`url: ${config.tokenUrl}`);
@@ -192,7 +216,7 @@ async function manageInternal(options) {
   }
   if (options.destination) {
     serverUrl(config);
-    const destinationName = `${config.service}${options.label ? `-${options.label}` : ""}-${INTERNAL_SUFFIX}-${SERVICE_SUFFIX}`;
+    const destinationName = `${config.service || config.app}${options.label ? `-${options.label}` : ""}-${INTERNAL_SUFFIX}-${SERVICE_SUFFIX}`;
     createDestination(
       destinationName,
       config.url,
@@ -211,7 +235,7 @@ async function manageInternal(options) {
       config.internalKey,
     );
     if (!config.internalToken) {
-      return;
+      return false;
     }
     if (options.token) {
       console.log(config.internalToken);
@@ -223,34 +247,35 @@ async function manageInternal(options) {
       fillHTTPFiles(options, config);
     }
   }
+  return true;
 }
 
 async function manageKey(options) {
-  if (!cfLogin()) {
-    return;
+  if (!cfLogin(options)) {
+    return false;
   }
   const service = cfService();
   if (!service) {
-    return;
+    return false;
   }
   const config = fetchAppInfo(options, service);
   const broker = cfBroker(options, config);
   if (!broker) {
-    return;
+    return false;
   }
   config.broker = broker;
   const serviceInstance = cfServiceInstance(options, config);
   if (!serviceInstance) {
-    return;
+    return false;
   }
   config.serviceInstance = serviceInstance;
   const serviceKey = cfServiceKey(options, config);
   if (!serviceKey) {
-    return;
+    return false;
   }
   config.serviceKey = serviceKey;
   if (!cfServiceCredentials(options, config)) {
-    return;
+    return false;
   }
   if (!options.token && !options.bearer && !options.http && !options.destination) {
     console.log(`name: ${config.serviceKey}`);
@@ -280,7 +305,7 @@ async function manageKey(options) {
       config.key,
     );
     if (!config.token) {
-      return;
+      return false;
     }
     if (options.token) {
       console.log(config.token);
@@ -293,33 +318,43 @@ async function manageKey(options) {
       fillHTTPFiles(options, config);
     }
   }
+  return true;
 }
 
 function manageClear(options) {
   fillHTTPFiles(options, {}, true);
+  return true;
 }
 
 function manageReset(options) {
-  if (!cfLogin()) {
-    return;
+  if (!cfLogin(options)) {
+    return false;
   }
   const service = cfService();
   if (!service) {
-    return;
+    return false;
   }
   const config = fetchAppInfo(options, service);
   const broker = cfBroker(options, config, true);
   if (!broker) {
-    return;
+    return true;
   }
+  let success = true;
   config.broker = broker;
   const serviceInstance = cfServiceInstance(options, config, true);
   if (serviceInstance) {
     config.serviceInstance = serviceInstance;
-    cfDeleteServiceKeys(options, config);
-    cfDeleteService(options, config);
+    if (!cfDeleteServiceKeys(options, config)) {
+      success = false;
+    }
+    if (!cfDeleteService(options, config)) {
+      success = false;
+    }
   }
-  cfDeleteBroker(options, config);
+  if (!cfDeleteBroker(options, config)) {
+    success = false;
+  }
+  return success;
 }
 
 function fetchAppInfo(options, service) {
@@ -335,7 +370,7 @@ function fetchAppInfo(options, service) {
       app = /- name: (.*)\n\s*type: java\n\s*path: srv/s.exec(mta)?.[1];
     }
     if (app) {
-      const appServerUrl = fetchServerUrl(app);
+      const appServerUrl = fetchServerUrl(app, options);
       if (appServerUrl) {
         serverUrl = appServerUrl;
       }
@@ -350,14 +385,17 @@ function fetchAppInfo(options, service) {
   };
 }
 
-function fetchServerUrl(app) {
-  const result = shelljs.exec(`cf app ${app}`, { silent: true }).stdout;
+function fetchServerUrl(app, options) {
+  const result = cfExec(`cf app ${app}`, options);
+  if (result === false) {
+    return false;
+  }
   return /routes:\s*(.*)/.exec(result)?.[1];
 }
 
-function cfLogin() {
-  const result = shelljs.exec("cf apps", { silent: true }).stdout;
-  if (!result.trim().endsWith("FAILED")) {
+function cfLogin(options) {
+  const result = cfExec(`cf target`, options);
+  if (result !== false && !result.trim().endsWith("FAILED")) {
     return true;
   }
   console.log("Not logged in to Cloud Foundry. Call 'cf login' and try again.");
@@ -384,13 +422,17 @@ function cfService() {
     }
   }
   console.log(`No service found in broker configuration. Call 'afc add broker'`);
+  return "";
 }
 
 function cfBroker(options, config, optional) {
   const brokerName = `${config.service}${options.label ? `-${options.label}` : ""}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
-  let result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
+  let result = cfExec(cfBrokersCommand, options);
+  if (result === false) {
+    return false;
+  }
   let cfBroker = regexBroker.exec(result)?.[1];
   if (!cfBroker && !optional) {
     serverUrl(config);
@@ -398,8 +440,14 @@ function cfBroker(options, config, optional) {
       options.password = prompt.hide("Broker password: ");
     }
     const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${config.url}/broker --space-scoped`;
-    shelljs.exec(cfCreateBrokerCommand, { silent: true });
-    result = shelljs.exec(cfBrokersCommand, { silent: true }).stdout;
+    result = cfExec(cfCreateBrokerCommand, options);
+    if (result === false) {
+      return false;
+    }
+    result = cfExec(cfBrokersCommand, options);
+    if (result === false) {
+      return false;
+    }
     cfBroker = regexBroker.exec(result)?.[1];
   }
   if (cfBroker) {
@@ -408,27 +456,40 @@ function cfBroker(options, config, optional) {
   if (!optional) {
     const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
     console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
+    return false;
   }
+  return "";
 }
 
 function cfServiceInstance(options, config, optional) {
   const serviceInstanceName = `${config.service}${options.label ? `-${options.label}` : ""}-${SERVICE_SUFFIX}`;
   const regexService = new RegExp(`${serviceInstanceName}.*${config.service}.*${PLAN_NAME}.*(${config.broker})`);
-  const cfCreateServicesCommand = `cf services`;
-  const cfServiceCommand = `cf create-service -b ${config.broker} ${config.service} ${PLAN_NAME} ${serviceInstanceName}`;
-  let result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
+  const cfServicesCommand = `cf services`;
+  const cfCreateServiceCommand = `cf create-service -b ${config.broker} ${config.service} ${PLAN_NAME} ${serviceInstanceName}`;
+  let result = cfExec(cfServicesCommand, options);
+  if (result === false) {
+    return false;
+  }
   let cfService = regexService.exec(result)?.[1];
   if (!cfService && !optional) {
-    shelljs.exec(cfServiceCommand, { silent: true });
-    result = shelljs.exec(cfCreateServicesCommand, { silent: true }).stdout;
+    result = cfExec(cfCreateServiceCommand, options);
+    if (result === false) {
+      return false;
+    }
+    result = cfExec(cfServicesCommand, options);
+    if (result === false) {
+      return false;
+    }
     cfService = regexService.exec(result)?.[1];
   }
   if (cfService) {
     return serviceInstanceName;
   }
   if (!optional) {
-    console.log(`Failed to create service via command: '${cfServiceCommand}'`);
+    console.log(`Failed to create service via command: '${cfCreateServiceCommand}'`);
+    return false;
   }
+  return "";
 }
 
 function cfServiceKey(options, config, optional) {
@@ -436,8 +497,8 @@ function cfServiceKey(options, config, optional) {
     `${config.serviceInstance}-${SERVICE_KEY_SUFFIX}` +
     (options.new ? `-${options.new === true ? Date.now() : options.new}` : "");
   const regexServiceKey = new RegExp(`(${serviceKeyName})`);
-  const cfCreateServiceKeyCommand = `cf service-keys ${config.serviceInstance}`;
-  let cfServiceKeyCommand = `cf create-service-key ${config.serviceInstance} ${serviceKeyName}`;
+  const cfServiceKeysCommand = `cf service-keys ${config.serviceInstance}`;
+  let cfCreateServiceKeyCommand = `cf create-service-key ${config.serviceInstance} ${serviceKeyName}`;
   if (options.certificate) {
     const validity = options.certificate === true ? DEFAULT_VALIDITY : options.certificate;
     const config = {
@@ -446,26 +507,39 @@ function cfServiceKey(options, config, optional) {
         x509: { "key-length": 2048, validity, "validity-type": "DAYS" },
       },
     };
-    cfServiceKeyCommand += ` -c '${JSON.stringify(config)}'`;
+    cfCreateServiceKeyCommand += ` -c '${JSON.stringify(config)}'`;
   }
-  let result = shelljs.exec(cfCreateServiceKeyCommand, { silent: true }).stdout;
+  let result = cfExec(cfServiceKeysCommand, options);
+  if (result === false) {
+    return false;
+  }
   let cfServiceKey = regexServiceKey.exec(result)?.[1];
   if (!cfServiceKey && !optional) {
-    shelljs.exec(cfServiceKeyCommand, { silent: true });
-    result = shelljs.exec(cfCreateServiceKeyCommand, { silent: true }).stdout;
+    result = cfExec(cfCreateServiceKeyCommand, options);
+    if (result === false) {
+      return false;
+    }
+    result = cfExec(cfServiceKeysCommand, options);
+    if (result === false) {
+      return false;
+    }
     cfServiceKey = regexServiceKey.exec(result)?.[1];
   }
   if (cfServiceKey) {
     return serviceKeyName;
   }
   if (!optional) {
-    console.log(`Failed to create service key via command: '${cfServiceKeyCommand}'`);
+    console.log(`Failed to create service key via command: '${cfCreateServiceKeyCommand}'`);
+    return false;
   }
 }
 
 function cfServiceCredentials(options, config) {
   const cfServiceKeyCommand = `cf service-key ${config.serviceInstance} ${config.serviceKey}`;
-  const result = shelljs.exec(cfServiceKeyCommand, { silent: true }).stdout;
+  const result = cfExec(cfServiceKeyCommand, options);
+  if (result === false) {
+    return false;
+  }
   config.certUrl = /"certurl": "(.*?)"/.exec(result)?.[1];
   config.authUrl = config.certUrl || /"url": "(.*?)"/.exec(result)?.[1];
   config.auth = stripHTTPS(config.authUrl);
@@ -484,30 +558,40 @@ function cfServiceCredentials(options, config) {
     return true;
   }
   console.log(`Failed to retrieve service key via command: '${cfServiceKeyCommand}'`);
+  return false;
 }
 
 function cfDeleteServiceKeys(options, config) {
   const serviceKeyPrefix = `${config.serviceInstance}-${SERVICE_KEY_SUFFIX}`;
-  const cfCreateServiceKeysCommand = `cf service-keys ${config.serviceInstance}`;
-  let result = shelljs.exec(cfCreateServiceKeysCommand, { silent: true }).stdout;
+  const cfServiceKeysCommand = `cf service-keys ${config.serviceInstance}`;
+  let result = cfExec(cfServiceKeysCommand, options);
+  if (result === false) {
+    return false;
+  }
   const lines = result.split("\n");
   for (const line of lines) {
     if (line.trim().startsWith(serviceKeyPrefix)) {
       const serviceKey = line.trim().split(" ")[0];
       const cfDeleteServiceKeyCommand = `cf delete-service-key -f ${config.serviceInstance} ${serviceKey}`;
-      shelljs.exec(cfDeleteServiceKeyCommand, { silent: true }).stdout;
+      result = cfExec(cfDeleteServiceKeyCommand, options);
+      if (result === false) {
+        return false;
+      }
     }
   }
+  return true;
 }
 
 function cfDeleteService(options, config) {
   const cfDeleteServiceCommand = `cf delete-service -f ${config.serviceInstance}`;
-  shelljs.exec(cfDeleteServiceCommand, { silent: true }).stdout;
+  const result = cfExec(cfDeleteServiceCommand, options);
+  return result !== false;
 }
 
 function cfDeleteBroker(options, config) {
   const cfDeleteServiceCommand = `cf delete-service-broker -f ${config.broker}`;
-  shelljs.exec(cfDeleteServiceCommand, { silent: true }).stdout;
+  const result = cfExec(cfDeleteServiceCommand, options);
+  return result !== false;
 }
 
 function fillHTTPFiles(options, config, clear) {
@@ -633,4 +717,17 @@ function stripHTTPS(url) {
     return url.substring(8);
   }
   return url;
+}
+
+function cfExec(command, options) {
+  const result = shelljs.exec(command, { silent: !options.verbose });
+  if (result.code !== 0) {
+    if (options.verbose) {
+      console.log(`"${command}", code ${result.code}: ${result.stderr}`);
+    } else {
+      console.log(result.stderr);
+    }
+    return false;
+  }
+  return result.stdout;
 }

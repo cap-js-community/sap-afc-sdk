@@ -215,6 +215,13 @@ public class SchedulingProviderControllerTest {
   @WithMockUser("authenticated")
   public void getJobParameterDefinitions() throws Exception {
     mockMvc
+      .perform(get("/api/job-scheduling/v1/JobParameterDefinition"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobParameterDefinition/A"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+
+    mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(5))
@@ -349,6 +356,13 @@ public class SchedulingProviderControllerTest {
   @WithMockUser("authenticated")
   public void getJobParameters() throws Exception {
     mockMvc
+      .perform(get("/api/job-scheduling/v1/JobParameter"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobParameter/3a89dfec-59f9-4a91-90fe-3c7ca7407103"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+
+    mockMvc
       .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(5))
@@ -384,6 +398,10 @@ public class SchedulingProviderControllerTest {
   @WithMockUser("authenticated")
   public void getJobResults() throws Exception {
     mockMvc
+      .perform(get("/api/job-scheduling/v1/JobResult"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyByKey", null, Locale.ENGLISH)));
+
+    mockMvc
       .perform(get("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results"))
       .andExpect(status().isOk());
 
@@ -407,6 +425,13 @@ public class SchedulingProviderControllerTest {
   @Test
   @WithMockUser("authenticated")
   public void getJobResultMessages() throws Exception {
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobResultMessage"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobResultMessage/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages"))
       .andExpect(status().isOk());
@@ -993,21 +1018,19 @@ public class SchedulingProviderControllerTest {
   @Test
   @WithMockUser("authenticated")
   void getJobParameterDefinitionNotFound() throws Exception {
-    mockMvc.perform(get("/api/job-scheduling/v1/JobParameterDefinition")).andExpect(status().isNotFound());
     mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition/XXX/parameters")).andExpect(status().isNotFound());
   }
 
   @Test
   @WithMockUser("authenticated")
   void getJobParameterNotFound() throws Exception {
-    mockMvc.perform(get("/api/job-scheduling/v1/JobParameter")).andExpect(status().isNotFound());
     mockMvc.perform(get("/api/job-scheduling/v1/Job/XXX/parameters")).andExpect(status().isNotFound());
   }
 
   @Test
   @WithMockUser("authenticated")
   void getJobResultMessageNotFound() throws Exception {
-    mockMvc.perform(get("/api/job-scheduling/v1/JobResultMessage")).andExpect(status().isNotFound());
+    mockMvc.perform(get("/api/job-scheduling/v1/JobResult/XXX/messages")).andExpect(status().isNotFound());
   }
 
   @Test

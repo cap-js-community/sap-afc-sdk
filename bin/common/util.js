@@ -26,6 +26,22 @@ function derivePackageName(name) {
   return name.replace(/-/g, "_");
 }
 
+function readJSON(file) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    return JSON.parse(content);
+  }
+}
+
+function readYAML(file) {
+  const filePath = path.join(process.cwd(), file);
+  if (fs.existsSync(filePath)) {
+    const content = fs.readFileSync(filePath, "utf8");
+    return yaml.parse(content);
+  }
+}
+
 function adjustText(file, callback) {
   const filePath = path.join(process.cwd(), file);
   if (fs.existsSync(filePath)) {
@@ -62,18 +78,6 @@ function adjustAllLines(file, callback) {
     const newLines = callback(lines) ?? lines;
     return newLines.join("\n");
   });
-}
-
-function replaceTextPart(content, part, replacement, positionPart, restriction) {
-  const position = Math.max(positionPart ? content.indexOf(positionPart) : 0, 0);
-  if (restriction >= 0 && !content.slice(position, position + restriction).includes(part)) {
-    return content;
-  }
-  const index = content.indexOf(part, position);
-  if (index < 0) {
-    return content;
-  }
-  return content.slice(0, index) + replacement + content.slice(index + part.length);
 }
 
 function adjustJSON(file, callback) {
@@ -284,10 +288,11 @@ module.exports = {
   projectName,
   deriveServiceName,
   derivePackageName,
+  readJSON,
+  readYAML,
   adjustText,
   adjustLines,
   adjustAllLines,
-  replaceTextPart,
   adjustJSON,
   adjustYAML,
   adjustYAMLDocument,

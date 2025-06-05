@@ -45,11 +45,11 @@ public class ApiIndexContentProviderFactory implements IndexContentProviderFacto
       writer.print(HEADER);
       writer.print(ENDPOINT_START);
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobDefinition", "JobDefinition");
-      // writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobParameterDefinition", "JobParameterDefinition");
+      writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobParameterDefinition", "JobParameterDefinition");
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/Job", "Job");
-      // writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobParameter", "JobParameter");
+      writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobParameter", "JobParameter");
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobResult", "JobResult");
-      // writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobResultMessage", "JobResultMessage");
+      writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobResultMessage", "JobResultMessage");
       writer.print(ENDPOINT_END);
     }
 

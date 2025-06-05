@@ -18,7 +18,7 @@ import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.Jo
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
-import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingError;
+import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Insert;
@@ -65,29 +65,29 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .where(jd -> jd.name().eq(definitionName));
     Optional<JobDefinition> _jobDefinition = persistenceService.run(query).first(JobDefinition.class);
     if (_jobDefinition.isEmpty()) {
-      throw JobSchedulingError.jobDefinitionNotFound(definitionName);
+      throw JobSchedulingException.jobDefinitionNotFound(definitionName);
     }
 
     JobDefinition jobDefinition = _jobDefinition.get();
 
     // Reference ID
     if (data.getReferenceID() == null) {
-      throw JobSchedulingError.referenceIDMissing();
+      throw JobSchedulingException.referenceIDMissing();
     }
     try {
       UUID.fromString(data.getReferenceID());
     } catch (IllegalArgumentException e) {
-      throw JobSchedulingError.referenceIDNoUUID(data.getReferenceID());
+      throw JobSchedulingException.referenceIDNoUUID(data.getReferenceID());
     }
 
     // Results
     if (data.getResults() != null) {
-      throw JobSchedulingError.jobResultsReadOnly();
+      throw JobSchedulingException.jobResultsReadOnly();
     }
 
     // Start Date & Time
     if (data.getStartDateTime() != null && !jobDefinition.getSupportsStartDateTime()) {
-      throw JobSchedulingError.startDateTimeNotSupported(jobDefinition.getName());
+      throw JobSchedulingException.startDateTimeNotSupported(jobDefinition.getName());
     }
 
     // Header
@@ -112,10 +112,10 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     if (data.getParameters() != null) {
       for (com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.JobParameter parameter : data.getParameters()) {
         if (parameter.getName() == null) {
-          throw JobSchedulingError.jobParameterNameMissing();
+          throw JobSchedulingException.jobParameterNameMissing();
         }
         if (!parameterDefinitions.containsKey(parameter.getName())) {
-          throw JobSchedulingError.jobParameterNotKnown(parameter.getName());
+          throw JobSchedulingException.jobParameterNotKnown(parameter.getName());
         }
         parameters.put(parameter.getName(), parameter);
       }
@@ -126,7 +126,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
         jobParameterDefinition.getName()
       );
       if (parameter == null && jobParameterDefinition.getRequired()) {
-        throw JobSchedulingError.jobParameterRequired(jobParameterDefinition.getName());
+        throw JobSchedulingException.jobParameterRequired(jobParameterDefinition.getName());
       }
       if (parameter == null) {
         continue;
@@ -138,14 +138,14 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
           parameter.get("value") != null &&
           !parameter.get("value").equals(jobParameterDefinition.getValue())
         ) {
-          throw JobSchedulingError.jobParameterReadOnly(jobParameterDefinition.getName());
+          throw JobSchedulingException.jobParameterReadOnly(jobParameterDefinition.getName());
         }
       }
       if (!parameter.containsKey("value")) {
         parameter.setValue(jobParameterDefinition.getValue());
       }
       if ((!parameter.containsKey("value") || parameter.get("value") == null) && jobParameterDefinition.getRequired()) {
-        throw JobSchedulingError.jobParameterValueRequired(jobParameterDefinition.getName());
+        throw JobSchedulingException.jobParameterValueRequired(jobParameterDefinition.getName());
       }
       if (parameter.containsKey("value") && parameter.get("value") != null) {
         switch (jobParameterDefinition.getDataTypeCode()) {
@@ -157,7 +157,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
             try {
               Float.parseFloat(parameter.get("value").toString());
             } catch (NumberFormatException e) {
-              throw JobSchedulingError.jobParameterValueInvalidType(
+              throw JobSchedulingException.jobParameterValueInvalidType(
                 parameter.get("value"),
                 parameter.getName(),
                 jobParameterDefinition.getDataTypeCode()
@@ -167,7 +167,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
             break;
           case DataTypeCode.DATETIME:
             if (!isValidISODateTime(parameter.get("value").toString())) {
-              throw JobSchedulingError.jobParameterValueInvalidType(
+              throw JobSchedulingException.jobParameterValueInvalidType(
                 parameter.get("value"),
                 parameter.getName(),
                 jobParameterDefinition.getDataTypeCode()
@@ -180,7 +180,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
               !(("true".equals(parameter.get("value").toString())) ||
                 ("false".equals(parameter.get("value").toString())))
             ) {
-              throw JobSchedulingError.jobParameterValueInvalidType(
+              throw JobSchedulingException.jobParameterValueInvalidType(
                 parameter.get("value"),
                 parameter.getName(),
                 jobParameterDefinition.getDataTypeCode()
@@ -259,11 +259,11 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .toString();
     Optional<Job> _job = persistenceService.run(context.getCqn()).first(Job.class);
     if (_job.isEmpty()) {
-      throw JobSchedulingError.jobNotFound(ID);
+      throw JobSchedulingException.jobNotFound(ID);
     }
     Job job = _job.get();
     if (!(JobStatusCode.REQUESTED.equals(job.getStatus()) || JobStatusCode.RUNNING.equals(job.getStatus()))) {
-      throw JobSchedulingError.jobCannotBeCanceled(job.getStatus());
+      throw JobSchedulingException.jobCannotBeCanceled(job.getStatus());
     }
   }
 
@@ -311,7 +311,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .toString();
     Optional<JobResult> _jobResult = persistenceService.run(context.getCqn()).first(JobResult.class);
     if (_jobResult.isEmpty()) {
-      throw JobSchedulingError.jobResultNotFound(ID);
+      throw JobSchedulingException.jobResultNotFound(ID);
     }
   }
 

@@ -13,7 +13,7 @@ import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.S
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
-import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingError;
+import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Update;
 import com.sap.cds.ql.cqn.CqnUpdate;
@@ -106,11 +106,11 @@ public class SchedulingProcessingBase {
     Job job = (Job) context.get("job");
 
     if (status == null || status.isEmpty()) {
-      throw JobSchedulingError.statusValueMissing();
+      throw JobSchedulingException.statusValueMissing();
     }
 
     if (this.statusTransitions.get(status) == null) {
-      throw JobSchedulingError.invalidJobStatus(status);
+      throw JobSchedulingException.invalidJobStatus(status);
     }
 
     if (status.equals(job.getStatusCode())) {
@@ -118,7 +118,7 @@ public class SchedulingProcessingBase {
     }
 
     if (!this.checkStatusTransition(context, job.getStatusCode(), status)) {
-      throw JobSchedulingError.statusTransitionNotAllowed(job.getStatusCode(), status);
+      throw JobSchedulingException.statusTransitionNotAllowed(job.getStatusCode(), status);
     }
 
     job.setStatusCode(status);
@@ -158,51 +158,51 @@ public class SchedulingProcessingBase {
         com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.create();
 
       if (result.getName() == null || result.getName().isEmpty()) {
-        throw JobSchedulingError.resultNameMissing();
+        throw JobSchedulingException.resultNameMissing();
       }
       if (result.getType() == null || result.getType().isEmpty()) {
-        throw JobSchedulingError.resultTypeMissing();
+        throw JobSchedulingException.resultTypeMissing();
       }
 
       switch (result.getType()) {
         case ResultTypeCode.LINK:
           if (result.getLink() == null) {
-            throw JobSchedulingError.linkMissing(result.getType());
+            throw JobSchedulingException.linkMissing(result.getType());
           }
           if (result.getMimeType() != null) {
-            throw JobSchedulingError.mimeTypeNotAllowed(result.getType());
+            throw JobSchedulingException.mimeTypeNotAllowed(result.getType());
           }
           if (result.getFilename() != null) {
-            throw JobSchedulingError.filenameNotAllowed(result.getType());
+            throw JobSchedulingException.filenameNotAllowed(result.getType());
           }
           if (result.getData() != null) {
-            throw JobSchedulingError.dataNotAllowed(result.getType());
+            throw JobSchedulingException.dataNotAllowed(result.getType());
           }
           if (result.getMessages() != null) {
-            throw JobSchedulingError.messagesNotAllowed(result.getType());
+            throw JobSchedulingException.messagesNotAllowed(result.getType());
           }
           break;
         case ResultTypeCode.DATA:
           if (result.getMimeType() == null) {
-            throw JobSchedulingError.mimeTypeMissing(result.getType());
+            throw JobSchedulingException.mimeTypeMissing(result.getType());
           }
           if (result.getFilename() == null) {
-            throw JobSchedulingError.filenameMissing(result.getType());
+            throw JobSchedulingException.filenameMissing(result.getType());
           }
           if (result.getData() == null) {
-            throw JobSchedulingError.dataMissing(result.getType());
+            throw JobSchedulingException.dataMissing(result.getType());
           }
           if (result.getLink() != null) {
-            throw JobSchedulingError.linkNotAllowed(result.getType());
+            throw JobSchedulingException.linkNotAllowed(result.getType());
           }
           if (result.getMessages() != null) {
-            throw JobSchedulingError.messagesNotAllowed(result.getType());
+            throw JobSchedulingException.messagesNotAllowed(result.getType());
           }
           break;
         case ResultTypeCode.MESSAGE:
           Collection<JobResultMessage> messages = result.getMessages();
           if (messages == null || messages.isEmpty()) {
-            throw JobSchedulingError.messagesMissing(result.getType());
+            throw JobSchedulingException.messagesMissing(result.getType());
           }
 
           List<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessage> dbMessages = new ArrayList<>();
@@ -212,7 +212,7 @@ public class SchedulingProcessingBase {
               com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessage.create();
 
             if (message.getCode() == null) {
-              throw JobSchedulingError.codeMissing();
+              throw JobSchedulingException.codeMissing();
             }
 
             dbMessage.setCode(message.getCode());
@@ -221,7 +221,7 @@ public class SchedulingProcessingBase {
             if (dbMessage.getText() == null) {
               String defaultText = messageProvider.get(message.getCode(), null, Locale.getDefault());
               if (defaultText == null) {
-                throw JobSchedulingError.textMissing();
+                throw JobSchedulingException.textMissing();
               }
               dbMessage.setText(defaultText);
             }
@@ -239,14 +239,14 @@ public class SchedulingProcessingBase {
             } else {
               for (JobResultMessageText text : message.getTexts()) {
                 if (text.getLocale() == null || text.getLocale().isEmpty()) {
-                  throw JobSchedulingError.localeMissing();
+                  throw JobSchedulingException.localeMissing();
                 }
                 boolean isValidLocale = locales
                   .stream()
                   .map(Locale::toString)
                   .anyMatch(l -> l.equals(text.getLocale()));
                 if (!isValidLocale) {
-                  throw JobSchedulingError.invalidLocale(text.getLocale());
+                  throw JobSchedulingException.invalidLocale(text.getLocale());
                 }
                 com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts dbText =
                   com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts.create();
@@ -257,7 +257,7 @@ public class SchedulingProcessingBase {
                     .stream()
                     .filter(l -> l.toString().equals(dbText.getLocale()))
                     .findFirst()
-                    .orElseThrow(() -> JobSchedulingError.invalidLocale(dbText.getLocale()));
+                    .orElseThrow(() -> JobSchedulingException.invalidLocale(dbText.getLocale()));
                   dbText.setText(messageProvider.get(message.getCode(), null, locale));
                 }
                 dbTexts.add(dbText);
@@ -267,11 +267,11 @@ public class SchedulingProcessingBase {
             dbMessage.setTexts(dbTexts);
 
             if (message.getSeverity() == null) {
-              throw JobSchedulingError.severityMissing();
+              throw JobSchedulingException.severityMissing();
             }
 
             if (!MESSAGE_SEVERITIES.contains(message.getSeverity())) {
-              throw JobSchedulingError.invalidMessageSeverity(message.getSeverity());
+              throw JobSchedulingException.invalidMessageSeverity(message.getSeverity());
             }
 
             dbMessage.setSeverityCode(message.getSeverity());
@@ -287,20 +287,20 @@ public class SchedulingProcessingBase {
           dbResult.setMessages(dbMessages);
 
           if (result.getLink() != null) {
-            throw JobSchedulingError.linkNotAllowed(result.getType());
+            throw JobSchedulingException.linkNotAllowed(result.getType());
           }
           if (result.getMimeType() != null) {
-            throw JobSchedulingError.mimeTypeNotAllowed(result.getType());
+            throw JobSchedulingException.mimeTypeNotAllowed(result.getType());
           }
           if (result.getFilename() != null) {
-            throw JobSchedulingError.filenameNotAllowed(result.getType());
+            throw JobSchedulingException.filenameNotAllowed(result.getType());
           }
           if (result.getData() != null) {
-            throw JobSchedulingError.dataNotAllowed(result.getType());
+            throw JobSchedulingException.dataNotAllowed(result.getType());
           }
           break;
         default:
-          throw JobSchedulingError.invalidResultType(result.getType());
+          throw JobSchedulingException.invalidResultType(result.getType());
       }
 
       dbResult.setJobId(jobId);

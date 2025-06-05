@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const cds = require("@sap/cds");
 
-const { projectName, isNode, generateHashBrokerPassword, adjustYAMLAllDocuments } = require("../common/util");
+const { projectName, isNode, readYAML, generateHashBrokerPassword, adjustYAMLAllDocuments } = require("../common/util");
 const YAML = require("yaml");
 
 const BROKER_PATH = path.join(process.cwd(), "srv/broker.json");
@@ -83,6 +83,17 @@ function writeFile(path, content) {
 }
 
 module.exports = (options) => {
+  if (
+    !(
+      readYAML("mta.yaml")?.resources?.find(
+        (r) => r?.parameters?.service === "xsuaa" && r?.parameters?.["service-plan"] === "broker",
+      ) || readYAML("chart/values.yaml")?.xsuaa?.servicePlanName === "broker"
+    )
+  ) {
+    console.log(`Broker feature requires a project using xsuaa with service plan 'broker'`);
+    return false;
+  }
+
   // Catalog
   if (process.env.BROKER_SERVICE_ID) {
     CATALOG.services[0].id = process.env.BROKER_SERVICE_ID;
