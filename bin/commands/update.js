@@ -19,8 +19,8 @@ module.exports = {
     return program
       .command("update")
       .description("Update project")
-      .option("-n, --node", "Node flavor")
-      .option("-j, --java", "Java flavor")
+      .option("-n, --node", "Node flavor enforced")
+      .option("-j, --java", "Java flavor enforced")
       .addHelpText(
         "afterAll",
         `

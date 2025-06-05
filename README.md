@@ -1205,6 +1205,19 @@ HTTP files will be placed at `/http`.
 
 ### Authorization
 
+#### Authentication Method
+
+The SDK supports authentication via `xsuaa` or `ias`. `xsuaa` is the default:
+
+- `xsuaa`: Authentication via XSUAA service.
+  - Boostrap SDK via `cds init <target> xsuaa`
+  - [Service Broker](#service-broker) feature can be used to manage service keys and access tokens
+- `ias`: Authentication via SAP Cloud Identity Services.
+  - Boostrap SDK via `cds init <target> ias`
+  - Is used to authenticate users for application and apis (`broker` feature is not available)
+
+#### Service Restrictions
+
 Scheduling Provider Service can be restricted for authorization adding `@requires` annotation:
 
 ```cds

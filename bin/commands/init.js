@@ -43,7 +43,7 @@ module.exports = {
           .default(config.defaults.target),
       )
       .addArgument(
-        new commander.Argument("[auth]", `Initialize project for authorization type (${config.auths.join(", ")})`)
+        new commander.Argument("[auth]", `Initialize project for authentication method (${config.auths.join(", ")})`)
           .choices(config.auths)
           .default(config.defaults.auth),
       )
@@ -53,8 +53,8 @@ module.exports = {
           "Add one or more features to the project (comma-separated list)",
         ).choices(["app", "broker", "http", "mock", "sample", "stub", "test"]),
       )
-      .option("-n, --node", "Node flavor")
-      .option("-j, --java", "Java flavor")
+      .option("-n, --node", "Node flavor enforced")
+      .option("-j, --java", "Java flavor enforced")
       .addHelpText(
         "afterAll",
         `
