@@ -15,6 +15,8 @@ module.exports = {
       )
       .option("-b, --basic", "Basic mock support (default)")
       .option("-a, --advanced", "Advanced mock support")
+      .option("-n, --node", "Node flavor enforced")
+      .option("-j, --java", "Java flavor enforced")
       .option("-x, --xremove", "Remove feature (supported for mock)")
       .addHelpText(
         "afterAll",
@@ -40,8 +42,15 @@ Examples:
     const features = (argument ?? "").split(",").map((f) => f.trim());
     const options = this.opts();
     const success = module.exports.process(features, options);
-    if (!options.xremove && success) {
-      console.log("Successfully added features to your project.");
+    if (success) {
+      if (options.xremove) {
+        console.log("Successfully removed features from your project.");
+      } else {
+        console.log("Successfully added features to your project.");
+      }
+    } else {
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(-1);
     }
   },
   process: function (features, options) {

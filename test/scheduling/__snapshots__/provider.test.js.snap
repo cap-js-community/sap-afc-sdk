@@ -593,6 +593,16 @@ exports[`API GET Job Parameters 2`] = `
 `;
 
 exports[`API GET Job Result Messages 1`] = `
+{
+  "filename": null,
+  "link": null,
+  "mimeType": null,
+  "name": "Message",
+  "type": "message",
+}
+`;
+
+exports[`API GET Job Result Messages 2`] = `
 [
   {
     "code": "ERROR_01",
@@ -612,7 +622,7 @@ exports[`API GET Job Result Messages 1`] = `
 ]
 `;
 
-exports[`API GET Job Result Messages 2`] = `
+exports[`API GET Job Result Messages 3`] = `
 [
   {
     "code": "INFO_01",

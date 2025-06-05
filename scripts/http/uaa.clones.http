@@ -1,0 +1,63 @@
+### Token
+POST https://{{auth}}/oauth/token?grant_type=client_credentials
+Accept: application/json
+Authorization: Basic {{clientId}} {{clientSecret}}
+
+### Get Clones
+GET https://{{auth}}/sap/rest/broker/clones
+Authorization: Bearer {{token}}
+
+### Get Clone
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}
+Authorization: Bearer {{token}}
+
+### Create Clone
+POST https://{{auth}}/sap/rest/broker/clones?serviceinstanceid={{instanceId}}&subaccountid={{subaccountId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "xsappname": "{{instanceId}}",
+  "oauth2-configuration": {
+    "credential-types": ["binding-secret", "x509"]
+  }
+}
+
+### Delete Clone
+DELETE https://{{auth}}/sap/rest/broker/clones/{{instanceId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Bind Clone
+PUT https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### Bind Clone (X509)
+PUT https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+   "parameters": {
+     "credential-type": "x509",
+     "x509": { "key-length": 2048, "validity": {{validityDays}}, "validity-type": "DAYS" }
+   }
+}
+
+### Get Clone Bindings
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/bindings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Get Clone Binding
+GET https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Unbind Clone
+DELETE https://{{auth}}/sap/rest/broker/clones/{{instanceId}}/binding/{{bindingId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json

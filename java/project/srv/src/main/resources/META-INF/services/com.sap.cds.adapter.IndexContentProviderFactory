@@ -1,0 +1,3 @@
+com.github.cap.js.community.sapafcsdk.index.ApiIndexContentProviderFactory
+com.github.cap.js.community.sapafcsdk.index.AppIndexContentProviderFactory
+com.github.cap.js.community.sapafcsdk.index.WsIndexContentProviderFactory

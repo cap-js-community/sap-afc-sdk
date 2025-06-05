@@ -1517,12 +1517,21 @@
             "scopes": {}
           }
         }
+      },
+      "bearer": {
+        "description": "To access this API, use the HTTP bearer authentication.",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
   "security": [
     {
       "oauth2": []
+    },
+    {
+      "bearer": []
     }
   ],
   "x-sap-direction": "outbound",

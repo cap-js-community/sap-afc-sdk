@@ -11,6 +11,8 @@ process.env.VCAP_APPLICATION = JSON.stringify({
   uris: ["sap-afc-sdk-srv.sap.com"],
 });
 
+cds.env.requires["sap-afc-sdk"].api.csp = true;
+
 process.env.PORT = 0; // Random
 
 describe("API", () => {
@@ -65,7 +67,7 @@ describe("API", () => {
         },
       });
       expect(response.headers).toMatchObject({
-        "access-control-allow-origin": "https://example.com",
+        "access-control-allow-origin": "https://sap-afc-sdk.sap.com",
         vary: "Origin",
       });
     });
@@ -266,7 +268,10 @@ describe("API", () => {
   });
 
   it("GET Job Result Messages", async () => {
-    let response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
+    await expect(GET("/api/job-scheduling/v1/JobResult")).rejects.toThrowAPIError(400, "accessOnlyByKey", []);
+    let response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?top=1");
     expect(response.data).toHaveLength(1);

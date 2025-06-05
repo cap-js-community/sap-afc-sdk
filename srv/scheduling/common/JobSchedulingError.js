@@ -10,6 +10,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static accessOnlyByKey() {
+    return new JobSchedulingError("accessOnlyByKey", {
+      args: [],
+      httpStatus: 400,
+    });
+  }
+
   static jobNotFound(ID) {
     return new JobSchedulingError("jobNotFound", {
       args: [ID],

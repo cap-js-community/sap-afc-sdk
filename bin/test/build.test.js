@@ -18,47 +18,148 @@ const workingDir = path.join(__dirname, "..", tempDir);
 const projectDir = path.join(workingDir, project);
 
 const Commands = {
-  BEFORE: [`cd ${tempDir}`, `npx cds init ${project}`, `cd ${project}`, "npm install ../../../"],
-  CF: ["npx afc init cf"],
-  KYMA: ["npx afc init kyma"],
-  AFTER: ["npx afc add -a broker,stub,mock,sample,test,http"],
+  BEGIN: [`cd ${tempDir}`],
+  CDS_NODE: [`npx cds init ${project}`],
+  CDS_JAVA: [`npx cds init ${project} --java`],
+  INSTALL: [`cd ${project}`, "npm install ../../../"],
+  AFC_CF: ["npx afc init cf"],
+  AFC_KYMA: ["npx afc init kyma"],
+  AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
+  AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
+  END: [], // ["npm test"]
 };
 
 const Files = {
-  ALL: ["package.json", "app/router/xs-app.json", "srv/broker.json", "srv/catalog.json"],
+  COMMON: [
+    "package.json",
+    "app/router/xs-app.json",
+    "http/scheduling/provider.cloud.http",
+    "http/scheduling/provider.local.http",
+  ],
+  NODE: [
+    "srv/broker.json",
+    "srv/catalog.json",
+    "srv/scheduling-processing-service.cds",
+    "srv/scheduling-processing-service.js",
+    "srv/scheduling-provider-service.cds",
+    "srv/scheduling-provider-service.js",
+    "test/scheduling.provider.test.js",
+  ],
+  JAVA: [
+    ".cdsrc.json",
+    "srv/pom.xml",
+    "srv/src/main/resources/application.yaml",
+    "srv/src/main/java/customer/afcsdk/ApplicationConfig.java",
+    "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java",
+    "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java",
+    "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java",
+  ],
   CF: ["mta.yaml"],
-  KYMA: ["chart/values.yaml", "containerize.yaml"],
+  KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],
 };
+
+// TODO: Temporary
+process.removeAllListeners("warning");
 
 describe("Build", () => {
   beforeEach(() => {
     if (fs.existsSync(workingDir)) {
-      fs.rmdirSync(workingDir, { recursive: true });
+      fs.rmSync(workingDir, { recursive: true });
     }
     fs.mkdirSync(workingDir);
   });
 
   afterAll(() => {
     if (fs.existsSync(workingDir)) {
-      fs.rmdirSync(workingDir, { recursive: true });
+      fs.rmSync(workingDir, { recursive: true });
     }
   });
 
-  it("CF", async () => {
-    const code = shelljs.exec([...Commands.BEFORE, ...Commands.CF, ...Commands.AFTER].join(" && ")).code;
-    expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.CF]) {
+  it("Node / CF", async () => {
+    const result = shelljs.exec(
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_NODE,
+        ...Commands.INSTALL,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_NODE,
+        ...Commands.AFC_NODE,
+        ...Commands.END,
+      ].join(" && "),
+    );
+    expect(cleanErr(result.stderr)).toBe("");
+    expect(result.code).toBe(0);
+    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
   });
 
-  it("Kyma", async () => {
-    const code = shelljs.exec([...Commands.BEFORE, ...Commands.KYMA, ...Commands.AFTER].join(" && ")).code;
-    expect(code).toBe(0);
-    for (const file of [...Files.ALL, ...Files.KYMA]) {
+  it("Node / Kyma", async () => {
+    const result = shelljs.exec(
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_NODE,
+        ...Commands.INSTALL,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_NODE,
+        ...Commands.AFC_NODE,
+        ...Commands.END,
+      ].join(" && "),
+    );
+    expect(cleanErr(result.stderr)).toMatch(/'cds add redis' is not available for Kyma yet/);
+    expect(result.code).toBe(0);
+    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
+      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
+      expect(content).toMatchSnapshot();
+    }
+  });
+
+  it("Java / CF", async () => {
+    const result = shelljs.exec(
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_JAVA,
+        ...Commands.INSTALL,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_CF,
+        ...Commands.AFC_JAVA,
+        ...Commands.AFC_JAVA,
+        ...Commands.END,
+      ].join(" && "),
+    );
+    expect(cleanErr(result.stderr)).toBe("");
+    expect(result.code).toBe(0);
+    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
+      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
+      expect(content).toMatchSnapshot();
+    }
+  });
+
+  it("Java / Kyma", async () => {
+    const result = shelljs.exec(
+      [
+        ...Commands.BEGIN,
+        ...Commands.CDS_JAVA,
+        ...Commands.INSTALL,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_KYMA,
+        ...Commands.AFC_JAVA,
+        ...Commands.AFC_JAVA,
+        ...Commands.END,
+      ].join(" && "),
+    );
+    expect(cleanErr(result.stderr)).toBe("");
+    expect(result.code).toBe(0);
+    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       const content = fs.readFileSync(path.join(projectDir, file), "utf8");
       expect(content).toMatchSnapshot();
     }
   });
 });
+
+function cleanErr(err) {
+  return err.trim();
+}
