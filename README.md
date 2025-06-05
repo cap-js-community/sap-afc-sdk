@@ -821,7 +821,7 @@ custom processing logic, and the processing status update handling.
 
 To implement a custom job processing extend the job processing service definition as follows:
 
-**Implementation file:** `srv/src/main/java/customer/scheduling/SchedulingProcessingHandler.java`
+**Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProcessingHandler.java`
 
 ```java
 package customer.scheduling;
@@ -974,7 +974,7 @@ under package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPI
 
 To implement a custom job provider extend the job provider service definition as follows:
 
-**Implementation file:** `srv/src/main/java/customer/<project>/scheduling/SchedulingProviderHandler.java`
+**Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProviderHandler.java`
 
 ```java
 package customer.scheduling;
@@ -1053,18 +1053,21 @@ sap-afc-sdk:
     cron: 0 */2 * * * *
 ```
 
-**Implementation file:** `srv/src/main/java/customer/scheduling/SchedulingProcessingHandler.java`
+**Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProcessingHandler.java`
 
 ```java
 package customer.scheduling;
 
-import cds.gen.schedulingprocessingservice.*;
-import com.sap.cds.services.handler.annotations.*;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProcessingService_.CDS_NAME)
-public class SchedulingProcessingHandler extends scheduling.handlers.SchedulingProcessingHandler {
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = SyncJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
