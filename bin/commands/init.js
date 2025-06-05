@@ -233,10 +233,11 @@ function processJava(target, auth) {
     }
   });
   adjustJSON("package.json", (json) => {
+    json.cds ??= {};
+    json.cds.requires ??= {};
+    json.cds.requires["event-queue"] = false;
     if (!cdsrc) {
       if (json.cds?.requires?.outbox?.kind !== "persistent-outbox") {
-        json.cds ??= {};
-        json.cds.requires ??= {};
         json.cds.requires.outbox ??= {};
         json.cds.requires.outbox.kind = "persistent-outbox";
       }

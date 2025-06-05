@@ -429,6 +429,7 @@ function cfBroker(options, config, optional) {
   const brokerName = `${config.service}${options.label ? `-${options.label}` : ""}-broker`;
   const regexBroker = new RegExp(`(${brokerName})\\s+https://`);
   const cfBrokersCommand = `cf service-brokers`;
+  const cfCreateBrokerCommandLog = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
   let result = cfExec(cfBrokersCommand, options);
   if (result === false) {
     return false;
@@ -440,7 +441,7 @@ function cfBroker(options, config, optional) {
       options.password = prompt.hide("Broker password: ");
     }
     const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '${options.password}' ${config.url}/broker --space-scoped`;
-    result = cfExec(cfCreateBrokerCommand, options);
+    result = cfExec(cfCreateBrokerCommand, options, cfCreateBrokerCommandLog);
     if (result === false) {
       return false;
     }
@@ -454,8 +455,7 @@ function cfBroker(options, config, optional) {
     return brokerName;
   }
   if (!optional) {
-    const cfCreateBrokerCommand = `cf create-service-broker ${brokerName} broker-user '***' ${config.url}/broker --space-scoped`;
-    console.log(`Failed to create service broker via command: '${cfCreateBrokerCommand}'`);
+    console.log(`Failed to create service broker via command: '${cfCreateBrokerCommandLog}'`);
     return false;
   }
   return "";
@@ -719,11 +719,11 @@ function stripHTTPS(url) {
   return url;
 }
 
-function cfExec(command, options) {
+function cfExec(command, options, log) {
   const result = shelljs.exec(command, { silent: !options.verbose });
   if (result.code !== 0) {
     if (options.verbose) {
-      console.log(`"${command}", code ${result.code}: ${result.stderr}`);
+      console.log(`"${log || command}", code ${result.code}: ${result.stderr}`);
     } else {
       console.log(result.stderr);
     }

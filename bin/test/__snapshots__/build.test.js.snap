@@ -13,16 +13,17 @@ exports[`Build Java / CF 1`] = `
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
   },
+  "cds": {
+    "requires": {
+      "event-queue": false,
+      "workzone": true
+    }
+  },
   "scripts": {
     "postinstall": "afc update",
     "start": "mvn spring-boot:run",
     "test": "mvn test",
     "build": "mvn cds:build"
-  },
-  "cds": {
-    "requires": {
-      "workzone": true
-    }
   },
   "sapux": [
     "app/scheduling.monitoring.job"
@@ -813,16 +814,17 @@ exports[`Build Java / Kyma 1`] = `
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
   },
+  "cds": {
+    "requires": {
+      "event-queue": false,
+      "workzone": true
+    }
+  },
   "scripts": {
     "postinstall": "afc update",
     "start": "mvn spring-boot:run",
     "test": "mvn test",
     "build": "mvn cds:build"
-  },
-  "cds": {
-    "requires": {
-      "workzone": true
-    }
   },
   "sapux": [
     "app/scheduling.monitoring.job"

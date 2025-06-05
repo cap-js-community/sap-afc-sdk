@@ -8,7 +8,7 @@ const packageJSON = require("../package.json");
 
 const COMMANDS = ["init", "update", "add", "api"];
 
-// TODO: Temporary removal
+// TODO: Temporary
 process.removeAllListeners("warning");
 process.on("warning", (warning) => {
   if (["DEP0040"].includes(warning.code)) {

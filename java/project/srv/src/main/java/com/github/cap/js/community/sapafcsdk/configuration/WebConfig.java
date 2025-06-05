@@ -68,7 +68,6 @@ public class WebConfig implements WebMvcConfigurer {
       .addMapping("/api/**")
       .allowedOrigins(origins)
       .allowedMethods(methods)
-      .allowedMethods(methods)
       .allowedHeaders(headers)
       .allowCredentials(credentials);
   }

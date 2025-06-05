@@ -58,6 +58,9 @@ const Files = {
   KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],
 };
 
+// TODO: Temporary
+process.removeAllListeners("warning");
+
 describe("Build", () => {
   beforeEach(() => {
     if (fs.existsSync(workingDir)) {
@@ -158,10 +161,5 @@ describe("Build", () => {
 });
 
 function cleanErr(err) {
-  return err
-    .replace(
-      /\(node:.*\) \[DEP0040] DeprecationWarning: The `punycode` module is deprecated\. Please use a userland alternative instead.*\n.*\(Use `node --trace-deprecation \.\.\.` to show where the warning was created\)\n?/gi,
-      "",
-    )
-    .trim();
+  return err.trim();
 }
