@@ -32,9 +32,9 @@ jobs:
           cache: maven
       - run: npm ci
       - name: Setup CDS project
-        run: npx cds init afcjdk && cd afcjdk && npm i
+        run: npx cds init afcjdk --java
       - name: Install SDK
-        run: npm i github:cap-js-community/sap-afc-sdk
+        run: npm install github:cap-js-community/sap-afc-sdk
         working-directory: ./afcjdk
       - name: Boostrap SDK
         run: npx afc init cf
