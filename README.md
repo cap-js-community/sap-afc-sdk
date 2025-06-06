@@ -114,7 +114,7 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
 
 ## CAP Node.js
 
-The SAP Advanced Financial Closing SDK for CDS provides a plugin for [SAP Cloud Application Programming Model (CAP)](https://cap.cloud.sap) (Node.js)
+The SAP Advanced Financial Closing SDK for CDS provides a plugin for [SAP Cloud Application Programming Model (CAP) for Node.js](https://cap.cloud.sap/docs/node.js)
 to extend and integrate with SAP Advanced Financial Closing (AFC). Specifically, it provides an out-of-the-box
 implementation of the [SAP Advanced Financial Closing Scheduling Service Provider Interface](https://hub.sap.com/api/SSPIV1)
 to expose a Scheduling Provider service to manage Job definitions and Jobs.
@@ -1179,7 +1179,7 @@ The broker is used to manage service key management to the API in a Cloud Foundr
 The application can be tested locally using the following steps:
 
 - Start application
-  - Terminal: `npm start
+  - Terminal: `npm start`
 - Open welcome page
   - Browser:
     - CAP Node.js: http://localhost:4004
@@ -1239,9 +1239,9 @@ Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/gui
 For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Add WorkZone and HTML5 Repo features (already part of [Adding SDK](#adding-sdk))
+- Add Work Zone and HTML5 Repo features (already part of [Adding SDK](#adding-sdk))
   - Terminal: `cds add workzone,html5-repo`
-- Setup and configure SAP WorkZone instance using HTML5 Apps Content Channel
+- Setup and configure SAP Work Zone instance using HTML5 Apps Content Channel
   - Add `Monitor Scheduling Jobs` app to Content Explorer
   - Assign app to a group, role and site to be accessible
 - (CAP Node.js) Disable UI served in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
