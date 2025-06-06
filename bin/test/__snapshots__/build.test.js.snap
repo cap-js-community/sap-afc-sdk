@@ -250,7 +250,7 @@ exports[`Build Java / CF 6`] = `
     <dependency>
       <groupId>com.github.cap.js.community</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.3.0</version>
+      <version>0.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -1051,7 +1051,7 @@ exports[`Build Java / Kyma 6`] = `
     <dependency>
       <groupId>com.github.cap.js.community</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.3.0</version>
+      <version>0.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
