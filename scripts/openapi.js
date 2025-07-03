@@ -172,6 +172,15 @@ function processSchedulingProviderService(check) {
             items: schema.properties.value.items,
           };
         }
+        if (pathMethod.parameters?.find((p) => ["skip", "top"].includes(p.name))) {
+          pathMethod.responses[200].headers ??= {};
+          pathMethod.responses[200].headers["x-total-count"] = {
+            description: "Total number of records.",
+            schema: {
+              type: "number",
+            },
+          };
+        }
       }
       pathMethod.responses = {
         ...pathMethod.responses,

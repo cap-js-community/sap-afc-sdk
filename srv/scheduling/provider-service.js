@@ -48,6 +48,27 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       req.query.limit(top, skip);
     });
 
+    this.before(
+      "READ",
+      [JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
+      (req) => {
+        if (!req.query.SELECT.one) {
+          req.query.SELECT.count = true;
+        }
+      },
+    );
+
+    this.after(
+      "READ",
+      [JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
+      (data, req) => {
+        if (data.$count !== undefined) {
+          req.http.res.setHeader("x-total-count", `${data.$count}`);
+          delete data.$count;
+        }
+      },
+    );
+
     this.before("READ", JobDefinition, (req) => {
       if (req.req?.query?.name) {
         req.query.where(`name like '${wildcard(req.req.query.name)}'`);

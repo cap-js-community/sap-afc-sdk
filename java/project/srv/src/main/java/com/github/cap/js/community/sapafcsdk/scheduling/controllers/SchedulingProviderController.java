@@ -7,6 +7,7 @@ import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.CdsException;
 import com.sap.cds.CdsJsonConverter;
+import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
@@ -56,7 +57,8 @@ public class SchedulingProviderController {
     @RequestParam(name = "skip", required = false) Integer skip,
     @RequestParam(name = "top", required = false) Integer top,
     @RequestParam(name = "name", required = false) String name,
-    @RequestParam(name = "search", required = false) String search
+    @RequestParam(name = "search", required = false) String search,
+    HttpServletResponse response
   ) {
     Select<JobDefinition_> query = Select.from(JOB_DEFINITION).orderBy(jd -> jd.name().asc());
     query = applyLimit(query, top, skip);
@@ -82,7 +84,11 @@ public class SchedulingProviderController {
       );
     }
 
-    return providerService.run(query).listOf(JobDefinition.class);
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    return result.listOf(JobDefinition.class);
   }
 
   @Tag(name = "Job Definition")
@@ -151,7 +157,11 @@ public class SchedulingProviderController {
       .orderBy(jd -> jd.jobName().asc(), jd -> jd.name().asc());
     query = applyLimit(query, top, skip);
 
-    List<JobParameterDefinition> parameters = providerService.run(query).listOf(JobParameterDefinition.class);
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    List<JobParameterDefinition> parameters = result.listOf(JobParameterDefinition.class);
 
     for (JobParameterDefinition parameter : parameters) {
       if (parameter.getValue() != null) {
@@ -171,7 +181,8 @@ public class SchedulingProviderController {
     @RequestParam(name = "skip", required = false) Integer skip,
     @RequestParam(name = "top", required = false) Integer top,
     @RequestParam(name = "name", required = false) String name,
-    @RequestParam(name = "referenceID", required = false) String referenceID
+    @RequestParam(name = "referenceID", required = false) String referenceID,
+    HttpServletResponse response
   ) {
     Select<Job_> query = Select.from(JOB).orderBy(j -> j.name().asc());
     query = applyLimit(query, top, skip);
@@ -183,6 +194,10 @@ public class SchedulingProviderController {
     if (referenceID != null && !referenceID.isEmpty()) {
       query = query.where(j -> j.referenceID().eq(referenceID));
     }
+
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
 
     return providerService.run(query).listOf(Job.class);
   }
@@ -249,7 +264,12 @@ public class SchedulingProviderController {
       .where(jp -> jp.jobID().eq(ID))
       .orderBy(jd -> jd.jobID().asc(), jd -> jd.name().asc());
     query = applyLimit(query, top, skip);
-    List<JobParameter> parameters = providerService.run(query).listOf(JobParameter.class);
+
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    List<JobParameter> parameters = result.listOf(JobParameter.class);
 
     Select<JobParameterDefinition_> jpdQuery = Select.from(JOB_PARAMETER_DEFINITION).where(jpd ->
       jpd.jobName().eq(job.get().getName())
@@ -293,7 +313,11 @@ public class SchedulingProviderController {
       .orderBy(jr -> jr.jobID().asc(), jr -> jr.name().asc());
     query = applyLimit(query, top, skip);
 
-    return providerService.run(query).listOf(JobParameter.class);
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    return result.listOf(JobParameter.class);
   }
 
   @Hidden
@@ -375,7 +399,11 @@ public class SchedulingProviderController {
       .orderBy(jrm -> jrm.resultID().asc(), jrm -> jrm.code().asc());
     query = applyLimit(query, top, skip);
 
-    return providerService.run(query).listOf(JobResultMessage.class);
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    return result.listOf(JobResultMessage.class);
   }
 
   @Tag(name = "Job Result")

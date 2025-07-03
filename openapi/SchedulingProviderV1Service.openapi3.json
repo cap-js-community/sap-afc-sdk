@@ -79,6 +79,14 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
+                }
+              }
             }
           },
           "400": {
@@ -311,6 +319,14 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
+                }
+              }
             }
           },
           "400": {
@@ -403,6 +419,14 @@
                   "items": {
                     "$ref": "#/components/schemas/SchedulingProviderService.JobResult"
                   }
+                }
+              }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
                 }
               }
             }
@@ -503,6 +527,14 @@
                   "items": {
                     "$ref": "#/components/schemas/SchedulingProviderService.JobDefinition"
                   }
+                }
+              }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
                 }
               }
             }
@@ -670,6 +702,14 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
+                }
+              }
             }
           },
           "400": {
@@ -833,6 +873,14 @@
                   "items": {
                     "$ref": "#/components/schemas/SchedulingProviderService.JobResultMessage"
                   }
+                }
+              }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
                 }
               }
             }

@@ -94,6 +94,7 @@ describe("API", () => {
     expect(response.data[0].name).toBe("JOB_2");
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=-1&top=4");
     expect(response.data).toHaveLength(4);
+    expect(response.headers["x-total-count"]).toBe("6");
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=1");
     expect(response.data).toHaveLength(5);
     for (let i = 0; i < response.data.length; i++) {
@@ -165,6 +166,7 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("B");
+    expect(response.headers["x-total-count"]).toBe("5");
     response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1");
     expect(cleanData(response.data)).toMatchSnapshot();
 
@@ -194,6 +196,7 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/Job?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("JOB_2");
+    expect(response.headers["x-total-count"]).toBe("3");
     response = await GET("/api/job-scheduling/v1/Job?skip=-1&top=4");
     expect(response.data).toHaveLength(3);
     response = await GET("/api/job-scheduling/v1/JobDefinition?skip=1");
@@ -237,6 +240,7 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].name).toBe("B");
+    expect(response.headers["x-total-count"]).toBe("5");
     response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1");
     expect(cleanData(response.data)).toMatchSnapshot();
 
@@ -256,6 +260,7 @@ describe("API", () => {
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].type).toBe(ResultType.link);
+    expect(response.headers["x-total-count"]).toBe("3");
 
     response = await GET("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1");
     expect(cleanData(response.data)).toMatchSnapshot();
@@ -277,6 +282,7 @@ describe("API", () => {
     expect(response.data).toHaveLength(1);
     expect(response.data[0].text).toBe("This is an error");
     expect(response.data[0].severity).toBe(MessageSeverity.error);
+    expect(response.headers["x-total-count"]).toBe("3");
     response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1");
     expect(response.data).toHaveLength(1);
     expect(response.data[0].text).toBe("This is an information");

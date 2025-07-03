@@ -89,7 +89,8 @@ public class SchedulingProviderControllerTest {
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition?skip=-1&top=4"))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.length()").value(4));
+      .andExpect(jsonPath("$.length()").value(4))
+      .andExpect(header().string("x-total-count", "6"));
 
     result = mockMvc.perform(get("/api/job-scheduling/v1/JobDefinition?skip=1")).andExpect(status().isOk()).andReturn();
 
@@ -246,7 +247,8 @@ public class SchedulingProviderControllerTest {
       .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1&top=1"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(1))
-      .andExpect(jsonPath("$[0].name").value("B"));
+      .andExpect(jsonPath("$[0].name").value("B"))
+      .andExpect(header().string("x-total-count", "5"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters?skip=1"))
@@ -298,7 +300,8 @@ public class SchedulingProviderControllerTest {
       .perform(get("/api/job-scheduling/v1/Job?skip=1&top=1"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(1))
-      .andExpect(jsonPath("$[0].name").value("JOB_2"));
+      .andExpect(jsonPath("$[0].name").value("JOB_2"))
+      .andExpect(header().string("x-total-count", "3"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/Job?skip=-1&top=4"))
@@ -387,7 +390,8 @@ public class SchedulingProviderControllerTest {
       .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1&top=1"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(1))
-      .andExpect(jsonPath("$[0].name").value("B"));
+      .andExpect(jsonPath("$[0].name").value("B"))
+      .andExpect(header().string("x-total-count", "5"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters?skip=1"))
@@ -415,7 +419,8 @@ public class SchedulingProviderControllerTest {
       .perform(get("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1&top=1"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(1))
-      .andExpect(jsonPath("$[0].type").value(ResultTypeCode.LINK));
+      .andExpect(jsonPath("$[0].type").value(ResultTypeCode.LINK))
+      .andExpect(header().string("x-total-count", "3"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results?skip=1"))
@@ -445,7 +450,8 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.length()").value(1))
       .andExpect(jsonPath("$[0].text").value("This is an error"))
-      .andExpect(jsonPath("$[0].severity").value(MessageSeverityCode.ERROR));
+      .andExpect(jsonPath("$[0].severity").value(MessageSeverityCode.ERROR))
+      .andExpect(header().string("x-total-count", "3"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages?skip=1&top=1"))
