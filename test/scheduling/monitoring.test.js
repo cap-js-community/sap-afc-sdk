@@ -117,7 +117,9 @@ describe("Monitoring Service", () => {
     const ws = await connectToWS("job-scheduling", ID);
 
     let response = await POST(`/odata/v4/job-scheduling/monitoring/Job(${ID})/cancel`, {});
-    expect(response.headers["sap-messages"]).toBe(`[{"code":"200","message":"Job was canceled.","numericSeverity":1}]`);
+    expect(response.headers["sap-messages"]).toBe(
+      `[{"code":"cancelJobSuccess","message":"Job was canceled.","numericSeverity":1}]`,
+    );
     expect(response.status).toBe(200);
     expect(response.data.status_code).toBe("cancelRequested");
 
@@ -157,22 +159,25 @@ describe("Monitoring Service", () => {
 
   describe("Error Situations", () => {
     it("POST Job Definitions", async () => {
-      await expect(POST("/odata/v4/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowAPIError(
+      await expect(POST("/odata/v4/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
     it("PUT Job Definitions", async () => {
-      await expect(PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowAPIError(
+      await expect(PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
     it("DELETE Job Definitions", async () => {
-      await expect(DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowAPIError(
+      await expect(DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
@@ -180,31 +185,43 @@ describe("Monitoring Service", () => {
     it("POST Job Parameter Definitions", async () => {
       await expect(
         POST("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')/parameters", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+      );
     });
 
     it("PUT Job Job Parameter Definitions", async () => {
       await expect(
         PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')/parameters(name='A',job_name='JOB_1')", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+      );
     });
 
     it("DELETE Job Job Parameter Definitions", async () => {
       await expect(
         DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition/JOB_1/parameters(name='A',job_name='JOB_1')", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+      );
     });
 
     it("PUT Job", async () => {
       await expect(
         PUT("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
+      ).rejects.toThrowCDSError(405, "ENTITY_IS_READ_ONLY", `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
     it("DELETE Job", async () => {
       await expect(
         DELETE("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingMonitoringService.Job" is read-only`);
+      ).rejects.toThrowCDSError(405, "ENTITY_IS_READ_ONLY", `Entity "SchedulingMonitoringService.Job" is read-only`);
     });
 
     it("Cancel Job", async () => {

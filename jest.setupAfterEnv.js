@@ -16,6 +16,16 @@ expect.extend({
     };
   },
 
+  async toThrowCDSError(received, status, code, message) {
+    const expected = `${status}: ${code} - ${message}`;
+    const response = received.response.data?.error ?? received.response.data;
+    const current = `${received.response.status}: ${response.code} - ${response.message}`;
+    return {
+      message: () => `Expected '${current}' to equal '${expected}'`,
+      pass: current === expected,
+    };
+  },
+
   async toThrowAPIUnexpectedError(received) {
     const status = 500;
     let code = "unexpectedError";

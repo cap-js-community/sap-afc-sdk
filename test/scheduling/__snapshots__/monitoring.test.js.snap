@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Monitoring Service Get $metadata 1`] = `
 "<?xml version="1.0" encoding="utf-8"?>
@@ -1122,7 +1122,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
-                        <Path>type/code</Path>
+                        <Path>type_code</Path>
                         <String>link</String>
                       </Ne>
                       <Bool>true</Bool>
@@ -1135,7 +1135,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
-                        <Path>type/code</Path>
+                        <Path>type_code</Path>
                         <String>data</String>
                       </Ne>
                       <Bool>true</Bool>
@@ -1148,7 +1148,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <Annotation Term="UI.Hidden">
                     <If>
                       <Ne>
-                        <Path>type/code</Path>
+                        <Path>type_code</Path>
                         <String>data</String>
                       </Ne>
                       <Bool>true</Bool>
@@ -1176,7 +1176,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
-                    <Path>type/code</Path>
+                    <Path>type_code</Path>
                     <String>message</String>
                   </Ne>
                   <Bool>true</Bool>
@@ -1200,7 +1200,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
-                    <Path>type/code</Path>
+                    <Path>type_code</Path>
                     <String>link</String>
                   </Ne>
                   <Bool>true</Bool>
@@ -1213,7 +1213,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
-                    <Path>type/code</Path>
+                    <Path>type_code</Path>
                     <String>data</String>
                   </Ne>
                   <Bool>true</Bool>
@@ -1226,7 +1226,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <Annotation Term="UI.Hidden">
                 <If>
                   <Ne>
-                    <Path>type/code</Path>
+                    <Path>type_code</Path>
                     <String>data</String>
                   </Ne>
                   <Bool>true</Bool>
@@ -2347,14 +2347,14 @@ exports[`Monitoring Service Get Codelists 1`] = `
   "@odata.context": "$metadata#JobStatus",
   "value": [
     {
+      "code": "cancelRequested",
+      "descr": "Requested",
+      "name": "Cancel Requested",
+    },
+    {
       "code": "canceled",
       "descr": "Canceled",
       "name": "Canceled",
-    },
-    {
-      "code": "cancelRequested",
-      "descr": "Requested",
-      "name": "Cancellation Requested",
     },
     {
       "code": "completed",
@@ -2364,12 +2364,12 @@ exports[`Monitoring Service Get Codelists 1`] = `
     {
       "code": "completedWithError",
       "descr": "Error",
-      "name": "Completed with Error",
+      "name": "Completed With Error",
     },
     {
       "code": "completedWithWarning",
       "descr": "Warning",
-      "name": "Completed with Warning",
+      "name": "Completed With Warning",
     },
     {
       "code": "failed",
@@ -2475,8 +2475,8 @@ exports[`Monitoring Service Get Codelists 5`] = `
     },
     {
       "code": "chartOfAccounts",
-      "descr": "Chart of Accounts",
-      "name": "Chart of Accounts",
+      "descr": "Chart Of Accounts",
+      "name": "Chart Of Accounts",
     },
     {
       "code": "companyCode",
@@ -3263,7 +3263,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
           "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
           "status": {
             "code": "completedWithError",
-            "name": "Completed with Error",
+            "name": "Completed With Error",
           },
           "status_code": "completedWithError",
           "testRun": false,
@@ -3297,7 +3297,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
       "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
       "status": {
         "code": "completedWithError",
-        "name": "Completed with Error",
+        "name": "Completed With Error",
       },
       "status_code": "completedWithError",
       "testRun": false,
@@ -3670,7 +3670,7 @@ exports[`Monitoring Service Get UI Flow 1`] = `
       "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
       "status": {
         "code": "completedWithError",
-        "name": "Completed with Error",
+        "name": "Completed With Error",
       },
       "status_code": "completedWithError",
       "testRun": false,
@@ -3695,7 +3695,7 @@ exports[`Monitoring Service Get UI Flow 2`] = `
   "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
   "status": {
     "code": "completedWithError",
-    "name": "Completed with Error",
+    "name": "Completed With Error",
   },
   "status_code": "completedWithError",
   "testRun": false,

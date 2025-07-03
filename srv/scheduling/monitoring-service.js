@@ -11,7 +11,7 @@ module.exports = class SchedulingMonitoringService extends BaseApplicationServic
 
     this.on(Job.actions.cancel, Job, async (req, next) => {
       const providerService = await cds.connect.to("SchedulingProviderService");
-      const ID = req.params[0];
+      const ID = req.params[0].ID;
       await providerService.tx(req).cancel(ProviderJob, ID);
       req.notify(200, "cancelJobSuccess");
       return await this.read(Job, ID);

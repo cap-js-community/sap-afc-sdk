@@ -23,56 +23,36 @@ service SchedulingMonitoringService {
 
 extend SchedulingMonitoringService.Job with columns {
   @title: '{i18n>Criticality}'
-  case status.code
-    when
-      #requested
-    then
-      5
-    when
-      #running
-    then
-      5
-    when
-      #completed
-    then
-      3
-    when
-      #completedWithWarning
-    then
-      2
-    when
-      #completedWithError
-    then
-      2
-    when
-      #failed
-    then
-      1
-    when
-      #cancelRequested
-    then
-      0
-    when
-      #canceled
-    then
-      0
+  case
+    status.code
+    when #requested
+         then 5
+    when #running
+         then 5
+    when #completed
+         then 3
+    when #completedWithWarning
+         then 2
+    when #completedWithError
+         then 2
+    when #failed
+         then 1
+    when #cancelRequested
+         then 0
+    when #canceled
+         then 0
   end as criticality : Integer
 }
 
 extend SchedulingMonitoringService.JobResultMessage with columns {
   @title: '{i18n>Criticality}'
-  case severity.code
-    when
-      #error
-    then
-      1
-    when
-      #warning
-    then
-      2
-    when
-      #info
-    then
-      5
+  case
+    severity.code
+    when #error
+         then 1
+    when #warning
+         then 2
+    when #info
+         then 5
   end as criticality : Integer
 };

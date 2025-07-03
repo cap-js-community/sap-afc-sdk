@@ -171,6 +171,11 @@ function processNode(target, auth) {
         json.sapux.push(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
       }
     }
+    if (json.cds?.server?.index === undefined) {
+      json.cds ??= {};
+      json.cds.server ??= {};
+      json.cds.server.index = true;
+    }
   });
 
   // cds add

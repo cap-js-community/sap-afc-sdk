@@ -140,31 +140,6 @@ module.exports = () => {
       }
       return yaml;
     });
-
-    // TODO: Remove (cap/issue/18449)
-    if (addedApps.length > 0) {
-      // CF
-      adjustYAMLDocument("mta.yaml", (yaml) => {
-        for (const module of yaml.get("modules").items) {
-          if (module.get("name").endsWith("-app-deployer")) {
-            const requires = module.getIn(["build-parameters", "requires"]);
-            requires.flow = false;
-            for (const app of addedApps) {
-              if (!requires.items.find((r) => r.get("name") === `${name}${app}`)) {
-                requires.items.push(
-                  yaml.createNode({
-                    name: `${name}${app}`,
-                    artifacts: [`${app}.zip`],
-                    "target-path": "resources",
-                  }),
-                );
-              }
-            }
-            break;
-          }
-        }
-      });
-    }
   } catch (err) {
     console.error(err.message);
   }

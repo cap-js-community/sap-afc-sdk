@@ -676,64 +676,81 @@ describe("API", () => {
     });
 
     it("POST Job Definitions", async () => {
-      await expect(POST("/api/job-scheduling/v1/JobDefinition", {})).rejects.toThrowAPIError(
+      await expect(POST("/api/job-scheduling/v1/JobDefinition", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
     it("PUT Job Definitions", async () => {
-      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1", {})).rejects.toThrowAPIError(
+      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
     it("DELETE Job Definitions", async () => {
-      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1")).rejects.toThrowAPIError(
+      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1")).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
     it("POST Job Parameter Definitions", async () => {
-      await expect(POST("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters", {})).rejects.toThrowAPIError(
+      await expect(POST("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
     });
 
     it("PUT Job Parameter Definitions", async () => {
-      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowAPIError(
+      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowCDSError(
         400,
+        "400",
         `Entity "SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
       );
-      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowAPIError(
+      await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
       await expect(
         PUT("/api/job-scheduling/v1/JobDefinition('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+      );
     });
 
     it("DELETE Job Parameter Definitions", async () => {
-      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowAPIError(
+      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowCDSError(
         400,
+        "400",
         `Entity "SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
       );
-      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowAPIError(
+      await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_READ_ONLY",
         `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
       await expect(
         DELETE("/api/job-scheduling/v1/JobDefinition('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
-      ).rejects.toThrowAPIError(405, `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+      );
     });
 
     it("PUT Job", async () => {
-      await expect(PUT("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103", {})).rejects.toThrowAPIError(
+      await expect(PUT("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103", {})).rejects.toThrowCDSError(
         405,
+        "ENTITY_IS_NOT_CRUD",
         `Entity "Job" is not updatable`,
       );
     });
@@ -741,7 +758,7 @@ describe("API", () => {
     it("DELETE Job", async () => {
       await expect(
         DELETE("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103", {}),
-      ).rejects.toThrowAPIError(405, `Entity "Job" is not deletable`);
+      ).rejects.toThrowCDSError(405, "ENTITY_IS_NOT_CRUD", `Entity "Job" is not deletable`);
     });
 
     it("READ Job Definition with wrong options", async () => {
@@ -782,7 +799,7 @@ describe("API", () => {
           name: "JOB_1",
           referenceID: 1,
         }),
-      ).rejects.toThrowAPIError(400, "Value 1 is not a valid UUID");
+      ).rejects.toThrowCDSError(400, "ASSERT_DATA_TYPE", "Value 1 is not a valid UUID");
       await expect(
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",
@@ -801,7 +818,7 @@ describe("API", () => {
           referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
           startDateTime: "X",
         }),
-      ).rejects.toThrowAPIError(400, "Value X is not a valid DateTime");
+      ).rejects.toThrowCDSError(400, "ASSERT_DATA_TYPE", "Value X is not a valid DateTime");
       await expect(
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",
@@ -809,7 +826,11 @@ describe("API", () => {
           startDateTime: new Date().toISOString().split(".")[0] + "Z",
           parameters: "test",
         }),
-      ).rejects.toThrowAPIError(400, `Value test is not a valid SchedulingProviderService.JobParameter`);
+      ).rejects.toThrowCDSError(
+        400,
+        "ASSERT_DATA_TYPE",
+        `Value test is not a valid SchedulingProviderService.JobParameter`,
+      );
       await expect(
         POST("/api/job-scheduling/v1/Job", {
           name: "JOB_1",

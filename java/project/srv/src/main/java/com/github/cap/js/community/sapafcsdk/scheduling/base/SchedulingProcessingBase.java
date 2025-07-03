@@ -125,8 +125,10 @@ public class SchedulingProcessingBase {
     CqnUpdate update = Update.entity(JOB).data(job);
     persistenceService.run(update);
     if (results != null && !results.isEmpty()) {
-      Collection<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> insertResults =
-        this.checkJobResults(context, results);
+      Collection<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> insertResults = this.checkJobResults(
+        context,
+        results
+      );
       Insert insert = Insert.into(JOB_RESULT).entries(insertResults);
       persistenceService.run(insert);
     }

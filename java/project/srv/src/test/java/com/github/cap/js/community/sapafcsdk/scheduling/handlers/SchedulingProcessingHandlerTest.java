@@ -19,7 +19,6 @@ import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.junit.jupiter.api.Test;
@@ -826,13 +825,10 @@ public class SchedulingProcessingHandlerTest {
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
-    String targetMessage =
-      ((InvocationTargetException) exception.getCause().getCause()).getTargetException().getMessage();
     assertTrue(
-      targetMessage.contains(
-        "Value of element 'code' in entity 'SchedulingProcessingService.JobResultMessage' is required"
-      ),
-      "Expected exception message not found: " + exception.getMessage()
+      exception
+        .getMessage()
+        .contains("Value of element 'code' in entity 'SchedulingProcessingService.JobResultMessage' is required")
     );
 
     messages = new ArrayList<
@@ -849,11 +845,10 @@ public class SchedulingProcessingHandlerTest {
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
-    targetMessage = ((InvocationTargetException) exception.getCause().getCause()).getTargetException().getMessage();
     assertTrue(
-      targetMessage.contains(
-        "Value of element 'severity' in entity 'SchedulingProcessingService.JobResultMessage' is required"
-      )
+      exception
+        .getMessage()
+        .contains("Value of element 'severity' in entity 'SchedulingProcessingService.JobResultMessage' is required")
     );
 
     messages = new ArrayList<
@@ -992,16 +987,10 @@ public class SchedulingProcessingHandlerTest {
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results10);
     });
-    targetMessage = ((InvocationTargetException) exception
-        .getCause()
-        .getCause()
-        .getCause()
-        .getCause()).getTargetException()
-      .getMessage();
     assertTrue(
-      targetMessage.contains(
-        "Value of element 'locale' in entity 'SchedulingProcessingService.JobResultMessageText' is required"
-      ),
+      exception
+        .getMessage()
+        .contains("Value of element 'locale' in entity 'SchedulingProcessingService.JobResultMessageText' is required"),
       "Expected exception message not found: " + exception.getMessage()
     );
 

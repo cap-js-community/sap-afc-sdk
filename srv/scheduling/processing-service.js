@@ -45,10 +45,10 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
       const job = await SELECT.one(Job, (job) => {
-        job`.*`,
+        (job`.*`,
           job.parameters((parameter) => {
             parameter`.*`;
-          });
+          }));
       }).where({ ID });
       if (!job) {
         return req.reject(JobSchedulingError.jobNotFound(ID));

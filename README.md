@@ -652,15 +652,13 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
 
 ### Usage
 
-- Run `npm add @cap-js-community/sap-afc-sdk` in and `com.sap.cds` CAP Java project
+- Run `npm add @cap-js-community/sap-afc-sdk` in `com.sap.cds` CAP Java project
 - Execute `npm start` to start server
-
   - Access welcome page at http://localhost:8080
   - Access Applications
     - [/launchpad.html](http://localhost:8080/launchpad.html): Sandbox Launchpad
     - [/scheduling.monitoring.job](http://localhost:8080/scheduling.monitoring.job): Standalone Scheduling Monitoring Job UI
   - Access Service Endpoints
-
     - Public API
       - [/api/job-scheduling/v1](http://localhost:4004/api/job-scheduling/v1): Scheduling Provider API ([OpenAPI Swagger UI](http://localhost:8080/api-docs/api/job-scheduling/v1))
     - OData API (UI)
@@ -668,22 +666,19 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
     - WebSocket API
       - [/ws/job-scheduling](http://localhost:8080/ws/job-scheduling): Scheduling WebSocket endpoint
     - CDS Internal API
+    - `SchedulingProcessingService`: Scheduling Processing service
 
-      - `SchedulingProcessingService`: Scheduling Processing service
-
-        ```java
-        @Autowired
-        private SchedulingProcessingService processingService;
-
-        ```
+      ```java
+      @Autowired
+      private SchedulingProcessingService processingService;
+      ```
 
       - `SchedulingWebsocketService`: Scheduling Websocket service
 
-        ```java
-        @Autowired
-        private SchedulingWebsocketService websocketService;
-
-        ```
+      ```java
+      @Autowired
+      private SchedulingWebsocketService websocketService;
+      ```
 
 ### Architecture
 
@@ -866,7 +861,6 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     context.proceed();
   }
 }
-
 ```
 
 A stub implementation for custom scheduling processing service can be generated via command:
@@ -1015,7 +1009,6 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
     context.proceed();
   }
 }
-
 ```
 
 A stub implementation for custom scheduling provider service can be generated via command:
@@ -1077,7 +1070,6 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     context.proceed();
   }
 }
-
 ```
 
 A stub implementation for periodic job sync can be generated via command:

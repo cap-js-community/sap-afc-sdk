@@ -88,13 +88,13 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
       if (req.data.jobID) {
         const job = await SELECT.one(DBJob, (job) => {
-          job.ID,
+          (job.ID,
             job.definition((jobDefinition) => {
-              jobDefinition.name,
+              (jobDefinition.name,
                 jobDefinition.parameters((jobParameterDefinition) => {
-                  jobParameterDefinition.name, jobParameterDefinition.dataType_code.as("dataType");
-                });
-            });
+                  (jobParameterDefinition.name, jobParameterDefinition.dataType_code.as("dataType"));
+                }));
+            }));
         }).where({ ID: req.data.jobID });
         parameters = toMap(job.definition.parameters);
       }
@@ -111,10 +111,10 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       // Definition
       const definitionName = req.data.name;
       const jobDefinition = await SELECT.one(DBJobDefinition, (jobDefinition) => {
-        jobDefinition`.*`,
+        (jobDefinition`.*`,
           jobDefinition.parameters((jobParameterDefinition) => {
             jobParameterDefinition`.*`;
-          });
+          }));
       }).where({ name: definitionName });
       if (!jobDefinition) {
         return req.reject(JobSchedulingError.jobDefinitionNotFound(definitionName));
@@ -287,7 +287,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.before(Job.actions.cancel, Job, async (req) => {
-      const ID = req.params[0];
+      const ID = req.params[0].ID;
       const job = await SELECT.one(Job).where({ ID });
       if (!job) {
         return req.reject(JobSchedulingError.jobNotFound(ID));
@@ -329,7 +329,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.before(JobResult.actions.data, JobResult, async (req) => {
-      const ID = req.params[0];
+      const ID = req.params[0].ID;
       const jobResult = await SELECT.one(JobResult).where({ ID });
       if (!jobResult) {
         return req.reject(JobSchedulingError.jobResultNotFound(ID));

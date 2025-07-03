@@ -54,8 +54,11 @@ public class AppIndexContentProviderFactory implements IndexContentProviderFacto
     public void writeContent(PrintWriter writer, String contextPath) {
       writer.print(ENDPOINT_START);
       writer.printf(ENDPOINT, contextPath + "/launchpad.html", "/launchpad.html");
-      for (String app : this.runtime.getEnvironment()
-        .getProperty("sap-afc-sdk.ui.apps", String[].class, APPS.toArray(new String[0]))) {
+      for (String app : this.runtime.getEnvironment().getProperty(
+        "sap-afc-sdk.ui.apps",
+        String[].class,
+        APPS.toArray(new String[0])
+      )) {
         writer.printf(ENDPOINT, contextPath + "/" + app + "/webapp/index.html", "/" + app);
       }
       writer.print(ENDPOINT_END);

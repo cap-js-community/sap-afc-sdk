@@ -322,7 +322,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .targetKeys()
       .get("ID")
       .toString();
-    context.setResult((byte[]) this.downloadData(context, ID));
+    context.setResult(this.downloadData(context, ID));
     context.setCompleted();
   }
 }

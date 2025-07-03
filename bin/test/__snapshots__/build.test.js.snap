@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Build Java / CF 1`] = `
 "{
@@ -8,7 +8,7 @@ exports[`Build Java / CF 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^8.9.3"
+    "@sap/cds-dk": "^9.0.4"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -192,9 +192,6 @@ Content-Type: application/json
 
 exports[`Build Java / CF 5`] = `
 "{
-  "sql": {
-    "native_hana_associations": false
-  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -204,7 +201,8 @@ exports[`Build Java / CF 5`] = `
       "db": "hana",
       "destinations": true,
       "html5-runtime": true
-    }
+    },
+    "cloud-logging": true
   }
 }
 "
@@ -636,9 +634,9 @@ modules:
         properties:
           srv-url: \${default-url}
     requires:
-      - name: afcsdk-destination
       - name: afcsdk-auth
       - name: afcsdk-db
+      - name: afcsdk-destination
       - name: afcsdk-cloud-logging
 
   - name: afcsdk-db-deployer
@@ -735,6 +733,25 @@ modules:
         - npm run build
       supported-platforms: []
 resources:
+  - name: afcsdk-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: broker
+      path: ./xs-security.json
+      config:
+        xsappname: afcsdk-\${org}-\${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+    requires:
+      - name: app-api
+  - name: afcsdk-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -753,11 +770,6 @@ resources:
                 ProxyType: Internet
                 HTML5.ForwardAuthToken: true
                 HTML5.DynamicDestination: true
-              - Name: ui5
-                URL: https://ui5.sap.com
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
     requires:
       - name: srv-api
         group: destinations
@@ -765,20 +777,6 @@ resources:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-  - name: afcsdk-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: broker
-      path: ./xs-security.json
-      config:
-        xsappname: afcsdk-\${org}-\${space}
-        tenant-mode: dedicated
-  - name: afcsdk-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -809,7 +807,7 @@ exports[`Build Java / Kyma 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^8.9.3"
+    "@sap/cds-dk": "^9.0.4"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -993,9 +991,6 @@ Content-Type: application/json
 
 exports[`Build Java / Kyma 5`] = `
 "{
-  "sql": {
-    "native_hana_associations": false
-  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -1005,7 +1000,8 @@ exports[`Build Java / Kyma 5`] = `
       "db": "hana",
       "destinations": true,
       "html5-runtime": true
-    }
+    },
+    "cloud-logging": true
   }
 }
 "
@@ -1421,15 +1417,6 @@ dependencies:
   - name: service-instance
     alias: destination
     version: ">0.0.0"
-  - name: service-instance
-    alias: xsuaa
-    version: ">0.0.0"
-  - name: service-instance
-    alias: hana
-    version: ">0.0.0"
-  - name: content-deployment
-    alias: hana-deployer
-    version: ">0.0.0"
   - name: web-application
     alias: approuter
     version: ">0.0.0"
@@ -1441,6 +1428,18 @@ dependencies:
     version: ">0.0.0"
   - name: service-instance
     alias: html5-apps-repo-runtime
+    version: ">0.0.0"
+  - name: service-instance
+    alias: xsuaa
+    version: ">0.0.0"
+  - name: service-instance
+    alias: hana
+    version: ">0.0.0"
+  - name: content-deployment
+    alias: hana-deployer
+    version: ">0.0.0"
+  - name: service-instance
+    alias: cloud-logging
     version: ">0.0.0"
 "
 `;
@@ -1457,12 +1456,12 @@ global:
     tag: latest
 srv:
   bindings:
-    destination:
-      serviceInstanceName: destination
     auth:
       serviceInstanceName: xsuaa
     db:
       serviceInstanceName: hana
+    destination:
+      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
@@ -1489,12 +1488,6 @@ srv:
     enabled: true
   networkSecurity:
     allowNamespaceInternal: true
-destination:
-  serviceOfferingName: destination
-  servicePlanName: lite
-  parameters:
-    version: 1.0.0
-    HTML5Runtime_enabled: true
 xsuaa:
   serviceOfferingName: xsuaa
   servicePlanName: broker
@@ -1540,13 +1533,19 @@ approuter:
     - configMapRef:
         name: "{{ .Release.Name }}-approuter-configmap"
   bindings:
-    auth:
-      serviceInstanceName: xsuaa
     html5-apps-repo-runtime:
       serviceInstanceName: html5-apps-repo-runtime
+    auth:
+      serviceInstanceName: xsuaa
 backendDestinations:
   srv-api:
     service: srv
+destination:
+  serviceOfferingName: destination
+  servicePlanName: lite
+  parameters:
+    version: 1.0.0
+    HTML5Runtime_enabled: true
 html5-apps-repo-host:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-host
@@ -1642,18 +1641,21 @@ exports[`Build Node / CF 1`] = `
   "private": true,
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../..",
-    "@cap-js/hana": "^1",
-    "@sap/cds": "^8",
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
     "@sap/xssec": "^4",
     "express": "^4",
-    "redis": "^4"
+    "redis": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "devDependencies": {
-    "@cap-js/cds-test": "^0.3.0",
-    "@cap-js/cds-types": "^0.10.0",
-    "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^8",
-    "jest": "^29.7.0"
+    "@cap-js/cds-test": "^0.4.0",
+    "@cap-js/cds-types": "^0.12.0",
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": ">=8",
+    "jest": "^30.0.4"
   },
   "scripts": {
     "start": "cds-serve",
@@ -1687,6 +1689,7 @@ exports[`Build Node / CF 1`] = `
         "html5-runtime": true
       },
       "workzone": true,
+      "cloud-logging": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -1697,8 +1700,8 @@ exports[`Build Node / CF 1`] = `
         }
       }
     },
-    "sql": {
-      "native_hana_associations": false
+    "server": {
+      "index": true
     }
   },
   "sapux": [
@@ -2081,10 +2084,10 @@ modules:
         properties:
           srv-url: \${default-url}
     requires:
-      - name: afcsdk-destination
-      - name: afcsdk-db
       - name: afcsdk-auth
+      - name: afcsdk-db
       - name: afcsdk-redis
+      - name: afcsdk-destination
       - name: afcsdk-cloud-logging
 
   - name: afcsdk-db-deployer
@@ -2178,6 +2181,41 @@ modules:
               sap.cloud.service: afcsdk.service
 
 resources:
+  - name: afcsdk-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: broker
+      path: ./xs-security.json
+      config:
+        xsappname: afcsdk-\${org}-\${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+    requires:
+      - name: app-api
+  - name: afcsdk-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: afcsdk-redis
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: redis-cache
+      service-plan: standard
+      # config:
+      # memory: 2 # GB, can be 2 or 4
+      # multi_az: true
+      # cluster_mode: true
+      # shard_count: 1
+      # node_count: 3 # per shard minimum is 3 (for standard plan)
+      # engine_version: "6.0" # can be "4.0" or "6.0"
+      # maintenance_window:
+      # day_of_week: Friday
+      # start_hour_utc: 0
+      # duration: 5 # hours
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -2196,11 +2234,6 @@ resources:
                 ProxyType: Internet
                 HTML5.ForwardAuthToken: true
                 HTML5.DynamicDestination: true
-              - Name: ui5
-                URL: https://ui5.sap.com
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
     requires:
       - name: srv-api
         group: destinations
@@ -2208,36 +2241,6 @@ resources:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-  - name: afcsdk-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-  - name: afcsdk-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: broker
-      path: ./xs-security.json
-      config:
-        xsappname: afcsdk-\${org}-\${space}
-        tenant-mode: dedicated
-  - name: afcsdk-redis
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: redis-cache
-      service-plan: standard
-      # config:
-      # memory: 2 # GB, can be 2 or 4
-      # multi_az: true
-      # cluster_mode: true
-      # shard_count: 1
-      # node_count: 3 # per shard minimum is 3 (for standard plan)
-      # engine_version: "6.0" # can be "4.0" or "6.0"
-      # maintenance_window:
-      # day_of_week: Friday
-      # start_hour_utc: 0
-      # duration: 5 # hours
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -2270,17 +2273,20 @@ exports[`Build Node / Kyma 1`] = `
   "private": true,
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../..",
-    "@cap-js/hana": "^1",
-    "@sap/cds": "^8",
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
     "@sap/xssec": "^4",
     "express": "^4",
-    "redis": "^4"
+    "redis": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "devDependencies": {
-    "@cap-js/cds-test": "^0.3.0",
-    "@cap-js/cds-types": "^0.10.0",
-    "@cap-js/sqlite": "^1",
-    "jest": "^29.7.0"
+    "@cap-js/cds-test": "^0.4.0",
+    "@cap-js/cds-types": "^0.12.0",
+    "@cap-js/sqlite": "^2",
+    "jest": "^30.0.4"
   },
   "scripts": {
     "start": "cds-serve",
@@ -2314,6 +2320,7 @@ exports[`Build Node / Kyma 1`] = `
         "html5-runtime": true
       },
       "workzone": true,
+      "cloud-logging": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2324,8 +2331,8 @@ exports[`Build Node / Kyma 1`] = `
         }
       }
     },
-    "sql": {
-      "native_hana_associations": false
+    "server": {
+      "index": true
     }
   },
   "sapux": [
@@ -2696,15 +2703,6 @@ dependencies:
   - name: service-instance
     alias: destination
     version: ">0.0.0"
-  - name: service-instance
-    alias: hana
-    version: ">0.0.0"
-  - name: content-deployment
-    alias: hana-deployer
-    version: ">0.0.0"
-  - name: service-instance
-    alias: xsuaa
-    version: ">0.0.0"
   - name: web-application
     alias: approuter
     version: ">0.0.0"
@@ -2716,6 +2714,18 @@ dependencies:
     version: ">0.0.0"
   - name: service-instance
     alias: html5-apps-repo-runtime
+    version: ">0.0.0"
+  - name: service-instance
+    alias: xsuaa
+    version: ">0.0.0"
+  - name: service-instance
+    alias: hana
+    version: ">0.0.0"
+  - name: content-deployment
+    alias: hana-deployer
+    version: ">0.0.0"
+  - name: service-instance
+    alias: cloud-logging
     version: ">0.0.0"
 "
 `;
@@ -2732,12 +2742,12 @@ global:
     tag: latest
 srv:
   bindings:
-    destination:
-      serviceInstanceName: destination
-    db:
-      serviceInstanceName: hana
     auth:
       serviceInstanceName: xsuaa
+    db:
+      serviceInstanceName: hana
+    destination:
+      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
@@ -2762,12 +2772,15 @@ srv:
     enabled: true
   networkSecurity:
     allowNamespaceInternal: true
-destination:
-  serviceOfferingName: destination
-  servicePlanName: lite
+xsuaa:
+  serviceOfferingName: xsuaa
+  servicePlanName: broker
   parameters:
-    version: 1.0.0
-    HTML5Runtime_enabled: true
+    tenant-mode: dedicated
+    oauth2-configuration:
+      redirect-uris:
+        - https://*.{{ tpl .Values.global.domain . }}/**
+    xsappname: afcsdk-{{ .Release.Namespace }}
 hana-deployer:
   image:
     repository: afcsdk-hana-deployer
@@ -2784,15 +2797,6 @@ hana-deployer:
 hana:
   serviceOfferingName: hana
   servicePlanName: hdi-shared
-xsuaa:
-  serviceOfferingName: xsuaa
-  servicePlanName: broker
-  parameters:
-    tenant-mode: dedicated
-    oauth2-configuration:
-      redirect-uris:
-        - https://*.{{ tpl .Values.global.domain . }}/**
-    xsappname: afcsdk-{{ .Release.Namespace }}
 approuter:
   image:
     repository: afcsdk-approuter
@@ -2813,13 +2817,19 @@ approuter:
     - configMapRef:
         name: "{{ .Release.Name }}-approuter-configmap"
   bindings:
-    auth:
-      serviceInstanceName: xsuaa
     html5-apps-repo-runtime:
       serviceInstanceName: html5-apps-repo-runtime
+    auth:
+      serviceInstanceName: xsuaa
 backendDestinations:
   srv-api:
     service: srv
+destination:
+  serviceOfferingName: destination
+  servicePlanName: lite
+  parameters:
+    version: 1.0.0
+    HTML5Runtime_enabled: true
 html5-apps-repo-host:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-host

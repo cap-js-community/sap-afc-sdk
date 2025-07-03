@@ -16,6 +16,9 @@ import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.persistence.PersistenceService;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -144,12 +147,12 @@ public class SchedulingProviderHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void getJobResultData() {
+  void getJobResultData() throws IOException {
     JobResult_ jobResultRef = CQL.entity(JobResult_.class).filter(j ->
       j.ID().eq("b2eb590f-9505-4fd6-a5e2-511a1b2ff47f")
     );
-    byte[] data = providerService.data(jobResultRef);
-    assertEquals("This is a test", new String(data));
+    InputStream data = providerService.data(jobResultRef);
+    assertEquals("This is a test", new String(data.readAllBytes(), StandardCharsets.UTF_8));
   }
 
   @Test

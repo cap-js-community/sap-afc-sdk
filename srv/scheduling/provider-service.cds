@@ -58,11 +58,11 @@ service SchedulingProviderService {
       *,
       parameters : redirected to JobParameterDefinition
                      on parameters.jobName = $self.name
-      }
-      excluding {
-        texts,
-        localized
-      };
+    }
+    excluding {
+      texts,
+      localized
+    };
 
   @title: null
   entity JobParameterDefinition @readonly as
@@ -111,15 +111,15 @@ service SchedulingProviderService {
                          on parameters.jobID = $self.ID,
           results    : redirected to JobResult
                          on results.jobID = $self.ID,
-                       }
-                       excluding {
-                         definition
-                       }
-        actions {
-          action cancel();
-        };
+    }
+    excluding {
+      definition
+    }
+    actions {
+      action cancel();
+    };
 
-          @title       : null
+  @title: null
   entity JobParameter @readonly           as
     projection on scheduling.JobParameter {
       key ID                       : String(255) @readonly,
@@ -142,15 +142,15 @@ service SchedulingProviderService {
           type.code as type, *,
           messages           : redirected to JobResultMessage
                                  on messages.resultID = $self.ID,
-      }
-      excluding {
-        job,
-        type,
-        data,
-      }
-      actions {
-        function data() returns @Core.MediaType: 'application/octet-stream' LargeBinary;
-      };
+    }
+    excluding {
+      job,
+      type,
+      data,
+    }
+    actions {
+      function data() returns @Core.MediaType: 'application/octet-stream' LargeBinary;
+    };
 
   @title: null
   entity JobResultMessage @readonly       as
