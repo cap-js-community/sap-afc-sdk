@@ -19,10 +19,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -170,6 +167,19 @@ public class SchedulingProviderController {
         } else if (Objects.equals(parameter.getDataType(), DataTypeCode.NUMBER)) {
           parameter.put("value", Float.parseFloat(parameter.getValue()));
         }
+      }
+      if (parameter.getEnumValues() != null) {
+        Collection<Object> enumValues = new ArrayList<>();
+        for (String value : parameter.getEnumValues()) {
+          if (Objects.equals(parameter.getDataType(), DataTypeCode._BOOLEAN)) {
+            enumValues.add(Objects.equals(value, "true"));
+          } else if (Objects.equals(parameter.getDataType(), DataTypeCode.NUMBER)) {
+            enumValues.add(Float.parseFloat(value));
+          } else {
+            enumValues.add(value);
+          }
+        }
+        parameter.put("enumValues", enumValues);
       }
     }
     return parameters;

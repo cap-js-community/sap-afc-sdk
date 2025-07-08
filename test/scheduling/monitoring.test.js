@@ -29,6 +29,8 @@ describe("Monitoring Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')?$expand=parameters");
     expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_3')?$expand=parameters");
+    expect(cleanData(response.data)).toMatchSnapshot();
   });
 
   it("Get Jobs", async () => {

@@ -129,6 +129,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static jobParameterValueInvalidEnum(value, name) {
+    return new JobSchedulingError("jobParameterValueInvalidEnum", {
+      args: [value, name],
+      httpStatus: 400,
+    });
+  }
+
   static jobCannotBeCanceled(status) {
     return new JobSchedulingError("jobCannotBeCanceled", {
       args: [status],

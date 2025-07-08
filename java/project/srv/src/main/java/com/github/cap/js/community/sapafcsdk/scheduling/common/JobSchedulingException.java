@@ -94,6 +94,10 @@ public class JobSchedulingException extends ServiceException {
     return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "jobParameterValueInvalidType", value, name, type);
   }
 
+  public static JobSchedulingException jobParameterValueInvalidEnum(Object value, String name) {
+    return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "jobParameterValueInvalidEnum", value, name);
+  }
+
   public static JobSchedulingException jobCannotBeCanceled(String status) {
     return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "jobCannotBeCanceled", status);
   }

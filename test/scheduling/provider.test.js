@@ -629,6 +629,119 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("GET Create Job (enum)", async () => {
+    let response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_3/parameters");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        parameters: [
+          {
+            name: "A",
+            value: "xxx",
+          },
+          {
+            name: "C",
+            value: true,
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "jobParameterValueInvalidEnum", ["xxx", "A"]);
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        parameters: [
+          {
+            name: "A",
+            value: null,
+          },
+          {
+            name: "C",
+            value: true,
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "jobParameterValueRequired", ["A"]);
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        parameters: [
+          {
+            name: "A",
+            value: "ABC",
+          },
+          {
+            name: "C",
+            value: true,
+          },
+          {
+            name: "D",
+            value: 22,
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "jobParameterValueInvalidEnum", [22, "D"]);
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        parameters: [
+          {
+            name: "A",
+            value: "ABC",
+          },
+          {
+            name: "C",
+            value: "truefalse",
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "jobParameterValueInvalidEnum", ["truefalse", "C"]);
+    response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_3",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      parameters: [
+        {
+          name: "A",
+          value: "ABC",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: "23",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_3",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      parameters: [
+        {
+          name: "A",
+          value: "ABC",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 23,
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);

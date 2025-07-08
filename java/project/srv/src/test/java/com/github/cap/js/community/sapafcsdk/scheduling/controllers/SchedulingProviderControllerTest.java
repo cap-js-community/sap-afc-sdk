@@ -1,6 +1,7 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
 import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -993,6 +994,191 @@ public class SchedulingProviderControllerTest {
     assertEquals(messageProvider.get("jobBasicMock", null, Locale.ENGLISH), resultMessage.getString("text"));
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void createJobWithEnum() throws Exception {
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_3/parameters"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(5))
+      .andExpect(jsonPath("$[0].name").value("A"))
+      .andExpect(jsonPath("$[0].value").value("ABC"))
+      .andExpect(jsonPath("$[0].enumValues").value(contains("ABC", "DEF", "GHI")))
+      .andExpect(jsonPath("$[1].name").value("B"))
+      .andExpect(jsonPath("$[1].value").value(25))
+      .andExpect(jsonPath("$[2].name").value("C"))
+      .andExpect(jsonPath("$[2].value").doesNotExist())
+      .andExpect(jsonPath("$[2].enumValues").value(contains(false, true)))
+      .andExpect(jsonPath("$[3].name").value("D"))
+      .andExpect(jsonPath("$[3].value").value(24))
+      .andExpect(jsonPath("$[3].enumValues").value(contains(23.0, 24.0, 25.0)))
+      .andExpect(jsonPath("$[4].name").value("E"))
+      .andExpect(jsonPath("$[4].value").value("2025-01-01T00:00:00Z"));
+
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "xxx")),
+            new JSONObject(Map.of("name", "C", "value", true))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(
+        post("/api/job-scheduling/v1/Job")
+          .contentType("application/json")
+          .content(job.toString())
+          .locale(Locale.ENGLISH)
+      )
+      .andExpect(status().isBadRequest())
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "xxx", "A" }, Locale.ENGLISH)
+        )
+      );
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", JSONObject.NULL)),
+            new JSONObject(Map.of("name", "C", "value", true))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(
+        post("/api/job-scheduling/v1/Job")
+          .contentType("application/json")
+          .content(job.toString())
+          .locale(Locale.ENGLISH)
+      )
+      .andExpect(status().isBadRequest())
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("jobParameterValueRequired", new String[] { "A" }, Locale.ENGLISH)
+        )
+      );
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "ABC")),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", 22))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(
+        post("/api/job-scheduling/v1/Job")
+          .contentType("application/json")
+          .content(job.toString())
+          .locale(Locale.ENGLISH)
+      )
+      .andExpect(status().isBadRequest())
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "22", "D" }, Locale.ENGLISH)
+        )
+      );
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "ABC")),
+            new JSONObject(Map.of("name", "C", "value", "truefalse"))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(
+        post("/api/job-scheduling/v1/Job")
+          .contentType("application/json")
+          .content(job.toString())
+          .locale(Locale.ENGLISH)
+      )
+      .andExpect(status().isBadRequest())
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "truefalse", "C" }, Locale.ENGLISH)
+        )
+      );
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "ABC")),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", "23"))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated());
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "ABC")),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", 23))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated());
   }
 
   @Test

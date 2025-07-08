@@ -54,6 +54,9 @@ entity JobParameterDefinition {
       @title: '{i18n>Value}'
       value       : String(5000);
 
+      @title: '{i18n>EnumValues}'
+      enumValues  : array of String(5000);
+
       @title: '{i18n>Required}'
       required    : Boolean not null default false;
 };

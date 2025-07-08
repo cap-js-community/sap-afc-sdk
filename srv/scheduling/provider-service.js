@@ -121,9 +121,23 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
       for (const row of data) {
         if (parameters[row.name]?.dataType === DataType.boolean) {
-          row.value = row.value === "true";
+          if (row.value !== null) {
+            row.value = row.value === "true";
+          }
+          if (Array.isArray(row.enumValues)) {
+            row.enumValues = row.enumValues.map((value) => {
+              return value === "true";
+            });
+          }
         } else if (parameters[row.name]?.dataType === DataType.number) {
-          row.value = parseFloat(row.value);
+          if (row.value !== null) {
+            row.value = parseFloat(row.value);
+          }
+          if (Array.isArray(row.enumValues)) {
+            row.enumValues = row.enumValues.map((value) => {
+              return parseFloat(value);
+            });
+          }
         }
       }
     });
@@ -205,6 +219,15 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         }
         if ((parameter.value === undefined || parameter.value === null) && jobParameterDefinition.required) {
           return req.reject(JobSchedulingError.jobParameterValueRequired(parameter.name));
+        }
+        if (Array.isArray(jobParameterDefinition.enumValues)) {
+          if (
+            !jobParameterDefinition.enumValues.find((enumValue) => {
+              return String(enumValue) === String(parameter.value);
+            })
+          ) {
+            return req.reject(JobSchedulingError.jobParameterValueInvalidEnum(parameter.value, parameter.name));
+          }
         }
         if (parameter.value !== undefined && parameter.value !== null) {
           let parsedValue;

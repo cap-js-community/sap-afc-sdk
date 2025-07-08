@@ -64,7 +64,33 @@ public class SchedulingMonitoringHandlerTest {
       .perform(get("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')?$expand=parameters"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.name").value("JOB_1"))
-      .andExpect(jsonPath("$.parameters.[0].name").value("A"));
+      .andExpect(jsonPath("$.parameters.[0].name").value("A"))
+      .andExpect(jsonPath("$.parameters.[0].value").value("ABC"))
+      .andExpect(jsonPath("$.parameters.[1].name").value("B"))
+      .andExpect(jsonPath("$.parameters.[1].value").value("21"))
+      .andExpect(jsonPath("$.parameters.[2].name").value("C"))
+      .andExpect(jsonPath("$.parameters.[2].value").value(nullValue()))
+      .andExpect(jsonPath("$.parameters.[3].name").value("D"))
+      .andExpect(jsonPath("$.parameters.[3].value").value("22"))
+      .andExpect(jsonPath("$.parameters.[4].name").value("E"))
+      .andExpect(jsonPath("$.parameters.[4].value").value("2025-01-01T00:00:00Z"));
+    mockMvc
+      .perform(get("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_3')?$expand=parameters"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.name").value("JOB_3"))
+      .andExpect(jsonPath("$.parameters.[0].name").value("A"))
+      .andExpect(jsonPath("$.parameters.[0].value").value("ABC"))
+      .andExpect(jsonPath("$.parameters.[0].enumValues").value(contains("ABC", "DEF", "GHI")))
+      .andExpect(jsonPath("$.parameters.[1].name").value("B"))
+      .andExpect(jsonPath("$.parameters.[1].value").value("25"))
+      .andExpect(jsonPath("$.parameters.[2].name").value("C"))
+      .andExpect(jsonPath("$.parameters.[2].value").value(nullValue()))
+      .andExpect(jsonPath("$.parameters.[2].enumValues").value(contains("false", "true")))
+      .andExpect(jsonPath("$.parameters.[3].name").value("D"))
+      .andExpect(jsonPath("$.parameters.[3].value").value("24"))
+      .andExpect(jsonPath("$.parameters.[3].enumValues").value(contains("23", "24", "25")))
+      .andExpect(jsonPath("$.parameters.[4].name").value("E"))
+      .andExpect(jsonPath("$.parameters.[4].value").value("2025-01-01T00:00:00Z"));
   }
 
   @Test

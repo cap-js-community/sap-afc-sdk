@@ -1104,7 +1104,8 @@
               "failed",
               "cancelRequested",
               "canceled"
-            ]
+            ],
+            "description": "Final statuses are 'completed', 'completedWithWarning', 'completedWithError', 'failed', and 'canceled', no further status transitions are then allowed"
           },
           "createdAt": {
             "type": "string",
@@ -1318,6 +1319,29 @@
               },
               {
                 "type": "number"
+              }
+            ]
+          },
+          "enumValues": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 5000
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
               }
             ]
           },

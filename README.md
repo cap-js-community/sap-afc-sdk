@@ -388,6 +388,7 @@ As part of the custom scheduling process service implementation, the following o
   - Job status transition is validated via `async checkStatusTransition(req, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
+    - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
   - Job results are checked and processed via `async checkJobResults(req, results)`
     - Valid results are valid according to job results signature constraints (see below)
     - Returns the processed job results to be inserted
@@ -887,6 +888,7 @@ As part of the custom scheduling process service implementation, the following o
   - Job status transition is validated via `this.checkStatusTransition(context, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
+    - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
   - Job results are checked and processed via `checkJobResults(context, results)`
     - Valid results are valid according to job results signature constraints (see below)
     - Returns the processed job results to be inserted

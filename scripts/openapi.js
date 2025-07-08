@@ -53,6 +53,8 @@ function processSchedulingProviderService(check) {
     },
   };
   delete data.components.schemas.count;
+  data.components.schemas["SchedulingProviderService.Job"].properties.status.description =
+    "Final statuses are 'completed', 'completedWithWarning', 'completedWithError', 'failed', and 'canceled', no further status transitions are then allowed";
   data.components.schemas["SchedulingProviderService.Job"].required = [
     "ID",
     "name",
@@ -67,6 +69,32 @@ function processSchedulingProviderService(check) {
     { type: "string", maxLength: 5000 },
     { type: "boolean" },
     { type: "number" },
+  ];
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items.type;
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items
+    .maxLength;
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.type;
+  delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items;
+  data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.oneOf = [
+    {
+      type: "array",
+      items: {
+        type: "string",
+        maxLength: 5000,
+      },
+    },
+    {
+      type: "array",
+      items: {
+        type: "boolean",
+      },
+    },
+    {
+      type: "array",
+      items: {
+        type: "number",
+      },
+    },
   ];
   data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = ["name", "dataType", "type"];
   data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
@@ -203,7 +231,7 @@ function processSchedulingProviderService(check) {
     for (const propertyName in schema.properties) {
       const property = schema.properties[propertyName];
       delete property.nullable;
-      if (!schemaKey.endsWith("-create") && property.type === "array") {
+      if (!schemaKey.endsWith("-create") && property.type === "array" && property.items.$ref) {
         delete schema.properties[propertyName];
       }
     }

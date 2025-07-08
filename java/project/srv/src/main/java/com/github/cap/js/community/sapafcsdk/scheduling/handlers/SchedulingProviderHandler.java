@@ -147,11 +147,21 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       if ((!parameter.containsKey("value") || parameter.get("value") == null) && jobParameterDefinition.getRequired()) {
         throw JobSchedulingException.jobParameterValueRequired(jobParameterDefinition.getName());
       }
+      if (jobParameterDefinition.getEnumValues() != null) {
+        if (
+          jobParameterDefinition
+            .getEnumValues()
+            .stream()
+            .noneMatch(enumValue -> enumValue.equals(parameter.getValue()))
+        ) {
+          throw JobSchedulingException.jobParameterValueInvalidEnum(parameter.getValue(), parameter.getName());
+        }
+      }
       if (parameter.containsKey("value") && parameter.get("value") != null) {
         switch (jobParameterDefinition.getDataTypeCode()) {
           case DataTypeCode.STRING:
           default:
-            parameter.put("value", parameter.get("value").toString());
+            parameter.setValue(parameter.get("value").toString());
             break;
           case DataTypeCode.NUMBER:
             try {
@@ -163,7 +173,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
                 jobParameterDefinition.getDataTypeCode()
               );
             }
-            parameter.put("value", parameter.get("value").toString());
+            parameter.setValue(parameter.get("value").toString());
             break;
           case DataTypeCode.DATETIME:
             if (!isValidISODateTime(parameter.get("value").toString())) {
@@ -173,7 +183,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
                 jobParameterDefinition.getDataTypeCode()
               );
             }
-            parameter.put("value", normalizeISODateTime(parameter.get("value").toString()));
+            parameter.setValue(normalizeISODateTime(parameter.get("value").toString()));
             break;
           case DataTypeCode._BOOLEAN:
             if (
@@ -186,7 +196,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
                 jobParameterDefinition.getDataTypeCode()
               );
             }
-            parameter.put("value", parameter.get("value").toString());
+            parameter.setValue(parameter.get("value").toString());
             break;
         }
       }

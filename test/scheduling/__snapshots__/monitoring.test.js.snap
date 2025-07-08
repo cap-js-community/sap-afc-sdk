@@ -146,6 +146,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </NavigationProperty>
         <Property Name="mappingType_code" Type="Edm.String" MaxLength="255"/>
         <Property Name="value" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="enumValues" Type="Collection(Edm.String)" MaxLength="5000" Nullable="true"/>
         <Property Name="required" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobParameterDefinition_texts)">
           <OnDelete Action="Cascade"/>
@@ -586,6 +587,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/value">
         <Annotation Term="Common.Label" String="Value"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/enumValues">
+        <Annotation Term="Common.Label" String="Enum Values"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/required">
         <Annotation Term="Common.Label" String="Required"/>
@@ -2651,6 +2655,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Parameter A",
+          "enumValues": [],
           "job_name": "JOB_1",
           "mappingType_code": null,
           "name": "A",
@@ -2661,6 +2666,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter B",
+          "enumValues": [],
           "job_name": "JOB_1",
           "mappingType_code": null,
           "name": "B",
@@ -2671,6 +2677,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "boolean",
           "description": "Parameter C",
+          "enumValues": [],
           "job_name": "JOB_1",
           "mappingType_code": null,
           "name": "C",
@@ -2681,6 +2688,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter D",
+          "enumValues": [],
           "job_name": "JOB_1",
           "mappingType_code": null,
           "name": "D",
@@ -2691,6 +2699,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "datetime",
           "description": "Parameter E",
+          "enumValues": [],
           "job_name": "JOB_1",
           "mappingType_code": null,
           "name": "E",
@@ -2711,6 +2720,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Parameter A",
+          "enumValues": [],
           "job_name": "JOB_2",
           "mappingType_code": null,
           "name": "A",
@@ -2721,6 +2731,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter B",
+          "enumValues": [],
           "job_name": "JOB_2",
           "mappingType_code": null,
           "name": "B",
@@ -2731,6 +2742,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "boolean",
           "description": "Parameter C",
+          "enumValues": [],
           "job_name": "JOB_2",
           "mappingType_code": "testRun",
           "name": "C",
@@ -2741,6 +2753,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter D",
+          "enumValues": [],
           "job_name": "JOB_2",
           "mappingType_code": null,
           "name": "D",
@@ -2751,6 +2764,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "datetime",
           "description": "Parameter E",
+          "enumValues": [],
           "job_name": "JOB_2",
           "mappingType_code": null,
           "name": "E",
@@ -2771,6 +2785,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Parameter A",
+          "enumValues": [
+            "ABC",
+            "DEF",
+            "GHI",
+          ],
           "job_name": "JOB_3",
           "mappingType_code": null,
           "name": "A",
@@ -2781,6 +2800,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter B",
+          "enumValues": [],
           "job_name": "JOB_3",
           "mappingType_code": null,
           "name": "B",
@@ -2791,16 +2811,25 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "boolean",
           "description": "Parameter C",
+          "enumValues": [
+            false,
+            true,
+          ],
           "job_name": "JOB_3",
           "mappingType_code": "testRun",
           "name": "C",
           "required": true,
-          "type_code": "mapping",
+          "type_code": "writableValue",
           "value": null,
         },
         {
           "dataType_code": "number",
           "description": "Parameter D",
+          "enumValues": [
+            "23",
+            "24",
+            "25",
+          ],
           "job_name": "JOB_3",
           "mappingType_code": null,
           "name": "D",
@@ -2811,6 +2840,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "datetime",
           "description": "Parameter E",
+          "enumValues": [],
           "job_name": "JOB_3",
           "mappingType_code": null,
           "name": "E",
@@ -2831,6 +2861,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Parameter A",
+          "enumValues": [],
           "job_name": "JOB_4",
           "mappingType_code": "companyCode",
           "name": "A",
@@ -2841,6 +2872,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "datetime",
           "description": "Parameter B",
+          "enumValues": [],
           "job_name": "JOB_4",
           "mappingType_code": "keyDate",
           "name": "B",
@@ -2851,6 +2883,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Parameter C",
+          "enumValues": [],
           "job_name": "JOB_4",
           "mappingType_code": "processingUser",
           "name": "C",
@@ -2861,6 +2894,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "boolean",
           "description": "Parameter D",
+          "enumValues": [],
           "job_name": "JOB_4",
           "mappingType_code": "testRun",
           "name": "D",
@@ -2871,6 +2905,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Parameter E",
+          "enumValues": [],
           "job_name": "JOB_4",
           "mappingType_code": "fiscalYear",
           "name": "E",
@@ -2900,6 +2935,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "number",
           "description": "Duration",
+          "enumValues": [],
           "job_name": "JOB_6",
           "mappingType_code": null,
           "name": "duration",
@@ -2910,6 +2946,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
         {
           "dataType_code": "string",
           "description": "Status",
+          "enumValues": [],
           "job_name": "JOB_6",
           "mappingType_code": null,
           "name": "status",
@@ -2936,6 +2973,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     {
       "dataType_code": "string",
       "description": "Parameter A",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "A",
@@ -2946,6 +2984,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     {
       "dataType_code": "number",
       "description": "Parameter B",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "B",
@@ -2956,6 +2995,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     {
       "dataType_code": "boolean",
       "description": "Parameter C",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "C",
@@ -2966,6 +3006,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     {
       "dataType_code": "number",
       "description": "Parameter D",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "D",
@@ -2976,6 +3017,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
     {
       "dataType_code": "datetime",
       "description": "Parameter E",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "E",
@@ -3000,6 +3042,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     {
       "dataType_code": "string",
       "description": "Parameter A",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "A",
@@ -3010,6 +3053,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     {
       "dataType_code": "number",
       "description": "Parameter B",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "B",
@@ -3020,6 +3064,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     {
       "dataType_code": "boolean",
       "description": "Parameter C",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "C",
@@ -3030,6 +3075,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     {
       "dataType_code": "number",
       "description": "Parameter D",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "D",
@@ -3040,6 +3086,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
     {
       "dataType_code": "datetime",
       "description": "Parameter E",
+      "enumValues": [],
       "job_name": "JOB_1",
       "mappingType_code": null,
       "name": "E",
@@ -3050,6 +3097,86 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
   ],
   "supportsStartDateTime": false,
   "supportsTestRun": false,
+  "version": "1",
+}
+`;
+
+exports[`Monitoring Service Get Job Definitions 4`] = `
+{
+  "@odata.context": "$metadata#JobDefinition/$entity",
+  "description": "Job Definition 3",
+  "longDescription": "Job Definition 3",
+  "name": "JOB_3",
+  "parameters": [
+    {
+      "dataType_code": "string",
+      "description": "Parameter A",
+      "enumValues": [
+        "ABC",
+        "DEF",
+        "GHI",
+      ],
+      "job_name": "JOB_3",
+      "mappingType_code": null,
+      "name": "A",
+      "required": true,
+      "type_code": "writableValue",
+      "value": "ABC",
+    },
+    {
+      "dataType_code": "number",
+      "description": "Parameter B",
+      "enumValues": [],
+      "job_name": "JOB_3",
+      "mappingType_code": null,
+      "name": "B",
+      "required": false,
+      "type_code": "readOnlyValue",
+      "value": "25",
+    },
+    {
+      "dataType_code": "boolean",
+      "description": "Parameter C",
+      "enumValues": [
+        false,
+        true,
+      ],
+      "job_name": "JOB_3",
+      "mappingType_code": "testRun",
+      "name": "C",
+      "required": true,
+      "type_code": "writableValue",
+      "value": null,
+    },
+    {
+      "dataType_code": "number",
+      "description": "Parameter D",
+      "enumValues": [
+        "23",
+        "24",
+        "25",
+      ],
+      "job_name": "JOB_3",
+      "mappingType_code": null,
+      "name": "D",
+      "required": false,
+      "type_code": "writableValue",
+      "value": "24",
+    },
+    {
+      "dataType_code": "datetime",
+      "description": "Parameter E",
+      "enumValues": [],
+      "job_name": "JOB_3",
+      "mappingType_code": null,
+      "name": "E",
+      "required": false,
+      "type_code": "writableValue",
+      "value": "2025-01-01T00:00:00Z",
+    },
+  ],
+  "supportsStartDateTime": false,
+  "supportsTestRun": true,
   "version": "1",
 }
 `;
@@ -3425,10 +3552,10 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
             "mappingType_code": "testRun",
             "name": "C",
             "type": {
-              "code": "mapping",
-              "name": "Mapping",
+              "code": "writableValue",
+              "name": "Writable Value",
             },
-            "type_code": "mapping",
+            "type_code": "writableValue",
           },
           "definition_name": "C",
           "value": "false",
@@ -3805,10 +3932,10 @@ exports[`Monitoring Service Get UI Flow 4`] = `
         "mappingType_code": "testRun",
         "name": "C",
         "type": {
-          "code": "mapping",
-          "name": "Mapping",
+          "code": "writableValue",
+          "name": "Writable Value",
         },
-        "type_code": "mapping",
+        "type_code": "writableValue",
       },
       "definition_name": "C",
       "value": "false",

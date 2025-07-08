@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`API Create Job (JSON data types) 1`] = `
 {
@@ -338,6 +338,101 @@ exports[`API Create Job (translation) 13`] = `
 ]
 `;
 
+exports[`API GET Create Job (enum) 1`] = `
+[
+  {
+    "dataType": "string",
+    "description": "Parameter A",
+    "enumValues": [
+      "ABC",
+      "DEF",
+      "GHI",
+    ],
+    "jobName": "JOB_3",
+    "mappingType": null,
+    "name": "A",
+    "required": true,
+    "type": "writableValue",
+    "value": "ABC",
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter B",
+    "enumValues": null,
+    "jobName": "JOB_3",
+    "mappingType": null,
+    "name": "B",
+    "required": false,
+    "type": "readOnlyValue",
+    "value": 25,
+  },
+  {
+    "dataType": "boolean",
+    "description": "Parameter C",
+    "enumValues": [
+      false,
+      false,
+    ],
+    "jobName": "JOB_3",
+    "mappingType": "testRun",
+    "name": "C",
+    "required": true,
+    "type": "writableValue",
+    "value": null,
+  },
+  {
+    "dataType": "number",
+    "description": "Parameter D",
+    "enumValues": [
+      23,
+      24,
+      25,
+    ],
+    "jobName": "JOB_3",
+    "mappingType": null,
+    "name": "D",
+    "required": false,
+    "type": "writableValue",
+    "value": 24,
+  },
+  {
+    "dataType": "datetime",
+    "description": "Parameter E",
+    "enumValues": null,
+    "jobName": "JOB_3",
+    "mappingType": null,
+    "name": "E",
+    "required": false,
+    "type": "writableValue",
+    "value": "2025-01-01T00:00:00Z",
+  },
+]
+`;
+
+exports[`API GET Create Job (enum) 2`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_3",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`API GET Create Job (enum) 3`] = `
+{
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_3",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
 exports[`API GET Job 1`] = `
 [
   {
@@ -387,6 +482,7 @@ exports[`API GET Job Definition Parameters 1`] = `
   {
     "dataType": "string",
     "description": "Parameter A",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "A",
@@ -397,6 +493,7 @@ exports[`API GET Job Definition Parameters 1`] = `
   {
     "dataType": "number",
     "description": "Parameter B",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "B",
@@ -407,16 +504,18 @@ exports[`API GET Job Definition Parameters 1`] = `
   {
     "dataType": "boolean",
     "description": "Parameter C",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "C",
     "required": true,
     "type": "writableValue",
-    "value": false,
+    "value": null,
   },
   {
     "dataType": "number",
     "description": "Parameter D",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "D",
@@ -427,6 +526,7 @@ exports[`API GET Job Definition Parameters 1`] = `
   {
     "dataType": "datetime",
     "description": "Parameter E",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "E",
@@ -442,6 +542,7 @@ exports[`API GET Job Definition Parameters 2`] = `
   {
     "dataType": "number",
     "description": "Parameter B",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "B",
@@ -452,16 +553,18 @@ exports[`API GET Job Definition Parameters 2`] = `
   {
     "dataType": "boolean",
     "description": "Parameter C",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "C",
     "required": true,
     "type": "writableValue",
-    "value": false,
+    "value": null,
   },
   {
     "dataType": "number",
     "description": "Parameter D",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "D",
@@ -472,6 +575,7 @@ exports[`API GET Job Definition Parameters 2`] = `
   {
     "dataType": "datetime",
     "description": "Parameter E",
+    "enumValues": null,
     "jobName": "JOB_1",
     "mappingType": null,
     "name": "E",
