@@ -668,7 +668,7 @@ public class SchedulingProviderControllerTest {
 
     String responseString = result.getResponse().getContentAsString();
     JSONObject responseJson = (JSONObject) cleanData(new JSONObject(responseString));
-    String ID = responseJson.getString("ID");
+    final String ID = responseJson.getString("ID");
 
     assertEquals("JOB_2", responseJson.get("name"));
     assertEquals("c1253940-5f25-4a0b-8585-f62bd085b327", responseJson.get("referenceID"));
@@ -708,6 +708,51 @@ public class SchedulingProviderControllerTest {
     }
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
+
+    job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_2",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "startDateTime",
+        "2025-01-01T12:00:00Z",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abcd")),
+            new JSONObject(Map.of("name", "B", "value", 23)),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", JSONObject.NULL))
+          )
+        )
+      )
+    );
+
+    result = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    responseString = result.getResponse().getContentAsString();
+    responseJson = (JSONObject) cleanData(new JSONObject(responseString));
+    final String ID2 = responseJson.getString("ID");
+
+    paramsResult = mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID2 + "/parameters"))
+      .andExpect(status().isOk())
+      .andReturn();
+    parameters = (JSONArray) cleanData(new JSONArray(paramsResult.getResponse().getContentAsString()));
+
+    expectedParameters = Map.of("A", "abcd", "B", new BigDecimal("23.0"), "C", true, "D", JSONObject.NULL);
+    for (int i = 0; i < parameters.length(); i++) {
+      JSONObject param = parameters.getJSONObject(i);
+      String paramName = param.getString("name");
+      assertTrue(expectedParameters.containsKey(paramName));
+      assertEquals(expectedParameters.get(paramName), param.opt("value"));
+    }
+
+    persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID2)));
   }
 
   @Test
@@ -1155,9 +1200,14 @@ public class SchedulingProviderControllerTest {
       )
     );
 
-    mockMvc
+    MvcResult result = mockMvc
       .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
-      .andExpect(status().isCreated());
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    JSONObject responseJson = (JSONObject) cleanData(new JSONObject(result.getResponse().getContentAsString()));
+    final String ID = responseJson.getString("ID");
+    persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
 
     job = new JSONObject(
       Map.of(
@@ -1176,9 +1226,14 @@ public class SchedulingProviderControllerTest {
       )
     );
 
-    mockMvc
+    result = mockMvc
       .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
-      .andExpect(status().isCreated());
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    responseJson = (JSONObject) cleanData(new JSONObject(result.getResponse().getContentAsString()));
+    String ID2 = responseJson.getString("ID");
+    persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID2)));
   }
 
   @Test

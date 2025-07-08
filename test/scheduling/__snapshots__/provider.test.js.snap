@@ -49,6 +49,23 @@ exports[`API Create Job (JSON data types) 3`] = `
 ]
 `;
 
+exports[`API Create Job (JSON data types) 4`] = `
+{
+  "0": {
+    "name": "A",
+    "value": "abcd",
+  },
+  "1": {
+    "name": "C",
+    "value": true,
+  },
+  "2": {
+    "name": "D",
+    "value": null,
+  },
+}
+`;
+
 exports[`API Create Job (advanced) 1`] = `
 {
   "link": "http://localhost:4004/<ID>",

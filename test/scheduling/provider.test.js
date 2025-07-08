@@ -464,12 +464,37 @@ describe("API", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
 
-    const ID = response.data.ID;
+    let ID = response.data.ID;
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
     expect(cleanData(response.data)).toMatchSnapshot();
     expect(response.data.status).toEqual("requested");
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/parameters`);
     expect(cleanData(response.data)).toMatchSnapshot();
+
+    response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      startDateTime: "2025-01-01T12:00:00Z",
+      testRun: false,
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: null,
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    ID = response.data.ID;
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/parameters`);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
   });
 
   it("Create Job (test run)", async () => {
