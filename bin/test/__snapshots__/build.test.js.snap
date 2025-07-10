@@ -1689,7 +1689,7 @@ exports[`Build Node / CF 1`] = `
         "html5-runtime": true
       },
       "workzone": true,
-      "cloud-logging": true,
+      "cloud-logging": {},
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2320,7 +2320,7 @@ exports[`Build Node / Kyma 1`] = `
         "html5-runtime": true
       },
       "workzone": true,
-      "cloud-logging": true,
+      "cloud-logging": {},
       "SchedulingProcessingService": {
         "outbox": {
           "events": {

@@ -357,6 +357,14 @@ function processCommonBefore() {
 }
 
 function processCommonAfter() {
+  // Project
+  // TODO: Remove (cap/issues/18805)
+  adjustJSON("package.json", (json) => {
+    if (json.cds?.requires?.["cloud-logging"] === true) {
+      json.cds.requires["cloud-logging"] = {};
+    }
+  });
+
   // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {
     for (const resource of yaml.get("resources").items) {
