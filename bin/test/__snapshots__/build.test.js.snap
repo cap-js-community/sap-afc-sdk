@@ -8,7 +8,7 @@ exports[`Build Java / CF 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^9.0.4"
+    "@sap/cds-dk": "^9.1.0"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -192,6 +192,9 @@ Content-Type: application/json
 
 exports[`Build Java / CF 5`] = `
 "{
+  "cdsc": {
+    "draftMessages": true
+  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -807,7 +810,7 @@ exports[`Build Java / Kyma 1`] = `
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^9.0.4"
+    "@sap/cds-dk": "^9.1.0"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "file:../../.."
@@ -991,6 +994,9 @@ Content-Type: application/json
 
 exports[`Build Java / Kyma 5`] = `
 "{
+  "cdsc": {
+    "draftMessages": true
+  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -1652,7 +1658,7 @@ exports[`Build Node / CF 1`] = `
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0.4.0",
-    "@cap-js/cds-types": "^0.12.0",
+    "@cap-js/cds-types": "^0.13.0",
     "@cap-js/sqlite": "^2",
     "@sap/cds-dk": ">=8",
     "jest": "^30.0.4"
@@ -2284,7 +2290,7 @@ exports[`Build Node / Kyma 1`] = `
   },
   "devDependencies": {
     "@cap-js/cds-test": "^0.4.0",
-    "@cap-js/cds-types": "^0.12.0",
+    "@cap-js/cds-types": "^0.13.0",
     "@cap-js/sqlite": "^2",
     "jest": "^30.0.4"
   },
