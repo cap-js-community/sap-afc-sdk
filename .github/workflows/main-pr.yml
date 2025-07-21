@@ -3,7 +3,7 @@
 
 name: Main PR
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
@@ -13,11 +13,37 @@ on:
       - main
 
 jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      #- uses: actions/setup-node@v4
+      #  with:
+      #    node-version: 22
+      #    cache: npm
+      #- uses: actions/setup-java@v4
+      #  with:
+      #    distribution: temurin
+      #    java-version: 21
+      #    cache: maven
+      #- run: npm ci
+      #- name: Update
+      #  run: npm run update
+      #- name: Push
+      #  run: |
+      #    git config user.name "github-actions[bot]"
+      #    git config user.email "github-actions[bot]@users.noreply.github.com"
+      #    git add .
+      #    git diff --cached --quiet || git commit -m "Update"
+      #    git pull --rebase origin "${GITHUB_HEAD_REF}"
+      #    git push origin HEAD:${GITHUB_HEAD_REF}
+
   test:
     runs-on: ubuntu-latest
+    needs: update
     strategy:
       matrix:
-        node-version: [22]
+        node-version: [22, 24]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     name: test - node.js ${{ matrix.node-version }}
@@ -32,6 +58,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: update
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,6 +70,7 @@ jobs:
 
   openapi:
     runs-on: ubuntu-latest
+    needs: update
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -54,6 +82,7 @@ jobs:
 
   java-test:
     runs-on: ubuntu-latest
+    needs: update
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -70,6 +99,7 @@ jobs:
 
   java-plugin:
     runs-on: ubuntu-latest
+    needs: update
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -86,6 +116,7 @@ jobs:
 
   bin:
     runs-on: ubuntu-latest
+    needs: update
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
