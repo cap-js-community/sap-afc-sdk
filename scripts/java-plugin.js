@@ -58,22 +58,28 @@ function packagePlugin(check) {
     xml.project.properties[0].revision = version;
     return xml;
   });
+
   // Build
   shelljs.exec("mvn package");
 
-  if (check) {
-    // Check
-    if (!fs.existsSync(targetPath) || !compareJars(sourcePath, targetPath)) {
+  // Check
+  let success = true;
+  if (fs.existsSync(targetPath) && compareJars(sourcePath, targetPath)) {
+    // eslint-disable-next-line no-console
+    console.log(`Java plugin at ${targetPath} is up-to-date.`);
+  } else {
+    if (check) {
       // eslint-disable-next-line no-console
       console.log(`Java plugin at ${targetPath} is not up-to-date.`);
-      // eslint-disable-next-line n/no-process-exit
-      process.exit(-1);
+      success = false;
+    } else {
+      // Remove previous versions
+      shelljs.rm("-f", path.join(targetFolder, `${Plugins.file}-*.${Plugins.extension}`));
+      // Copy
+      shelljs.cp(sourcePath, targetPath);
+      // eslint-disable-next-line no-console
+      console.log(`Java plugin at ${targetPath} was updated.`);
     }
-  } else {
-    // Remove previous versions
-    shelljs.rm("-f", path.join(targetFolder, `${Plugins.file}-*.${Plugins.extension}`));
-    // Copy
-    shelljs.cp(sourcePath, targetPath);
   }
 
   // Clean-up
@@ -82,6 +88,11 @@ function packagePlugin(check) {
   shelljs.rm("-r", ".flattened-pom.xml");
 
   shelljs.popd();
+
+  if (!success) {
+    // eslint-disable-next-line n/no-process-exit
+    process.exit(-1);
+  }
 }
 
 function compareJars(sourcePath, targetPath) {
