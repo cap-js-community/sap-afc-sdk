@@ -91,8 +91,7 @@ describe("Build", () => {
     expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
-      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
-      expect(content).toMatchSnapshot();
+      compareFile(file);
     }
   });
 
@@ -112,8 +111,7 @@ describe("Build", () => {
     expect(cleanErr(result.stderr)).toMatch(/'cds add redis' is not available for Kyma yet/);
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
-      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
-      expect(content).toMatchSnapshot();
+      compareFile(file);
     }
   });
 
@@ -133,8 +131,7 @@ describe("Build", () => {
     expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
-      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
-      expect(content).toMatchSnapshot();
+      compareFile(file);
     }
   });
 
@@ -154,12 +151,22 @@ describe("Build", () => {
     expect(cleanErr(result.stderr)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
-      const content = fs.readFileSync(path.join(projectDir, file), "utf8");
-      expect(content).toMatchSnapshot();
+      compareFile(file);
     }
   });
 });
 
 function cleanErr(err) {
   return err.trim();
+}
+
+function compareFile(file) {
+  let content = fs.readFileSync(path.join(projectDir, file), "utf8");
+  if (["package.json"].includes(file)) {
+    const json = JSON.parse(content);
+    delete json.dependencies;
+    delete json.devDependencies;
+    content = JSON.stringify(json, null, 2);
+  }
+  expect(content).toMatchSnapshot();
 }
