@@ -1,0 +1,39 @@
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# This workflow will protect the main branch by testing and linting new PRs and commits
+
+name: Update PR
+permissions:
+  contents: write
+  pull-requests: write
+
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+      - run: npm ci
+      - name: Update
+        run: npm run update
+      - name: Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --cached --quiet || git commit -m "Update"
+          git pull --rebase origin "${GITHUB_HEAD_REF}"
+          git push origin HEAD:${GITHUB_HEAD_REF}
