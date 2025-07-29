@@ -12,6 +12,8 @@ on:
     workflows: ["Update PR"]
     types:
       - completed
+    braches:
+      - '**'
 
 jobs:
   test:
