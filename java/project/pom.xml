@@ -21,7 +21,7 @@
 		<spring.boot.version>3.5.4</spring.boot.version>
 		<spring.cloud.version>4.5.0</spring.cloud.version>
 		<spring.doc.version>2.8.9</spring.doc.version>
-		<xsuaa.version>3.6.0</xsuaa.version>
+		<xsuaa.version>3.6.1</xsuaa.version>
 
 		<cds.install-node.downloadUrl>https://nodejs.org/dist/</cds.install-node.downloadUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
