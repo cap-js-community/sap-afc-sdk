@@ -4,6 +4,7 @@ permissions:
   contents: read
   pull-requests: write
 
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_run
 on:
   workflow_run:
     workflows: ["Main CI"]
