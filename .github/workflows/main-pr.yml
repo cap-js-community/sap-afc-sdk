@@ -6,14 +6,11 @@ permissions:
   contents: read
   pull-requests: read
 
-# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_run
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
 on:
-  workflow_run:
-    workflows: ["Update PR"]
-    types:
-      - completed
+  pull_request:
     branches:
-      - '**'
+      - main
 
 jobs:
   test:
