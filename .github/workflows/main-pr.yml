@@ -12,7 +12,7 @@ on:
     workflows: ["Update PR"]
     types:
       - completed
-    braches:
+    branches:
       - '**'
 
 jobs:
