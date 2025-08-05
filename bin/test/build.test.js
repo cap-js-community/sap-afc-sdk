@@ -58,7 +58,6 @@ const Files = {
   KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],
 };
 
-// TODO: Temporary
 process.removeAllListeners("warning");
 
 describe("Build", () => {

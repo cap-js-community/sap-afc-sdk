@@ -677,9 +677,13 @@ modules:
     type: com.sap.application.content
     path: .
     requires:
+      - name: afcsdk-auth
+      - name: srv-api
       - name: afcsdk-html5-repo-host
         parameters:
           content-target: true
+          config:
+            HTML5Runtime_enabled: true
     build-parameters:
       build-result: resources
       requires:
@@ -687,6 +691,26 @@ modules:
           artifacts:
             - scheduling.monitoring.job.zip
           target-path: resources
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: srv-api
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+              - Name: ui5
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -729,6 +753,7 @@ modules:
         - npm ci
         - npm run build
       supported-platforms: []
+
 resources:
   - name: afcsdk-auth
     type: org.cloudfoundry.managed-service
@@ -1478,10 +1503,10 @@ srv:
       path: /actuator/health/liveness
     readiness:
       path: /actuator/health/readiness
-  expose:
-    enabled: true
   networkSecurity:
     allowNamespaceInternal: true
+  expose:
+    enabled: true
 xsuaa:
   serviceOfferingName: xsuaa
   servicePlanName: broker
@@ -1584,11 +1609,11 @@ tag: latest
 before-all:
   - npx cds build --production
   - mvn clean package -DskipTests=true --batch-mode
-  - mkdir -p ui-resources/resources
+  - mkdir -p app/html5-deployer/resources
   - npm i --prefix app/scheduling.monitoring.job
   - npm run build --prefix app/scheduling.monitoring.job
   # zip filename should match the archiveName specified in ui5-deploy.yaml
-  - cp -f app/scheduling.monitoring.job/dist/scheduling.monitoring.job.zip ui-resources/resources/scheduling.monitoring.job.zip
+  - cp -f app/scheduling.monitoring.job/dist/scheduling.monitoring.job.zip app/html5-deployer/resources/scheduling.monitoring.job.zip
 modules:
   - name: afcsdk-srv
     build-parameters:
@@ -1619,7 +1644,7 @@ modules:
       buildpack:
         type: nodejs
         builder: builder-jammy-base
-        path: ui-resources
+        path: app/html5-deployer
         env:
           BP_NODE_RUN_SCRIPTS: ""
 "
