@@ -18,9 +18,9 @@ runs:
       run: npm install -g ctz
       shell: bash
     - name: Setup Tools
-      uses: buildpacks/github-actions/setup-tools@v5.9.3
+      uses: buildpacks/github-actions/setup-tools@v5.9.4
     - name: Setup Pack
-      uses: buildpacks/github-actions/setup-pack@v5.9.3
+      uses: buildpacks/github-actions/setup-pack@v5.9.4
     - name: Setup Kube
       run: |
         mkdir ${HOME}/kyma-binaries
