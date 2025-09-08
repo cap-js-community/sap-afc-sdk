@@ -197,7 +197,7 @@ exports[`Build Java / CF 5`] = `
       "auth": "xsuaa",
       "db": "hana",
       "destinations": true,
-      "html5-runtime": true
+      "html5-repo": true
     },
     "cloud-logging": true
   }
@@ -1018,7 +1018,7 @@ exports[`Build Java / Kyma 5`] = `
       "auth": "xsuaa",
       "db": "hana",
       "destinations": true,
-      "html5-runtime": true
+      "html5-repo": true
     },
     "cloud-logging": true
   }
@@ -1655,16 +1655,11 @@ exports[`Build Node / CF 1`] = `
   "name": "afcsdk",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
     "start": "cds-serve",
     "test": "jest"
   },
+  "private": true,
   "cds": {
     "requires": {
       "sap-afc-sdk": {
@@ -1690,10 +1685,10 @@ exports[`Build Node / CF 1`] = `
         "auth": "xsuaa",
         "db": "hana",
         "destinations": true,
-        "html5-runtime": true
+        "html5-repo": true
       },
       "workzone": true,
-      "cloud-logging": {},
+      "cloud-logging": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2130,9 +2125,13 @@ modules:
     type: com.sap.application.content
     path: gen
     requires:
+      - name: afcsdk-auth
+      - name: srv-api
       - name: afcsdk-html5-repo-host
         parameters:
           content-target: true
+          config:
+            HTML5Runtime_enabled: true
     build-parameters:
       build-result: app/
       requires:
@@ -2140,6 +2139,25 @@ modules:
           artifacts:
             - scheduling.monitoring.job.zip
           target-path: app/
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: srv-api
+                URL: ~{srv-api/srv-url}
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
+                HTML5.ForwardAuthToken: true
+                HTML5.DynamicDestination: true
+              - Name: ui5
+                URL: https://ui5.sap.com
+                Authentication: NoAuthentication
+                Type: HTTP
+                ProxyType: Internet
 
   - name: afcsdkscheduling.monitoring.job
     type: html5
@@ -2272,16 +2290,11 @@ exports[`Build Node / Kyma 1`] = `
   "name": "afcsdk",
   "version": "1.0.0",
   "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
     "start": "cds-serve",
     "test": "jest"
   },
+  "private": true,
   "cds": {
     "requires": {
       "sap-afc-sdk": {
@@ -2307,10 +2320,10 @@ exports[`Build Node / Kyma 1`] = `
         "auth": "xsuaa",
         "db": "hana",
         "destinations": true,
-        "html5-runtime": true
+        "html5-repo": true
       },
       "workzone": true,
-      "cloud-logging": {},
+      "cloud-logging": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2758,10 +2771,10 @@ srv:
       path: /health
     readiness:
       path: /health
-  expose:
-    enabled: true
   networkSecurity:
     allowNamespaceInternal: true
+  expose:
+    enabled: true
 xsuaa:
   serviceOfferingName: xsuaa
   servicePlanName: broker
@@ -2863,7 +2876,7 @@ repository: afcsdk.common.repositories.cloud.sap
 tag: latest
 before-all:
   - npx cds build --production
-  - mkdir -p ui-resources/resources
+  - mkdir -p app/html5-deployer/resources
   - npm i --prefix
     node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job
   - npm run build --prefix
@@ -2871,7 +2884,7 @@ before-all:
   # zip filename should match the archiveName specified in ui5-deploy.yaml
   - cp -f
     node_modules/@cap-js-community/sap-afc-sdk/app/scheduling.monitoring.job/dist/scheduling.monitoring.job.zip
-    ui-resources/resources/scheduling.monitoring.job.zip
+    app/html5-deployer/resources/scheduling.monitoring.job.zip
 modules:
   - name: afcsdk-srv
     build-parameters:
@@ -2902,7 +2915,7 @@ modules:
       buildpack:
         type: nodejs
         builder: builder-jammy-base
-        path: ui-resources
+        path: app/html5-deployer
         env:
           BP_NODE_RUN_SCRIPTS: ""
 "

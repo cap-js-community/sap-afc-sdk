@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`CDS Plugin GET API Root 1`] = `
 {
@@ -264,16 +264,6 @@ footer {
         </ul>
       </div>
   
-      <div id="schedulingwebsocketservice-ws">
-        <h3 class="header">
-          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
       <div id="schedulingmonitoringservice-odata">
         <h3 class="header">
           <a href="/odata/v4/job-scheduling/monitoring"><span>/odata/v4/job-scheduling/monitoring</span></a><span>/</span> <a href="/odata/v4/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
@@ -397,6 +387,16 @@ footer {
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
+        </ul>
+        <ul>
+        </ul>
+      </div>
+  
+      <div id="schedulingwebsocketservice-ws">
+        <h3 class="header">
+          <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
+        </h3>
+        <ul>
         </ul>
         <ul>
         </ul>

@@ -227,11 +227,9 @@ describe("Monitoring Service", () => {
     });
 
     it("Cancel Job", async () => {
-      await expect(POST(`/odata/v4/job-scheduling/monitoring/Job/XXX/cancel`, {})).rejects.toThrowAPIError(
-        404,
-        "jobNotFound",
-        ["XXX"],
-      );
+      await expect(
+        POST(`/odata/v4/job-scheduling/monitoring/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407104/cancel`, {}),
+      ).rejects.toThrowAPIError(404, "jobNotFound", ["3a89dfec-59f9-4a91-90fe-3c7ca7407104"]);
 
       const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
       await POST(`/odata/v4/job-scheduling/monitoring/Job/${ID}/cancel`, {});
