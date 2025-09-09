@@ -186,9 +186,6 @@ Content-Type: application/json
 
 exports[`Build Java / CF 5`] = `
 "{
-  "cdsc": {
-    "draftMessages": true
-  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -335,6 +332,10 @@ exports[`Build Java / CF 6`] = `
             </goals>
             <configuration>
               <basePackage>cds.gen</basePackage>
+              <betterNames>true</betterNames>
+              <cqnServiceGetters>true</cqnServiceGetters>
+              <linkedInterfaces>true</linkedInterfaces>
+              <interfacesForAspects>true</interfacesForAspects>
             </configuration>
           </execution>
         </executions>
@@ -665,6 +666,7 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
+      - name: afcsdk-html5-repo-host
       - name: afcsdk-cloud-logging
     provides:
       - name: app-api
@@ -1007,9 +1009,6 @@ Content-Type: application/json
 
 exports[`Build Java / Kyma 5`] = `
 "{
-  "cdsc": {
-    "draftMessages": true
-  },
   "requires": {
     "outbox": {
       "kind": "persistent-outbox"
@@ -1161,6 +1160,10 @@ exports[`Build Java / Kyma 6`] = `
             </goals>
             <configuration>
               <basePackage>cds.gen</basePackage>
+              <betterNames>true</betterNames>
+              <cqnServiceGetters>true</cqnServiceGetters>
+              <linkedInterfaces>true</linkedInterfaces>
+              <interfacesForAspects>true</interfacesForAspects>
             </configuration>
           </execution>
         </executions>
@@ -2114,6 +2117,7 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
+      - name: afcsdk-html5-repo-host
       - name: afcsdk-cloud-logging
     provides:
       - name: app-api
