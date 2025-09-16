@@ -1,4 +1,4 @@
 ID;referenceID;startDateTime;definition_name;version;status_code;testRun;errorOnlyRun
 3a89dfec-59f9-4a91-90fe-3c7ca7407103;7158cbab-a42b-4cb9-9656-8db72521d13d;2025-01-01T12:00:00Z;JOB_1;1;requested;false;false
 4a89dfec-59f9-4a91-90fe-3c7ca7407103;8158cbab-a42b-4cb9-9656-8db72521d13d;2025-01-02T12:00:00Z;JOB_2;1;running;true;true
-5a89dfec-59f9-4a91-90fe-3c7ca7407103;9158cbab-a42b-4cb9-9656-8db72521d13d;2025-01-02T12:00:00Z;JOB_3;1;completedWithError;false;null
+5a89dfec-59f9-4a91-90fe-3c7ca7407103;9158cbab-a42b-4cb9-9656-8db72521d13d;2025-01-02T12:00:00Z;JOB_3;1;completedWithError;false;
