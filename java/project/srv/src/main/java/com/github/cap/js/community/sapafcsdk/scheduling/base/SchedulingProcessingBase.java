@@ -6,10 +6,9 @@ import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult;
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
 import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
@@ -452,9 +451,23 @@ public class SchedulingProcessingBase {
     return result;
   }
 
-  protected void mockJobSync(EventContext context) {
-    Logger jobSyncLog = LoggerFactory.getLogger("job-sync");
+  protected void mockJobSync(SyncJobContext context) {
+    Logger jobSyncLog = LoggerFactory.getLogger("sapafcsdk/jobsync");
     jobSyncLog.info("periodic sync job triggered");
+  }
+
+  protected void mockNotification(NotifyContext context) {
+    Logger jobSyncLog = LoggerFactory.getLogger("sapafcsdk/notification");
+    for (Notification notification : context.getNotifications()) {
+      jobSyncLog.info(
+        String.format(
+          "{\"name\":\"%s\",\"ID\":\"%s\",\"value\":\"%s\"}",
+          notification.getName(),
+          notification.getId(),
+          notification.getValue()
+        )
+      );
+    }
   }
 
   protected static List<Locale> getAvailableBundleLocales(String baseName, ClassLoader classLoader) {

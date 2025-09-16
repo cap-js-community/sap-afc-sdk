@@ -351,6 +351,12 @@ footer {
           <a href="/api/job-scheduling/v1"><span>/api/job-scheduling/v1</span></a> <span><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></span>
         </h3>
         <ul>
+          <li id="schedulingproviderservice-rest-capabilities">
+            <div>
+              <a href="/api/job-scheduling/v1/Capabilities"><span>Capabilities</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
           <li id="schedulingproviderservice-rest-jobdefinition">
             <div>
               <a href="/api/job-scheduling/v1/JobDefinition"><span>JobDefinition</span></a>

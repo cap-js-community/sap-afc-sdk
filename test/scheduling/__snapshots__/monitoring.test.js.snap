@@ -109,12 +109,15 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="description" Type="Edm.String" MaxLength="5000"/>
         <Property Name="longDescription" Type="Edm.String" MaxLength="5000"/>
-        <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
-        <Property Name="supportsTestRun" Type="Edm.Boolean"/>
         <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="vendorName" Type="Edm.String"/>
+        <Property Name="vendorSystem" Type="Edm.String"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
+        <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
+        <Property Name="supportsTestRun" Type="Edm.Boolean"/>
+        <Property Name="supportsErrorOnlyRun" Type="Edm.Boolean"/>
         <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobDefinition_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -166,18 +169,19 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
         <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
         <Property Name="referenceID" Type="Edm.Guid" Nullable="false"/>
-        <Property Name="startDateTime" Type="Edm.DateTimeOffset"/>
         <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
           <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
         <NavigationProperty Name="status" Type="SchedulingMonitoringService.JobStatus" Nullable="false">
           <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="status_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="requested"/>
+        <Property Name="link" Type="Edm.String" MaxLength="5000"/>
+        <Property Name="startDateTime" Type="Edm.DateTimeOffset"/>
         <Property Name="testRun" Type="Edm.Boolean"/>
+        <Property Name="errorOnlyRun" Type="Edm.Boolean"/>
         <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameter)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
@@ -460,17 +464,26 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.JobDefinition/longDescription">
         <Annotation Term="Common.Label" String="Long Description"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
+        <Annotation Term="Common.Label" String="Version"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/vendorName">
+        <Annotation Term="Common.Label" String="Vendor Name"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/vendorSystem">
+        <Annotation Term="Common.Label" String="Vendor System"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/parameters">
+        <Annotation Term="Common.Label" String="Parameters"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
         <Annotation Term="Common.Label" String="Supports Start Date and Time"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsTestRun">
         <Annotation Term="Common.Label" String="Supports Test Run"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
-        <Annotation Term="Common.Label" String="Version"/>
-      </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/parameters">
-        <Annotation Term="Common.Label" String="Parameters"/>
+      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsErrorOnlyRun">
+        <Annotation Term="Common.Label" String="Supports Error-Only Run"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.JobParameterDefinition">
         <Annotation Term="Common.Label" String="Job Parameter Definition"/>
@@ -853,9 +866,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="SchedulingMonitoringService.Job/referenceID">
         <Annotation Term="Common.Label" String="Reference ID"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/startDateTime">
-        <Annotation Term="Common.Label" String="Start Date &amp; Time"/>
-      </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/definition">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
@@ -882,6 +892,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <Record Type="Common.ValueListParameterDisplayOnly">
                   <PropertyValue Property="ValueListProperty" String="version"/>
                 </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="vendorName"/>
+                </Record>
+                <Record Type="Common.ValueListParameterDisplayOnly">
+                  <PropertyValue Property="ValueListProperty" String="vendorSystem"/>
+                </Record>
               </Collection>
             </PropertyValue>
           </Record>
@@ -890,11 +906,6 @@ exports[`Monitoring Service Get $metadata 1`] = `
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/version">
         <Annotation Term="Common.Label" String="Version"/>
-        <Annotation Term="Core.Computed" Bool="true"/>
-      </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/link">
-        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
-        <Annotation Term="Common.Label" String="Link"/>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/status">
@@ -925,9 +936,20 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/link">
+        <Annotation Term="HTML5.LinkTarget" String="_blank"/>
+        <Annotation Term="Common.Label" String="Link"/>
+        <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/startDateTime">
+        <Annotation Term="Common.Label" String="Start Date &amp; Time"/>
+      </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/testRun">
         <Annotation Term="Common.Label" String="Test Run"/>
         <Annotation Term="Core.Computed" Bool="true"/>
+      </Annotations>
+      <Annotations Target="SchedulingMonitoringService.Job/errorOnlyRun">
+        <Annotation Term="Common.Label" String="Error-Only Run"/>
       </Annotations>
       <Annotations Target="SchedulingMonitoringService.Job/parameters">
         <Annotation Term="Common.Label" String="Parameters"/>
@@ -2708,8 +2730,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsErrorOnlyRun": true,
       "supportsStartDateTime": false,
       "supportsTestRun": false,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
     {
@@ -2773,8 +2798,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsErrorOnlyRun": true,
       "supportsStartDateTime": true,
       "supportsTestRun": true,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
     {
@@ -2849,8 +2877,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "2025-01-01T00:00:00Z",
         },
       ],
+      "supportsErrorOnlyRun": false,
       "supportsStartDateTime": false,
       "supportsTestRun": true,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
     {
@@ -2914,8 +2945,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": null,
         },
       ],
+      "supportsErrorOnlyRun": true,
       "supportsStartDateTime": false,
       "supportsTestRun": false,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
     {
@@ -2923,8 +2957,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
       "longDescription": "Job Definition 5",
       "name": "JOB_5",
       "parameters": [],
+      "supportsErrorOnlyRun": true,
       "supportsStartDateTime": false,
       "supportsTestRun": false,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
     {
@@ -2955,8 +2992,11 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "value": "completed",
         },
       ],
+      "supportsErrorOnlyRun": false,
       "supportsStartDateTime": false,
       "supportsTestRun": false,
+      "vendorName": "Test Company",
+      "vendorSystem": "Test System",
       "version": "1",
     },
   ],
@@ -3026,8 +3066,11 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
       "value": "2025-01-01T00:00:00Z",
     },
   ],
+  "supportsErrorOnlyRun": true,
   "supportsStartDateTime": false,
   "supportsTestRun": false,
+  "vendorName": "Test Company",
+  "vendorSystem": "Test System",
   "version": "1",
 }
 `;
@@ -3095,8 +3138,11 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
       "value": "2025-01-01T00:00:00Z",
     },
   ],
+  "supportsErrorOnlyRun": true,
   "supportsStartDateTime": false,
   "supportsTestRun": false,
+  "vendorName": "Test Company",
+  "vendorSystem": "Test System",
   "version": "1",
 }
 `;
@@ -3175,8 +3221,11 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
       "value": "2025-01-01T00:00:00Z",
     },
   ],
+  "supportsErrorOnlyRun": false,
   "supportsStartDateTime": false,
   "supportsTestRun": true,
+  "vendorName": "Test Company",
+  "vendorSystem": "Test System",
   "version": "1",
 }
 `;
@@ -3188,6 +3237,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
     {
       "criticality": 5,
       "definition_name": "JOB_1",
+      "errorOnlyRun": false,
       "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
@@ -3225,6 +3275,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
     {
       "criticality": 5,
       "definition_name": "JOB_2",
+      "errorOnlyRun": true,
       "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
@@ -3262,6 +3313,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
     {
       "criticality": 2,
       "definition_name": "JOB_3",
+      "errorOnlyRun": null,
       "link": "http://localhost:4004/<ID>",
       "parameters": [
         {
@@ -3305,6 +3357,7 @@ exports[`Monitoring Service Get Jobs 2`] = `
   "@odata.context": "$metadata#Job/$entity",
   "criticality": 5,
   "definition_name": "JOB_1",
+  "errorOnlyRun": false,
   "link": "http://localhost:4004/<ID>",
   "parameters": [
     {

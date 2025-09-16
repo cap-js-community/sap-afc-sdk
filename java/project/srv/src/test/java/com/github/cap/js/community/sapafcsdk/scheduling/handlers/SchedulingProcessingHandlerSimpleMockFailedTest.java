@@ -47,7 +47,7 @@ public class SchedulingProcessingHandlerSimpleMockFailedTest {
 
   @Test
   @WithMockUser("authenticated")
-  void processJob() throws Exception {
+  void processJob() {
     Locale.setDefault(Locale.ENGLISH);
 
     Job job = Job.of(

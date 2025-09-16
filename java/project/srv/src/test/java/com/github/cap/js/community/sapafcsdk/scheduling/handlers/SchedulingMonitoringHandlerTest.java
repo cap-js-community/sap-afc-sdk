@@ -335,8 +335,8 @@ public class SchedulingMonitoringHandlerTest {
         header().string(
           "sap-messages",
           "[{\"code\":\"200\",\"message\":\"" +
-          messageProvider.get("cancelJobSuccess", null, Locale.ENGLISH) +
-          "\",\"numericSeverity\":1}]"
+            messageProvider.get("cancelJobSuccess", null, Locale.ENGLISH) +
+            "\",\"numericSeverity\":1}]"
         )
       )
       .andExpect(jsonPath("$.status_code").value("cancelRequested"));

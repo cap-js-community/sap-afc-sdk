@@ -40,7 +40,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
   async init() {
     const { Job } = this.entities("scheduling");
-    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
@@ -77,6 +77,13 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
       if (processingConfig) {
         await this.mockJobSync(req);
+      }
+    });
+
+    this.on(notify, async (req, next) => {
+      const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
+      if (processingConfig) {
+        await this.mockNotification(req);
       }
     });
 
@@ -416,11 +423,17 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async mockJobSync(req) {
-    cds.log("job-sync").info("periodic sync job triggered");
+    cds.log("sapafcsdk/jobsync").info("periodic sync job triggered");
   }
 
-  /*async reportStatus(req, status) {
-    const afc = await cds.connect.to("afc");
-    return await afc.tx(req).reportStatus(status);
-  }*/
+  async mockNotification(req) {
+    for (const notification of req.data.notifications) {
+      cds.log("sapafcsdk/notification").info(notification);
+    }
+  }
+
+  // async reportStatus(req, status) {
+  //   const afc = await cds.connect.to("afc");
+  //   await afc.tx(req).reportStatus(status);
+  // }
 };

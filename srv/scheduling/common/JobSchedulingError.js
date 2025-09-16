@@ -87,6 +87,13 @@ class JobSchedulingError extends BaseError {
     });
   }
 
+  static errorOnlyRunNotSupported(name) {
+    return new JobSchedulingError("errorOnlyRunNotSupported", {
+      args: [name],
+      httpStatus: 400,
+    });
+  }
+
   static jobParameterNameMissing() {
     return new JobSchedulingError("jobParameterNameMissing", {
       args: [],

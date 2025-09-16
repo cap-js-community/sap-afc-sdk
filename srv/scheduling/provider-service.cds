@@ -34,6 +34,11 @@ using scheduling from '../../db/scheduling';
 @Core.LongDescription: 'The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.'
 service SchedulingProviderService {
 
+  @readonly
+  entity Capabilities {
+    supportsNotification : Boolean
+  };
+
   @Capabilities.ReadRestrictions.CustomQueryOptions: [
     {
       Name       : 'skip',
@@ -104,7 +109,6 @@ service SchedulingProviderService {
       key ID         : String(255)  @readonly,
           definition.name as name,
           referenceID,
-          startDateTime,
           version,
           status.code     as status @readonly, *,
           parameters : redirected to JobParameter
@@ -194,8 +198,27 @@ service SchedulingProviderService {
   aspect definition {};
 
   aspect compositionDefinition : definition {};
+
+  @Capabilities: {ReadRestrictions: {
+    CustomQueryOptions   : [],
+    ReadByKeyRestrictions: {CustomQueryOptions: []}
+  }}
+  aspect singleton : definition {};
+
+  type NotificationName : String(255) enum {
+    taskListStatusChanged;
+  };
+
+  type Notification {
+    name  : NotificationName not null;
+    ID    : String(255);
+    value : String(5000);
+  };
+
+  action notify(notifications: many Notification);
 }
 
+extend SchedulingProviderService.Capabilities with SchedulingProviderService.singleton;
 extend SchedulingProviderService.JobDefinition with SchedulingProviderService.definition;
 extend SchedulingProviderService.JobParameterDefinition with SchedulingProviderService.compositionDefinition;
 extend SchedulingProviderService.Job with SchedulingProviderService.definition;

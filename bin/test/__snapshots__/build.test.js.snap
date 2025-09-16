@@ -109,7 +109,21 @@ Content-Type: application/json
 POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
-"
+
+### Notification
+POST https://{{api}}/job-scheduling/v1/notify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Java / CF 4`] = `
@@ -181,7 +195,21 @@ Content-Type: application/json
 POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
-"
+
+### Notification
+POST http://{{host}}/api/job-scheduling/v1/notify
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Java / CF 5`] = `
@@ -487,6 +515,13 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     // Your logic goes here
     context.proceed();
   }
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 }
 "
 `;
@@ -537,6 +572,7 @@ exports[`Build Java / CF 11`] = `
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -549,6 +585,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -571,7 +608,7 @@ public class SchedulingProviderHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  public void createJobBasic() throws Exception {
+  public void createJob() throws Exception {
     JSONObject job = new JSONObject(
       Map.of(
         "name",
@@ -590,6 +627,55 @@ public class SchedulingProviderHandlerTest {
     mockMvc
       .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
       .andExpect(status().isCreated());
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void cancelJob() throws Exception {
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_1",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abc")),
+            new JSONObject(Map.of("name", "C", "value", "true"))
+          )
+        )
+      )
+    );
+    MvcResult result = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+    JSONObject json = new JSONObject(response);
+    String ID = json.getString("ID");
+
+    mockMvc.perform(post("/api/job-scheduling/v1/Job/" + ID + "/cancel")).andExpect(status().isNoContent());
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.status").value("cancelRequested"));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void notification() throws Exception {
+    JSONObject notification = new JSONObject(
+      Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+    );
+    JSONArray notifications = new JSONArray();
+    notifications.put(notification);
+    JSONObject content = new JSONObject(Map.of("notifications", notifications));
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/notify").contentType("application/json").content(content.toString()))
+      .andExpect(status().isNoContent());
   }
 }
 "
@@ -932,7 +1018,21 @@ Content-Type: application/json
 POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
-"
+
+### Notification
+POST https://{{api}}/job-scheduling/v1/notify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Java / Kyma 4`] = `
@@ -1004,7 +1104,21 @@ Content-Type: application/json
 POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
-"
+
+### Notification
+POST http://{{host}}/api/job-scheduling/v1/notify
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Java / Kyma 5`] = `
@@ -1315,6 +1429,13 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     // Your logic goes here
     context.proceed();
   }
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 }
 "
 `;
@@ -1365,6 +1486,7 @@ exports[`Build Java / Kyma 11`] = `
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -1377,6 +1499,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -1399,7 +1522,7 @@ public class SchedulingProviderHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  public void createJobBasic() throws Exception {
+  public void createJob() throws Exception {
     JSONObject job = new JSONObject(
       Map.of(
         "name",
@@ -1418,6 +1541,55 @@ public class SchedulingProviderHandlerTest {
     mockMvc
       .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
       .andExpect(status().isCreated());
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void cancelJob() throws Exception {
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_1",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abc")),
+            new JSONObject(Map.of("name", "C", "value", "true"))
+          )
+        )
+      )
+    );
+    MvcResult result = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+    JSONObject json = new JSONObject(response);
+    String ID = json.getString("ID");
+
+    mockMvc.perform(post("/api/job-scheduling/v1/Job/" + ID + "/cancel")).andExpect(status().isNoContent());
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.status").value("cancelRequested"));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void notification() throws Exception {
+    JSONObject notification = new JSONObject(
+      Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+    );
+    JSONArray notifications = new JSONArray();
+    notifications.put(notification);
+    JSONObject content = new JSONObject(Map.of("notifications", notifications));
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/notify").contentType("application/json").content(content.toString()))
+      .andExpect(status().isNoContent());
   }
 }
 "
@@ -1795,7 +1967,21 @@ Content-Type: application/json
 POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
-"
+
+### Notification
+POST https://{{api}}/job-scheduling/v1/notify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Node / CF 4`] = `
@@ -1867,7 +2053,21 @@ Content-Type: application/json
 POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
-"
+
+### Notification
+POST http://{{host}}/api/job-scheduling/v1/notify
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Node / CF 5`] = `
@@ -1947,7 +2147,7 @@ const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk")
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
-    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.on(processJob, async (req, next) => {
       // Your logic goes here
@@ -1965,6 +2165,11 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     });
 
     this.on(syncJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    this.on(notify, async (req, next) => {
       // Your logic goes here
       await next();
     });
@@ -2053,6 +2258,43 @@ describe("Scheduling Provider", () => {
       ],
     });
     expect(response.status).toBe(201);
+  });
+
+  it("POST Job cancel", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_1",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      parameters: [
+        {
+          name: "A",
+          value: "abc",
+        },
+        {
+          name: "C",
+          value: "true",
+        },
+      ],
+    });
+    const ID = response.data.ID;
+    expect(response.status).toBe(201);
+    response = await POST(\`/api/job-scheduling/v1/Job/\${ID}/cancel\`, {});
+    expect(response.status).toBe(204);
+    response = await GET(\`/api/job-scheduling/v1/Job/\${ID}\`);
+    expect(response.status).toEqual(200);
+    expect(response.data.status).toEqual("cancelRequested");
+  });
+
+  it("POST notification", async () => {
+    const response = await POST("/api/job-scheduling/v1/notify", {
+      notifications: [
+        {
+          name: "taskListStatusChanged",
+          ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+          value: "obsolete",
+        },
+      ],
+    });
+    expect(response.status).toBe(204);
   });
 });
 "
@@ -2431,7 +2673,21 @@ Content-Type: application/json
 POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
-"
+
+### Notification
+POST https://{{api}}/job-scheduling/v1/notify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Node / Kyma 4`] = `
@@ -2503,7 +2759,21 @@ Content-Type: application/json
 POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
-"
+
+### Notification
+POST http://{{host}}/api/job-scheduling/v1/notify
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}"
 `;
 
 exports[`Build Node / Kyma 5`] = `
@@ -2583,7 +2853,7 @@ const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk")
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
-    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.on(processJob, async (req, next) => {
       // Your logic goes here
@@ -2601,6 +2871,11 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     });
 
     this.on(syncJob, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    this.on(notify, async (req, next) => {
       // Your logic goes here
       await next();
     });
@@ -2689,6 +2964,43 @@ describe("Scheduling Provider", () => {
       ],
     });
     expect(response.status).toBe(201);
+  });
+
+  it("POST Job cancel", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_1",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      parameters: [
+        {
+          name: "A",
+          value: "abc",
+        },
+        {
+          name: "C",
+          value: "true",
+        },
+      ],
+    });
+    const ID = response.data.ID;
+    expect(response.status).toBe(201);
+    response = await POST(\`/api/job-scheduling/v1/Job/\${ID}/cancel\`, {});
+    expect(response.status).toBe(204);
+    response = await GET(\`/api/job-scheduling/v1/Job/\${ID}\`);
+    expect(response.status).toEqual(200);
+    expect(response.data.status).toEqual("cancelRequested");
+  });
+
+  it("POST notification", async () => {
+    const response = await POST("/api/job-scheduling/v1/notify", {
+      notifications: [
+        {
+          name: "taskListStatusChanged",
+          ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+          value: "obsolete",
+        },
+      ],
+    });
+    expect(response.status).toBe(204);
   });
 });
 "

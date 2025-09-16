@@ -139,7 +139,7 @@ function serveBroker() {
     brokerConfig = merge([require(brokerPath), brokerConfig]);
   } catch (err) {
     if (Object.keys(brokerConfig).length === 0) {
-      cds.log("/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
+      cds.log("sapafcsdk/broker").info(`broker.json not found at '${brokerPath}'. Call 'afc add broker'`);
     }
   }
   for (const service in brokerConfig?.SBF_SERVICE_CONFIG ?? {}) {
@@ -166,7 +166,7 @@ function serveBroker() {
     router.use("/broker", broker.app);
     cds.app.use(router);
   } catch (err) {
-    cds.log("/broker").error("Failed to start broker", err);
+    cds.log("sapafcsdk/broker").error("Failed to start broker", err);
   }
 }
 
@@ -261,7 +261,7 @@ function serveSwaggerUI() {
         return;
       }
       const apiPath = config.paths.swaggerUi + service.path;
-      cds.log("/swagger").info("Serving Swagger UI for ", { service: service.name, at: apiPath });
+      cds.log("sapafcsdk/swagger").info("Serving Swagger UI for ", { service: service.name, at: apiPath });
       router.use(
         apiPath,
         ...cds.middlewares.before,
@@ -359,7 +359,7 @@ function approuterWildcardUrl() {
 
 function approuterTenantUrl(req) {
   if (cds.env.requires.multitenancy) {
-    const subdomain = req.user?.tokenInfo?.extAttributes?.zdn;
+    const subdomain = req.user?.authInfo?.getSubdomain?.();
     if (subdomain) {
       return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
     }

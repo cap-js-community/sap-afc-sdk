@@ -15,7 +15,9 @@ cds.env.requires["sap-afc-sdk"].api.csp = true;
 
 process.env.PORT = 0; // Random
 
-describe("API", () => {
+describe("Provider Service", () => {
+  const log = cds.test.log();
+
   beforeEach(async () => {
     axios.defaults.headers = {
       Authorization: authorization.alice,
@@ -71,6 +73,16 @@ describe("API", () => {
         vary: "Origin",
       });
     });
+  });
+
+  it("GET Capabilities", async () => {
+    let response = await GET("/api/job-scheduling/v1/Capabilities");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    const capabilities = cds.env.requires["sap-afc-sdk"].capabilities;
+    cds.env.requires["sap-afc-sdk"].capabilities = null;
+    response = await GET("/api/job-scheduling/v1/Capabilities");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    cds.env.requires["sap-afc-sdk"].capabilities = capabilities;
   });
 
   it("GET Job Definitions", async () => {
@@ -548,6 +560,91 @@ describe("API", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
+  it("Create Job (error-only run)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      errorOnlyRun: false,
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 32.0,
+        },
+        {
+          name: "E",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_2",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      errorOnlyRun: true,
+      parameters: [
+        {
+          name: "A",
+          value: "abcd",
+        },
+        {
+          name: "C",
+          value: true,
+        },
+        {
+          name: "D",
+          value: 32.0,
+        },
+        {
+          name: "E",
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        errorOnlyRun: false,
+        parameters: [
+          {
+            name: "A",
+            value: "xxx",
+          },
+          {
+            name: "C",
+            value: true,
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "errorOnlyRunNotSupported", ["JOB_3"]);
+    await expect(
+      POST("/api/job-scheduling/v1/Job", {
+        name: "JOB_3",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        errorOnlyRun: true,
+        parameters: [
+          {
+            name: "A",
+            value: "xxx",
+          },
+          {
+            name: "C",
+            value: true,
+          },
+        ],
+      }),
+    ).rejects.toThrowAPIError(400, "errorOnlyRunNotSupported", ["JOB_3"]);
   });
 
   it("Create Job (translation)", async () => {
@@ -1190,5 +1287,28 @@ describe("API", () => {
         ["cancelRequested"],
       );
     });
+  });
+
+  it("Notification", async () => {
+    cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+    const response = await POST("/api/job-scheduling/v1/notify", {
+      notifications: [
+        {
+          name: "taskListStatusChanged",
+          ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+          value: "obsolete",
+        },
+      ],
+    });
+    expect(response.status).toBe(204);
+    await processOutbox("SchedulingProcessingService");
+    expect(log.output).toEqual(
+      expect.stringMatching(
+        /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,
+      ),
+    );
+    log.clear();
+    await clearEventQueue();
+    cds.env.requires["sap-afc-sdk"].mockProcessing = false;
   });
 });

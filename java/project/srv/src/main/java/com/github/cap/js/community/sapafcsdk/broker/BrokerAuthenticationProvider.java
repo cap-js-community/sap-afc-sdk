@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BrokerAuthenticationProvider implements AuthenticationProvider {
 
-  static Logger log = LoggerFactory.getLogger("brokerSecurity");
+  static Logger log = LoggerFactory.getLogger("sapafcsdk/broker");
 
   @Autowired
   private BrokerProperties brokerProperties;

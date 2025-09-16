@@ -2,6 +2,7 @@ package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
 import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
 
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.DataTypeCode;
 import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
@@ -32,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+@Hidden
 @RestController
 @RequestMapping(value = "/api/job-scheduling/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SchedulingProviderController {
@@ -45,8 +47,19 @@ public class SchedulingProviderController {
   @Autowired
   private CdsModel cdsModel;
 
+  @Autowired
+  protected AfcSdkProperties afcsdkProperties;
+
   @Value("${cds.query.limit.max:1000}")
   private int queryMaxLimit;
+
+  @Tag(name = "Capabilities")
+  @GetMapping("/Capabilities")
+  public Capabilities capabilities(HttpServletResponse response) {
+    Capabilities capabilities = Capabilities.create();
+    capabilities.setSupportsNotification(afcsdkProperties.getCapabilities().isSupportsNotification());
+    return capabilities;
+  }
 
   @Tag(name = "Job Definition")
   @GetMapping("/JobDefinition")
@@ -480,6 +493,27 @@ public class SchedulingProviderController {
     );
   }
 
+  @Tag(name = "Notification")
+  @PostMapping("notify")
+  public ResponseEntity<?> notify(@RequestBody NotifyBody body, HttpServletRequest request) {
+    return ResponseHandler.execute(
+      () -> {
+        List<Notification> notifications = new ArrayList<>();
+        for (NotifyNotification notifyNotification : body.notifications) {
+          notifications.add(
+            Notification.of(
+              Map.of("name", notifyNotification.name, "ID", notifyNotification.ID, "value", notifyNotification.value)
+            )
+          );
+        }
+        providerService.notify(notifications);
+        return ResponseEntity.noContent().build();
+      },
+      request,
+      HttpStatus.NO_CONTENT
+    );
+  }
+
   private <T extends StructuredType<?>> Select<T> applyLimit(Select<T> query, Integer top, Integer skip) {
     int effectiveTop = (top != null) ? top : queryMaxLimit;
     effectiveTop = (effectiveTop <= 0) ? 1 : Math.min(effectiveTop, queryMaxLimit);
@@ -533,5 +567,17 @@ public class SchedulingProviderController {
         }
       }
     }
+  }
+
+  public static class NotifyBody {
+
+    public List<NotifyNotification> notifications;
+  }
+
+  public static class NotifyNotification {
+
+    public String name;
+    public String ID;
+    public String value;
   }
 }

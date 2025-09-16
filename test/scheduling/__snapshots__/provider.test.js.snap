@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`API Create Job (JSON data types) 1`] = `
+exports[`Provider Service Create Job (JSON data types) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -12,8 +13,9 @@ exports[`API Create Job (JSON data types) 1`] = `
 }
 `;
 
-exports[`API Create Job (JSON data types) 2`] = `
+exports[`Provider Service Create Job (JSON data types) 2`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -24,7 +26,7 @@ exports[`API Create Job (JSON data types) 2`] = `
 }
 `;
 
-exports[`API Create Job (JSON data types) 3`] = `
+exports[`Provider Service Create Job (JSON data types) 3`] = `
 [
   {
     "name": "A",
@@ -49,7 +51,7 @@ exports[`API Create Job (JSON data types) 3`] = `
 ]
 `;
 
-exports[`API Create Job (JSON data types) 4`] = `
+exports[`Provider Service Create Job (JSON data types) 4`] = `
 {
   "0": {
     "name": "A",
@@ -66,8 +68,9 @@ exports[`API Create Job (JSON data types) 4`] = `
 }
 `;
 
-exports[`API Create Job (advanced) 1`] = `
+exports[`Provider Service Create Job (advanced) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -78,8 +81,9 @@ exports[`API Create Job (advanced) 1`] = `
 }
 `;
 
-exports[`API Create Job (advanced) 2`] = `
+exports[`Provider Service Create Job (advanced) 2`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -90,7 +94,7 @@ exports[`API Create Job (advanced) 2`] = `
 }
 `;
 
-exports[`API Create Job (advanced) 3`] = `
+exports[`Provider Service Create Job (advanced) 3`] = `
 [
   {
     "name": "A",
@@ -111,8 +115,9 @@ exports[`API Create Job (advanced) 3`] = `
 ]
 `;
 
-exports[`API Create Job (basic) 1`] = `
+exports[`Provider Service Create Job (basic) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -123,8 +128,35 @@ exports[`API Create Job (basic) 1`] = `
 }
 `;
 
-exports[`API Create Job (no parameters) 1`] = `
+exports[`Provider Service Create Job (error-only run) 1`] = `
 {
+  "errorOnlyRun": false,
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`Provider Service Create Job (error-only run) 2`] = `
+{
+  "errorOnlyRun": true,
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_2",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": true,
+  "version": "1",
+}
+`;
+
+exports[`Provider Service Create Job (no parameters) 1`] = `
+{
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_5",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -135,8 +167,9 @@ exports[`API Create Job (no parameters) 1`] = `
 }
 `;
 
-exports[`API Create Job (status and duration) 1`] = `
+exports[`Provider Service Create Job (status and duration) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_6",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -147,8 +180,9 @@ exports[`API Create Job (status and duration) 1`] = `
 }
 `;
 
-exports[`API Create Job (status and duration) 2`] = `
+exports[`Provider Service Create Job (status and duration) 2`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_6",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -159,7 +193,7 @@ exports[`API Create Job (status and duration) 2`] = `
 }
 `;
 
-exports[`API Create Job (status and duration) 3`] = `
+exports[`Provider Service Create Job (status and duration) 3`] = `
 {
   "filename": null,
   "link": null,
@@ -169,7 +203,7 @@ exports[`API Create Job (status and duration) 3`] = `
 }
 `;
 
-exports[`API Create Job (status and duration) 4`] = `
+exports[`Provider Service Create Job (status and duration) 4`] = `
 [
   {
     "code": "jobBasicMock",
@@ -179,8 +213,9 @@ exports[`API Create Job (status and duration) 4`] = `
 ]
 `;
 
-exports[`API Create Job (test run) 1`] = `
+exports[`Provider Service Create Job (test run) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -191,7 +226,7 @@ exports[`API Create Job (test run) 1`] = `
 }
 `;
 
-exports[`API Create Job (test run) 2`] = `
+exports[`Provider Service Create Job (test run) 2`] = `
 {
   "filename": null,
   "link": null,
@@ -201,7 +236,7 @@ exports[`API Create Job (test run) 2`] = `
 }
 `;
 
-exports[`API Create Job (test run) 3`] = `
+exports[`Provider Service Create Job (test run) 3`] = `
 {
   "filename": "log.txt",
   "link": null,
@@ -211,7 +246,7 @@ exports[`API Create Job (test run) 3`] = `
 }
 `;
 
-exports[`API Create Job (test run) 4`] = `
+exports[`Provider Service Create Job (test run) 4`] = `
 [
   {
     "code": "jobBasicMock",
@@ -221,10 +256,11 @@ exports[`API Create Job (test run) 4`] = `
 ]
 `;
 
-exports[`API Create Job (test run) 5`] = `[]`;
+exports[`Provider Service Create Job (test run) 5`] = `[]`;
 
-exports[`API Create Job (translation) 1`] = `
+exports[`Provider Service Create Job (translation) 1`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_2",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -235,7 +271,7 @@ exports[`API Create Job (translation) 1`] = `
 }
 `;
 
-exports[`API Create Job (translation) 2`] = `
+exports[`Provider Service Create Job (translation) 2`] = `
 {
   "filename": null,
   "link": null,
@@ -245,7 +281,7 @@ exports[`API Create Job (translation) 2`] = `
 }
 `;
 
-exports[`API Create Job (translation) 3`] = `
+exports[`Provider Service Create Job (translation) 3`] = `
 [
   {
     "code": "jobBasicMock",
@@ -255,7 +291,7 @@ exports[`API Create Job (translation) 3`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 4`] = `
+exports[`Provider Service Create Job (translation) 4`] = `
 [
   {
     "code": "jobBasicMock",
@@ -265,7 +301,7 @@ exports[`API Create Job (translation) 4`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 5`] = `
+exports[`Provider Service Create Job (translation) 5`] = `
 {
   "filename": "log.txt",
   "link": null,
@@ -275,7 +311,7 @@ exports[`API Create Job (translation) 5`] = `
 }
 `;
 
-exports[`API Create Job (translation) 6`] = `
+exports[`Provider Service Create Job (translation) 6`] = `
 {
   "filename": "log.pdf",
   "link": null,
@@ -285,7 +321,7 @@ exports[`API Create Job (translation) 6`] = `
 }
 `;
 
-exports[`API Create Job (translation) 7`] = `
+exports[`Provider Service Create Job (translation) 7`] = `
 {
   "filename": null,
   "link": "https://sap.com",
@@ -295,7 +331,7 @@ exports[`API Create Job (translation) 7`] = `
 }
 `;
 
-exports[`API Create Job (translation) 8`] = `
+exports[`Provider Service Create Job (translation) 8`] = `
 {
   "filename": null,
   "link": null,
@@ -305,7 +341,7 @@ exports[`API Create Job (translation) 8`] = `
 }
 `;
 
-exports[`API Create Job (translation) 9`] = `
+exports[`Provider Service Create Job (translation) 9`] = `
 [
   {
     "code": "jobCompleted",
@@ -315,7 +351,7 @@ exports[`API Create Job (translation) 9`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 10`] = `
+exports[`Provider Service Create Job (translation) 10`] = `
 [
   {
     "code": "jobCompleted",
@@ -325,7 +361,7 @@ exports[`API Create Job (translation) 10`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 11`] = `
+exports[`Provider Service Create Job (translation) 11`] = `
 {
   "filename": null,
   "link": null,
@@ -335,7 +371,7 @@ exports[`API Create Job (translation) 11`] = `
 }
 `;
 
-exports[`API Create Job (translation) 12`] = `
+exports[`Provider Service Create Job (translation) 12`] = `
 [
   {
     "code": "jobTestRun",
@@ -345,7 +381,7 @@ exports[`API Create Job (translation) 12`] = `
 ]
 `;
 
-exports[`API Create Job (translation) 13`] = `
+exports[`Provider Service Create Job (translation) 13`] = `
 [
   {
     "code": "jobTestRun",
@@ -355,7 +391,15 @@ exports[`API Create Job (translation) 13`] = `
 ]
 `;
 
-exports[`API GET Create Job (enum) 1`] = `
+exports[`Provider Service GET Capabilities 1`] = `
+{
+  "supportsNotification": true,
+}
+`;
+
+exports[`Provider Service GET Capabilities 2`] = `{}`;
+
+exports[`Provider Service GET Create Job (enum) 1`] = `
 [
   {
     "dataType": "string",
@@ -426,8 +470,9 @@ exports[`API GET Create Job (enum) 1`] = `
 ]
 `;
 
-exports[`API GET Create Job (enum) 2`] = `
+exports[`Provider Service GET Create Job (enum) 2`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_3",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -438,8 +483,9 @@ exports[`API GET Create Job (enum) 2`] = `
 }
 `;
 
-exports[`API GET Create Job (enum) 3`] = `
+exports[`Provider Service GET Create Job (enum) 3`] = `
 {
+  "errorOnlyRun": null,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_3",
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
@@ -450,9 +496,10 @@ exports[`API GET Create Job (enum) 3`] = `
 }
 `;
 
-exports[`API GET Job 1`] = `
+exports[`Provider Service GET Job 1`] = `
 [
   {
+    "errorOnlyRun": false,
     "link": "http://localhost:4004/<ID>",
     "name": "JOB_1",
     "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
@@ -462,6 +509,7 @@ exports[`API GET Job 1`] = `
     "version": "1",
   },
   {
+    "errorOnlyRun": true,
     "link": "http://localhost:4004/<ID>",
     "name": "JOB_2",
     "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
@@ -471,6 +519,7 @@ exports[`API GET Job 1`] = `
     "version": "1",
   },
   {
+    "errorOnlyRun": null,
     "link": "http://localhost:4004/<ID>",
     "name": "JOB_3",
     "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
@@ -482,8 +531,9 @@ exports[`API GET Job 1`] = `
 ]
 `;
 
-exports[`API GET Job 2`] = `
+exports[`Provider Service GET Job 2`] = `
 {
+  "errorOnlyRun": false,
   "link": "http://localhost:4004/<ID>",
   "name": "JOB_1",
   "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
@@ -494,7 +544,7 @@ exports[`API GET Job 2`] = `
 }
 `;
 
-exports[`API GET Job Definition Parameters 1`] = `
+exports[`Provider Service GET Job Definition Parameters 1`] = `
 [
   {
     "dataType": "string",
@@ -554,7 +604,7 @@ exports[`API GET Job Definition Parameters 1`] = `
 ]
 `;
 
-exports[`API GET Job Definition Parameters 2`] = `
+exports[`Provider Service GET Job Definition Parameters 2`] = `
 [
   {
     "dataType": "number",
@@ -603,71 +653,92 @@ exports[`API GET Job Definition Parameters 2`] = `
 ]
 `;
 
-exports[`API GET Job Definitions 1`] = `
+exports[`Provider Service GET Job Definitions 1`] = `
 [
   {
     "description": "Job Definition 1",
     "longDescription": "Job Definition 1",
     "name": "JOB_1",
+    "supportsErrorOnlyRun": true,
     "supportsStartDateTime": false,
     "supportsTestRun": false,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
   {
     "description": "Job Definition 2",
     "longDescription": "Job Definition 2",
     "name": "JOB_2",
+    "supportsErrorOnlyRun": true,
     "supportsStartDateTime": true,
     "supportsTestRun": true,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
   {
     "description": "Job Definition 3",
     "longDescription": "Job Definition 3",
     "name": "JOB_3",
+    "supportsErrorOnlyRun": false,
     "supportsStartDateTime": false,
     "supportsTestRun": true,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
   {
     "description": "Job Definition 4",
     "longDescription": "Job Definition 4",
     "name": "JOB_4",
+    "supportsErrorOnlyRun": true,
     "supportsStartDateTime": false,
     "supportsTestRun": false,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
   {
     "description": "Job Definition 5",
     "longDescription": "Job Definition 5",
     "name": "JOB_5",
+    "supportsErrorOnlyRun": true,
     "supportsStartDateTime": false,
     "supportsTestRun": false,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
   {
     "description": "Job Definition 6",
     "longDescription": "Job Definition 6",
     "name": "JOB_6",
+    "supportsErrorOnlyRun": false,
     "supportsStartDateTime": false,
     "supportsTestRun": false,
+    "vendorName": "Test Company",
+    "vendorSystem": "Test System",
     "version": "1",
   },
 ]
 `;
 
-exports[`API GET Job Definitions 2`] = `
+exports[`Provider Service GET Job Definitions 2`] = `
 {
   "description": "Job Definition 1",
   "longDescription": "Job Definition 1",
   "name": "JOB_1",
+  "supportsErrorOnlyRun": true,
   "supportsStartDateTime": false,
   "supportsTestRun": false,
+  "vendorName": "Test Company",
+  "vendorSystem": "Test System",
   "version": "1",
 }
 `;
 
-exports[`API GET Job Parameters 1`] = `
+exports[`Provider Service GET Job Parameters 1`] = `
 [
   {
     "name": "A",
@@ -692,7 +763,7 @@ exports[`API GET Job Parameters 1`] = `
 ]
 `;
 
-exports[`API GET Job Parameters 2`] = `
+exports[`Provider Service GET Job Parameters 2`] = `
 [
   {
     "name": "B",
@@ -713,7 +784,7 @@ exports[`API GET Job Parameters 2`] = `
 ]
 `;
 
-exports[`API GET Job Result Messages 1`] = `
+exports[`Provider Service GET Job Result Messages 1`] = `
 {
   "filename": null,
   "link": null,
@@ -723,7 +794,7 @@ exports[`API GET Job Result Messages 1`] = `
 }
 `;
 
-exports[`API GET Job Result Messages 2`] = `
+exports[`Provider Service GET Job Result Messages 2`] = `
 [
   {
     "code": "ERROR_01",
@@ -743,7 +814,7 @@ exports[`API GET Job Result Messages 2`] = `
 ]
 `;
 
-exports[`API GET Job Result Messages 3`] = `
+exports[`Provider Service GET Job Result Messages 3`] = `
 [
   {
     "code": "INFO_01",
@@ -758,7 +829,7 @@ exports[`API GET Job Result Messages 3`] = `
 ]
 `;
 
-exports[`API GET Job Results 1`] = `
+exports[`Provider Service GET Job Results 1`] = `
 [
   {
     "filename": "test.txt",
@@ -784,7 +855,7 @@ exports[`API GET Job Results 1`] = `
 ]
 `;
 
-exports[`API GET Job Results 2`] = `
+exports[`Provider Service GET Job Results 2`] = `
 [
   {
     "filename": null,
@@ -803,7 +874,7 @@ exports[`API GET Job Results 2`] = `
 ]
 `;
 
-exports[`API Open API GET API Docs Root 1`] = `
+exports[`Provider Service Open API GET API Docs Root 1`] = `
 "
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
@@ -888,7 +959,7 @@ exports[`API Open API GET API Docs Root 1`] = `
 "
 `;
 
-exports[`API Open API GET API Docs Root 2`] = `
+exports[`Provider Service Open API GET API Docs Root 2`] = `
 "
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
@@ -973,4 +1044,4 @@ exports[`API Open API GET API Docs Root 2`] = `
 "
 `;
 
-exports[`API Security GET CSP 1`] = `"default-src 'self' https://sap-afc-sdk.sap.com https://sap-afc-sdk-srv.sap.com https://authentication.sap.hana.ondemand.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"`;
+exports[`Provider Service Security GET CSP 1`] = `"default-src 'self' https://sap-afc-sdk.sap.com https://sap-afc-sdk-srv.sap.com https://authentication.sap.hana.ondemand.com;base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"`;

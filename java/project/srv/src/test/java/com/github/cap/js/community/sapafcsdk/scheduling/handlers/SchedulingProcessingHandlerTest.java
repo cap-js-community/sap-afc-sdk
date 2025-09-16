@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.Notification;
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
@@ -53,7 +54,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void processJob() throws Exception {
+  void processJob() {
     Job job = Job.of(
       Map.of(
         "definition_name",
@@ -80,7 +81,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void updateJobStatus() throws Exception {
+  void updateJobStatus() {
     Job job = Job.of(
       Map.of(
         "definition_name",
@@ -403,7 +404,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void cancelJob() throws Exception {
+  void cancelJob() {
     Job job = Job.of(
       Map.of(
         "definition_name",
@@ -428,7 +429,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void processJobError() throws Exception {
+  void processJobError() {
     Locale.setDefault(Locale.ENGLISH);
 
     Exception exception = assertThrows(Exception.class, () -> {
@@ -442,7 +443,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void updateJobWrongStatus() throws Exception {
+  void updateJobWrongStatus() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -500,7 +501,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void updateJobWrongResultsLink() throws Exception {
+  void updateJobWrongResultsLink() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -642,7 +643,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void updateJobWrongResultsData() throws Exception {
+  void updateJobWrongResultsData() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -758,7 +759,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void updateJobWrongResultsMessage() throws Exception {
+  void updateJobWrongResultsMessage() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -1027,7 +1028,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void cancelJobStatus() throws Exception {
+  void cancelJobStatus() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -1071,7 +1072,7 @@ public class SchedulingProcessingHandlerTest {
 
   @Test
   @WithMockUser("authenticated")
-  void cancelJobCompleted() throws Exception {
+  void cancelJobCompleted() {
     Locale.setDefault(Locale.ENGLISH);
     Job job = Job.of(
       Map.of(
@@ -1112,5 +1113,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void notification() {
+    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    processingServiceOutboxed.notify(
+      List.of(
+        Notification.of(
+          Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+        )
+      )
+    );
   }
 }

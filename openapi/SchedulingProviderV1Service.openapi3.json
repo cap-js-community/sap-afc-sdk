@@ -13,6 +13,9 @@
   ],
   "tags": [
     {
+      "name": "Capabilities"
+    },
+    {
       "name": "Job Definition"
     },
     {
@@ -20,9 +23,71 @@
     },
     {
       "name": "Job Result"
+    },
+    {
+      "name": "Notification"
     }
   ],
   "paths": {
+    "/Capabilities": {
+      "get": {
+        "summary": "Retrieves capabilities.",
+        "tags": ["Capabilities"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retrieved capabilities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingProviderService.Capabilities"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "description": "The operation allows you to retrieve capabilities."
+      }
+    },
     "/Job": {
       "get": {
         "summary": "Retrieves a list of job.",
@@ -196,7 +261,7 @@
             "$ref": "#/components/responses/503"
           }
         },
-        "description": "The operation allows you to create a single job based on the provided parameters."
+        "description": "The operation allows you to create a single job."
       }
     },
     "/Job/{ID}": {
@@ -267,7 +332,7 @@
             "$ref": "#/components/responses/503"
           }
         },
-        "description": "The operation allows you to retrieve a single job based on the provided parameters."
+        "description": "The operation allows you to retrieve a single job."
       }
     },
     "/Job/{ID}/parameters": {
@@ -650,7 +715,7 @@
             "$ref": "#/components/responses/503"
           }
         },
-        "description": "The operation allows you to retrieve a single job definition based on the provided parameters."
+        "description": "The operation allows you to retrieve a single job definition."
       }
     },
     "/JobDefinition/{name}/parameters": {
@@ -823,7 +888,7 @@
             "$ref": "#/components/responses/503"
           }
         },
-        "description": "The operation allows you to retrieve a single job result based on the provided parameters."
+        "description": "The operation allows you to retrieve a single job result."
       }
     },
     "/JobResult/{ID}/messages": {
@@ -928,6 +993,80 @@
         "description": "The operation allows you to retrieve a list of messages of a job result based on the provided parameters."
       }
     },
+    "/notify": {
+      "post": {
+        "summary": "Invokes action notify",
+        "tags": ["Notification"],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "requestBody": {
+          "description": "Action parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notifications": {
+                    "type": "array",
+                    "items": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/SchedulingProviderService.Notification"
+                        }
+                      ],
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "The operation allows you to invoke action notify."
+      }
+    },
     "/JobResult/{ID}/data": {
       "parameters": [
         {
@@ -997,7 +1136,7 @@
             "$ref": "#/components/responses/503"
           }
         },
-        "description": "The operation allows you to retrieve data of a job result based on the provided parameters."
+        "description": "The operation allows you to retrieve data of a job result."
       }
     },
     "/Job/{ID}/cancel": {
@@ -1066,6 +1205,15 @@
   },
   "components": {
     "schemas": {
+      "SchedulingProviderService.Capabilities": {
+        "title": "Capabilities",
+        "type": "object",
+        "properties": {
+          "supportsNotification": {
+            "type": "boolean"
+          }
+        }
+      },
       "SchedulingProviderService.Job": {
         "title": "Job",
         "type": "object",
@@ -1082,11 +1230,6 @@
             "type": "string",
             "format": "uuid",
             "example": "01234567-89ab-cdef-0123-456789abcdef"
-          },
-          "startDateTime": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2017-04-13T15:51:04Z"
           },
           "version": {
             "type": "string",
@@ -1129,7 +1272,15 @@
             "type": "string",
             "maxLength": 5000
           },
+          "startDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
           "testRun": {
+            "type": "boolean"
+          },
+          "errorOnlyRun": {
             "type": "boolean"
           }
         },
@@ -1152,6 +1303,9 @@
             "type": "string",
             "format": "date-time",
             "example": "2017-04-13T15:51:04Z"
+          },
+          "errorOnlyRun": {
+            "type": "boolean"
           },
           "parameters": {
             "type": "array",
@@ -1178,15 +1332,24 @@
             "type": "string",
             "maxLength": 5000
           },
+          "version": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "vendorName": {
+            "type": "string"
+          },
+          "vendorSystem": {
+            "type": "string"
+          },
           "supportsStartDateTime": {
             "type": "boolean"
           },
           "supportsTestRun": {
             "type": "boolean"
           },
-          "version": {
-            "type": "string",
-            "maxLength": 255
+          "supportsErrorOnlyRun": {
+            "type": "boolean"
           }
         },
         "required": ["name", "version"]
@@ -1421,16 +1584,43 @@
         },
         "required": ["ID", "severity", "code", "text", "createdAt"]
       },
+      "SchedulingProviderService.Notification": {
+        "title": "Notification",
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/SchedulingProviderService.NotificationName",
+            "enum": ["taskListStatusChanged"]
+          },
+          "ID": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 5000
+          }
+        }
+      },
+      "SchedulingProviderService.NotificationName": {
+        "type": "string",
+        "maxLength": 255,
+        "enum": ["taskListStatusChanged"],
+        "title": "NotificationName"
+      },
       "error": {
         "type": "object",
         "required": ["code", "message"],
         "properties": {
           "code": {
             "type": "string",
-            "maxLength": 255
+            "maxLength": 255,
+            "description": "A machine-readable error code.",
+            "x-extensible-enum": ["statusTransitionNotAllowed"]
           },
           "message": {
             "type": "string",
+            "description": "A human-readable error message.",
             "maxLength": 5000
           }
         }

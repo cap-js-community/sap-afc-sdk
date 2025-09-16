@@ -53,7 +53,7 @@ describe("CDS Plugin", () => {
   it("Boostrap", async () => {
     expect(log.output).toEqual(
       expect.stringMatching(
-        /\[\/broker] - Failed to start broker AssertionError \[ERR_ASSERTION]: Could not find credentials service/s,
+        /\[sapafcsdk\/broker] - Failed to start broker AssertionError \[ERR_ASSERTION]: Could not find credentials service/s,
       ),
     );
   });

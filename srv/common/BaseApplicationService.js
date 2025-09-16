@@ -19,7 +19,7 @@ module.exports = class BaseApplicationService extends cds.ApplicationService {
       const status = parseInt(err.status ?? err.code);
       if (isNaN(status) || status >= 500) {
         const unexpectedError = BaseError.unexpectedError();
-        cds.log("/BaseApplicationService").error(unexpectedError.name, err);
+        cds.log("sapafcsdk/service").error(unexpectedError.name, err);
         throw unexpectedError;
       }
       throw err;

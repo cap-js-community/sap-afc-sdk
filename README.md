@@ -26,9 +26,9 @@ be consumed with [SAP Cloud Application Programming Model](https://www.npmjs.com
     - [Job Processing](#job-processing)
     - [Job Provider](#job-provider)
     - [Periodic Job Sync](#periodic-job-sync)
+    - [Notification](#notification)
   - [API](#api)
-  - [Redis](#redis)
-  - [Feature Toggles](#feature-toggles)
+  - [Additional Settings](#additional-settings)
 - [CAP Java](#cap-java)
   - [Usage](#usage-1)
   - [Architecture](#architecture-1)
@@ -37,6 +37,7 @@ be consumed with [SAP Cloud Application Programming Model](https://www.npmjs.com
     - [Job Processing](#job-processing-1)
     - [Job Provider](#job-provider-1)
     - [Periodic Job Sync](#periodic-job-sync-1)
+    - [Notification](#notification-1)
   - [API](#api-1)
 - [Deployment](#deployment)
 - [Service Broker](#service-broker)
@@ -54,8 +55,8 @@ be consumed with [SAP Cloud Application Programming Model](https://www.npmjs.com
 [SAP Advanced Financial Closing (AFC)](https://help.sap.com/docs/advanced-financial-closing) lets you define, automate,
 process, and monitor the entity close for your organization.
 
-- To develop and test applications build with this SDK you need a [CAP Node.js](https://www.npmjs.com/package/@sap/cds) or [CAP Java](https://www.npmjs.com/package/@sap/cds) project
-- To integrate you need access to an instance of [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing)
+- To develop and test applications built with this SDK, you need a [CAP Node.js](https://www.npmjs.com/package/@sap/cds) or [CAP Java](https://www.npmjs.com/package/@sap/cds) project
+- To integrate, you need access to an instance of [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing)
 
 ## Getting Started
 
@@ -71,10 +72,10 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
 - Select objective `Application`
 - Choose category `Full-Stack`
 - Select type `Full-Stack Node.JS` or `Full-Stack Java`
-- Provide project name and dev space
+- Provide the project name and dev space
 - Press `Review`
 - Press `Create`
-- Open project in SAP Business Application Studio
+- Open the project in SAP Business Application Studio
 
 **CDS Command-Line-Interface**:
 
@@ -83,7 +84,7 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
   - Terminal:
     - CAP Node.js: `cds init <name>`
     - CAP Java: `cds init <name> --java`
-- Switch to project folder:
+- Switch to the project folder:
   - Terminal: `cd <name>`
 - Install
   - Terminal: `npm install`
@@ -133,7 +134,7 @@ Furthermore, it brings the following out-of-the-box features:
 
 - Run `npm add @cap-js-community/sap-afc-sdk` in `@sap/cds` CAP Node.js project
 - Execute `npm start` to start server
-  - Access welcome page at http://localhost:4004
+  - Access the welcome page at http://localhost:4004
   - Access Applications
     - [/launchpad.html](http://localhost:4004/launchpad.html): Sandbox Launchpad
     - [/scheduling.monitoring.job](http://localhost:4004/scheduling.monitoring.job): Standalone Scheduling Monitoring Job UI
@@ -158,13 +159,13 @@ Furthermore, it brings the following out-of-the-box features:
 
 ### Architecture
 
-The SAP Advanced Financial Closing SDK for CDS is build on the following architecture open source
+The SAP Advanced Financial Closing SDK for CDS is built on the following architecture open source
 building blocks as depicted in the following diagram:
 
 ![Architecture Concept](./docs/assets/architecture_concept_node.svg)
 
 - **WebSocket Adapter for CDS** (https://github.com/cap-js-community/websocket)
-  - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in context of the SAP
+  - Exposes a WebSocket protocol via WebSocket standard or Socket.IO for CDS services. Runs in the context of the SAP
     Cloud Application Programming Model (CAP) using @sap/cds (CDS Node.js).
 - **Event Queue for CDS** (https://github.com/cap-js-community/event-queue)
   - The Event-Queue is a framework built on top of CAP Node.js, designed specifically for efficient and streamlined
@@ -173,7 +174,7 @@ building blocks as depicted in the following diagram:
   - SAP BTP feature toggle library enables Node.js applications using the SAP Cloud Application Programming Model to
     maintain live-updatable feature toggles via Redis
 
-Using the SAP Advanced Financial Closing SDK a 3rd-party scheduling provider can be built for SAP Advanced Financial Closing.
+Using the SAP Advanced Financial Closing SDK, a third-party scheduling provider can be built for SAP Advanced Financial Closing.
 The architectural design of the SAP Advanced Financial Closing (AFC) SDK for implementing a Scheduling Provider is based
 on the SAP Cloud Application Programming Model (CAP) and SAP Build Code. It leverages the [@cap-js-community](https://github.com/cap-js-community)
 open-source components to enable scheduling services in AFC.
@@ -203,15 +204,17 @@ The following diagram illustrates the high-level architecture of the SAP Advance
   - Displays scheduling job statuses and updates in real-time via WebSockets
 - **Event Queue & Feature Toggles:**
   - Event Queue (using CDS Outbox) facilitates asynchronous job execution
-  - Feature Toggles allow influence Job and Event Queue processing dynamically
+  - Feature Toggles allow influencing Job and Event Queue processing dynamically
 - **Database & Redis Caching:**
   - Stores job scheduling data in the database
-  - Redis is used for information distribution (e.g. Event Queue, WebSockets, Feature Toggles)
+  - Redis is used for information distribution (e.g., Event Queue, WebSockets, Feature Toggles)
 
 ### Options
 
 Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` section:
 
+- `capabilities: Object`: Capabilities configuration. Default is `{}`
+  - `capabilities.supportsNotification: Boolean`: Supports notification configuration. Default is `true`
 - `endpoints: Object`: Endpoint configuration. Default is `{}`
   - `endpoints.approuter: String`: Url of approuter. Default is `null` (derived from conventions `<app>-srv`)
   - `endpoints.server: String`: Url of server. Default is `null` (derived from environment, e.g. CF)
@@ -221,11 +224,11 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `api.csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default is `false`
 - `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default is `{}`
   - `ui.path: String`: Path to the served UI5 application. Default is `''`
-  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default is `true`
+  - `ui.link: Boolean`: Link of jobs to served UI5 launchpad, if `null`. Default is `true`
   - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default is `true`
     - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default is `true`
-  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately, if no Launchpad is served. Default is `true`
+  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately if no Launchpad is served. Default is `true`
 - `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default is `false` and `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default is `false`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default is `0`
@@ -246,7 +249,7 @@ The SDK provides a set of services to implement the job processing service and t
 
 The job processing service is responsible for processing the jobs.
 
-#### Mock Processing
+##### Mock Processing
 
 The library includes a mocked processing for jump-start development, which is disabled by default via option.
 `cds.requires.sap-afc-sdk.mockProcessing: false`
@@ -274,7 +277,7 @@ The project can be adjusted to use basic mock processing automatically via comma
 
 - Terminal: `afc add -b mock`
 
-A more advanced mocked Job processing can be configured by setting the
+More advanced mocked Job processing can be configured by setting the
 following [CDS env](https://cap.cloud.sap/docs/node.js/cds-env) options (as described in [options](#options)):
 
 ```json
@@ -313,11 +316,11 @@ To disable mock processing remove CDS env `cds.requires.sap-afc-sdk.mockProcessi
 - Terminal: `afc add -x mock`
 
 The default implementation of the job processing is already provided by the SDK. Focus can be put on
-custom processing logic, and the processing status update handling.
+custom processing logic and the processing status update handling.
 
-#### Custom Processing
+##### Custom Processing
 
-To implement a custom job processing extend the job processing service definition as follows:
+To implement custom job processing, extend the job processing service definition as follows:
 
 **CDS file:** `/srv/scheduling-processing-service.cds`
 
@@ -334,7 +337,7 @@ const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sa
 
 class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
-    const { processJob, updateJob, cancelJob, syncJob } = this.operations;
+    const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.on(processJob, async (req, next) => {
       // Your logic goes here
@@ -356,6 +359,11 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
       await next();
     });
 
+    this.on(notify, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
     super.init();
   }
 }
@@ -363,7 +371,7 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
 module.exports = CustomSchedulingProcessingService;
 ```
 
-A stub implementation for custom scheduling processing service can be generated via command:
+A stub implementation for a custom scheduling processing service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -390,7 +398,7 @@ As part of the custom scheduling process service implementation, the following o
     - Check function and status transitions can be customized
     - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
   - Job results are checked and processed via `async checkJobResults(req, results)`
-    - Valid results are valid according to job results signature constraints (see below)
+    - Valid results are valid, according to job results signature constraints (see below)
     - Returns the processed job results to be inserted
   - Call `await next()` to perform default implementation (update status to requested status)
 - `on(cancelJob)`:
@@ -447,11 +455,11 @@ The following constraints apply for each job result type:
   - Other properties are not allowed
 - `data`:
   - Properties `name`, `mimeType`, `filename` and `data` need to be provided
-  - Data needs to be provided as base64 encoded string
+  - Data needs to be provided as a base64 encoded string
   - Other properties are not allowed
 - `message`:
   - Properties `name` and `messages` need to be provided
-  - Messages need to be provided as array of job result messages
+  - Messages need to be provided as an array of job result messages
   - Other properties are not allowed
 
 Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
@@ -460,16 +468,22 @@ provides resilient processing (circuit breaker, retry, load-balancing, etc.).
 
 In addition, to overwriting the default implementation via an `on` handler, also additional `before` and `after` handlers can be registered.
 
+##### Error Codes
+
+The following error codes are defined to be used in exceptions as part of the stable interface (`x-extensible-enum`):
+
+- `statusTransitionNotAllowed`: Status transition is not allowed for the current job status
+
 #### Job Provider
 
 A job provider service is already provided per default by the SDK, implementing
 the [SAP Advanced Financial Closing Scheduling Service Provider Interface](https://hub.sap.com/api/SSPIV1).
-Therefore, focus can be put on additional custom provider logic (e.g. streaming of data from a remote location).
+Therefore, focus can be put on additional custom provider logic (e.g., streaming of data from a remote location).
 
 The **SAP Advanced Financial Closing Scheduling Service Provider Interface** is published on SAP Business Accelerator Hub
-under package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
+under the package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
 
-To implement a custom job provider extend the job provider service definition as follows:
+To implement a custom job provider, extend the job provider service definition as follows:
 
 **CDS file:** `/srv/scheduling-provider-service.cds`
 
@@ -510,7 +524,7 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
 module.exports = CustomSchedulingProviderService;
 ```
 
-A stub implementation for custom scheduling provider service can be generated via command:
+A stub implementation for a custom scheduling provider service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -593,12 +607,84 @@ A stub implementation for periodic job sync can be generated via command:
 
 - Terminal: `afc add stub`
 
-Details on how to implement periodic event via Event Queue can be found in
+Details on how to implement a periodic event via Event Queue can be found in
 [Event-Queue documentation on Periodic Events](https://cap-js-community.github.io/event-queue/configure-event/#periodic-events).
+
+#### Notification
+
+The service provider can be notified with special scheduling notifications via operation `notify`.
+The `notification` capability is active per default, can be disabled by setting environment option:
+
+**CDS Env:**
+
+```json
+{
+  "cds": {
+    "requires": {
+      "sap-afc-sdk": {
+        "capabilities": {
+          "supportsNotification": false
+        }
+      }
+    }
+  }
+}
+```
+
+The `notify` operation of the Scheduling Service Provider Interface can send multiple notifications at once.
+The signature of a single notification is defined as follows:
+
+```cds
+type Notification {
+  name  : String(255) not null;
+  ID    : String(255);
+  value : String(5000);
+};
+```
+
+Available notifications are:
+
+- `taskListStatusChanged`: Notification to inform about changed task list status.
+  - `name`: Notification name `taskListStatusChanged`
+  - `ID`: Task list ID
+  - `value`: New task list status
+
+**CDS file:** `/srv/scheduling-processing-service.cds`
+
+```cds
+using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+
+annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+```
+
+**Implementation file:** `/srv/scheduling-processing-service.js`
+
+```js
+const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
+
+class CustomSchedulingProcessingService extends SchedulingProcessingService {
+  async init() {
+    const { notify } = this.operations;
+
+    this.on(notify, async (req, next) => {
+      // Your logic goes here
+      await next();
+    });
+
+    super.init();
+  }
+}
+
+module.exports = CustomSchedulingProcessingService;
+```
+
+A stub implementation for notification handling can be generated via command:
+
+- Terminal: `afc add stub`
 
 ### API
 
-The SDK based application expose the scheduling provider API. The out-of-the-box open service broker implementation
+The SDK-based application exposes the scheduling provider API. The out-of-the-box open service broker implementation
 can be used to manage service keys and access tokens to the API.
 After [Deployment](#deployment) the [Service Broker](#service-broker) can be registered in Cloud Foundry.
 
@@ -612,7 +698,9 @@ as part of CDS environment in `cds.requires.sap-afc-sdk.broker` section.
 
 More details on how to use the service broker can be found in the [Service Broker](#service-broker) section.
 
-### Redis
+### Additional Settings
+
+#### Redis
 
 The application can be scaled by adding a Redis cache to distribute workload across application instances.
 Add Redis to the project (already part of [Adding SDK](#adding-sdk) for CAP Node.js):
@@ -622,7 +710,7 @@ Add Redis to the project (already part of [Adding SDK](#adding-sdk) for CAP Node
 Redis is used by `@cap-js-community/event-queue`, `@cap-js-community/websocket` and `@cap-js-community/feature-toggle-library`
 modules to process events, distribute websocket messages and store and distribute feature toggles values.
 
-### Feature Toggles
+#### Feature Toggles
 
 The Feature Toggle Library is used to control the execution of the Event Queue.
 It exposes endpoints to manage feature toggles:
@@ -655,7 +743,7 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
 
 - Run `npm add @cap-js-community/sap-afc-sdk` in `com.sap.cds` CAP Java project
 - Execute `npm start` to start server
-  - Access welcome page at http://localhost:8080
+  - Access the welcome page at http://localhost:8080
   - Access Applications
     - [/launchpad.html](http://localhost:8080/launchpad.html): Sandbox Launchpad
     - [/scheduling.monitoring.job](http://localhost:8080/scheduling.monitoring.job): Standalone Scheduling Monitoring Job UI
@@ -683,12 +771,12 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
 
 ### Architecture
 
-The SAP Advanced Financial Closing SDK for CDS is build on the following architecture open source
+The SAP Advanced Financial Closing SDK for CDS is built on the following architecture open source
 building blocks as depicted in the following diagram:
 
 ![Architecture Concept](./docs/assets/architecture_concept_java.svg)
 
-Using the SAP Advanced Financial Closing SDK a 3rd-party scheduling provider can be built for SAP Advanced Financial Closing.
+Using the SAP Advanced Financial Closing SDK, a third-party scheduling provider can be built for SAP Advanced Financial Closing.
 The architectural design of the SAP Advanced Financial Closing (AFC) SDK for implementing a Scheduling Provider is based
 on the SAP Cloud Application Programming Model (CAP) and SAP Build Code.
 
@@ -724,15 +812,17 @@ The following diagram illustrates the high-level architecture of the SAP Advance
 
 Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` section:
 
+- `capabilities: Object`: Capabilities configuration. Default is `{}`
+  - `capabilities.supportsNotification: Boolean`: Supports notification configuration. Default is `true`
 - `endpoints: Object`: Endpoint configuration. Default is `{}`
   - `endpoints.approuter: String`: Url of approuter. Default is `null` (derived from conventions `<app>-srv`)
   - `endpoints.server: String`: Url of server. Default is `null` (derived from environment, e.g. CF)
 - `api: Object`: API configuration on `/api` paths. Default see below
   - `api.cors: Object`: Cross-Origin Resource Sharing (CORS) configuration cors module on `/api` paths. Default is `{ origin: true }`
     - `api.cors.origin: Boolean | String | String[]`: Cross-Origin Resource Sharing (CORS) origin configuration. Default is `true` (allow approuter url)
-    - `api.cors.methods: String | String[]`: Cross-Origin Resource Sharing (CORS) allow methods configuration. Default is `[]`
-    - `api.cors.heqaders: String | String[]`: Cross-Origin Resource Sharing (CORS) allow headers configuration. Default is `[]`
-    - `api.cors.credentials: Boolean`: Cross-Origin Resource Sharing (CORS) allow credentials configuration. Default is `true`
+    - `api.cors.methods: String | String[]`: Cross-Origin Resource Sharing (CORS) 'allow methods' configuration. Default is `[]`
+    - `api.cors.heqaders: String | String[]`: Cross-Origin Resource Sharing (CORS) 'allow headers' configuration. Default is `[]`
+    - `api.cors.credentials: Boolean`: Cross-Origin Resource Sharing (CORS) 'allow credentials' configuration. Default is `true`
 - `ui: Object`: UI configuration. Default is `{}`
   - `ui.enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
 - `broker: Object`: Service broker configuration. Default is `{}`
@@ -765,7 +855,7 @@ The SDK provides a set of services to implement the job processing service and t
 
 The job processing service is responsible for processing the jobs.
 
-#### Mock Processing
+##### Mock Processing
 
 The library includes a mocked processing for jump-start development, which is disabled by default
 (no `sap-afc-sdk.mock-processing` config in `application.yml`).
@@ -785,7 +875,7 @@ The project can be adjusted to use basic mock processing automatically via comma
 
 - Terminal: `afc add -b mock`
 
-A more advanced mocked Job processing can be configured by setting the
+More advanced mocked Job processing can be configured by setting the
 following [CDS env](https://cap.cloud.sap/docs/node.js/cds-env) options (as described in [options](#options)):
 
 ```yaml
@@ -812,11 +902,11 @@ To disable mock processing remove config `sap-afc-sdk.mockProcessing`, e.g. via 
 - Terminal: `afc add -x mock`
 
 The default implementation of the job processing is already provided by the SDK. Focus can be put on
-custom processing logic, and the processing status update handling.
+custom processing logic and the processing status update handling.
 
-#### Custom Processing
+##### Custom Processing
 
-To implement a custom job processing extend the job processing service definition as follows:
+To implement custom job processing, extend the job processing service definition as follows:
 
 **Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProcessingHandler.java`
 
@@ -861,10 +951,17 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     // Your logic goes here
     context.proceed();
   }
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 }
 ```
 
-A stub implementation for custom scheduling processing service can be generated via command:
+A stub implementation for a custom scheduling processing service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -890,7 +987,7 @@ As part of the custom scheduling process service implementation, the following o
     - Check function and status transitions can be customized
     - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
   - Job results are checked and processed via `checkJobResults(context, results)`
-    - Valid results are valid according to job results signature constraints (see below)
+    - Valid results are valid, according to job results signature constraints (see below)
     - Returns the processed job results to be inserted
   - Call `context.proceed()` to perform default implementation (update status to requested status)
 - `cancelJob`:
@@ -947,11 +1044,11 @@ The following constraints apply for each job result type:
   - Other properties are not allowed
 - `data`:
   - Properties `name`, `mimeType`, `filename` and `data` need to be provided
-  - Data needs to be provided as base64 encoded string
+  - Data needs to be provided as a base64 encoded string
   - Other properties are not allowed
 - `message`:
   - Properties `name` and `messages` need to be provided
-  - Messages need to be provided as array of job result messages
+  - Messages need to be provided as an array of job result messages
   - Other properties are not allowed
 
 Job processing is performed as part of the Event Queue processing. The Event Queue is a framework built on top of CAP
@@ -960,16 +1057,22 @@ provides resilient processing (circuit breaker, retry, load-balancing, etc.).
 
 In addition, to overwriting the default implementation via an `on` handler, also additional `before` and `after` handlers can be registered.
 
+##### Error Codes
+
+The following error codes are defined to be used in exceptions as part of the stable interface (`x-extensible-enum`):
+
+- `statusTransitionNotAllowed`: Status transition is not allowed for the current job status
+
 #### Job Provider
 
 A job provider service is already provided per default by the SDK, implementing
 the [SAP Advanced Financial Closing Scheduling Service Provider Interface](https://hub.sap.com/api/SSPIV1).
-Therefore, focus can be put on additional custom provider logic (e.g. streaming of data from a remote location).
+Therefore, focus can be put on additional custom provider logic (e.g., streaming of data from a remote location).
 
 The **SAP Advanced Financial Closing Scheduling Service Provider Interface** is published on SAP Business Accelerator Hub
-under package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
+under the package **SAP Advanced Financial Closing** at https://api.sap.com/api/SSPIV1.
 
-To implement a custom job provider extend the job provider service definition as follows:
+To implement a custom job provider, extend the job provider service definition as follows:
 
 **Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProviderHandler.java`
 
@@ -1013,7 +1116,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 }
 ```
 
-A stub implementation for custom scheduling provider service can be generated via command:
+A stub implementation for a custom scheduling provider service can be generated via command:
 
 - Terminal: `afc add stub`
 
@@ -1078,13 +1181,73 @@ A stub implementation for periodic job sync can be generated via command:
 
 - Terminal: `afc add stub`
 
+#### Notification
+
+The service provider can be notified with special scheduling notifications via operation `notify`.
+The `notification` capability is active per default, can be disabled by setting environment option:
+
+**Application file:**
+
+```yaml
+sap-afc-sdk:
+  capabilities:
+    supportsNotification: false
+```
+
+The `notify` operation of the Scheduling Service Provider Interface can send multiple notifications at once.
+The signature of a single notification is defined as follows:
+
+```cds
+type Notification {
+  name  : String(255) not null;
+  ID    : String(255);
+  value : String(5000);
+};
+```
+
+Available notifications are:
+
+- `taskListStatusChanged`: Notification to inform about changed task list status.
+  - `name`: Notification name `taskListStatusChanged`
+  - `ID`: Task list ID
+  - `value`: New task list status
+
+**Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProcessingHandler.java`
+
+```java
+package customer.scheduling;
+
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.sap.cds.services.handler.annotations.HandlerOrder;
+import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.ServiceName;
+import org.springframework.stereotype.Component;
+
+@Component
+@ServiceName(SchedulingProcessingService_.CDS_NAME)
+public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
+}
+```
+
+A stub implementation for notification handling can be generated via command:
+
+- Terminal: `afc add stub`
+
 ### API
 
-The SDK based application expose the scheduling provider API. The out-of-the-box open service broker implementation
+The SDK-based application exposes the scheduling provider API. The out-of-the-box open service broker implementation
 can be used to manage service keys and access tokens to the API.
 After [Deployment](#deployment) the [Service Broker](#service-broker) can be registered in Cloud Foundry.
 
-After adding the broker to project via `afc add broker`, the default configuration is located in `application.yaml` at:
+After adding the broker to a project via `afc add broker`, the default configuration is located in `application.yaml` at:
 
 ```yaml
 spring:
@@ -1150,7 +1313,7 @@ The broker is used to manage service key management to the API in a Cloud Foundr
     - Update .http files placeholders
       - Terminal: `afc api key -h`
     - Perform OAuth token request using key credentials (clientId, clientSecret)
-      - See [http/auth/uaa.cloud.http](./http/auth/uaa.cloud.http) for obtaining an OAuth token
+      - See [http/auth/uaa.cloud.http](./http/auth/uaa.cloud.http) for getting an OAuth token
       - Via CLI:
         - Terminal: `afc api key -t`
     - Call API using OAuth token
@@ -1174,14 +1337,14 @@ The application can be tested locally using the following steps:
 
 - Start application
   - Terminal: `npm start`
-- Open welcome page
+- Open the welcome page
   - Browser:
     - CAP Node.js: http://localhost:4004
     - CAP Java: http://localhost:8080
 
 #### Sample data
 
-To add sample job definitions and job instances run:
+To add sample job definitions and job instances, run:
 
 - Terminal: `afc add sample`
 
@@ -1189,7 +1352,7 @@ Test data will be placed at `/db/data`
 
 #### Unit-Tests
 
-To add unit-tests for testing the API endpoints run:
+To add unit-tests for testing the API endpoints, run:
 
 - Terminal: `afc add test`
 
@@ -1235,11 +1398,11 @@ server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
 - Add Work Zone and HTML5 Repo features (already part of [Adding SDK](#adding-sdk))
   - Terminal: `cds add workzone,html5-repo`
-- Setup and configure SAP Work Zone instance using HTML5 Apps Content Channel
+- Set up and configure SAP Work Zone instance using HTML5 Apps Content Channel
   - Add `Monitor Scheduling Jobs` app to Content Explorer
-  - Assign app to a group, role and site to be accessible
+  - Assign an app to a group, role, and site to be accessible
 - (CAP Node.js) Disable UI served in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
-- (Optional) Apps from AFC SDK can also be copied over into project at `/app` for further adjustments:
+- (Optional) Apps from AFC SDK can also be copied over into a project at `/app` for further adjustments:
   - Terminal: `afc add app`
 
 ### Multitenancy
@@ -1252,7 +1415,7 @@ Details can be found at https://github.com/cap-js-community/mtx-tool.
 
 ## Support, Feedback, Contributing
 
-This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js-community/sap-afc-sdk/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+This project is open to feature requests/suggestions, bug reports, etc. via [GitHub issues](https://github.com/cap-js-community/sap-afc-sdk/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
 
 ## Code of Conduct
 

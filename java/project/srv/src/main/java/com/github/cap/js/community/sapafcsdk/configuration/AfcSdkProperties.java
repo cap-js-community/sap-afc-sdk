@@ -19,6 +19,7 @@ public class AfcSdkProperties {
   private TenantCache tenantCache;
   private Ui ui = new Ui();
   private Api api = new Api();
+  private Capabilities capabilities = new Capabilities();
 
   public Endpoints getEndpoints() {
     return endpoints;
@@ -66,6 +67,14 @@ public class AfcSdkProperties {
 
   public void setApi(Api api) {
     this.api = api;
+  }
+
+  public Capabilities getCapabilities() {
+    return capabilities;
+  }
+
+  public void setCapabilities(Capabilities capabilities) {
+    this.capabilities = capabilities;
   }
 
   public static class Endpoints {
@@ -189,6 +198,19 @@ public class AfcSdkProperties {
 
     public void setCors(Map<String, Object> cors) {
       this.cors = cors;
+    }
+  }
+
+  public static class Capabilities {
+
+    private boolean supportsNotification = true;
+
+    public boolean isSupportsNotification() {
+      return supportsNotification;
+    }
+
+    public void setSupportsNotification(boolean supportsNotification) {
+      this.supportsNotification = supportsNotification;
     }
   }
 }

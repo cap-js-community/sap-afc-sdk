@@ -68,9 +68,17 @@ public class SchedulingProcessingHandler extends SchedulingProcessingBase implem
     }
     context.setCompleted();
   }
-  /*
-    protected void reportStatus(EventContext context, String status) {
-        // afcService.reportStatus(Status);
+
+  @On(event = NotifyContext.CDS_NAME)
+  public void notify(NotifyContext context) {
+    AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
+    if (processingConfig != null) {
+      this.mockNotification(context);
     }
-    */
+    context.setCompleted();
+  }
+
+  // protected void reportStatus(EventContext context, String status) {
+  //   afcService.reportStatus(Status);
+  // }
 }

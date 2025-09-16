@@ -21,12 +21,13 @@ const Commands = {
   BEGIN: [`cd ${tempDir}`],
   CDS_NODE: [`npx cds init ${project}`],
   CDS_JAVA: [`npx cds init ${project} --java`],
-  INSTALL: [`cd ${project}`, "npm install ../../../"],
+  INSTALL: [`cd ${project}`, "cp ../../test/.npmrc .", "npm install ../../../"],
   AFC_CF: ["npx afc init cf"],
   AFC_KYMA: ["npx afc init kyma"],
   AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
   AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
-  END: [], // ["npm test"]
+  END: [],
+  TEST: ["npm test"],
 };
 
 const Files = {
@@ -75,7 +76,7 @@ describe("Build", () => {
   });
 
   it("Node / CF", async () => {
-    const result = shelljs.exec(
+    let result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_NODE,
@@ -92,10 +93,12 @@ describe("Build", () => {
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       compareFile(file);
     }
+    result = shelljs.exec([...Commands.TEST].join(" && "));
+    expect(result.code).toBe(0);
   });
 
   it("Node / Kyma", async () => {
-    const result = shelljs.exec(
+    let result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_NODE,
@@ -112,10 +115,12 @@ describe("Build", () => {
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
       compareFile(file);
     }
+    result = shelljs.exec([...Commands.TEST].join(" && "));
+    expect(result.code).toBe(0);
   });
 
   it("Java / CF", async () => {
-    const result = shelljs.exec(
+    let result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_JAVA,
@@ -132,10 +137,12 @@ describe("Build", () => {
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
       compareFile(file);
     }
+    result = shelljs.exec([...Commands.TEST].join(" && "));
+    expect(result.code).toBe(0);
   });
 
   it("Java / Kyma", async () => {
-    const result = shelljs.exec(
+    let result = shelljs.exec(
       [
         ...Commands.BEGIN,
         ...Commands.CDS_JAVA,
@@ -152,6 +159,8 @@ describe("Build", () => {
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       compareFile(file);
     }
+    result = shelljs.exec([...Commands.TEST].join(" && "));
+    expect(result.code).toBe(0);
   });
 });
 

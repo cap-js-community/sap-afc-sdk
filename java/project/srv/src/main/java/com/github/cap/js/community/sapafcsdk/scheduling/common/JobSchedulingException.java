@@ -70,6 +70,10 @@ public class JobSchedulingException extends ServiceException {
     return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "startDateTimeNotSupported", name);
   }
 
+  public static JobSchedulingException errorOnlyRunNotSupported(String name) {
+    return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "errorOnlyRunNotSupported", name);
+  }
+
   public static JobSchedulingException jobParameterNameMissing() {
     return new JobSchedulingException(ErrorStatuses.BAD_REQUEST, "jobParameterNameMissing");
   }

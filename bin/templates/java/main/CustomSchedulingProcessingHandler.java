@@ -38,4 +38,11 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
     // Your logic goes here
     context.proceed();
   }
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    // Your logic goes here
+    context.proceed();
+  }
 }

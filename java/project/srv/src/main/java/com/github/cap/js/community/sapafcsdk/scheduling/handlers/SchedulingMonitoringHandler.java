@@ -38,9 +38,9 @@ public class SchedulingMonitoringHandler implements EventHandler {
       if (job.getLink() == null) {
         job.setLink(
           endpointProvider.approuterTenantUrl(context.getUserInfo()) +
-          "/launchpad.html#Job-monitor&/Job(" +
-          job.getId() +
-          ")"
+            "/launchpad.html#Job-monitor&/Job(" +
+            job.getId() +
+            ")"
         );
       }
     }

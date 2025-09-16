@@ -44,6 +44,7 @@ public class ApiIndexContentProviderFactory implements IndexContentProviderFacto
     public void writeContent(PrintWriter writer, String contextPath) {
       writer.print(HEADER);
       writer.print(ENDPOINT_START);
+      writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/Capabilities", "Capabilities");
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobDefinition", "JobDefinition");
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/JobParameterDefinition", "JobParameterDefinition");
       writer.printf(ENDPOINT, contextPath + "/api/job-scheduling/v1/Job", "Job");

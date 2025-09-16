@@ -447,13 +447,13 @@ describe("Processing Service", () => {
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.syncJob()).resolves.not.toThrow();
     await processOutbox("SchedulingProcessingService.syncJob");
-    expect(log.output).toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
+    expect(log.output).toEqual(expect.stringMatching(/\[sapafcsdk\/jobsync] - periodic sync job triggered/s));
 
     log.output = "";
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     await expect(processingService.syncJob()).resolves.not.toThrow();
     await processOutbox("SchedulingProcessingService.syncJob");
-    expect(log.output).not.toEqual(expect.stringMatching(/\[job-sync] - periodic sync job triggered/s));
+    expect(log.output).not.toEqual(expect.stringMatching(/\[sapafcsdk\/jobsync] - periodic sync job triggered/s));
   });
 
   it("cancelJob", async () => {
@@ -1103,6 +1103,47 @@ describe("Processing Service", () => {
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*completed.*canceled/s));
+      log.clear();
+      await clearEventQueue();
+    });
+
+    it("notify", async () => {
+      cds.env.requires["sap-afc-sdk"].mockProcessing = false;
+      await expect(
+        processingService.notify({
+          notifications: [
+            {
+              name: "taskListStatusChanged",
+              ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              value: "obsolete",
+            },
+          ],
+        }),
+      ).resolves.not.toThrow();
+      await processOutbox("SchedulingProcessingService");
+      await clearEventQueue();
+    });
+
+    it("notify - mock", async () => {
+      cds.env.requires["sap-afc-sdk"].mockProcessing = true;
+      await expect(
+        processingService.notify({
+          notifications: [
+            {
+              name: "taskListStatusChanged",
+              ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              value: "obsolete",
+            },
+          ],
+        }),
+      ).resolves.not.toThrow();
+
+      await processOutbox("SchedulingProcessingService");
+      expect(log.output).toEqual(
+        expect.stringMatching(
+          /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,
+        ),
+      );
       log.clear();
       await clearEventQueue();
     });

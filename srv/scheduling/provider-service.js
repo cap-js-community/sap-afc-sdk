@@ -13,8 +13,14 @@ const isUUID = (input) =>
 
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
-    const { JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } = this.entities;
+    const { Capabilities, JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } =
+      this.entities;
     const { JobDefinition: DBJobDefinition, Job: DBJob } = this.entities("scheduling");
+    const { notify } = this.operations;
+
+    this.on("READ", Capabilities, () => {
+      return cds.env.requires?.["sap-afc-sdk"]?.capabilities ?? {};
+    });
 
     this.before("READ", [JobParameterDefinition, JobParameter, JobResultMessage], (req) => {
       if (req.subject?.ref?.length <= 1) {
@@ -30,7 +36,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.before("READ", (req) => {
       req.query.SELECT.where = undefined;
-      req.query.SELECT.orderBy = Object.keys(req.target.keys).reduce((orderBy, key) => {
+      req.query.SELECT.orderBy = Object.keys(req.target.keys ?? {}).reduce((orderBy, key) => {
         orderBy.push({ ref: [key], sort: "asc" });
         return orderBy;
       }, []);
@@ -168,17 +174,31 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
       }
 
       // Start Date & Time
-      if (req.data.startDateTime && !jobDefinition.supportsStartDateTime) {
+      if (
+        req.data.startDateTime !== undefined &&
+        req.data.startDateTime !== null &&
+        !jobDefinition.supportsStartDateTime
+      ) {
         return req.reject(JobSchedulingError.startDateTimeNotSupported(jobDefinition.name));
+      }
+
+      // Error-Only Run
+      if (
+        req.data.errorOnlyRun !== undefined &&
+        req.data.errorOnlyRun !== null &&
+        !jobDefinition.supportsErrorOnlyRun
+      ) {
+        return req.reject(JobSchedulingError.errorOnlyRunNotSupported(jobDefinition.name));
       }
 
       // Header
       const job = {
         referenceID: req.data.referenceID,
-        startDateTime: req.data.startDateTime,
         definition_name: definitionName,
         version: jobDefinition?.version,
         status_code: JobStatus.requested,
+        startDateTime: jobDefinition.supportsStartDateTime ? req.data.startDateTime : null,
+        errorOnlyRun: jobDefinition.supportsErrorOnlyRun ? req.data.errorOnlyRun : null,
         parameters: [],
       };
 
@@ -383,6 +403,11 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.on(JobResult.actions.data, JobResult, async (req) => {
       return await this.downloadData(req, req.jobResult.ID);
+    });
+
+    this.on(notify, async (req) => {
+      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      await schedulingProcessingService.tx(req).send("notify", req.data);
     });
 
     return super.init();

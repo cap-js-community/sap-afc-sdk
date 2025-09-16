@@ -17,7 +17,10 @@ import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.services.messages.LocalizedMessageProvider;
 import com.sap.cds.services.persistence.PersistenceService;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
 import org.json.JSONArray;
@@ -49,6 +52,32 @@ public class SchedulingProviderControllerTest {
 
   @Test
   @WithMockUser("authenticated")
+  public void getWelcomePage() throws Exception {
+    mockMvc.perform(get("/")).andExpect(header().string("Content-Type", "text/html")).andExpect(status().isOk());
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void getOpenAPI() throws Exception {
+    mockMvc.perform(get("/api-docs/api/job-scheduling/v1")).andExpect(status().isFound());
+    mockMvc
+      .perform(get("/api-docs/api/job-scheduling/swagger-ui/index.html"))
+      .andExpect(header().string("Content-Type", "text/html"))
+      .andExpect(status().isOk());
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void getCapabilities() throws Exception {
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Capabilities"))
+      .andExpect(header().string("Content-Type", "application/json"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.supportsNotification").value(true));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
   public void getJobDefinitions() throws Exception {
     MvcResult result = mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition"))
@@ -61,7 +90,12 @@ public class SchedulingProviderControllerTest {
     assertEquals(6, jsonArray.length());
     for (int i = 0; i < jsonArray.length(); i++) {
       JSONObject job = jsonArray.getJSONObject(i);
+      assertEquals("Job Definition " + (i + 1), job.getString("description"));
+      assertEquals("Job Definition " + (i + 1), job.getString("longDescription"));
       assertEquals("JOB_" + (i + 1), job.getString("name"));
+      assertEquals("1", job.getString("version"));
+      assertEquals("Test Company", job.getString("vendorName"));
+      assertEquals("Test System", job.getString("vendorSystem"));
     }
 
     mockMvc
@@ -282,6 +316,7 @@ public class SchedulingProviderControllerTest {
     assertEquals(3, jsonArray.length());
     for (int i = 0; i < jsonArray.length(); i++) {
       JSONObject job = jsonArray.getJSONObject(i);
+      assertNotNull(job.getString("ID"));
       assertEquals("JOB_" + (i + 1), job.getString("name"));
     }
 
@@ -757,7 +792,7 @@ public class SchedulingProviderControllerTest {
 
   @Test
   @WithMockUser("authenticated")
-  public void createJobWithTestRunFlag() throws Exception {
+  public void createJobWithTestRun() throws Exception {
     JSONObject job = new JSONObject(
       Map.of(
         "name",
@@ -851,6 +886,122 @@ public class SchedulingProviderControllerTest {
     assertEquals(messageProvider.get("jobTestRun", null, Locale.ENGLISH), resultMessage.getString("text"));
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void createJobErrorOnlyRun() throws Exception {
+    JSONObject job1 = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_2",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "errorOnlyRun",
+        false,
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abcd")),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", 32.0)),
+            new JSONObject(Map.of("name", "E"))
+          )
+        )
+      )
+    );
+
+    MvcResult result1 = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job1.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    JSONObject response1 = (JSONObject) cleanData(new JSONObject(result1.getResponse().getContentAsString()));
+    assertEquals(false, response1.get("errorOnlyRun"));
+
+    JSONObject job2 = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_2",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "errorOnlyRun",
+        true,
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abcd")),
+            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "D", "value", 32.0)),
+            new JSONObject(Map.of("name", "E"))
+          )
+        )
+      )
+    );
+
+    MvcResult result2 = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job2.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    JSONObject response2 = (JSONObject) cleanData(new JSONObject(result2.getResponse().getContentAsString()));
+    assertEquals(true, response2.get("errorOnlyRun"));
+
+    JSONObject job3 = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "errorOnlyRun",
+        false,
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "xxx")),
+            new JSONObject(Map.of("name", "C", "value", true))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job3.toString()))
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$.code").value("errorOnlyRunNotSupported"))
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("errorOnlyRunNotSupported", new String[] { "JOB_3" }, Locale.ENGLISH)
+        )
+      );
+
+    JSONObject job4 = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_3",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "errorOnlyRun",
+        true,
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "xxx")),
+            new JSONObject(Map.of("name", "C", "value", true))
+          )
+        )
+      )
+    );
+
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job4.toString()))
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$.code").value("errorOnlyRunNotSupported"))
+      .andExpect(
+        jsonPath("$.message").value(
+          messageProvider.get("errorOnlyRunNotSupported", new String[] { "JOB_3" }, Locale.ENGLISH)
+        )
+      );
   }
 
   @Test
@@ -1884,6 +2035,34 @@ public class SchedulingProviderControllerTest {
       );
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void notification() throws Exception {
+    PrintStream standardOut = System.out;
+    ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outputStreamCaptor));
+    JSONObject notification = new JSONObject(
+      Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+    );
+    JSONArray notifications = new JSONArray();
+    notifications.put(notification);
+    JSONObject content = new JSONObject(Map.of("notifications", notifications));
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/notify").contentType("application/json").content(content.toString()))
+      .andExpect(status().isNoContent());
+
+    String logs = outputStreamCaptor.toString(StandardCharsets.UTF_8);
+    assertTrue(logs.contains("sapafcsdk/notification"), "Expected log message not found in: " + logs);
+    assertTrue(
+      logs.contains(
+        " {\"name\":\"taskListStatusChanged\",\"ID\":\"3a89dfec-59f9-4a91-90fe-3c7ca7407103\",\"value\":\"obsolete\"}"
+      ),
+      "Expected log message not found in: " + logs
+    );
+
+    System.setOut(standardOut);
   }
 
   private static final Set<String> FIELDS_TO_CLEAN = Set.of("createdAt", "createdBy", "modifiedAt", "modifiedBy");

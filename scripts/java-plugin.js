@@ -50,6 +50,7 @@ function packagePlugin(check) {
   );
   shelljs.rm("-rf", "../../app/**/node_modules");
   shelljs.cp("-R", "../../app", "src/main/resources");
+  shelljs.cp("-R", "../../openapi", "src/main/resources");
   shelljs.cp("-R", "../project/srv/src/main/resources/log.pdf", "src/main/resources");
   shelljs.cp("-R", "../project/srv/src/gen/resources/META-INF/cds4j-codegen", "src/main/resources/META-INF");
 

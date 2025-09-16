@@ -64,3 +64,18 @@ Content-Type: application/json
 POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
+### Notification
+POST https://{{api}}/job-scheduling/v1/notify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notifications": [
+    {
+      "name": "taskListStatusChanged",
+      "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "value": "obsolete"
+    }
+  ]
+}

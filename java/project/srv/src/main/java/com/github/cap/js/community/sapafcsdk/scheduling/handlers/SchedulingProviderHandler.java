@@ -29,10 +29,7 @@ import com.sap.cds.services.EventContext;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.After;
-import com.sap.cds.services.handler.annotations.Before;
-import com.sap.cds.services.handler.annotations.On;
-import com.sap.cds.services.handler.annotations.ServiceName;
+import com.sap.cds.services.handler.annotations.*;
 import java.io.IOException;
 import java.util.*;
 import org.springframework.stereotype.Component;
@@ -47,9 +44,9 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       if (job.getLink() == null) {
         job.setLink(
           endpointProvider.approuterTenantUrl(context.getUserInfo()) +
-          "/launchpad.html#Job-monitor&/Job(" +
-          job.getId() +
-          ")"
+            "/launchpad.html#Job-monitor&/Job(" +
+            job.getId() +
+            ")"
         );
       }
     }
@@ -90,11 +87,21 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       throw JobSchedulingException.startDateTimeNotSupported(jobDefinition.getName());
     }
 
+    // Error-Only Run
+    if (data.getErrorOnlyRun() != null && !jobDefinition.getSupportsErrorOnlyRun()) {
+      throw JobSchedulingException.errorOnlyRunNotSupported(jobDefinition.getName());
+    }
+
     // Header
     com.github.cap.js.community.sapafcsdk.model.scheduling.Job job =
       com.github.cap.js.community.sapafcsdk.model.scheduling.Job.create();
     job.setReferenceID(data.getReferenceID());
-    job.setStartDateTime(data.getStartDateTime());
+    if (jobDefinition.getSupportsStartDateTime()) {
+      job.setStartDateTime(data.getStartDateTime());
+    }
+    if (jobDefinition.getSupportsErrorOnlyRun()) {
+      job.setErrorOnlyRun(data.getErrorOnlyRun());
+    }
     job.setDefinitionName(definitionName);
     job.setVersion(jobDefinition.getVersion());
     job.setStatusCode(JobStatusCode.REQUESTED);
@@ -333,6 +340,21 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .get("ID")
       .toString();
     context.setResult(this.downloadData(context, ID));
+    context.setCompleted();
+  }
+
+  @On(event = NotifyContext.CDS_NAME)
+  @HandlerOrder(HandlerOrder.EARLY)
+  public void notify(NotifyContext context) {
+    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.Notification> notifications =
+      new ArrayList<>();
+    for (Notification notification : context.getNotifications()) {
+      notifications.add(
+        com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.Notification.of(notification)
+      );
+    }
+    processingServiceOutboxed.notify(notifications);
     context.setCompleted();
   }
 }

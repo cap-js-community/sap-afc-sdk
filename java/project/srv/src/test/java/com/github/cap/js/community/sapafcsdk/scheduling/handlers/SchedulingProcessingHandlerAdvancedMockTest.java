@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.Notification;
 import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.github.cap.js.community.sapafcsdk.test.TestAdvancedConfig;
@@ -19,6 +20,7 @@ import com.sap.cds.services.persistence.PersistenceService;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -46,7 +48,7 @@ public class SchedulingProcessingHandlerAdvancedMockTest {
 
   @Test
   @WithMockUser("authenticated")
-  void processJob() throws Exception {
+  void processJob() {
     Locale.setDefault(Locale.ENGLISH);
 
     Job job = Job.of(
@@ -84,6 +86,34 @@ public class SchedulingProcessingHandlerAdvancedMockTest {
     processingService.syncJob();
     String logs = outputStreamCaptor.toString(StandardCharsets.UTF_8);
     assertTrue(logs.contains("periodic sync job triggered"), "Expected log message not found in: " + logs);
+
+    System.setOut(standardOut);
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void notification() {
+    PrintStream standardOut = System.out;
+    ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(outputStreamCaptor));
+
+    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    processingServiceOutboxed.notify(
+      List.of(
+        Notification.of(
+          Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+        )
+      )
+    );
+
+    String logs = outputStreamCaptor.toString(StandardCharsets.UTF_8);
+    assertTrue(logs.contains("sapafcsdk/notification"), "Expected log message not found in: " + logs);
+    assertTrue(
+      logs.contains(
+        " {\"name\":\"taskListStatusChanged\",\"ID\":\"3a89dfec-59f9-4a91-90fe-3c7ca7407103\",\"value\":\"obsolete\"}"
+      ),
+      "Expected log message not found in: " + logs
+    );
 
     System.setOut(standardOut);
   }
