@@ -242,7 +242,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         }
         if (Array.isArray(jobParameterDefinition.enumValues)) {
           if (
-            !jobParameterDefinition.enumValues.find((enumValue) => {
+            !jobParameterDefinition.enumValues.some((enumValue) => {
               return String(enumValue) === String(parameter.value);
             })
           ) {

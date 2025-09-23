@@ -1344,7 +1344,7 @@ public class SchedulingProviderControllerTest {
         new JSONArray(
           List.of(
             new JSONObject(Map.of("name", "A", "value", "ABC")),
-            new JSONObject(Map.of("name", "C", "value", true)),
+            new JSONObject(Map.of("name", "C", "value", false)),
             new JSONObject(Map.of("name", "D", "value", "23"))
           )
         )

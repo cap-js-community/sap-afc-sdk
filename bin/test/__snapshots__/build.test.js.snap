@@ -752,7 +752,6 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
-      - name: afcsdk-html5-repo-host
       - name: afcsdk-cloud-logging
     provides:
       - name: app-api
@@ -798,7 +797,6 @@ modules:
                 Authentication: NoAuthentication
                 Type: HTTP
                 ProxyType: Internet
-
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -841,7 +839,6 @@ modules:
         - npm ci
         - npm run build
       supported-platforms: []
-
 resources:
   - name: afcsdk-auth
     type: org.cloudfoundry.managed-service
@@ -2359,7 +2356,6 @@ modules:
       - name: afcsdk-auth
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
-      - name: afcsdk-html5-repo-host
       - name: afcsdk-cloud-logging
     provides:
       - name: app-api

@@ -478,7 +478,7 @@ exports[`Provider Service GET Create Job (enum) 2`] = `
   "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
   "startDateTime": null,
   "status": "requested",
-  "testRun": true,
+  "testRun": false,
   "version": "1",
 }
 `;

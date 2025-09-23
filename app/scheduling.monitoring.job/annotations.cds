@@ -29,8 +29,12 @@ annotate SchedulingMonitoringService.Job with @(
       },
       {
         $Type: 'UI.DataField',
-        Value: referenceID,
+        Value: definition.vendorName,
       },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.vendorSystem,
+      }
     ],
   },
   UI.FieldGroup #Details       : {
@@ -41,6 +45,10 @@ annotate SchedulingMonitoringService.Job with @(
         Value: status_code,
       },
       {
+        $Type: 'UI.DataField',
+        Value: referenceID,
+      },
+      {
         $Type: 'UI.DataFieldWithUrl',
         Value: link,
         Url  : link,
@@ -48,6 +56,10 @@ annotate SchedulingMonitoringService.Job with @(
       {
         $Type: 'UI.DataField',
         Value: testRun,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: errorOnlyRun,
       },
     ],
   },
@@ -82,6 +94,10 @@ annotate SchedulingMonitoringService.Job with @(
       {
         $Type: 'UI.DataField',
         Value: definition.supportsTestRun,
+      },
+      {
+        $Type: 'UI.DataField',
+        Value: definition.supportsErrorOnlyRun,
       }
     ]
   },

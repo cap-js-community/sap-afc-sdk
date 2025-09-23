@@ -635,7 +635,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
                   <PropertyValue Property="Value" Path="definition/longDescription"/>
                 </Record>
                 <Record Type="UI.DataField">
-                  <PropertyValue Property="Value" Path="referenceID"/>
+                  <PropertyValue Property="Value" Path="definition/vendorName"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/vendorSystem"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -648,12 +651,18 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="status_code"/>
                 </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="referenceID"/>
+                </Record>
                 <Record Type="UI.DataFieldWithUrl">
                   <PropertyValue Property="Value" Path="link"/>
                   <PropertyValue Property="Url" Path="link"/>
                 </Record>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="testRun"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="errorOnlyRun"/>
                 </Record>
               </Collection>
             </PropertyValue>
@@ -688,6 +697,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
                 </Record>
                 <Record Type="UI.DataField">
                   <PropertyValue Property="Value" Path="definition/supportsTestRun"/>
+                </Record>
+                <Record Type="UI.DataField">
+                  <PropertyValue Property="Value" Path="definition/supportsErrorOnlyRun"/>
                 </Record>
               </Collection>
             </PropertyValue>
