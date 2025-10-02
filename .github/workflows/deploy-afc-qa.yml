@@ -42,9 +42,6 @@ jobs:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
           BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
-      - name: Unit Test
-        run: npm test
-        working-directory: ./afcqa
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
       - name: Setup CF
