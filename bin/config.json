@@ -8,14 +8,26 @@
   "appRoot": "app",
   "apps": ["scheduling.monitoring.job"],
   "features": {
-    "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"],
-    "common": ["hana", "cloud-logging", "approuter", "destination", "html5-repo", "workzone"],
-    "xsuaa": ["xsuaa"],
-    "ias": ["ias", "ams"],
-    "node": ["sqlite", "redis"],
-    "java": [],
-    "cf": ["mta"],
-    "kyma": ["helm", "containerize"]
+    "default": {
+      "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"],
+      "common": ["hana", "approuter", "html5-repo", "workzone", "cloud-logging"],
+      "xsuaa": ["xsuaa"],
+      "ias": ["ias", "ams"],
+      "node": ["sqlite", "redis"],
+      "java": [],
+      "cf": ["mta"],
+      "kyma": ["helm", "containerize"]
+    },
+    "basic": {
+      "afc": ["app", "broker"],
+      "common": ["hana", "approuter"],
+      "xsuaa": ["xsuaa"],
+      "ias": ["ias"],
+      "node": ["sqlite"],
+      "java": [],
+      "cf": ["mta"],
+      "kyma": ["helm", "containerize"]
+    }
   },
   "options": {
     "cds": "--for production --y"

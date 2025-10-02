@@ -13,8 +13,10 @@ module.exports = {
       .addArgument(
         new commander.Argument("<features>", "Add one or more features to an existing project (comma-separated list)"),
       )
-      .option("-b, --basic", "Basic mock support (default)")
-      .option("-a, --advanced", "Advanced mock support")
+      .option("-b, --basic", "Basic mode (default)")
+      .option("-a, --advanced", "Advanced mode")
+      .option("-d, --data", "Data mode")
+      .option("-m, --metadata", "Metadata mode")
       .option("-n, --node", "Node flavor enforced")
       .option("-j, --java", "Java flavor enforced")
       .option("-x, --xremove", "Remove feature (supported for mock)")

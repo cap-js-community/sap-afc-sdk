@@ -53,6 +53,12 @@ module.exports = {
           "Add one or more features to the project (comma-separated list)",
         ).choices(["app", "broker", "http", "mock", "sample", "stub", "test"]),
       )
+      .addOption(
+        new commander.Option("-p, --profile <profile>", "Initialization profile (default)").choices([
+          "default",
+          "basic",
+        ]),
+      )
       .option("-n, --node", "Node flavor enforced")
       .option("-j, --java", "Java flavor enforced")
       .addHelpText(
@@ -105,13 +111,14 @@ Examples:
     try {
       target ||= config.defaults.target;
       auth ||= config.defaults.auth;
-      processCommonBefore(target, auth);
+      const profile = options?.profile ?? "default";
+      processCommonBefore(target, profile, auth);
       if (isNode(options)) {
-        processNode(target, auth);
+        processNode(target, profile, auth);
       } else {
-        processJava(target, auth);
+        processJava(target, profile, auth);
       }
-      processCommonAfter(target, auth);
+      processCommonAfter(target, profile, auth);
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);
@@ -120,7 +127,7 @@ Examples:
   },
 };
 
-function processNode(target, auth) {
+function processNode(target, profile, auth) {
   // Create app stubs
   const appStubs = [];
   for (const app of config.apps) {
@@ -179,10 +186,10 @@ function processNode(target, auth) {
   });
 
   // cds add
-  const cdsFeatures = config.features.common
-    .concat(config.features[target])
-    .concat(config.features[auth])
-    .concat(config.features.node);
+  const cdsFeatures = config.features[profile].common
+    .concat(config.features[profile][target])
+    .concat(config.features[profile][auth])
+    .concat(config.features[profile].node);
   shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 
   // Cleanup app stubs
@@ -228,7 +235,7 @@ function processNode(target, auth) {
   });
 }
 
-function processJava(target, auth) {
+function processJava(target, profile, auth) {
   // cdsrc
   const cdsrc = adjustJSON(".cdsrc.json", (json) => {
     if (json.requires?.outbox?.kind !== "persistent-outbox") {
@@ -331,10 +338,10 @@ function processJava(target, auth) {
     },
   );
 
-  const cdsFeatures = config.features.common
-    .concat(config.features[target])
-    .concat(config.features[auth])
-    .concat(config.features.java);
+  const cdsFeatures = config.features[profile].common
+    .concat(config.features[profile][target])
+    .concat(config.features[profile][auth])
+    .concat(config.features[profile].java);
   shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
 
   // TODO: Remove (cap/issues/18263)

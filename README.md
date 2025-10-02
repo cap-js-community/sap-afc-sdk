@@ -311,7 +311,7 @@ The project can be adjusted to use advanced mock processing (without additional 
 
 Mock configuration can be adjusted in `package.json` afterward.
 
-To disable mock processing remove CDS env `cds.requires.sap-afc-sdk.mockProcessing`, e.g. via command:
+To disable mock processing remove CDS env `cds.requires.sap-afc-sdk.mockProcessing`, e.g., via command:
 
 - Terminal: `afc add -x mock`
 
@@ -720,7 +720,7 @@ It exposes endpoints to manage feature toggles:
 
 See `.http` files in [/http/toggles](./http/toggles) to call feature toggle endpoints.
 An internal OAuth token needs to be fetched via [/http/auth/uaa.internal.cloud.http](./http/auth/uaa.internal.cloud.http)
-providing credentials from XSUAA instance or via calling:
+providing credentials from the XSUAA instance or via calling:
 
 - Terminal: `afc api key -i`
 
@@ -1370,7 +1370,7 @@ HTTP files will be placed at `/http`.
 
 #### Authentication Method
 
-The SDK supports authentication via `xsuaa` or `ias`. `xsuaa` is the default:
+The SDK supports authentication via `xsuaa` or `ias`. `xsuaa` It is the default:
 
 - `xsuaa`: Authentication via XSUAA service.
   - Boostrap SDK via `cds init <target> xsuaa`
