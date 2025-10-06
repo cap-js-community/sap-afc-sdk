@@ -191,7 +191,8 @@ annotate SchedulingMonitoringService.Job with @(
     referenceID,
     definition_name,
     status_code,
-    testRun
+    testRun,
+    errorOnlyRun
   ],
 );
 

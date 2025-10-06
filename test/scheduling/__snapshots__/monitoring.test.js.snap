@@ -777,6 +777,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
             <PropertyPath>definition_name</PropertyPath>
             <PropertyPath>status_code</PropertyPath>
             <PropertyPath>testRun</PropertyPath>
+            <PropertyPath>errorOnlyRun</PropertyPath>
           </Collection>
         </Annotation>
         <Annotation Term="UI.LineItem">
