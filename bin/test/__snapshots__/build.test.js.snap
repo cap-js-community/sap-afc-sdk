@@ -9,8 +9,7 @@ exports[`Build Java / CF 1`] = `
   "repository": "<Add your repository here>",
   "cds": {
     "requires": {
-      "event-queue": false,
-      "workzone": true
+      "event-queue": false
     }
   },
   "scripts": {
@@ -224,6 +223,7 @@ exports[`Build Java / CF 5`] = `
       "destinations": true,
       "html5-repo": true
     },
+    "workzone": true,
     "cloud-logging": true
   }
 }
@@ -915,8 +915,7 @@ exports[`Build Java / Kyma 1`] = `
   "repository": "<Add your repository here>",
   "cds": {
     "requires": {
-      "event-queue": false,
-      "workzone": true
+      "event-queue": false
     }
   },
   "scripts": {
@@ -1130,6 +1129,7 @@ exports[`Build Java / Kyma 5`] = `
       "destinations": true,
       "html5-repo": true
     },
+    "workzone": true,
     "cloud-logging": true
   }
 }
@@ -2338,7 +2338,6 @@ modules:
       buildpack: nodejs_buildpack
     requires:
       - name: afcsdk-db
-
   - name: afcsdk
     type: approuter.nodejs
     path: app/router

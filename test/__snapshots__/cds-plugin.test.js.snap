@@ -281,42 +281,6 @@ footer {
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-job">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/Job"><span>Job</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobparameter">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobresult">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobresultmessage">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-jobstatus">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
-          <li id="schedulingmonitoringservice-odata-resulttype">
-            <div>
-              <a href="/odata/v4/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
-            </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
-          </li>
           <li id="schedulingmonitoringservice-odata-parametertype">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
@@ -334,6 +298,42 @@ footer {
               <a href="/odata/v4/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
             </div>
             <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-job">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/Job"><span>Job</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobstatus">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobparameter">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobresult">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-resulttype">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+          </li>
+          <li id="schedulingmonitoringservice-odata-jobresultmessage">
+            <div>
+              <a href="/odata/v4/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
+            </div>
+            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
           <li id="schedulingmonitoringservice-odata-messageseverity">
             <div>
