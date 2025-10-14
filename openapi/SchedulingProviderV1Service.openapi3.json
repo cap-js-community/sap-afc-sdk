@@ -1060,6 +1060,20 @@
                     }
                   }
                 }
+              },
+              "examples": {
+                "obsolete": {
+                  "summary": "Notification for task list status change to obsolete",
+                  "value": {
+                    "notifications": [
+                      {
+                        "name": "taskListStatusChanged",
+                        "ID": "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+                        "value": "obsolete"
+                      }
+                    ]
+                  }
+                }
               }
             }
           }
@@ -1598,7 +1612,8 @@
           },
           "value": {
             "type": "string",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "x-extensible-enum": ["released", "active", "paused", "completed", "obsolete"]
           }
         }
       },

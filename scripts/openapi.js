@@ -46,6 +46,13 @@ function processSchedulingProviderService(check, skip) {
     // Components
     data.components.parameters = {};
     data.components.responses = DEFAULT_RESPONSES;
+    data.components.schemas["SchedulingProviderService.Notification"].properties.value["x-extensible-enum"] = [
+      "released",
+      "active",
+      "paused",
+      "completed",
+      "obsolete",
+    ];
     data.components.schemas.error = {
       type: "object",
       required: ["code", "message"],
@@ -145,6 +152,20 @@ function processSchedulingProviderService(check, skip) {
     const getCapabilities = data.paths["/Capabilities"].get.responses[200].content["application/json"];
     getCapabilities.schema = {
       $ref: getCapabilities.schema.properties.value.items.$ref,
+    };
+    data.paths["/notify"].post.requestBody.content["application/json"].examples = {
+      obsolete: {
+        summary: "Notification for task list status change to obsolete",
+        value: {
+          notifications: [
+            {
+              name: "taskListStatusChanged",
+              ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              value: "obsolete",
+            },
+          ],
+        },
+      },
     };
     delete data.paths["/JobResult"];
     delete data.paths["/JobResult/{ID}/SchedulingProviderService.data"];
