@@ -9,7 +9,7 @@
   "dependencies": {},
   "devDependencies": {
     "@ui5/cli": "^4.0.30",
-    "@sap/ux-ui5-tooling": "^1.19.0",
+    "@sap/ux-ui5-tooling": "^1.19.1",
     "ui5-task-zipper": "^3.4.4"
   },
   "scripts": {
