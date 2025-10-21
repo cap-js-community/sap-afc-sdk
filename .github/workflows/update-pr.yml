@@ -30,6 +30,8 @@ jobs:
       - name: Update
         run: npm run update
       - name: Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.UPDATE_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
