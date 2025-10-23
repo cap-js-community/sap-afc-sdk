@@ -61,7 +61,7 @@ function processSchedulingProviderService(check, skip) {
           type: "string",
           maxLength: 255,
           description: "A machine-readable error code.",
-          "x-extensible-enum": ["statusTransitionNotAllowed"],
+          "x-extensible-enum": fetchErrorCodes(),
         },
         message: {
           type: "string",
@@ -313,4 +313,19 @@ function nameToTag(name) {
     return "Notification";
   }
   return name;
+}
+
+function fetchErrorCodes() {
+  return [
+    ...fetchMessageCodes("./srv/i18n/messages.properties"),
+    ...fetchMessageCodes("./srv/scheduling/i18n/messages.properties"),
+  ];
+}
+
+function fetchMessageCodes(i18n) {
+  const messages = fs.readFileSync(path.join(process.cwd(), i18n), "utf-8");
+  const lines = messages.split("\n").filter((line) => line && !line.startsWith("#"));
+  return lines.map((line) => {
+    return line.split("=")[0];
+  });
 }
