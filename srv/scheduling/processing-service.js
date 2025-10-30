@@ -39,7 +39,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async init() {
-    const { Job } = this.entities("scheduling");
+    const { Job } = cds.entities("scheduling");
     const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
@@ -91,7 +91,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async processJobUpdate(req, status, results) {
-    const { Job, JobResult } = this.entities("scheduling");
+    const { Job, JobResult } = cds.entities("scheduling");
     const job = req.job;
     if (!status) {
       return req.reject(JobSchedulingError.statusValueMissing());

@@ -15,7 +15,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   async init() {
     const { Capabilities, JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } =
       this.entities;
-    const { JobDefinition: DBJobDefinition, Job: DBJob } = this.entities("scheduling");
+    const { JobDefinition: DBJobDefinition, Job: DBJob } = cds.entities("scheduling");
     const { notify } = this.operations;
 
     this.on("READ", Capabilities, () => {
@@ -414,7 +414,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   }
 
   async createJob(req, job) {
-    const { Job: DBJob } = this.entities("scheduling");
+    const { Job: DBJob } = cds.entities("scheduling");
     for (const parameter of job.parameters) {
       if (parameter.value !== null) {
         parameter.value = String(parameter.value);
@@ -424,12 +424,12 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   }
 
   async updateJob(req, job, data) {
-    const { Job: DBJob } = this.entities("scheduling");
+    const { Job: DBJob } = cds.entities("scheduling");
     await UPDATE.entity(DBJob).set(data).where({ ID: job.ID });
   }
 
   async downloadData(req, ID) {
-    const { JobResult: DBJobResult } = this.entities("scheduling");
+    const { JobResult: DBJobResult } = cds.entities("scheduling");
     const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
     return {
       value: data,

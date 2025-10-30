@@ -6,8 +6,8 @@ const BaseApplicationService = require("../common/BaseApplicationService");
 
 module.exports = class SchedulingMonitoringService extends BaseApplicationService {
   async init() {
-    const { Job } = this.entities();
-    const { Job: ProviderJob } = this.entities("SchedulingProviderService");
+    const { Job } = this.entities;
+    const { Job: ProviderJob } = cds.entities("SchedulingProviderService");
 
     this.on(Job.actions.cancel, Job, async (req, next) => {
       const providerService = await cds.connect.to("SchedulingProviderService");
