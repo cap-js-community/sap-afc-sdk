@@ -15,6 +15,16 @@ const { isNode, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common
 
 const Version = require(path.join(__dirname, "../../package.json")).version;
 
+const Profile = {
+  Default: "default",
+  Basic: "basic",
+};
+
+const Runtime = {
+  Node: "node",
+  Java: "java",
+};
+
 const Dependencies = {
   Node: [],
   Java: [
@@ -26,7 +36,7 @@ const Dependencies = {
     {
       groupId: "org.springframework.security",
       artifactId: "spring-security-test",
-      version: "6.4.4",
+      version: "6.5.5",
       scope: "test",
     },
   ],
@@ -41,11 +51,6 @@ module.exports = {
         new commander.Argument("[target]", `Initialize project for target platform (${config.targets.join(", ")})`)
           .choices(config.targets)
           .default(config.defaults.target),
-      )
-      .addArgument(
-        new commander.Argument("[auth]", `Initialize project for authentication method (${config.auths.join(", ")})`)
-          .choices(config.auths)
-          .default(config.defaults.auth),
       )
       .addOption(
         new commander.Option(
@@ -75,15 +80,13 @@ Features:
 
 Examples:
   afc init cf
-  afc init cf ias
   afc init kyma
-  afc init kyma xsuaa
-  afc init cf --add broker,sample,http
-  afc init kyma --add broker,sample,http
+  afc init cf --add app,broker,sample,http
+  afc init kyma --add app,broker,sample,http
 `,
       );
   },
-  handle: function (target, auth) {
+  handle: function (target) {
     const name = projectName();
     if (!name) {
       console.log(`CDS project not found`);
@@ -91,13 +94,13 @@ Examples:
     }
 
     console.log(`Initializing project`);
-    let success = module.exports.process(target, auth, this.opts());
+    let success = module.exports.process(target, this.opts());
     if (success) {
       const options = this.opts();
       if (options.add) {
         const features = options.add.split(",").map((f) => f.trim());
         const addCommand = require("./add");
-        success = addCommand.process(features);
+        success = addCommand.process(features, {});
       }
     }
     if (success) {
@@ -107,18 +110,18 @@ Examples:
       process.exit(-1);
     }
   },
-  process: function (target, auth, options) {
+  process: function (target, options) {
     try {
       target ||= config.defaults.target;
-      auth ||= config.defaults.auth;
-      const profile = options?.profile ?? "default";
-      processCommonBefore(target, profile, auth);
+      const runtime = isNode(options) ? Runtime.Node : Runtime.Java;
+      const profile = options?.profile ?? Profile.Default;
+      processBefore(runtime, target, profile);
       if (isNode(options)) {
-        processNode(target, profile, auth);
+        processNode(target, profile);
       } else {
-        processJava(target, profile, auth);
+        processJava(target, profile);
       }
-      processCommonAfter(target, profile, auth);
+      processAfter(runtime, target, profile);
       return true;
     } catch (err) {
       console.error("Project initialization failed: ", err.message);
@@ -127,33 +130,35 @@ Examples:
   },
 };
 
-function processNode(target, profile, auth) {
-  // Create app stubs
-  const appStubs = [];
-  for (const app of config.apps) {
-    const appPath = path.join(process.cwd(), config.appRoot, app);
-    if (!fs.existsSync(appPath)) {
-      fs.mkdirSync(appPath, { recursive: true });
-      appStubs.push(app);
-    }
-  }
-
-  // Remove previous replacements
+function processBefore(runtime, target, profile) {
+  // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {
-    for (const app of appStubs) {
-      for (const module of yaml.get("modules").items) {
-        if (module.get("path") === `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`) {
-          module.set("path", `app/${app}`);
-          if (module.getIn(["build-parameters", "commands", 0]) === "npm i") {
-            module.setIn(["build-parameters", "commands", 0], "npm ci");
-          }
-          break;
-        }
+    for (const resource of yaml.get("resources").items) {
+      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
+        resource.setIn(["parameters", "service-plan"], "application");
       }
     }
     return yaml;
   });
 
+  // Kyma
+  adjustYAMLDocument("chart/values.yaml", (yaml) => {
+    if (yaml.getIn(["xsuaa", "servicePlanName"])) {
+      yaml.setIn(["xsuaa", "servicePlanName"], "application");
+    }
+    return yaml;
+  });
+
+  // CDS add
+  const excludes = (config.excludes[runtime] || []).concat(config.excludes[target] || []);
+  const features = config.features[profile].common
+    .concat(config.features[profile][runtime])
+    .concat(config.features[profile][target])
+    .filter((feature) => !excludes.includes(feature));
+  shelljs.exec(`cds add ${features.join(",")} ${config.options.cds}`);
+}
+
+function processNode() {
   // Project
   adjustJSON("package.json", (json) => {
     if (
@@ -172,70 +177,15 @@ function processNode(target, profile, auth) {
         json.cds.requires["sap-afc-sdk"]["[production]"].endpoints.server = process.env.SERVER_URL;
       }
     }
-    json.sapux ??= [];
-    for (const app of appStubs) {
-      if (!json.sapux.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)) {
-        json.sapux.push(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
-      }
-    }
     if (json.cds?.server?.index === undefined) {
       json.cds ??= {};
       json.cds.server ??= {};
       json.cds.server.index = true;
     }
   });
-
-  // cds add
-  const cdsFeatures = config.features[profile].common
-    .concat(config.features[profile][target])
-    .concat(config.features[profile][auth])
-    .concat(config.features[profile].node);
-  shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
-
-  // Cleanup app stubs
-  for (const app of appStubs) {
-    const appPath = path.join(process.cwd(), config.appRoot, app);
-    if (fs.existsSync(appPath)) {
-      fs.rmSync(appPath, { recursive: true, force: true });
-    }
-  }
-
-  // CF
-  adjustYAMLDocument("mta.yaml", (yaml) => {
-    for (const app of appStubs) {
-      for (const module of yaml.get("modules").items) {
-        if (module.get("path") === `app/${app}`) {
-          module.set("path", `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`);
-          if (module.getIn(["build-parameters", "commands", 0]) === "npm ci") {
-            module.setIn(["build-parameters", "commands", 0], "npm i");
-          }
-          break;
-        }
-      }
-    }
-    return yaml;
-  });
-
-  // Kyma
-  adjustYAMLDocument("containerize.yaml", (yaml) => {
-    for (const app of appStubs) {
-      yaml.get("before-all").items.forEach((line, index) => {
-        if (
-          line.value.includes(`app/${app}`) &&
-          !line.value.includes(`node_modules/@cap-js-community/sap-afc-sdk/app/${app}`)
-        ) {
-          yaml.setIn(
-            ["before-all", index],
-            line.value.replace(`app/${app}`, `node_modules/@cap-js-community/sap-afc-sdk/app/${app}`),
-          );
-        }
-      });
-    }
-    return yaml;
-  });
 }
 
-function processJava(target, profile, auth) {
+function processJava() {
   // cdsrc
   const cdsrc = adjustJSON(".cdsrc.json", (json) => {
     if (json.requires?.outbox?.kind !== "persistent-outbox") {
@@ -244,6 +194,8 @@ function processJava(target, profile, auth) {
       json.requires.outbox.kind = "persistent-outbox";
     }
   });
+
+  // Project
   adjustJSON("package.json", (json) => {
     json.cds ??= {};
     json.cds.requires ??= {};
@@ -338,12 +290,6 @@ function processJava(target, profile, auth) {
     },
   );
 
-  const cdsFeatures = config.features[profile].common
-    .concat(config.features[profile][target])
-    .concat(config.features[profile][auth])
-    .concat(config.features[profile].java);
-  shelljs.exec(`cds add ${cdsFeatures.join(",")} ${config.options.cds}`);
-
   // TODO: Remove (cap/issues/18263)
   const sourcePath = path.resolve(__dirname, "../../db/data");
   const targetPath = path.resolve(process.cwd(), "db/csv");
@@ -352,18 +298,7 @@ function processJava(target, profile, auth) {
   }
 }
 
-function processCommonBefore() {
-  adjustYAMLDocument("mta.yaml", (yaml) => {
-    for (const resource of yaml.get("resources").items) {
-      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
-        resource.setIn(["parameters", "service-plan"], "application");
-      }
-    }
-    return yaml;
-  });
-}
-
-function processCommonAfter() {
+function processAfter() {
   // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {
     for (const resource of yaml.get("resources").items) {

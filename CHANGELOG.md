@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Version 0.8.0 - 2025-11-xx
 
+### Added
+
+- Add `date` data type
+- Add `applicationUrl` in capabilities
+
 ### Fixed
 
-- tbd
+- Adopt new HTML5 app handling
+- App is not built from module (copy or link)
+- Remove specific auth handling
+- Adopt `cds up`
+- Refactorings and improvements
+- Fix typings
 
 ## Version 0.7.0 - 2025-10-13
 

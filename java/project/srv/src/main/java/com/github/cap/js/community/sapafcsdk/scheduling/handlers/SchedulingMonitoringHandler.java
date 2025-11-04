@@ -1,6 +1,7 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
 import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.Job;
 import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.JobCancelContext;
 import com.github.cap.js.community.sapafcsdk.model.schedulingmonitoringservice.Job_;
@@ -32,16 +33,18 @@ public class SchedulingMonitoringHandler implements EventHandler {
   @Autowired
   private EndpointProvider endpointProvider;
 
+  @Autowired
+  protected AfcSdkProperties afcsdkProperties;
+
   @After(event = CqnService.EVENT_READ, entity = Job_.CDS_NAME)
   public void fillLink(EventContext context, List<Job> jobs) {
-    for (Job job : jobs) {
-      if (job.getLink() == null) {
-        job.setLink(
-          endpointProvider.approuterTenantUrl(context.getUserInfo()) +
-            "/launchpad.html#Job-monitor&/Job(" +
-            job.getId() +
-            ")"
-        );
+    if (afcsdkProperties.getUi() != null && afcsdkProperties.getUi().isLink()) {
+      for (Job job : jobs) {
+        if (job.getId() != null && job.getLink() == null) {
+          job.setLink(
+            endpointProvider.getLaunchpadUrl(context.getUserInfo()) + "#Job-monitor&/Job(" + job.getId() + ")"
+          );
+        }
       }
     }
   }

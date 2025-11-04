@@ -3,6 +3,7 @@
 const cds = require("@sap/cds");
 
 const BaseError = require("../common/BaseError");
+const { launchpadUrl } = require("../../src/util/url");
 
 module.exports = class BaseApplicationService extends cds.ApplicationService {
   async init() {
@@ -23,6 +24,18 @@ module.exports = class BaseApplicationService extends cds.ApplicationService {
         throw unexpectedError;
       }
       throw err;
+    }
+  }
+
+  fillLink(entity, object, action) {
+    if (cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
+      this.after("READ", entity, async (result, req) => {
+        for (const row of result) {
+          if (row.ID && row.link === null) {
+            row.link = `${launchpadUrl(req)}#${object}-${action}&/${object}(${row.ID})`;
+          }
+        }
+      });
     }
   }
 };

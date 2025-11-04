@@ -19,6 +19,7 @@ module.exports = {
   DataType: {
     string: "string",
     number: "number",
+    date: "date",
     datetime: "datetime",
     boolean: "boolean",
   },

@@ -214,6 +214,7 @@ entity ParameterType : CodeList {
 type DataTypeCode               : String(255) enum {
   string;
   number;
+  date;
   datetime;
   boolean;
 };

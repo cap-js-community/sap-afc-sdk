@@ -3,6 +3,7 @@ package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
 import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_DEFINITION;
 
+import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.JobDefinition;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.JobDefinition_;
@@ -27,27 +28,41 @@ import com.sap.cds.ql.Update;
 import com.sap.cds.ql.cqn.CqnAnalyzer;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.cds.CdsCreateEventContext;
+import com.sap.cds.services.cds.CdsReadEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.*;
 import java.io.IOException;
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(SchedulingProviderService_.CDS_NAME)
 public class SchedulingProviderHandler extends SchedulingProviderBase implements EventHandler {
 
+  @Autowired
+  protected AfcSdkProperties afcsdkProperties;
+
+  @On(event = CqnService.EVENT_READ, entity = Capabilities_.CDS_NAME)
+  public void capabilities(CdsReadEventContext context) {
+    Capabilities capabilities = Capabilities.create();
+    capabilities.setSupportsNotification(afcsdkProperties.getCapabilities().isSupportsNotification());
+    if (afcsdkProperties.getUi().isLink()) {
+      capabilities.setApplicationUrl(endpointProvider.approuterTenantUrl(context.getUserInfo()));
+    }
+    context.setResult(List.of(capabilities));
+  }
+
   @After(event = CqnService.EVENT_READ, entity = Job_.CDS_NAME)
   public void fillLink(EventContext context, List<Job> jobs) {
-    for (Job job : jobs) {
-      if (job.getLink() == null) {
-        job.setLink(
-          endpointProvider.approuterTenantUrl(context.getUserInfo()) +
-            "/launchpad.html#Job-monitor&/Job(" +
-            job.getId() +
-            ")"
-        );
+    if (afcsdkProperties.getUi() != null && afcsdkProperties.getUi().isLink()) {
+      for (Job job : jobs) {
+        if (job.getId() != null && job.getLink() == null) {
+          job.setLink(
+            endpointProvider.getLaunchpadUrl(context.getUserInfo()) + "#Job-monitor&/Job(" + job.getId() + ")"
+          );
+        }
       }
     }
   }
@@ -182,6 +197,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
             }
             parameter.setValue(parameter.get("value").toString());
             break;
+          case DataTypeCode.DATE:
           case DataTypeCode.DATETIME:
             if (!isValidISODateTime(parameter.get("value").toString())) {
               throw JobSchedulingException.jobParameterValueInvalidType(
@@ -190,7 +206,11 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
                 jobParameterDefinition.getDataTypeCode()
               );
             }
-            parameter.setValue(normalizeISODateTime(parameter.get("value").toString()));
+            String normalizedDate = normalizeISODateTime(parameter.get("value").toString());
+            if (jobParameterDefinition.getDataTypeCode().equals(DataTypeCode.DATE)) {
+              normalizedDate = normalizedDate.split("T")[0];
+            }
+            parameter.setValue(normalizedDate);
             break;
           case DataTypeCode._BOOLEAN:
             if (

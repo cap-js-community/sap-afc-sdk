@@ -50,6 +50,9 @@ async function main() {
     await exec.exec("cf", ["auth"]);
     await exec.exec("cf", ["target", "-o", org, "-s", space]);
 
+    // mbt
+    await exec.exec("npm", ["install", "mbt"]);
+
     core.info(`Done`);
   } catch (error) {
     core.setFailed(error.message);

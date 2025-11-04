@@ -1,5 +1,6 @@
 code;name;descr
 string;String;String
 number;Number;Number
+date;Date;Date
 datetime;Date & Time;Date & Time
 boolean;Boolean;Boolean

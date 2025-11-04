@@ -99,12 +99,12 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
   - Use locally:
     - Terminal: `npx afc`
 - Init target environment
-  - Cloud Foundry:
+  - Cloud Foundry (default):
     - Terminal: `afc init cf`
   - Kyma:
     - Terminal: `afc init kyma`
 - Add SDK features
-  - Terminal: `afc add broker,sample,http`
+  - Terminal: `afc add app,broker,sample,http`
 
 ### Test Project
 
@@ -224,7 +224,7 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `api.csp: Object | Boolean`: Content Security Policy (CSP) directives for [helmet](https://github.com/helmetjs/helmet) module on `/api` paths. Default is `false`
 - `ui: Object | Boolean`: UI configuration. Use `false` to disable UI. Default is `{}`
   - `ui.path: String`: Path to the served UI5 application. Default is `''`
-  - `ui.link: Boolean`: Link of jobs to served UI5 launchpad, if `null`. Default is `true`
+  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default is `true`
   - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default is `true`
     - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default is `true`
@@ -825,6 +825,7 @@ Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` sectio
     - `api.cors.credentials: Boolean`: Cross-Origin Resource Sharing (CORS) 'allow credentials' configuration. Default is `true`
 - `ui: Object`: UI configuration. Default is `{}`
   - `ui.enabled: Boolean`: UI apps are served. Default is `false` and `true` in `cloud`
+  - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default is `true`
 - `broker: Object`: Service broker configuration. Default is `{}`
   - `broker.name: String`: Name of the broker. Default is `<project name>`
   - `broker.enabled: Boolean`: Is broker enabled. Default is `false`
@@ -1298,8 +1299,11 @@ BTP offers different deployment options, depending on the target environment (Cl
 An Open Service Broker compliant broker implementation can be added to the CAP project.
 The broker is used to manage service key management to the API in a Cloud Foundry environment.
 
+> For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required
+
 - Add broker and service configuration (already part of [Adding SDK](#adding-sdk))
   - Terminal: `afc add broker`
+  - Auth strategy for service `xsuaa` with plan `broker` is applied via `cds add xsuaa`
 - Deploy to CF (see [Deployment](#deployment) to [Cloud Foundry](#cloud-foundry))
 - Get API key credentials
   - Terminal: `afc api key`
@@ -1370,14 +1374,13 @@ HTTP files will be placed at `/http`.
 
 #### Authentication Method
 
-The SDK supports authentication via `xsuaa` or `ias`. `xsuaa` It is the default:
+The authentication strategy can be configured via CDS env according to [CDS documentation](https://cap.cloud.sap/docs/node.js/authentication#strategies).
 
-- `xsuaa`: Authentication via XSUAA service.
-  - Boostrap SDK via `cds init <target> xsuaa`
-  - [Service Broker](#service-broker) feature can be used to manage service keys and access tokens
-- `ias`: Authentication via SAP Cloud Identity Services.
-  - Boostrap SDK via `cds init <target> ias`
-  - Is used to authenticate users for application and apis (`broker` feature is not available)
+For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required:
+
+- Terminal: `afc add broker`
+- Service `xsuaa` with plan `broker` is applied via `cds add xsuaa`
+- [Service Broker](#service-broker) feature can be used to manage service keys and access tokens
 
 #### Service Restrictions
 

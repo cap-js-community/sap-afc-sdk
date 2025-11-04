@@ -36,7 +36,8 @@ service SchedulingProviderService {
 
   @readonly
   entity Capabilities {
-    supportsNotification : Boolean
+    supportsNotification : Boolean;
+    applicationUrl       : String;
   };
 
   @Capabilities.ReadRestrictions.CustomQueryOptions: [

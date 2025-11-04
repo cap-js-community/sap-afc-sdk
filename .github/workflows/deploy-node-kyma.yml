@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
       - name: Setup CDS project
@@ -61,12 +61,6 @@ jobs:
           registry: ${{ secrets.ARTIFACTORY_REPOSITORY }}
           username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
-      - name: Containerize
-        run: ctz containerize.yaml --push --logs
-        working-directory: ./afcsdk
-      - name: Upgrade
-        run: helm upgrade --install afcsdk ./gen/chart -n ${{ secrets.KYMA_NAMESPACE }}
-        working-directory: ./afcsdk
-      - name: Rollout
-        run: kubectl rollout restart deployment -n ${{ secrets.KYMA_NAMESPACE }}
+      - name: CDS Up
+        run: npx cds up --to k8s -n ${{ secrets.KYMA_NAMESPACE }}
         working-directory: ./afcsdk

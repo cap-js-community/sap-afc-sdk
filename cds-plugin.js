@@ -11,12 +11,16 @@ const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 const toggles = require("@cap-js-community/feature-toggle-library");
 const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
+const {
+  approuterUrl,
+  approuterWildcardUrl,
+  approuterUrlRegExp,
+  authorizationUrl,
+  serverUrl,
+} = require("./src/util/url");
+
 const { merge, toObject } = require("./src/util/helper");
-
-const config = merge([require("./config.json"), cds.env.requires?.["sap-afc-sdk"]?.config ?? {}]);
-
-const SERVER_SUFFIX = "srv";
-const APPROUTER_SUFFIX = "approuter";
+const config = require("./src/util/config");
 
 process.env.SAP_AFC_SDK_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
@@ -26,12 +30,6 @@ cds.on("bootstrap", () => {
   serveBroker();
   serveUIs();
   serveSwaggerUI();
-});
-
-cds.on("connect", (srv) => {
-  if (srv.name === "db") {
-    registerAfterReadJobFillLink(srv);
-  }
 });
 
 cds.on("listening", () => {
@@ -326,75 +324,6 @@ function toOpenApiDoc(req, service, name) {
   return openAPI;
 }
 
-let _approuterUrl;
-
-function approuterUrl() {
-  if (_approuterUrl) {
-    return _approuterUrl;
-  }
-  if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.approuter) {
-    return (_approuterUrl = cds.env.requires["sap-afc-sdk"].endpoints.approuter);
-  }
-  if (process.env.VCAP_APPLICATION) {
-    return (_approuterUrl = serverUrl().replace(new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`), `$1$2`));
-  } else {
-    return (_approuterUrl = serverUrl().replace(
-      new RegExp(`(https:\\/\\/.*?)-${SERVER_SUFFIX}(.*)`),
-      `$1-${APPROUTER_SUFFIX}$2`,
-    ));
-  }
-}
-
-function approuterDomain() {
-  let url = approuterUrl();
-  if (url?.startsWith("https://")) {
-    url = url.substring(8);
-  }
-  return url;
-}
-
-function approuterWildcardUrl() {
-  return `*.${approuterDomain()}`;
-}
-
-function approuterTenantUrl(req) {
-  if (cds.env.requires.multitenancy) {
-    const subdomain = req.user?.authInfo?.getSubdomain?.();
-    if (subdomain) {
-      return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
-    }
-  }
-  return approuterUrl();
-}
-
-function approuterUrlRegExp() {
-  let url = approuterDomain();
-  url = url.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
-  return RegExp(url + "$");
-}
-
-let _serverUrl;
-
-function serverUrl() {
-  if (_serverUrl) {
-    return _serverUrl;
-  }
-  if (cds.env.requires?.["sap-afc-sdk"]?.endpoints?.server) {
-    return (_serverUrl = cds.env.requires["sap-afc-sdk"].endpoints.server);
-  }
-  if (process.env.VCAP_APPLICATION) {
-    const url = JSON.parse(process.env.VCAP_APPLICATION).uris?.[0];
-    if (url) {
-      return (_serverUrl = `https://${url}`);
-    }
-  }
-  return (_serverUrl = cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`);
-}
-
-function authorizationUrl() {
-  return cds.env.requires?.auth?.credentials?.url ?? config.endpoints.authentication;
-}
-
 function addLinkToIndexHtml(service, apiPath) {
   const provider = () => {
     return { href: apiPath, name: "Open API", title: "Show in Swagger UI" };
@@ -420,23 +349,6 @@ function handleFeatureToggles() {
       eventQueueConfig[name] = value;
     });
   }
-}
-
-function registerAfterReadJobFillLink(db) {
-  if (!cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
-    return;
-  }
-  db.after("READ", async (result, req) => {
-    if (req.target.name.split(".").pop() !== "Job") {
-      return;
-    }
-    result = Array.isArray(result) ? result : [result];
-    for (const row of result) {
-      if (row.ID && row.link === null) {
-        row.link = `${approuterTenantUrl(req)}/${config.paths.launchpad}#Job-monitor&/Job(${row.ID})`;
-      }
-    }
-  });
 }
 
 // Plugins

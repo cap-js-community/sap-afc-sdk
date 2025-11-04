@@ -1225,6 +1225,9 @@
         "properties": {
           "supportsNotification": {
             "type": "boolean"
+          },
+          "applicationUrl": {
+            "type": "string"
           }
         }
       },
@@ -1450,7 +1453,7 @@
           "dataType": {
             "type": "string",
             "maxLength": 255,
-            "enum": ["string", "number", "datetime", "boolean"]
+            "enum": ["string", "number", "date", "datetime", "boolean"]
           },
           "mappingType": {
             "type": "string",

@@ -21,10 +21,10 @@ const Commands = {
   BEGIN: [`cd ${tempDir}`],
   CDS_NODE: [`npx cds init ${project}`],
   CDS_JAVA: [`npx cds init ${project} --java`],
-  INSTALL: [`cd ${project}`, "cp ../../test/.npmrc .", "npm install ../../../"],
+  INSTALL: [`cd ${project}`, "cp ../../test/.npmrc .", "npm install"],
   AFC_CF: ["npx afc init cf"],
   AFC_KYMA: ["npx afc init kyma"],
-  AFC_NODE: ["npx afc add -a broker,stub,mock,sample,test,http"],
+  AFC_NODE: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
   AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
   END: [],
   TEST: ["npm test"],
@@ -59,6 +59,13 @@ const Files = {
   KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],
 };
 
+const ENV = {
+  NODE: "NODE",
+  JAVA: "JAVA",
+  CF: "CF",
+  KYMA: "KYMA",
+};
+
 process.removeAllListeners("warning");
 
 describe("Build", () => {
@@ -88,7 +95,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(cleanErr(result.stderr)).toBe("");
+    expect(cleanErr(result.stderr, ENV.NODE, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
       compareFile(file);
@@ -110,7 +117,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(cleanErr(result.stderr)).toMatch(/'cds add redis' is not available for Kyma yet/);
+    expect(cleanErr(result.stderr, ENV.NODE, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
       compareFile(file);
@@ -132,7 +139,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(cleanErr(result.stderr)).toBe("");
+    expect(cleanErr(result.stderr, ENV.JAVA, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
       compareFile(file);
@@ -154,7 +161,7 @@ describe("Build", () => {
         ...Commands.END,
       ].join(" && "),
     );
-    expect(cleanErr(result.stderr)).toBe("");
+    expect(cleanErr(result.stderr, ENV.JAVA, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
     for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
       compareFile(file);
@@ -176,5 +183,5 @@ function compareFile(file) {
     delete json.devDependencies;
     content = JSON.stringify(json, null, 2);
   }
-  expect(content).toMatchSnapshot();
+  expect(file + "\n\n" + content).toMatchSnapshot();
 }

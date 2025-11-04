@@ -128,6 +128,57 @@ exports[`Provider Service Create Job (basic) 1`] = `
 }
 `;
 
+exports[`Provider Service Create Job (date) 1`] = `
+{
+  "errorOnlyRun": null,
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_4",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
+exports[`Provider Service Create Job (date) 2`] = `
+{
+  "errorOnlyRun": null,
+  "link": "http://localhost:4004/<ID>",
+  "name": "JOB_4",
+  "referenceID": "c1253940-5f25-4a0b-8585-f62bd085b327",
+  "startDateTime": null,
+  "status": "requested",
+  "testRun": null,
+  "version": "1",
+}
+`;
+
+exports[`Provider Service Create Job (date) 3`] = `
+[
+  {
+    "name": "A",
+    "value": "1010",
+  },
+  {
+    "name": "B",
+    "value": "2025-01-01",
+  },
+  {
+    "name": "C",
+    "value": "alice",
+  },
+  {
+    "name": "D",
+    "value": false,
+  },
+  {
+    "name": "E",
+    "value": 2025,
+  },
+]
+`;
+
 exports[`Provider Service Create Job (error-only run) 1`] = `
 {
   "errorOnlyRun": false,
@@ -393,11 +444,16 @@ exports[`Provider Service Create Job (translation) 13`] = `
 
 exports[`Provider Service GET Capabilities 1`] = `
 {
+  "applicationUrl": "https://sap-afc-sdk.sap.com",
   "supportsNotification": true,
 }
 `;
 
-exports[`Provider Service GET Capabilities 2`] = `{}`;
+exports[`Provider Service GET Capabilities 2`] = `
+{
+  "applicationUrl": "https://sap-afc-sdk.sap.com",
+}
+`;
 
 exports[`Provider Service GET Create Job (enum) 1`] = `
 [

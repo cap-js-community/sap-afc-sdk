@@ -2,6 +2,7 @@ package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
 import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
 
+import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.model.scheduling.DataTypeCode;
 import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
@@ -50,15 +51,16 @@ public class SchedulingProviderController {
   @Autowired
   protected AfcSdkProperties afcsdkProperties;
 
+  @Autowired
+  protected EndpointProvider endpointProvider;
+
   @Value("${cds.query.limit.max:1000}")
   private int queryMaxLimit;
 
   @Tag(name = "Capabilities")
   @GetMapping("/Capabilities")
-  public Capabilities capabilities(HttpServletResponse response) {
-    Capabilities capabilities = Capabilities.create();
-    capabilities.setSupportsNotification(afcsdkProperties.getCapabilities().isSupportsNotification());
-    return capabilities;
+  public Optional<Capabilities> capabilities(HttpServletResponse response) {
+    return providerService.run(Select.from(CAPABILITIES)).first(Capabilities.class);
   }
 
   @Tag(name = "Job Definition")

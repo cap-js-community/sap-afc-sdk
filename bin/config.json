@@ -11,8 +11,6 @@
     "default": {
       "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"],
       "common": ["hana", "approuter", "html5-repo", "workzone", "cloud-logging"],
-      "xsuaa": ["xsuaa"],
-      "ias": ["ias", "ams"],
       "node": ["sqlite", "redis"],
       "java": [],
       "cf": ["mta"],
@@ -21,13 +19,14 @@
     "basic": {
       "afc": ["app", "broker"],
       "common": ["hana", "approuter"],
-      "xsuaa": ["xsuaa"],
-      "ias": ["ias"],
       "node": ["sqlite"],
       "java": [],
       "cf": ["mta"],
       "kyma": ["helm", "containerize"]
     }
+  },
+  "excludes": {
+    "kyma": ["redis"]
   },
   "options": {
     "cds": "--for production --y"

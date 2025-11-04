@@ -73,7 +73,8 @@ public class SchedulingProviderControllerTest {
       .perform(get("/api/job-scheduling/v1/Capabilities"))
       .andExpect(header().string("Content-Type", "application/json"))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.supportsNotification").value(true));
+      .andExpect(jsonPath("$.supportsNotification").value(true))
+      .andExpect(jsonPath("$.applicationUrl").value("http://localhost:8080"));
   }
 
   @Test
@@ -1385,6 +1386,63 @@ public class SchedulingProviderControllerTest {
     responseJson = (JSONObject) cleanData(new JSONObject(result.getResponse().getContentAsString()));
     String ID2 = responseJson.getString("ID");
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID2)));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void createJobWithDate() throws Exception {
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_4",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "1010")),
+            new JSONObject(Map.of("name", "B", "value", "2025-01-01T12:34:56.789Z")),
+            new JSONObject(Map.of("name", "C", "value", "alice")),
+            new JSONObject(Map.of("name", "D", "value", false)),
+            new JSONObject(Map.of("name", "E", "value", 2025))
+          )
+        )
+      )
+    );
+
+    MvcResult result = mockMvc
+      .perform(
+        post("/api/job-scheduling/v1/Job")
+          .contentType("application/json")
+          .content(job.toString())
+          .locale(Locale.ENGLISH)
+      )
+      .andExpect(status().isCreated())
+      .andReturn();
+
+    JSONObject responseJson = (JSONObject) cleanData(new JSONObject(result.getResponse().getContentAsString()));
+    final String ID = responseJson.getString("ID");
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.name").value("JOB_4"))
+      .andExpect(jsonPath("$.referenceID").value("c1253940-5f25-4a0b-8585-f62bd085b327"));
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID + "/parameters"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(5))
+      .andExpect(jsonPath("$[0].name").value("A"))
+      .andExpect(jsonPath("$[0].value").value("1010"))
+      .andExpect(jsonPath("$[1].name").value("B"))
+      .andExpect(jsonPath("$[1].value").value("2025-01-01"))
+      .andExpect(jsonPath("$[2].name").value("C"))
+      .andExpect(jsonPath("$[2].value").value("alice"))
+      .andExpect(jsonPath("$[3].name").value("D"))
+      .andExpect(jsonPath("$[3].value").value(false))
+      .andExpect(jsonPath("$[4].name").value("E"))
+      .andExpect(jsonPath("$[4].value").value(2025));
+
+    persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
   }
 
   @Test

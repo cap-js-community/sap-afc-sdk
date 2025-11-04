@@ -17,6 +17,7 @@ export namespace scheduling {
   export type DataTypeCode =
     | 'string'
     | 'number'
+    | 'date'
     | 'datetime'
     | 'boolean';
 
@@ -57,11 +58,14 @@ export namespace scheduling {
     name: string;
     description?: string;
     longDescription?: string;
-    supportsStartDateTime?: boolean;
-    supportsTestRun?: boolean;
     version: string;
+    vendorName?: string;
+    vendorSystem?: string;
     parameters?: JobParameterDefinition[];
     texts?: JobDefinitionTexts[];
+    supportsStartDateTime?: boolean;
+    supportsTestRun?: boolean;
+    supportsErrorOnlyRun?: boolean;
   }
 
   export interface JobParameterDefinition {
@@ -72,6 +76,7 @@ export namespace scheduling {
     dataType_code?: DataTypeCode;
     mappingType_code?: MappingTypeCode;
     value?: string | number | boolean;
+    enumValues?: string[];
     required?: boolean;
     texts?: JobParameterDefinitionTexts[];
   }
@@ -93,12 +98,13 @@ export namespace scheduling {
   export interface Job {
     ID: string;
     referenceID: string;
-    startDateTime?: string;
     definition_name: string;
     version: string;
-    link?: string;
     status_code: JobStatusCode;
+    link?: string;
+    startDateTime?: string;
     testRun?: boolean;
+    errorOnlyRun?: boolean;
     parameters?: JobParameter[];
     results?: JobResult[];
     createdAt?: string;

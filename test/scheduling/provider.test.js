@@ -864,6 +864,42 @@ describe("Provider Service", () => {
     expect(cleanData({ ...response.data })).toMatchSnapshot();
   });
 
+  it("Create Job (date)", async () => {
+    let response = await POST("/api/job-scheduling/v1/Job", {
+      name: "JOB_4",
+      referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+      parameters: [
+        {
+          name: "A",
+          value: "1010",
+        },
+        {
+          name: "B",
+          value: "2025-01-01T12:34:56.789Z",
+        },
+        {
+          name: "C",
+          value: "alice",
+        },
+        {
+          name: "D",
+          value: false,
+        },
+        {
+          name: "E",
+          value: 2025,
+        },
+      ],
+    });
+    expect(response.status).toBe(201);
+    const ID = response.data.ID;
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET(`/api/job-scheduling/v1/Job/${ID}/parameters`);
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);

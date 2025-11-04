@@ -20,6 +20,7 @@ module.exports = {
       .option("-n, --node", "Node flavor enforced")
       .option("-j, --java", "Java flavor enforced")
       .option("-x, --xremove", "Remove feature (supported for mock)")
+      .option("-l, --link", "Use links")
       .addHelpText(
         "afterAll",
         `
@@ -81,6 +82,7 @@ Examples:
         featureFn = require(`../features/${feature}`);
       } catch {
         console.log(`Unknown feature '${feature}'`);
+        success = false;
         continue;
       }
       try {

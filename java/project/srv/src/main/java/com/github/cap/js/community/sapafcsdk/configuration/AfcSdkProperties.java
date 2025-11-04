@@ -168,7 +168,7 @@ public class AfcSdkProperties {
   public static class Ui {
 
     private boolean enabled = false;
-
+    private boolean link = true;
     private List<String> apps = APPS;
 
     public boolean isEnabled() {
@@ -177,6 +177,14 @@ public class AfcSdkProperties {
 
     public void setEnabled(boolean enabled) {
       this.enabled = enabled;
+    }
+
+    public boolean isLink() {
+      return link;
+    }
+
+    public void setLink(boolean link) {
+      this.link = link;
     }
 
     public List<String> getApps() {
