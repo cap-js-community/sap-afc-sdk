@@ -394,17 +394,6 @@ describe("Processing Service", () => {
 
   it("updateJob - processJobUpdate", async () => {
     const schedulingProcessingService = new SchedulingProcessingService();
-    Object.defineProperty(schedulingProcessingService, "entities", {
-      writable: true,
-    });
-    const Job = cds.model.definitions["scheduling.Job"];
-    const JobResult = cds.model.definitions["scheduling.JobResult"];
-    schedulingProcessingService.entities = () => {
-      return {
-        Job,
-        JobResult,
-      };
-    };
     const req = {
       job: {
         ID,
@@ -429,11 +418,11 @@ describe("Processing Service", () => {
     ]);
     expect(result).toBeUndefined();
     const tx = cds.tx(req);
-    const results = await tx.run(SELECT.from(JobResult).where({ job_ID: ID }));
+    const results = await tx.run(SELECT.from("scheduling.JobResult").where({ job_ID: ID }));
     expect(results).toHaveLength(2);
     const data = [];
     for (const entry of results) {
-      const jobResult = await tx.run(SELECT.one.from(JobResult).columns("data").where({ ID: entry.ID }));
+      const jobResult = await tx.run(SELECT.one.from("scheduling.JobResult").columns("data").where({ ID: entry.ID }));
       data.push(await text(jobResult.data));
     }
     await tx.rollback();

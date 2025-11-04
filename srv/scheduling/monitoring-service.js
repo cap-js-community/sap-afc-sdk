@@ -7,7 +7,7 @@ const BaseApplicationService = require("../common/BaseApplicationService");
 module.exports = class SchedulingMonitoringService extends BaseApplicationService {
   async init() {
     const { Job } = this.entities;
-    const { Job: ProviderJob } = this.entities("SchedulingProviderService");
+    const { Job: ProviderJob } = cds.entities("SchedulingProviderService");
 
     this.fillLink(Job, "Job", "manage");
 

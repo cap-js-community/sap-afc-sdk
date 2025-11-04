@@ -455,6 +455,12 @@ exports[`Provider Service GET Capabilities 2`] = `
 }
 `;
 
+exports[`Provider Service GET Capabilities 3`] = `
+{
+  "applicationUrl": null,
+}
+`;
+
 exports[`Provider Service GET Create Job (enum) 1`] = `
 [
   {

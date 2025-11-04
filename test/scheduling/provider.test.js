@@ -82,6 +82,9 @@ describe("Provider Service", () => {
     cds.env.requires["sap-afc-sdk"].capabilities = null;
     response = await GET("/api/job-scheduling/v1/Capabilities");
     expect(cleanData(response.data)).toMatchSnapshot();
+    cds.env.requires["sap-afc-sdk"].ui.link = false;
+    response = await GET("/api/job-scheduling/v1/Capabilities");
+    expect(cleanData(response.data)).toMatchSnapshot();
     cds.env.requires["sap-afc-sdk"].capabilities = capabilities;
   });
 
