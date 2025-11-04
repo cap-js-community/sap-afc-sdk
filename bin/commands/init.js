@@ -156,6 +156,7 @@ function processBefore(runtime, target, profile) {
     .concat(config.features[profile][target])
     .filter((feature) => !excludes.includes(feature));
   shelljs.exec(`cds add ${features.join(",")} ${config.options.cds}`);
+  shelljs.exec("npm install");
 }
 
 function processNode() {

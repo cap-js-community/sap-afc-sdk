@@ -444,14 +444,14 @@ exports[`Provider Service Create Job (translation) 13`] = `
 
 exports[`Provider Service GET Capabilities 1`] = `
 {
-  "applicationUrl": "https://sap-afc-sdk.sap.com",
+  "applicationUrl": "https://sap-afc-sdk.sap.com/launchpad.html",
   "supportsNotification": true,
 }
 `;
 
 exports[`Provider Service GET Capabilities 2`] = `
 {
-  "applicationUrl": "https://sap-afc-sdk.sap.com",
+  "applicationUrl": "https://sap-afc-sdk.sap.com/launchpad.html",
 }
 `;
 

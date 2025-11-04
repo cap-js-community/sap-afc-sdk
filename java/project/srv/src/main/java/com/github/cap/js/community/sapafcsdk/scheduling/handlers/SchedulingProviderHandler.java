@@ -49,7 +49,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     Capabilities capabilities = Capabilities.create();
     capabilities.setSupportsNotification(afcsdkProperties.getCapabilities().isSupportsNotification());
     if (afcsdkProperties.getUi().isLink()) {
-      capabilities.setApplicationUrl(endpointProvider.approuterTenantUrl(context.getUserInfo()));
+      capabilities.setApplicationUrl(endpointProvider.getLaunchpadUrl(context.getUserInfo()));
     }
     context.setResult(List.of(capabilities));
   }

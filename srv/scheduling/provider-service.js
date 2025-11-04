@@ -7,7 +7,7 @@ const BaseApplicationService = require("../common/BaseApplicationService");
 const { JobStatus, MappingType, DataType } = require("./common/codelist");
 const JobSchedulingError = require("./common/JobSchedulingError");
 const { wildcard, toMap } = require("../../src/util/helper");
-const { approuterTenantUrl } = require("../../src/util/url");
+const { launchpadUrl } = require("../../src/util/url");
 
 const isUUID = (input) =>
   input && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input);
@@ -24,7 +24,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     this.on("READ", Capabilities, (req) => {
       return {
         ...(cds.env.requires?.["sap-afc-sdk"]?.capabilities ?? {}),
-        applicationUrl: cds.env.requires?.["sap-afc-sdk"]?.ui?.link ? approuterTenantUrl(req) : null,
+        applicationUrl: cds.env.requires?.["sap-afc-sdk"]?.ui?.link ? launchpadUrl(req) : null,
       };
     });
 

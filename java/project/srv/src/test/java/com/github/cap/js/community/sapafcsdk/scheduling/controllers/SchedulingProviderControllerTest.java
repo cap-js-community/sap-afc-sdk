@@ -74,7 +74,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(header().string("Content-Type", "application/json"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.supportsNotification").value(true))
-      .andExpect(jsonPath("$.applicationUrl").value("http://localhost:8080"));
+      .andExpect(jsonPath("$.applicationUrl").value("http://localhost:8080/launchpad.html"));
   }
 
   @Test
