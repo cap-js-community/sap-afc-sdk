@@ -1,19 +1,19 @@
-name: 'k8s-info'
-description: 'Collect Kubernetes information and logs for debugging purposes'
+name: "k8s-info"
+description: "Collect Kubernetes information and logs for debugging purposes"
 inputs:
   app-name:
-    description: 'Name of the application'
+    description: "Name of the application"
     required: true
   tenant-mode:
-    description: 'Tenant mode (st or mt)'
+    description: "Tenant mode (st or mt)"
     required: false
   clean-deployment:
-    description: 'Clean deployment immediately'
+    description: "Clean deployment immediately"
     required: false
-    default: 'true'
+    default: "true"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Get logs
       if: always()
