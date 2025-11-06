@@ -205,7 +205,7 @@ The following diagram illustrates the high-level architecture of the SAP Advance
   - Supports monitoring via OData V4 API
   - Displays scheduling job statuses and updates in real-time via WebSockets
 - **Event Queue & Feature Toggles:**
-  - Event Queue (using CDS Outbox) facilitates asynchronous job execution
+  - Event Queue (instrumenting CDS Queue) facilitates asynchronous job execution
   - Feature Toggles allow influencing Job and Event Queue processing dynamically
 - **Database & Redis Caching:**
   - Stores job scheduling data in the database

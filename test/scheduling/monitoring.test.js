@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { authorization, cleanData, clearEventQueue, connectToWS, processOutbox, callBatch } = require("../helper");
+const { authorization, cleanData, clearEventQueue, connectToWS, processQueue, callBatch } = require("../helper");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
 
@@ -126,14 +126,14 @@ describe("Monitoring Service", () => {
     expect(response.data.status_code).toBe("cancelRequested");
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("cancelRequested");
 
     message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingProcessingService");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingProcessingService");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("canceled");

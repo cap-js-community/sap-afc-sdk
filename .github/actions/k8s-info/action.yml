@@ -1,0 +1,64 @@
+name: 'k8s-info'
+description: 'Collect Kubernetes information and logs for debugging purposes'
+inputs:
+  app-name:
+    description: 'Name of the application'
+    required: true
+  tenant-mode:
+    description: 'Tenant mode (st or mt)'
+    required: false
+  clean-deployment:
+    description: 'Clean deployment immediately'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get logs
+      if: always()
+      shell: bash
+      run: |
+        pods=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep "^${{ inputs.app-name }}")
+        for pod in $pods; do
+          # strip app-name prefix and pod hash
+          suffix=${pod#${{ inputs.app-name }}-}
+          module=$(echo "$suffix" | sed -E 's/-[a-z0-9]{5,10}$//')
+
+          echo "::group::Get logs for $module"
+          kubectl logs "$pod" --since=10m || true
+          echo "::endgroup::"
+        done
+
+        echo "::group::Get events"
+        kubectl get events --sort-by='.lastTimestamp' | grep "${{ inputs.app-name }}" | tail -n 20
+        echo "::endgroup::"
+
+        echo "::group::Get pods"
+        kubectl get pods | grep "^${{ inputs.app-name }}"
+        echo "::endgroup::"
+
+        echo "::group::Get secrets"
+        kubectl get secrets | grep "^${{ inputs.app-name }}"
+        echo "::endgroup::"
+
+        echo "::group::Get service instances"
+        kubectl get serviceinstances | grep "^${{ inputs.app-name }}"
+        echo "::endgroup::"
+
+        echo "::group::Get service bindings"
+        kubectl get servicebindings | grep "^${{ inputs.app-name }}"
+        echo "::endgroup::"
+
+        echo "::group::Get deployments"
+        kubectl get deployments | grep "^${{ inputs.app-name }}"
+        echo "::endgroup::"
+
+    - name: Cleanup cluster
+      if: (!cancelled() && inputs.clean-deployment != 'false')
+      shell: bash
+      continue-on-error: true
+      run: |
+        echo "::group::Cleanup cluster"
+        helm uninstall ${{ inputs.app-name }} --ignore-not-found
+        echo "::endgroup::"

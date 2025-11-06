@@ -5,7 +5,7 @@ const { text, buffer } = require("node:stream/consumers");
 const { Readable } = require("stream");
 const fs = require("fs");
 
-const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processOutbox } = require("../helper");
+const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processQueue } = require("../helper");
 const { JobStatus, ResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
 const SchedulingProcessingService = require("../../srv/scheduling/processing-service");
 
@@ -36,12 +36,12 @@ describe("Processing Service", () => {
 
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     let job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.running);
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.running);
@@ -53,7 +53,7 @@ describe("Processing Service", () => {
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -65,7 +65,7 @@ describe("Processing Service", () => {
       .where({ ID: entry.ID });
     expect(result).toBe(1);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
@@ -96,7 +96,7 @@ describe("Processing Service", () => {
     };
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -108,7 +108,7 @@ describe("Processing Service", () => {
       .where({ ID: entry.ID });
     expect(result).toBe(1);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completedWithWarning);
@@ -130,7 +130,7 @@ describe("Processing Service", () => {
     };
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -142,7 +142,7 @@ describe("Processing Service", () => {
       .where({ ID: entry.ID });
     expect(result).toBe(1);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completedWithError);
@@ -164,7 +164,7 @@ describe("Processing Service", () => {
     };
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -176,7 +176,7 @@ describe("Processing Service", () => {
       .where({ ID: entry.ID });
     expect(result).toBe(1);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.failed);
@@ -203,7 +203,7 @@ describe("Processing Service", () => {
     };
     await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     let entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -215,7 +215,7 @@ describe("Processing Service", () => {
       .where({ ID: entry.ID });
     expect(result).toBe(1);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).not.toBe(JobStatus.running);
@@ -228,8 +228,8 @@ describe("Processing Service", () => {
     let message = ws.message("jobStatusChanged");
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingProcessingService");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("running");
@@ -237,8 +237,8 @@ describe("Processing Service", () => {
     message = ws.message("jobStatusChanged");
     await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingProcessingService");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
     event = await message;
@@ -246,14 +246,14 @@ describe("Processing Service", () => {
     expect(event.status).toBe(JobStatus.completed);
 
     await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     ws.close();
   });
 
   it("updateJob - translation", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -277,7 +277,7 @@ describe("Processing Service", () => {
         },
       ]),
     ).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
     const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
@@ -301,7 +301,7 @@ describe("Processing Service", () => {
 
   it("updateJob - results - base64", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -328,7 +328,7 @@ describe("Processing Service", () => {
         },
       ]),
     ).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
     const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
@@ -346,7 +346,7 @@ describe("Processing Service", () => {
 
   it("updateJob - results - readable", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -358,7 +358,7 @@ describe("Processing Service", () => {
         },
       ]),
     ).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.completed);
     const jobResults = await SELECT.from("scheduling.JobResult").where({ job_ID: ID });
@@ -376,7 +376,7 @@ describe("Processing Service", () => {
 
   it("updateJob - results - arraybuffer", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -388,7 +388,7 @@ describe("Processing Service", () => {
         },
       ]),
     ).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary {.*type: 'cds.LargeBinary'.*}/s));
   });
 
@@ -435,13 +435,13 @@ describe("Processing Service", () => {
     cds.env.log.levels["periodic"] = MessageSeverity.info;
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
     await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService.syncJob");
+    await processQueue("SchedulingProcessingService.syncJob");
     expect(log.output).toEqual(expect.stringMatching(/\[sapafcsdk\/jobsync] - periodic sync job triggered/s));
 
     log.output = "";
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     await expect(processingService.syncJob()).resolves.not.toThrow();
-    await processOutbox("SchedulingProcessingService.syncJob");
+    await processQueue("SchedulingProcessingService.syncJob");
     expect(log.output).not.toEqual(expect.stringMatching(/\[sapafcsdk\/jobsync] - periodic sync job triggered/s));
   });
 
@@ -451,12 +451,12 @@ describe("Processing Service", () => {
 
     await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     const job = await SELECT.one.from("scheduling.Job").where({ ID });
     expect(job.status_code).toBe(JobStatus.canceled);
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.canceled);
@@ -467,7 +467,7 @@ describe("Processing Service", () => {
   describe("Error Situations", () => {
     it("processJob", async () => {
       await expect(processingService.processJob("XXX")).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       const entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -478,7 +478,7 @@ describe("Processing Service", () => {
 
     it("updateJob - status", async () => {
       await expect(processingService.updateJob("XXX")).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -487,7 +487,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID)).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -496,7 +496,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, "XXX")).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -505,7 +505,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -516,7 +516,7 @@ describe("Processing Service", () => {
 
     it("updateJob - results", async () => {
       await expect(processingService.updateJob(ID, JobStatus.completed, {})).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -525,7 +525,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{}])).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -534,7 +534,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Link" }])).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -545,7 +545,7 @@ describe("Processing Service", () => {
       await expect(
         processingService.updateJob(ID, JobStatus.running, [{ name: "Link", type: "X" }]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -561,7 +561,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -579,7 +579,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -597,7 +597,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -615,7 +615,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -633,7 +633,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -642,7 +642,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Data" }])).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -658,7 +658,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -675,7 +675,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -693,7 +693,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -713,7 +713,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -733,7 +733,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -749,7 +749,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -766,7 +766,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -783,7 +783,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -800,7 +800,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -821,7 +821,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -843,7 +843,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -866,7 +866,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -890,7 +890,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -914,7 +914,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -938,7 +938,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -962,7 +962,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -986,7 +986,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1009,7 +1009,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1030,7 +1030,7 @@ describe("Processing Service", () => {
           },
         ]),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1039,7 +1039,7 @@ describe("Processing Service", () => {
 
     it("cancelJob - status", async () => {
       await expect(processingService.cancelJob("XXX")).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1048,11 +1048,11 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, "running")).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       log.clear();
       await clearEventQueue();
       await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1067,7 +1067,7 @@ describe("Processing Service", () => {
       };
       await expect(processingService.processJob(ID)).resolves.not.toThrow();
 
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
 
       let entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
       expect(entry).toBeDefined();
@@ -1079,7 +1079,7 @@ describe("Processing Service", () => {
         .where({ ID: entry.ID });
       expect(result).toBe(1);
 
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
 
       const job = await SELECT.one.from("scheduling.Job").where({ ID });
       expect(job.status_code).toBe(JobStatus.completed);
@@ -1087,7 +1087,7 @@ describe("Processing Service", () => {
       await clearEventQueue();
 
       await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
@@ -1109,7 +1109,7 @@ describe("Processing Service", () => {
           ],
         }),
       ).resolves.not.toThrow();
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       await clearEventQueue();
     });
 
@@ -1127,7 +1127,7 @@ describe("Processing Service", () => {
         }),
       ).resolves.not.toThrow();
 
-      await processOutbox("SchedulingProcessingService");
+      await processQueue("SchedulingProcessingService");
       expect(log.output).toEqual(
         expect.stringMatching(
           /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,

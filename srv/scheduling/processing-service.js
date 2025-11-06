@@ -252,12 +252,14 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             text: message.text,
             severity_code: message.severity,
             createdAt: message.createdAt,
-            texts: message.texts.map((text) => {
-              return {
-                locale: text.locale,
-                text: text.text,
-              };
-            }),
+            texts: message.texts
+              .map((text) => {
+                return {
+                  locale: text.locale,
+                  text: text.text,
+                };
+              })
+              .filter((text) => text.locale && text.text),
           };
         }),
       };

@@ -2,7 +2,7 @@
 
 const cds = require("@sap/cds");
 
-const { authorization, cleanData, clearEventQueue, eventQueueEntry, connectToWS, processOutbox } = require("../helper");
+const { authorization, cleanData, clearEventQueue, eventQueueEntry, connectToWS, processQueue } = require("../helper");
 const { JobStatus, MessageSeverity, ResultType } = require("../../srv/scheduling/common/codelist");
 
 const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
@@ -412,7 +412,7 @@ describe("Provider Service", () => {
 
     const ws = await connectToWS("job-scheduling", ID);
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("requested");
@@ -428,8 +428,8 @@ describe("Provider Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
 
     message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingProcessingService");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingProcessingService");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.running);
@@ -544,7 +544,7 @@ describe("Provider Service", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -552,7 +552,7 @@ describe("Provider Service", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -682,7 +682,7 @@ describe("Provider Service", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -690,7 +690,7 @@ describe("Provider Service", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     for (const result of response.data) {
@@ -730,7 +730,7 @@ describe("Provider Service", () => {
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     let entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -744,7 +744,7 @@ describe("Provider Service", () => {
       })
       .where({ ID: entry.ID });
     expect(result).toBe(1);
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
@@ -913,14 +913,14 @@ describe("Provider Service", () => {
     expect(response.data.status).toEqual(JobStatus.cancelRequested);
 
     let message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.cancelRequested);
 
     message = ws.message("jobStatusChanged");
-    await processOutbox("SchedulingProcessingService");
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingProcessingService");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.canceled);
@@ -1340,7 +1340,7 @@ describe("Provider Service", () => {
       ],
     });
     expect(response.status).toBe(204);
-    await processOutbox("SchedulingProcessingService");
+    await processQueue("SchedulingProcessingService");
     expect(log.output).toEqual(
       expect.stringMatching(
         /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,

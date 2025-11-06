@@ -3,7 +3,7 @@
 const cds = require("@sap/cds");
 const eventQueue = require("@cap-js-community/event-queue");
 
-const { connectToWS, clearEventQueue, processOutbox, wait, eventQueueEntry } = require("../helper");
+const { connectToWS, clearEventQueue, processQueue, wait, eventQueueEntry } = require("../helper");
 const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
@@ -24,7 +24,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -44,7 +44,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -64,7 +64,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -92,7 +92,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let events = await messages;
     events.sort((a, b) => a.status.localeCompare(b.status));
     expect(events).toEqual([
@@ -134,7 +134,7 @@ describe("Websocket Service", () => {
 
     await wait(1000);
 
-    await processOutbox("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("SchedulingWebsocketService.jobStatusChanged");
     let events = await messages;
     expect(events).toEqual({ status: "running", IDs: ["XXX", "YYY"] });
     ws.close();

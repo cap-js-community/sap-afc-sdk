@@ -39,7 +39,7 @@ function cleanData(data) {
   return data;
 }
 
-async function processOutbox(subType) {
+async function processQueue(subType) {
   await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", subType);
 }
 
@@ -197,7 +197,7 @@ module.exports = {
   cleanData,
   clearEventQueue,
   eventQueueEntry,
-  processOutbox,
+  processQueue,
   connectToWS,
   wait,
   callBatch,
