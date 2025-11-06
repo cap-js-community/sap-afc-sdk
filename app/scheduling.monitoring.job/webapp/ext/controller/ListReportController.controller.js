@@ -7,24 +7,23 @@ sap.ui.define(
       override: {
         onInit: function () {
           this.base.onInit();
-          window.socket.attachMessage("message", (event) => {
-            const message = JSON.parse(event.getParameter("data"));
-            if (message?.event === "jobStatusChanged") {
-              if (message.data?.status === "requested") {
+          window.websockets?.main?.message((oMessage) => {
+            if (oMessage?.event === "jobStatusChanged") {
+              if (oMessage.data?.status === "requested") {
                 this.refreshForAll();
               } else {
-                this.refreshForContext(message);
+                this.refreshForContext(oMessage);
               }
             }
           });
         },
       },
 
-      refreshForContext(message) {
+      refreshForContext(oMessage) {
         const table = this.getView().byId("scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table");
         const contexts = table.tableBindingInfo?.binding?.getAllCurrentContexts();
         for (const context of contexts ?? []) {
-          if (message.data?.IDs?.includes(context.getObject().ID)) {
+          if (oMessage.data?.IDs?.includes(context.getObject().ID)) {
             this.base.getExtensionAPI().refresh();
             const router = this.base.getAppComponent().getRouter();
             if (router && !router.getHashChanger().getHash().startsWith("Job")) {
