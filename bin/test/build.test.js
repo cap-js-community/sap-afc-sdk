@@ -37,6 +37,12 @@ const Files = {
     "http/scheduling/provider.cloud.http",
     "http/scheduling/provider.local.http",
   ],
+  APP: [
+    "app/appconfig/fioriSandboxConfig.json",
+    "app/scheduling.monitoring.job/webapp/manifest.json",
+    "app/scheduling.monitoring.job/webapp/Component.js",
+    "app/scheduling.monitoring.job/ui5.yaml",
+  ],
   NODE: [
     "srv/broker.json",
     "srv/catalog.json",
@@ -97,7 +103,7 @@ describe("Build", () => {
     );
     expect(cleanErr(result.stderr, ENV.NODE, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
-    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.CF]) {
+    for (const file of [...Files.COMMON, ...Files.APP, ...Files.NODE, ...Files.CF]) {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
@@ -119,7 +125,7 @@ describe("Build", () => {
     );
     expect(cleanErr(result.stderr, ENV.NODE, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
-    for (const file of [...Files.COMMON, ...Files.NODE, ...Files.KYMA]) {
+    for (const file of [...Files.COMMON, ...Files.APP, ...Files.NODE, ...Files.KYMA]) {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
@@ -141,7 +147,7 @@ describe("Build", () => {
     );
     expect(cleanErr(result.stderr, ENV.JAVA, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
-    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.CF]) {
+    for (const file of [...Files.COMMON, ...Files.APP, ...Files.JAVA, ...Files.CF]) {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
@@ -163,7 +169,7 @@ describe("Build", () => {
     );
     expect(cleanErr(result.stderr, ENV.JAVA, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
-    for (const file of [...Files.COMMON, ...Files.JAVA, ...Files.KYMA]) {
+    for (const file of [...Files.COMMON, ...Files.APP, ...Files.JAVA, ...Files.KYMA]) {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));

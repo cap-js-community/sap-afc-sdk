@@ -41,7 +41,7 @@ jobs:
         run: npx afc init cf
         working-directory: ./afcjdk
       - name: Add SDK features
-        run: npx afc add -a app,broker,stub,mock,sample,test,http
+        run: npx afc add -a broker,stub,mock,sample,test,http
         working-directory: ./afcjdk
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}

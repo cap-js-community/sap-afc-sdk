@@ -99,8 +99,10 @@ Examples:
       const options = this.opts();
       if (options.add) {
         const features = options.add.split(",").map((f) => f.trim());
-        const addCommand = require("./add");
-        success = addCommand.process(features, {});
+        if (features.length > 0) {
+          const addCommand = require("./add");
+          success = addCommand.process(features, {});
+        }
       }
     }
     if (success) {
@@ -155,8 +157,10 @@ function processBefore(runtime, target, profile) {
     .concat(config.features[profile][runtime])
     .concat(config.features[profile][target])
     .filter((feature) => !excludes.includes(feature));
-  shelljs.exec(`cds add ${features.join(",")} ${config.options.cds}`);
-  shelljs.exec("npm install");
+  if (features.length > 0) {
+    shelljs.exec(`cds add ${features.join(",")} ${config.options.cds}`);
+    shelljs.exec("npm install");
+  }
 }
 
 function processNode() {

@@ -1,29 +1,29 @@
 {
   "targets": ["cf", "kyma"],
-  "auths": ["xsuaa", "ias"],
   "defaults": {
-    "target": "cf",
-    "auth": "xsuaa"
+    "target": "cf"
   },
   "appRoot": "app",
   "apps": ["scheduling.monitoring.job"],
   "features": {
     "default": {
-      "afc": ["app", "broker", "stub", "mock", "sample", "test", "http"],
-      "common": ["hana", "approuter", "html5-repo", "workzone", "cloud-logging"],
+      "common": ["approuter", "hana", "cloud-logging"],
       "node": ["sqlite", "redis"],
       "java": [],
       "cf": ["mta"],
       "kyma": ["helm", "containerize"]
     },
     "basic": {
-      "afc": ["app", "broker"],
-      "common": ["hana", "approuter"],
+      "common": ["approuter", "hana"],
       "node": ["sqlite"],
       "java": [],
       "cf": ["mta"],
       "kyma": ["helm", "containerize"]
     }
+  },
+  "dependencies": {
+    "broker": ["xsuaa"],
+    "app": ["html5-repo", "workzone"]
   },
   "excludes": {
     "kyma": ["redis"]

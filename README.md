@@ -104,7 +104,9 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
   - Kyma:
     - Terminal: `afc init kyma`
 - Add SDK features
-  - Terminal: `afc add app,broker,sample,http`
+  - Terminal: `afc add sample,broker,http`
+- Add stub implementation
+  - Terminal: `afc add stub`
 
 ### Test Project
 
@@ -702,12 +704,13 @@ More details on how to use the service broker can be found in the [Service Broke
 
 #### Redis
 
-The application can be scaled by adding a Redis cache to distribute workload across application instances.
-Add Redis to the project (already part of [Adding SDK](#adding-sdk) for CAP Node.js):
+The application can be scaled by adding a Redis cache to distribute workload across application instances:
+
+For CAP Node.js Redis support can be added via command:
 
 - Terminal: `cds add redis`
 
-Redis is used by `@cap-js-community/event-queue`, `@cap-js-community/websocket` and `@cap-js-community/feature-toggle-library`
+For Node.js runtime, Redis is used by `@cap-js-community/event-queue`, `@cap-js-community/websocket` and `@cap-js-community/feature-toggle-library`
 modules to process events, distribute websocket messages and store and distribute feature toggles values.
 
 #### Feature Toggles
@@ -1269,29 +1272,23 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 ### Cloud Foundry
 
-- Add MTA feature (already part of [Adding SDK](#adding-sdk) for Cloud Foundry)
+- Initialize project for Cloud Foundry:
   - Terminal: `afc init cf`
-- Build MTA
-  - Terminal: `mbt build`
-- Deploy MTA
-  - Terminal: `cf deploy mta_archives/<mta>.mtar`
+- CDS Upgrade:
+  - Terminal: `cds up --to cf`
 - For details see guide [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
 
 #### Kyma
 
-- Add helm feature (already part of [Adding SDK](#adding-sdk) for Kyma)
+- Initialize project for Kyma:
   - Terminal: `afc init kyma`
-- Configuration
+- Configuration:
   - Set global domain in `chart/values.yaml`
   - Set global image registry in `chart/values.yaml`
   - Set repository in `containerize.yaml`
   - Set endpoints to `approuter` and `server` in `sap-afc-sdk` env to Kyma API rule hosts
-- Containerize
-  - Terminal: `ctz containerize.yaml --push`
-- Upgrade
-  - Terminal: `helm upgrade --install <name> ./gen/chart -n <namespace>`
-- Rollout
-  - Terminal: `kubectl rollout restart deployment -n <namespace>`
+- CDS Upgrade:
+  - Terminal: `cds up --to k8s -n <namespace>`
 - For details see guide [Deployment to Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma)
 
 ## Service Broker
@@ -1301,7 +1298,7 @@ The broker is used to manage service key management to the API in a Cloud Foundr
 
 > For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required
 
-- Add broker and service configuration (already part of [Adding SDK](#adding-sdk))
+- Add broker and service configuration:
   - Terminal: `afc add broker`
   - Auth strategy for service `xsuaa` with plan `broker` is applied via `cds add xsuaa`
 - Deploy to CF (see [Deployment](#deployment) to [Cloud Foundry](#cloud-foundry))
@@ -1396,16 +1393,17 @@ Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/gui
 
 ### Work Zone
 
-For development and testing purposes UIs are served as part of the server. Exposed UIs can be accessed via the
+For development and testing purposes SDK UIs are served as part of the server. Exposed UIs can be accessed via the
 server welcome page. For productive usage, UIs should be served via HTML5 repo:
 
-- Add Work Zone and HTML5 Repo features (already part of [Adding SDK](#adding-sdk))
-  - Terminal: `cds add workzone,html5-repo`
+- Add SDK Apps to HTML5 Repo (copy to project)
+  - Terminal: `afc add app`
+- Work Zone and HTML5 Repo features are added automatically via `cds add workzone,html5-repo`
 - Set up and configure SAP Work Zone instance using HTML5 Apps Content Channel
   - Add `Monitor Scheduling Jobs` app to Content Explorer
   - Assign an app to a group, role, and site to be accessible
 - (CAP Node.js) Disable UI served in server via CDS env: `cds.requires.sap-afc-sdk.ui: false`
-- (Optional) Apps from AFC SDK can also be copied over into a project at `/app` for further adjustments:
+- (Optional) Apps from AFC SDK can also be copied over into a project at `/app` for further adjustments
   - Terminal: `afc add app`
 
 ### Multitenancy

@@ -14,9 +14,6 @@ runs:
       uses: azure/setup-helm@v4
     - name: Setup Kubectl
       uses: azure/setup-kubectl@v4
-    - name: Install Containerize
-      run: npm install -g ctz
-      shell: bash
     - name: Setup Tools
       uses: buildpacks/github-actions/setup-tools@v5.9.6
     - name: Setup Pack

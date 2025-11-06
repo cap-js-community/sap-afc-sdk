@@ -42,7 +42,7 @@ jobs:
           APPROUTER_URL: https://afcsdk-approuter-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
           SERVER_URL: https://afcsdk-srv-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
       - name: Add SDK features
-        run: npx afc add -a app,broker,stub,mock,sample,test,http
+        run: npx afc add -a broker,stub,mock,sample,test,http
         working-directory: ./afcsdk
         env:
           BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_KYMA_HASH }}

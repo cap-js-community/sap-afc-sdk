@@ -455,10 +455,10 @@ annotate SchedulingMonitoringService.JobResultMessage with @(
   ],
   UI.HeaderInfo         : {
     $Type         : 'UI.HeaderInfoType',
-    TypeName      : '{i18n>JobResult}',
-    TypeNamePlural: '{i18n>JobResults}',
+    TypeName      : '{i18n>JobResultMessage}',
+    TypeNamePlural: '{i18n>JobResultMessages}',
     Title         : {
-      Label: '{i18n>JobResult}',
+      Label: '{i18n>JobResultMessage}',
       Value: text
     },
     Description   : {Value: severity.code}

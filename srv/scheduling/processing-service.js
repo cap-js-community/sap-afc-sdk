@@ -105,6 +105,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (!(await this.checkStatusTransition(req, job.status_code, status))) {
       return req.reject(JobSchedulingError.statusTransitionNotAllowed(job.status_code, status));
     }
+    job.status_code = status;
     await UPDATE.entity(Job)
       .set({
         status_code: status,

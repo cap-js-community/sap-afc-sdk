@@ -9,7 +9,7 @@ module.exports = class SchedulingMonitoringService extends BaseApplicationServic
     const { Job } = this.entities;
     const { Job: ProviderJob } = cds.entities("SchedulingProviderService");
 
-    this.fillLink(Job, "Job", "manage");
+    this.fillLink(Job, "Job", "monitor");
 
     this.on(Job.actions.cancel, Job, async (req, next) => {
       const providerService = await cds.connect.to("SchedulingProviderService");

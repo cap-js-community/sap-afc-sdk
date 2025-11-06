@@ -220,6 +220,386 @@ Content-Type: application/json
 `;
 
 exports[`Build Java / CF 5`] = `
+"app/appconfig/fioriSandboxConfig.json
+
+{
+  "services": {
+    "LaunchPage": {
+      "adapter": {
+        "config": {
+          "catalogs": [],
+          "groups": [
+            {
+              "id": "Scheduling",
+              "title": "Scheduling",
+              "isPreset": true,
+              "isVisible": true,
+              "isGroupLocked": false,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                  "properties": {
+                    "title": "Monitor Scheduling Jobs",
+                    "targetURL": "#Job-monitor"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NavTargetResolution": {
+      "config": {
+        "enableClientSideTargetResolution": true
+      }
+    },
+    "ClientSideTargetResolution": {
+      "adapter": {
+        "config": {
+          "inbounds": {
+            "JobMonitor": {
+              "semanticObject": "Job",
+              "action": "monitor",
+              "title": "Monitor Scheduling Jobs",
+              "signature": {
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID"
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID"
+                  }
+                },
+                "additionalParameters": "allowed"
+              },
+              "resolutionResult": {
+                "applicationType": "SAPUI5",
+                "additionalInformation": "SAPUI5.Component=afcsdk.scheduling.monitoring.job",
+                "url": "./scheduling.monitoring.job/webapp"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}"
+`;
+
+exports[`Build Java / CF 6`] = `
+"app/scheduling.monitoring.job/webapp/manifest.json
+
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "afcsdk.scheduling.monitoring.job",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.16.2",
+      "toolsId": "52ffac46-93e2-4014-8995-f806289611a4"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/job-scheduling/monitoring/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Job-monitor": {
+          "semanticObject": "Job",
+          "action": "monitor",
+          "title": "{{appTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.13",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "afcsdk.scheduling.monitoring.job.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "JobList",
+          "target": "JobList"
+        },
+        {
+          "pattern": "Job({key}):?query:",
+          "name": "JobObjectPage",
+          "target": "JobObjectPage"
+        },
+        {
+          "pattern": "Job({key})/parameters({key2}):?query:",
+          "name": "JobParameterObjectPage",
+          "target": "JobParameterObjectPage"
+        },
+        {
+          "pattern": "Job({key})/results({key2}):?query:",
+          "name": "JobResultObjectPage",
+          "target": "JobResultObjectPage"
+        }
+      ],
+      "targets": {
+        "JobList": {
+          "type": "Component",
+          "id": "JobList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Job",
+              "variantManagement": "Page",
+              "navigation": {
+                "Job": {
+                  "detail": {
+                    "route": "JobObjectPage"
+                  }
+                }
+              },
+              "initialLoad": true,
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobObjectPage": {
+          "type": "Component",
+          "id": "JobObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Job",
+              "navigation": {
+                "JobParameter": {
+                  "detail": {
+                    "route": "JobParameterObjectPage"
+                  }
+                },
+                "JobResult": {
+                  "detail": {
+                    "route": "JobResultObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "results/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "columns": {
+                    "data": {
+                      "header": "{i18n>Data}",
+                      "position": {
+                        "anchor": "DataFieldWithUrl::mimeType",
+                        "placement": "After"
+                      },
+                      "template": "afcsdk.scheduling.monitoring.job.ext.fragment.data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobParameterObjectPage": {
+          "type": "Component",
+          "id": "JobParameterObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobParameter"
+            }
+          }
+        },
+        "JobResultObjectPage": {
+          "type": "Component",
+          "id": "JobResultObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobResult",
+              "content": {
+                "header": {
+                  "actions": {
+                    "download": {
+                      "press": "afcsdk.scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "visible": "{= %{type_code} === 'data'}",
+                      "enabled": true,
+                      "text": "{i18n>Download}",
+                      "icon": "sap-icon://download"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ListReportController"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "afcsdk.service"
+  }
+}
+"
+`;
+
+exports[`Build Java / CF 7`] = `
+"app/scheduling.monitoring.job/webapp/Component.js
+
+"use strict";
+
+sap.ui.define(["sap/fe/core/AppComponent", "sap/ui/core/ws/WebSocket"], function (Component, WebSocket) {
+  return Component.extend("afcsdk.scheduling.monitoring.job.Component", {
+    metadata: {
+      manifest: "json",
+    },
+
+    constructor: function () {
+      Component.prototype.constructor.apply(this, arguments);
+      window.socket = new WebSocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
+    },
+  });
+});
+"
+`;
+
+exports[`Build Java / CF 8`] = `
+"app/scheduling.monitoring.job/ui5.yaml
+
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: scheduling.monitoring.job
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://sapui5.hana.ondemand.com
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+builder:
+  resources:
+    excludes:
+      - .DS_Store
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: scheduling.monitoring.job
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json
+"
+`;
+
+exports[`Build Java / CF 9`] = `
 ".cdsrc.json
 
 {
@@ -231,16 +611,16 @@ exports[`Build Java / CF 5`] = `
       "auth": "xsuaa"
     },
     "cloud-logging": true,
-    "workzone": true,
     "outbox": {
       "kind": "persistent-outbox"
-    }
+    },
+    "workzone": true
   }
 }
 "
 `;
 
-exports[`Build Java / CF 6`] = `
+exports[`Build Java / CF 10`] = `
 "srv/pom.xml
 
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -385,7 +765,7 @@ exports[`Build Java / CF 6`] = `
 </project>"
 `;
 
-exports[`Build Java / CF 7`] = `
+exports[`Build Java / CF 11`] = `
 "srv/src/main/resources/application.yaml
 
 ---
@@ -474,7 +854,7 @@ spring:
 "
 `;
 
-exports[`Build Java / CF 8`] = `
+exports[`Build Java / CF 12`] = `
 "srv/src/main/java/customer/afcsdk/ApplicationConfig.java
 
 package customer.afcsdk;
@@ -490,7 +870,7 @@ public class ApplicationConfig {}
 "
 `;
 
-exports[`Build Java / CF 9`] = `
+exports[`Build Java / CF 13`] = `
 "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java
 
 package customer.afcsdk.scheduling;
@@ -544,7 +924,7 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 "
 `;
 
-exports[`Build Java / CF 10`] = `
+exports[`Build Java / CF 14`] = `
 "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java
 
 package customer.afcsdk.scheduling;
@@ -587,7 +967,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 "
 `;
 
-exports[`Build Java / CF 11`] = `
+exports[`Build Java / CF 15`] = `
 "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java
 
 package customer.afcsdk.scheduling;
@@ -703,7 +1083,7 @@ public class SchedulingProviderHandlerTest {
 "
 `;
 
-exports[`Build Java / CF 12`] = `
+exports[`Build Java / CF 16`] = `
 "mta.yaml
 
 _schema-version: 3.3.0
@@ -743,8 +1123,8 @@ modules:
           srv-url: \${default-url}
     requires:
       - name: afcsdk-db
-      - name: afcsdk-destination
       - name: afcsdk-cloud-logging
+      - name: afcsdk-destination
       - name: afcsdk-auth
 
   - name: afcsdk-db-deployer
@@ -773,9 +1153,9 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
+      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
-      - name: afcsdk-cloud-logging
       - name: afcsdk-auth
     provides:
       - name: app-api
@@ -802,6 +1182,18 @@ modules:
           artifacts:
             - scheduling.monitoring.job.zip
           target-path: resources
+
+  - name: afcsdkscheduling.monitoring.job
+    type: html5
+    path: app/scheduling.monitoring.job
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms: []
+
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -834,22 +1226,20 @@ modules:
               ServiceKeyName: afcsdk-auth-key
               sap.cloud.service: afcsdk.service
 
-  - name: afcsdkscheduling.monitoring.job
-    type: html5
-    path: app/scheduling.monitoring.job
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm ci
-        - npm run build
-      supported-platforms: []
 resources:
   - name: afcsdk-db
     type: com.sap.xs.hdi-container
     parameters:
       service: hana
       service-plan: hdi-shared
+  - name: afcsdk-cloud-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: cloud-logging
+      service-plan: standard
+      config:
+        ingest_otlp:
+          enabled: true
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -886,14 +1276,6 @@ resources:
     parameters:
       service: html5-apps-repo
       service-plan: app-runtime
-  - name: afcsdk-cloud-logging
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: cloud-logging
-      service-plan: standard
-      config:
-        ingest_otlp:
-          enabled: true
   - name: afcsdk-auth
     type: org.cloudfoundry.managed-service
     parameters:
@@ -1131,6 +1513,386 @@ Content-Type: application/json
 `;
 
 exports[`Build Java / Kyma 5`] = `
+"app/appconfig/fioriSandboxConfig.json
+
+{
+  "services": {
+    "LaunchPage": {
+      "adapter": {
+        "config": {
+          "catalogs": [],
+          "groups": [
+            {
+              "id": "Scheduling",
+              "title": "Scheduling",
+              "isPreset": true,
+              "isVisible": true,
+              "isGroupLocked": false,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                  "properties": {
+                    "title": "Monitor Scheduling Jobs",
+                    "targetURL": "#Job-monitor"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NavTargetResolution": {
+      "config": {
+        "enableClientSideTargetResolution": true
+      }
+    },
+    "ClientSideTargetResolution": {
+      "adapter": {
+        "config": {
+          "inbounds": {
+            "JobMonitor": {
+              "semanticObject": "Job",
+              "action": "monitor",
+              "title": "Monitor Scheduling Jobs",
+              "signature": {
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID"
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID"
+                  }
+                },
+                "additionalParameters": "allowed"
+              },
+              "resolutionResult": {
+                "applicationType": "SAPUI5",
+                "additionalInformation": "SAPUI5.Component=afcsdk.scheduling.monitoring.job",
+                "url": "./scheduling.monitoring.job/webapp"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}"
+`;
+
+exports[`Build Java / Kyma 6`] = `
+"app/scheduling.monitoring.job/webapp/manifest.json
+
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "afcsdk.scheduling.monitoring.job",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.16.2",
+      "toolsId": "52ffac46-93e2-4014-8995-f806289611a4"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/job-scheduling/monitoring/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Job-monitor": {
+          "semanticObject": "Job",
+          "action": "monitor",
+          "title": "{{appTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.13",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "afcsdk.scheduling.monitoring.job.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "JobList",
+          "target": "JobList"
+        },
+        {
+          "pattern": "Job({key}):?query:",
+          "name": "JobObjectPage",
+          "target": "JobObjectPage"
+        },
+        {
+          "pattern": "Job({key})/parameters({key2}):?query:",
+          "name": "JobParameterObjectPage",
+          "target": "JobParameterObjectPage"
+        },
+        {
+          "pattern": "Job({key})/results({key2}):?query:",
+          "name": "JobResultObjectPage",
+          "target": "JobResultObjectPage"
+        }
+      ],
+      "targets": {
+        "JobList": {
+          "type": "Component",
+          "id": "JobList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Job",
+              "variantManagement": "Page",
+              "navigation": {
+                "Job": {
+                  "detail": {
+                    "route": "JobObjectPage"
+                  }
+                }
+              },
+              "initialLoad": true,
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobObjectPage": {
+          "type": "Component",
+          "id": "JobObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Job",
+              "navigation": {
+                "JobParameter": {
+                  "detail": {
+                    "route": "JobParameterObjectPage"
+                  }
+                },
+                "JobResult": {
+                  "detail": {
+                    "route": "JobResultObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "results/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "columns": {
+                    "data": {
+                      "header": "{i18n>Data}",
+                      "position": {
+                        "anchor": "DataFieldWithUrl::mimeType",
+                        "placement": "After"
+                      },
+                      "template": "afcsdk.scheduling.monitoring.job.ext.fragment.data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobParameterObjectPage": {
+          "type": "Component",
+          "id": "JobParameterObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobParameter"
+            }
+          }
+        },
+        "JobResultObjectPage": {
+          "type": "Component",
+          "id": "JobResultObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobResult",
+              "content": {
+                "header": {
+                  "actions": {
+                    "download": {
+                      "press": "afcsdk.scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "visible": "{= %{type_code} === 'data'}",
+                      "enabled": true,
+                      "text": "{i18n>Download}",
+                      "icon": "sap-icon://download"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ListReportController"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "afcsdk.service"
+  }
+}
+"
+`;
+
+exports[`Build Java / Kyma 7`] = `
+"app/scheduling.monitoring.job/webapp/Component.js
+
+"use strict";
+
+sap.ui.define(["sap/fe/core/AppComponent", "sap/ui/core/ws/WebSocket"], function (Component, WebSocket) {
+  return Component.extend("afcsdk.scheduling.monitoring.job.Component", {
+    metadata: {
+      manifest: "json",
+    },
+
+    constructor: function () {
+      Component.prototype.constructor.apply(this, arguments);
+      window.socket = new WebSocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
+    },
+  });
+});
+"
+`;
+
+exports[`Build Java / Kyma 8`] = `
+"app/scheduling.monitoring.job/ui5.yaml
+
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: scheduling.monitoring.job
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://sapui5.hana.ondemand.com
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+builder:
+  resources:
+    excludes:
+      - .DS_Store
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: scheduling.monitoring.job
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json
+"
+`;
+
+exports[`Build Java / Kyma 9`] = `
 ".cdsrc.json
 
 {
@@ -1142,16 +1904,16 @@ exports[`Build Java / Kyma 5`] = `
       "auth": "xsuaa"
     },
     "cloud-logging": true,
-    "workzone": true,
     "outbox": {
       "kind": "persistent-outbox"
-    }
+    },
+    "workzone": true
   }
 }
 "
 `;
 
-exports[`Build Java / Kyma 6`] = `
+exports[`Build Java / Kyma 10`] = `
 "srv/pom.xml
 
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -1301,7 +2063,7 @@ exports[`Build Java / Kyma 6`] = `
 </project>"
 `;
 
-exports[`Build Java / Kyma 7`] = `
+exports[`Build Java / Kyma 11`] = `
 "srv/src/main/resources/application.yaml
 
 ---
@@ -1390,7 +2152,7 @@ spring:
 "
 `;
 
-exports[`Build Java / Kyma 8`] = `
+exports[`Build Java / Kyma 12`] = `
 "srv/src/main/java/customer/afcsdk/ApplicationConfig.java
 
 package customer.afcsdk;
@@ -1406,7 +2168,7 @@ public class ApplicationConfig {}
 "
 `;
 
-exports[`Build Java / Kyma 9`] = `
+exports[`Build Java / Kyma 13`] = `
 "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java
 
 package customer.afcsdk.scheduling;
@@ -1460,7 +2222,7 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 "
 `;
 
-exports[`Build Java / Kyma 10`] = `
+exports[`Build Java / Kyma 14`] = `
 "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java
 
 package customer.afcsdk.scheduling;
@@ -1503,7 +2265,7 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 "
 `;
 
-exports[`Build Java / Kyma 11`] = `
+exports[`Build Java / Kyma 15`] = `
 "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java
 
 package customer.afcsdk.scheduling;
@@ -1619,7 +2381,7 @@ public class SchedulingProviderHandlerTest {
 "
 `;
 
-exports[`Build Java / Kyma 12`] = `
+exports[`Build Java / Kyma 16`] = `
 "chart/Chart.yaml
 
 apiVersion: v2
@@ -1638,18 +2400,6 @@ dependencies:
     alias: approuter
     version: ">0.0.0"
   - name: service-instance
-    alias: html5-apps-repo-host
-    version: ">0.0.0"
-  - name: content-deployment
-    alias: html5-apps-deployer
-    version: ">0.0.0"
-  - name: service-instance
-    alias: html5-apps-repo-runtime
-    version: ">0.0.0"
-  - name: service-instance
-    alias: destination
-    version: ">0.0.0"
-  - name: service-instance
     alias: hana
     version: ">0.0.0"
   - name: content-deployment
@@ -1659,12 +2409,24 @@ dependencies:
     alias: cloud-logging
     version: ">0.0.0"
   - name: service-instance
+    alias: html5-apps-repo-host
+    version: ">0.0.0"
+  - name: content-deployment
+    alias: html5-apps-deployer
+    version: ">0.0.0"
+  - name: service-instance
+    alias: destination
+    version: ">0.0.0"
+  - name: service-instance
+    alias: html5-apps-repo-runtime
+    version: ">0.0.0"
+  - name: service-instance
     alias: xsuaa
     version: ">0.0.0"
 "
 `;
 
-exports[`Build Java / Kyma 13`] = `
+exports[`Build Java / Kyma 17`] = `
 "chart/values.yaml
 
 # yaml-language-server: $schema=./values.schema.json
@@ -1680,13 +2442,13 @@ srv:
   bindings:
     db:
       serviceInstanceName: hana
-    destination:
-      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
         enabled: true
         rotationFrequency: 168h
+    destination:
+      serviceInstanceName: destination
     auth:
       serviceInstanceName: xsuaa
   image:
@@ -1753,6 +2515,12 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
+cloud-logging:
+  serviceOfferingName: cloud-logging
+  servicePlanName: standard
+  parameters:
+    ingest_otlp:
+      enabled: true
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
@@ -1787,12 +2555,6 @@ html5-apps-deployer:
 html5-apps-repo-runtime:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-runtime
-cloud-logging:
-  serviceOfferingName: cloud-logging
-  servicePlanName: standard
-  parameters:
-    ingest_otlp:
-      enabled: true
 xsuaa:
   serviceOfferingName: xsuaa
   servicePlanName: broker
@@ -1805,7 +2567,7 @@ xsuaa:
 "
 `;
 
-exports[`Build Java / Kyma 14`] = `
+exports[`Build Java / Kyma 18`] = `
 "containerize.yaml
 
 _schema-version: '1.0'
@@ -1870,7 +2632,6 @@ exports[`Build Node / CF 1`] = `
         "auth": "xsuaa"
       },
       "cloud-logging": true,
-      "workzone": true,
       "sap-afc-sdk": {
         "[production]": {
           "endpoints": {
@@ -1890,6 +2651,7 @@ exports[`Build Node / CF 1`] = `
           }
         }
       },
+      "workzone": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2104,6 +2866,386 @@ Content-Type: application/json
 `;
 
 exports[`Build Node / CF 5`] = `
+"app/appconfig/fioriSandboxConfig.json
+
+{
+  "services": {
+    "LaunchPage": {
+      "adapter": {
+        "config": {
+          "catalogs": [],
+          "groups": [
+            {
+              "id": "Scheduling",
+              "title": "Scheduling",
+              "isPreset": true,
+              "isVisible": true,
+              "isGroupLocked": false,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                  "properties": {
+                    "title": "Monitor Scheduling Jobs",
+                    "targetURL": "#Job-monitor"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NavTargetResolution": {
+      "config": {
+        "enableClientSideTargetResolution": true
+      }
+    },
+    "ClientSideTargetResolution": {
+      "adapter": {
+        "config": {
+          "inbounds": {
+            "JobMonitor": {
+              "semanticObject": "Job",
+              "action": "monitor",
+              "title": "Monitor Scheduling Jobs",
+              "signature": {
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID"
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID"
+                  }
+                },
+                "additionalParameters": "allowed"
+              },
+              "resolutionResult": {
+                "applicationType": "SAPUI5",
+                "additionalInformation": "SAPUI5.Component=afcsdk.scheduling.monitoring.job",
+                "url": "./scheduling.monitoring.job/webapp"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}"
+`;
+
+exports[`Build Node / CF 6`] = `
+"app/scheduling.monitoring.job/webapp/manifest.json
+
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "afcsdk.scheduling.monitoring.job",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.16.2",
+      "toolsId": "52ffac46-93e2-4014-8995-f806289611a4"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/job-scheduling/monitoring/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Job-monitor": {
+          "semanticObject": "Job",
+          "action": "monitor",
+          "title": "{{appTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.13",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "afcsdk.scheduling.monitoring.job.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "JobList",
+          "target": "JobList"
+        },
+        {
+          "pattern": "Job({key}):?query:",
+          "name": "JobObjectPage",
+          "target": "JobObjectPage"
+        },
+        {
+          "pattern": "Job({key})/parameters({key2}):?query:",
+          "name": "JobParameterObjectPage",
+          "target": "JobParameterObjectPage"
+        },
+        {
+          "pattern": "Job({key})/results({key2}):?query:",
+          "name": "JobResultObjectPage",
+          "target": "JobResultObjectPage"
+        }
+      ],
+      "targets": {
+        "JobList": {
+          "type": "Component",
+          "id": "JobList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Job",
+              "variantManagement": "Page",
+              "navigation": {
+                "Job": {
+                  "detail": {
+                    "route": "JobObjectPage"
+                  }
+                }
+              },
+              "initialLoad": true,
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobObjectPage": {
+          "type": "Component",
+          "id": "JobObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Job",
+              "navigation": {
+                "JobParameter": {
+                  "detail": {
+                    "route": "JobParameterObjectPage"
+                  }
+                },
+                "JobResult": {
+                  "detail": {
+                    "route": "JobResultObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "results/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "columns": {
+                    "data": {
+                      "header": "{i18n>Data}",
+                      "position": {
+                        "anchor": "DataFieldWithUrl::mimeType",
+                        "placement": "After"
+                      },
+                      "template": "afcsdk.scheduling.monitoring.job.ext.fragment.data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobParameterObjectPage": {
+          "type": "Component",
+          "id": "JobParameterObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobParameter"
+            }
+          }
+        },
+        "JobResultObjectPage": {
+          "type": "Component",
+          "id": "JobResultObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobResult",
+              "content": {
+                "header": {
+                  "actions": {
+                    "download": {
+                      "press": "afcsdk.scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "visible": "{= %{type_code} === 'data'}",
+                      "enabled": true,
+                      "text": "{i18n>Download}",
+                      "icon": "sap-icon://download"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ListReportController"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "afcsdk.service"
+  }
+}
+"
+`;
+
+exports[`Build Node / CF 7`] = `
+"app/scheduling.monitoring.job/webapp/Component.js
+
+"use strict";
+
+sap.ui.define(["sap/fe/core/AppComponent", "sap/ui/core/ws/WebSocket"], function (Component, WebSocket) {
+  return Component.extend("afcsdk.scheduling.monitoring.job.Component", {
+    metadata: {
+      manifest: "json",
+    },
+
+    constructor: function () {
+      Component.prototype.constructor.apply(this, arguments);
+      window.socket = new WebSocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
+    },
+  });
+});
+"
+`;
+
+exports[`Build Node / CF 8`] = `
+"app/scheduling.monitoring.job/ui5.yaml
+
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: scheduling.monitoring.job
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://sapui5.hana.ondemand.com
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+builder:
+  resources:
+    excludes:
+      - .DS_Store
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: scheduling.monitoring.job
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json
+"
+`;
+
+exports[`Build Node / CF 9`] = `
 "srv/broker.json
 
 {
@@ -2141,7 +3283,7 @@ exports[`Build Node / CF 5`] = `
 }"
 `;
 
-exports[`Build Node / CF 6`] = `
+exports[`Build Node / CF 10`] = `
 "srv/catalog.json
 
 {
@@ -2170,7 +3312,7 @@ exports[`Build Node / CF 6`] = `
 }"
 `;
 
-exports[`Build Node / CF 7`] = `
+exports[`Build Node / CF 11`] = `
 "srv/scheduling-processing-service.cds
 
 using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
@@ -2179,7 +3321,7 @@ annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-ser
 "
 `;
 
-exports[`Build Node / CF 8`] = `
+exports[`Build Node / CF 12`] = `
 "srv/scheduling-processing-service.js
 
 "use strict";
@@ -2223,7 +3365,7 @@ module.exports = CustomSchedulingProcessingService;
 "
 `;
 
-exports[`Build Node / CF 9`] = `
+exports[`Build Node / CF 13`] = `
 "srv/scheduling-provider-service.cds
 
 using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
@@ -2231,7 +3373,7 @@ using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
 annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
 
-exports[`Build Node / CF 10`] = `
+exports[`Build Node / CF 14`] = `
 "srv/scheduling-provider-service.js
 
 "use strict";
@@ -2265,7 +3407,7 @@ module.exports = CustomSchedulingProviderService;
 "
 `;
 
-exports[`Build Node / CF 11`] = `
+exports[`Build Node / CF 15`] = `
 "test/scheduling.provider.test.js
 
 "use strict";
@@ -2347,7 +3489,7 @@ describe("Scheduling Provider", () => {
 "
 `;
 
-exports[`Build Node / CF 12`] = `
+exports[`Build Node / CF 16`] = `
 "mta.yaml
 
 _schema-version: 3.3.0
@@ -2379,8 +3521,8 @@ modules:
     requires:
       - name: afcsdk-db
       - name: afcsdk-redis
-      - name: afcsdk-destination
       - name: afcsdk-cloud-logging
+      - name: afcsdk-destination
       - name: afcsdk-auth
 
   - name: afcsdk-db-deployer
@@ -2404,9 +3546,9 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
+      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
       - name: afcsdk-html5-runtime
-      - name: afcsdk-cloud-logging
       - name: afcsdk-auth
     provides:
       - name: app-api
@@ -2432,6 +3574,18 @@ modules:
           artifacts:
             - scheduling.monitoring.job.zip
           target-path: app/
+
+  - name: afcsdkscheduling.monitoring.job
+    type: html5
+    path: app/scheduling.monitoring.job
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms: []
+
   - name: afcsdk-destinations
     type: com.sap.application.content
     requires:
@@ -2464,16 +3618,6 @@ modules:
               ServiceKeyName: afcsdk-auth-key
               sap.cloud.service: afcsdk.service
 
-  - name: afcsdkscheduling.monitoring.job
-    type: html5
-    path: app/scheduling.monitoring.job
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm ci
-        - npm run build
-      supported-platforms: []
 resources:
   - name: afcsdk-db
     type: com.sap.xs.hdi-container
@@ -2496,6 +3640,14 @@ resources:
       # day_of_week: Friday
       # start_hour_utc: 0
       # duration: 5 # hours
+  - name: afcsdk-cloud-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: cloud-logging
+      service-plan: standard
+      config:
+        ingest_otlp:
+          enabled: true
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -2532,14 +3684,6 @@ resources:
     parameters:
       service: html5-apps-repo
       service-plan: app-runtime
-  - name: afcsdk-cloud-logging
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: cloud-logging
-      service-plan: standard
-      config:
-        ingest_otlp:
-          enabled: true
   - name: afcsdk-auth
     type: org.cloudfoundry.managed-service
     parameters:
@@ -2578,7 +3722,6 @@ exports[`Build Node / Kyma 1`] = `
         "auth": "xsuaa"
       },
       "cloud-logging": true,
-      "workzone": true,
       "sap-afc-sdk": {
         "[production]": {
           "endpoints": {
@@ -2598,6 +3741,7 @@ exports[`Build Node / Kyma 1`] = `
           }
         }
       },
+      "workzone": true,
       "SchedulingProcessingService": {
         "outbox": {
           "events": {
@@ -2812,6 +3956,386 @@ Content-Type: application/json
 `;
 
 exports[`Build Node / Kyma 5`] = `
+"app/appconfig/fioriSandboxConfig.json
+
+{
+  "services": {
+    "LaunchPage": {
+      "adapter": {
+        "config": {
+          "catalogs": [],
+          "groups": [
+            {
+              "id": "Scheduling",
+              "title": "Scheduling",
+              "isPreset": true,
+              "isVisible": true,
+              "isGroupLocked": false,
+              "tiles": [
+                {
+                  "id": "JobMonitor",
+                  "tileType": "sap.ushell.ui.tile.StaticTile",
+                  "properties": {
+                    "title": "Monitor Scheduling Jobs",
+                    "targetURL": "#Job-monitor"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "NavTargetResolution": {
+      "config": {
+        "enableClientSideTargetResolution": true
+      }
+    },
+    "ClientSideTargetResolution": {
+      "adapter": {
+        "config": {
+          "inbounds": {
+            "JobMonitor": {
+              "semanticObject": "Job",
+              "action": "monitor",
+              "title": "Monitor Scheduling Jobs",
+              "signature": {
+                "parameters": {
+                  "Job.ID": {
+                    "renameTo": "ID"
+                  },
+                  "Job.parameters.ID": {
+                    "renameTo": "ID"
+                  }
+                },
+                "additionalParameters": "allowed"
+              },
+              "resolutionResult": {
+                "applicationType": "SAPUI5",
+                "additionalInformation": "SAPUI5.Component=afcsdk.scheduling.monitoring.job",
+                "url": "./scheduling.monitoring.job/webapp"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}"
+`;
+
+exports[`Build Node / Kyma 6`] = `
+"app/scheduling.monitoring.job/webapp/manifest.json
+
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "afcsdk.scheduling.monitoring.job",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.16.2",
+      "toolsId": "52ffac46-93e2-4014-8995-f806289611a4"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/job-scheduling/monitoring/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Job-monitor": {
+          "semanticObject": "Job",
+          "action": "monitor",
+          "title": "{{appTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.13",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "afcsdk.scheduling.monitoring.job.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "JobList",
+          "target": "JobList"
+        },
+        {
+          "pattern": "Job({key}):?query:",
+          "name": "JobObjectPage",
+          "target": "JobObjectPage"
+        },
+        {
+          "pattern": "Job({key})/parameters({key2}):?query:",
+          "name": "JobParameterObjectPage",
+          "target": "JobParameterObjectPage"
+        },
+        {
+          "pattern": "Job({key})/results({key2}):?query:",
+          "name": "JobResultObjectPage",
+          "target": "JobResultObjectPage"
+        }
+      ],
+      "targets": {
+        "JobList": {
+          "type": "Component",
+          "id": "JobList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/Job",
+              "variantManagement": "Page",
+              "navigation": {
+                "Job": {
+                  "detail": {
+                    "route": "JobObjectPage"
+                  }
+                }
+              },
+              "initialLoad": true,
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobObjectPage": {
+          "type": "Component",
+          "id": "JobObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Job",
+              "navigation": {
+                "JobParameter": {
+                  "detail": {
+                    "route": "JobParameterObjectPage"
+                  }
+                },
+                "JobResult": {
+                  "detail": {
+                    "route": "JobResultObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "results/@com.sap.vocabularies.UI.v1.LineItem": {
+                  "columns": {
+                    "data": {
+                      "header": "{i18n>Data}",
+                      "position": {
+                        "anchor": "DataFieldWithUrl::mimeType",
+                        "placement": "After"
+                      },
+                      "template": "afcsdk.scheduling.monitoring.job.ext.fragment.data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "JobParameterObjectPage": {
+          "type": "Component",
+          "id": "JobParameterObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobParameter"
+            }
+          }
+        },
+        "JobResultObjectPage": {
+          "type": "Component",
+          "id": "JobResultObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/JobResult",
+              "content": {
+                "header": {
+                  "actions": {
+                    "download": {
+                      "press": "afcsdk.scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "visible": "{= %{type_code} === 'data'}",
+                      "enabled": true,
+                      "text": "{i18n>Download}",
+                      "icon": "sap-icon://download"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ListReportController"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController": {
+            "controllerName": "afcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "afcsdk.service"
+  }
+}
+"
+`;
+
+exports[`Build Node / Kyma 7`] = `
+"app/scheduling.monitoring.job/webapp/Component.js
+
+"use strict";
+
+sap.ui.define(["sap/fe/core/AppComponent", "sap/ui/core/ws/WebSocket"], function (Component, WebSocket) {
+  return Component.extend("afcsdk.scheduling.monitoring.job.Component", {
+    metadata: {
+      manifest: "json",
+    },
+
+    constructor: function () {
+      Component.prototype.constructor.apply(this, arguments);
+      window.socket = new WebSocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
+    },
+  });
+});
+"
+`;
+
+exports[`Build Node / Kyma 8`] = `
+"app/scheduling.monitoring.job/ui5.yaml
+
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "3.1"
+metadata:
+  name: scheduling.monitoring.job
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://sapui5.hana.ondemand.com
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+builder:
+  resources:
+    excludes:
+      - .DS_Store
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: scheduling.monitoring.job
+        relativePaths: true
+        additionalFiles:
+          - xs-app.json
+"
+`;
+
+exports[`Build Node / Kyma 9`] = `
 "srv/broker.json
 
 {
@@ -2849,7 +4373,7 @@ exports[`Build Node / Kyma 5`] = `
 }"
 `;
 
-exports[`Build Node / Kyma 6`] = `
+exports[`Build Node / Kyma 10`] = `
 "srv/catalog.json
 
 {
@@ -2878,7 +4402,7 @@ exports[`Build Node / Kyma 6`] = `
 }"
 `;
 
-exports[`Build Node / Kyma 7`] = `
+exports[`Build Node / Kyma 11`] = `
 "srv/scheduling-processing-service.cds
 
 using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
@@ -2887,7 +4411,7 @@ annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-ser
 "
 `;
 
-exports[`Build Node / Kyma 8`] = `
+exports[`Build Node / Kyma 12`] = `
 "srv/scheduling-processing-service.js
 
 "use strict";
@@ -2931,7 +4455,7 @@ module.exports = CustomSchedulingProcessingService;
 "
 `;
 
-exports[`Build Node / Kyma 9`] = `
+exports[`Build Node / Kyma 13`] = `
 "srv/scheduling-provider-service.cds
 
 using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
@@ -2939,7 +4463,7 @@ using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
 annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
 
-exports[`Build Node / Kyma 10`] = `
+exports[`Build Node / Kyma 14`] = `
 "srv/scheduling-provider-service.js
 
 "use strict";
@@ -2973,7 +4497,7 @@ module.exports = CustomSchedulingProviderService;
 "
 `;
 
-exports[`Build Node / Kyma 11`] = `
+exports[`Build Node / Kyma 15`] = `
 "test/scheduling.provider.test.js
 
 "use strict";
@@ -3055,7 +4579,7 @@ describe("Scheduling Provider", () => {
 "
 `;
 
-exports[`Build Node / Kyma 12`] = `
+exports[`Build Node / Kyma 16`] = `
 "chart/Chart.yaml
 
 apiVersion: v2
@@ -3074,18 +4598,6 @@ dependencies:
     alias: approuter
     version: ">0.0.0"
   - name: service-instance
-    alias: html5-apps-repo-host
-    version: ">0.0.0"
-  - name: content-deployment
-    alias: html5-apps-deployer
-    version: ">0.0.0"
-  - name: service-instance
-    alias: html5-apps-repo-runtime
-    version: ">0.0.0"
-  - name: service-instance
-    alias: destination
-    version: ">0.0.0"
-  - name: service-instance
     alias: hana
     version: ">0.0.0"
   - name: content-deployment
@@ -3095,12 +4607,24 @@ dependencies:
     alias: cloud-logging
     version: ">0.0.0"
   - name: service-instance
+    alias: html5-apps-repo-host
+    version: ">0.0.0"
+  - name: content-deployment
+    alias: html5-apps-deployer
+    version: ">0.0.0"
+  - name: service-instance
+    alias: destination
+    version: ">0.0.0"
+  - name: service-instance
+    alias: html5-apps-repo-runtime
+    version: ">0.0.0"
+  - name: service-instance
     alias: xsuaa
     version: ">0.0.0"
 "
 `;
 
-exports[`Build Node / Kyma 13`] = `
+exports[`Build Node / Kyma 17`] = `
 "chart/values.yaml
 
 # yaml-language-server: $schema=./values.schema.json
@@ -3116,13 +4640,13 @@ srv:
   bindings:
     db:
       serviceInstanceName: hana
-    destination:
-      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
         enabled: true
         rotationFrequency: 168h
+    destination:
+      serviceInstanceName: destination
     auth:
       serviceInstanceName: xsuaa
   image:
@@ -3187,6 +4711,12 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
+cloud-logging:
+  serviceOfferingName: cloud-logging
+  servicePlanName: standard
+  parameters:
+    ingest_otlp:
+      enabled: true
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
@@ -3221,12 +4751,6 @@ html5-apps-deployer:
 html5-apps-repo-runtime:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-runtime
-cloud-logging:
-  serviceOfferingName: cloud-logging
-  servicePlanName: standard
-  parameters:
-    ingest_otlp:
-      enabled: true
 xsuaa:
   serviceOfferingName: xsuaa
   servicePlanName: broker
@@ -3239,7 +4763,7 @@ xsuaa:
 "
 `;
 
-exports[`Build Node / Kyma 14`] = `
+exports[`Build Node / Kyma 18`] = `
 "containerize.yaml
 
 _schema-version: '1.0'

@@ -41,9 +41,7 @@ public class SchedulingMonitoringHandler implements EventHandler {
     if (afcsdkProperties.getUi() != null && afcsdkProperties.getUi().isLink()) {
       for (Job job : jobs) {
         if (job.getId() != null && job.getLink() == null) {
-          job.setLink(
-            endpointProvider.getLaunchpadUrl(context.getUserInfo()) + "#Job-monitor&/Job(" + job.getId() + ")"
-          );
+          job.setLink(endpointProvider.getLink(context.getUserInfo(), "Job", "monitor", job.getId()));
         }
       }
     }

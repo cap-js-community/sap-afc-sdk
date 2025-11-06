@@ -19,7 +19,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     const { JobDefinition: DBJobDefinition, Job: DBJob } = cds.entities("scheduling");
     const { notify } = this.operations;
 
-    this.fillLink(Job, "Job", "manage");
+    this.fillLink(Job, "Job", "monitor");
 
     this.on("READ", Capabilities, (req) => {
       return {

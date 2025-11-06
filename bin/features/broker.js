@@ -204,7 +204,7 @@ function addXsuaaBroker() {
   });
 
   // cds add
-  shelljs.exec(`cds add xsuaa ${config.options.cds}`);
+  shelljs.exec(`cds add ${config.dependencies.broker.join(",")} ${config.options.cds}`);
 
   // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {

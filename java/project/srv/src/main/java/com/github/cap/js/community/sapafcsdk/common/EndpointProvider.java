@@ -125,6 +125,10 @@ public class EndpointProvider {
     return this.approuterTenantUrl(userInfo) + "/launchpad.html";
   }
 
+  public String getLink(UserInfo userInfo, String object, String action, String id) {
+    return this.getLaunchpadUrl(userInfo) + "#" + object + "-" + action + "&/" + object + "(" + id + ")";
+  }
+
   public Map<String, String> getApiEndpoints() {
     String serverUrl = this.serverUrl();
     return brokerProperties

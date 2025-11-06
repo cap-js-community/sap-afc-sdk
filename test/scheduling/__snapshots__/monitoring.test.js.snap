@@ -1378,7 +1378,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job Parameter"/>
-            <PropertyValue Property="TypeNamePlural" String="JobParameters"/>
+            <PropertyValue Property="TypeNamePlural" String="Job Parameters"/>
             <PropertyValue Property="Title">
               <Record Type="UI.DataField">
                 <PropertyValue Property="Label" String="Job Parameter"/>
@@ -1610,7 +1610,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
             <PropertyValue Property="TypeName" String="Job Result"/>
-            <PropertyValue Property="TypeNamePlural" String="JobResults"/>
+            <PropertyValue Property="TypeNamePlural" String="Job Results"/>
             <PropertyValue Property="Title">
               <Record Type="UI.DataField">
                 <PropertyValue Property="Label" String="Job Result"/>
@@ -1828,11 +1828,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="UI.HeaderInfo">
           <Record Type="UI.HeaderInfoType">
-            <PropertyValue Property="TypeName" String="Job Result"/>
-            <PropertyValue Property="TypeNamePlural" String="JobResults"/>
+            <PropertyValue Property="TypeName" String="Job Result Message"/>
+            <PropertyValue Property="TypeNamePlural" String="Job Result Messages"/>
             <PropertyValue Property="Title">
               <Record Type="UI.DataField">
-                <PropertyValue Property="Label" String="Job Result"/>
+                <PropertyValue Property="Label" String="Job Result Message"/>
                 <PropertyValue Property="Value" Path="text"/>
               </Record>
             </PropertyValue>
@@ -2995,6 +2995,17 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
       "longDescription": "Job Definition 6",
       "name": "JOB_6",
       "parameters": [
+        {
+          "dataType_code": "date",
+          "description": "Date",
+          "enumValues": [],
+          "job_name": "JOB_6",
+          "mappingType_code": null,
+          "name": "date",
+          "required": false,
+          "type_code": "writableValue",
+          "value": null,
+        },
         {
           "dataType_code": "number",
           "description": "Duration",

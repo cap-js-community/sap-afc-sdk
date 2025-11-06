@@ -21,3 +21,4 @@ D;JOB_4;Parameter D;mapping;boolean;;true;testRun;
 E;JOB_4;Parameter E;mapping;number;;true;fiscalYear;
 status;JOB_6;Status;writableValue;string;completed;false;;
 duration;JOB_6;Duration;writableValue;number;10;false;;
+date;JOB_6;Date;writableValue;date;;false;;

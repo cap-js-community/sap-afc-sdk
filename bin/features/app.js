@@ -10,9 +10,10 @@ const {
   adjustJSON,
   adjustYAMLAllDocument,
   adjustAllLines,
-  copyFolder,
+  copyFolderAdjusted,
   projectName,
   deriveServiceName,
+  adjustYAMLDocument,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
@@ -21,8 +22,14 @@ const Exclude = {
   files: ["ui5-afc-sdk.js"],
   tasks: ["ui5-afc-sdk"],
 };
-
-const Files = ["appconfig/fioriSandboxConfig.json", "launchpad.html"];
+const Adjust = {
+  extensions: [".js", ".xml", ".html"],
+  files: ["manifest.json", "fioriSandboxConfig.json"],
+};
+const Common = {
+  extensions: [],
+  files: ["appconfig/fioriSandboxConfig.json", "launchpad.html"],
+};
 
 module.exports = (options) => {
   try {
@@ -45,17 +52,24 @@ module.exports = (options) => {
       if (options.link) {
         const srcPath = path.join(__dirname, "../../", config.appRoot, app);
         fs.symlinkSync(srcPath, appPath, "dir");
-
         console.log(`Folder '${appPath}' linked.`);
       } else {
         const srcPath = path.join(__dirname, "../../", config.appRoot, app);
-        copyFolder(srcPath, appPath, Exclude);
+        copyFolderAdjusted(srcPath, appPath, Exclude, (content, srcPath) => {
+          const ext = path.extname(srcPath);
+          const fileName = path.basename(srcPath);
+          if (Adjust.extensions.includes(ext) || Adjust.files.includes(fileName)) {
+            const appName = app.replace(/\./g, "\\.");
+            const appPath = app.replace(/\./g, "/");
+            const appPathRegex = app.replace(/\./g, "\\/");
+            content = content
+              .replace(new RegExp(`"(${appName})`, "gm"), `"${name}.$1`)
+              .replace(new RegExp(`${appPathRegex}`, "gm"), `${name}/${appPath}`);
+          }
+          return content;
+        });
 
         adjustJSON(path.join(config.appRoot, app, "webapp/manifest.json"), (json) => {
-          if (json["sap.app"]?.id && !json["sap.app"].id.startsWith(`${name}.`)) {
-            json["sap.app"] ??= {};
-            json["sap.app"].id = `${name}.${json["sap.app"].id}`;
-          }
           if (!json?.["sap.cloud"]?.service) {
             json["sap.cloud"] ??= {};
             json["sap.cloud"].service = `${deriveServiceName(name)}.service`;
@@ -117,7 +131,7 @@ module.exports = (options) => {
         }
       });
 
-      for (const file of Files) {
+      for (const file of Common.files) {
         const filePath = path.join(process.cwd(), config.appRoot, file);
         if (!fs.existsSync(filePath)) {
           fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -128,6 +142,7 @@ module.exports = (options) => {
         }
       }
 
+      // App Config
       const sandboxConfigFilePath = path.join(process.cwd(), config.appRoot, "appconfig/fioriSandboxConfig.json");
       const projectFioriSandboxConfig = require(sandboxConfigFilePath);
       const packageFioriSandboxConfig = require(
@@ -137,10 +152,27 @@ module.exports = (options) => {
         array: "merge",
         mergeKey: "id",
       });
-      fs.writeFileSync(sandboxConfigFilePath, JSON.stringify(mergedFioriSandboxConfig, null, 2), "utf8");
+      let appConfigContent = JSON.stringify(mergedFioriSandboxConfig, null, 2);
+      for (const app of config.apps) {
+        appConfigContent = appConfigContent.replace(`SAPUI5.Component=${app}`, `SAPUI5.Component=${name}.${app}`);
+      }
+      fs.writeFileSync(sandboxConfigFilePath, appConfigContent, "utf8");
 
       // cds add
-      shelljs.exec(`cds add html5-repo ${config.options.cds}`);
+      shelljs.exec(`cds add ${config.dependencies.app.join(",")} ${config.options.cds}`);
+
+      // TODO: Remove (cap/issues/19545)
+      adjustYAMLDocument("chart/Chart.yaml", (yaml) => {
+        const dependencies = yaml.get("dependencies");
+        if (dependencies && !dependencies.items.find((d) => d.get("alias") === "html5-apps-repo-runtime")) {
+          dependencies.items.push({
+            name: "service-instance",
+            alias: "html5-apps-repo-runtime",
+            version: ">0.0.0",
+          });
+        }
+        return yaml;
+      });
     }
   } catch (err) {
     console.error(err.message);

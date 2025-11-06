@@ -13,4 +13,4 @@ npx cds init afcqa
 cd afcqa
 cp ../../.npmrc . && npm install ../../../ # npm install github:cap-js-community/sap-afc-sdk
 npx afc init cf -p basic
-npx afc add -a app,broker,mock
+npx afc add -a broker,mock
