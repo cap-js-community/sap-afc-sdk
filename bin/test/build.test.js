@@ -178,7 +178,9 @@ describe("Build", () => {
 });
 
 function cleanErr(err) {
-  return err.trim();
+  let lines = err.split("\n");
+  lines = lines.filter((line) => !line.startsWith("npm warn EBADENGIN"));
+  return lines.join("\n").trim();
 }
 
 function compareFile(file) {
