@@ -904,7 +904,7 @@ describe("Provider Service", () => {
   });
 
   it("Create Job (headers)", async () => {
-    cds.env.requires.SchedulingProcessingService.queued.propagateHeaders = ["customHeader", "authId"];
+    cds.env.requires.queue.propagateHeaders = ["customheader", "authid"];
 
     let response = await POST(
       "/api/job-scheduling/v1/Job",
