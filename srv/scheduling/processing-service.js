@@ -373,7 +373,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         break;
     }
 
-    await cds.outboxed(this).send(
+    await cds.queued(this).send(
       "updateJob",
       {
         ID,

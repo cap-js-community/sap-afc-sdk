@@ -11,10 +11,10 @@
   },
   "services": {
     "SchedulingProcessingService": {
-      "outbox": true
+      "queued": true
     },
     "SchedulingWebsocketService": {
-      "outbox": true
+      "queued": true
     }
   },
   "toggles": {

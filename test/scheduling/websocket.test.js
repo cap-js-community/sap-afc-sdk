@@ -107,7 +107,7 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let messages = ws.message("jobStatusChanged");
 
-    cds.env.requires.SchedulingWebsocketService.outbox.events.jobStatusChanged.timeBucket = cron;
+    cds.env.requires.SchedulingWebsocketService.queued.events.jobStatusChanged.timeBucket = cron;
     const event = eventQueue.config.events.find(
       (event) => event.subType === "SchedulingWebsocketService.jobStatusChanged",
     );

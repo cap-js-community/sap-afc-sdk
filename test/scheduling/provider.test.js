@@ -903,6 +903,49 @@ describe("Provider Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("Create Job (headers)", async () => {
+    cds.env.requires.SchedulingProcessingService.queued.propagateHeaders = ["customHeader", "authId"];
+
+    let response = await POST(
+      "/api/job-scheduling/v1/Job",
+      {
+        name: "JOB_1",
+        referenceID: "c1253940-5f25-4a0b-8585-f62bd085b327",
+        parameters: [
+          {
+            name: "A",
+            value: "abc",
+          },
+          {
+            name: "C",
+            value: "true",
+          },
+          {
+            name: "E",
+            value: null,
+          },
+        ],
+      },
+      {
+        headers: {
+          customHeader: 123,
+          authId: 1234,
+          xyz: "abc",
+        },
+      },
+    );
+    expect(response.status).toBe(201);
+    expect(cleanData({ ...response.data })).toMatchSnapshot();
+
+    await processQueue("SchedulingProcessingService");
+    const entry = await eventQueueEntry();
+    const payload = JSON.parse(entry.payload);
+    expect(payload.headers).toMatchObject({
+      customHeader: 123,
+      authId: 1234,
+    });
+  });
+
   it("Cancel Job", async () => {
     const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
     const ws = await connectToWS("job-scheduling", ID);

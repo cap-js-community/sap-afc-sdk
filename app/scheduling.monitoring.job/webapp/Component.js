@@ -12,10 +12,10 @@ sap.ui.define(
 
       constructor: function () {
         Component.prototype.constructor.apply(this, arguments);
-        this.ws(this.getManifestObject().resolveUri("ws/job-scheduling"));
+        this.websocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
       },
 
-      ws: function (sUrl, sName = "main") {
+      websocket: function (sUrl, sName = "main") {
         window.websockets ??= {};
         window.websockets[sName] = {
           _ws: undefined,
