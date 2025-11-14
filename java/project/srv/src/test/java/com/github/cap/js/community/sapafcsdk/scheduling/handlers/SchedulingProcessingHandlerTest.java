@@ -832,9 +832,7 @@ public class SchedulingProcessingHandlerTest {
         .contains("Value of element 'code' in entity 'SchedulingProcessingService.JobResultMessage' is required")
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     messages.add(message);
@@ -852,9 +850,7 @@ public class SchedulingProcessingHandlerTest {
         .contains("Value of element 'severity' in entity 'SchedulingProcessingService.JobResultMessage' is required")
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setSeverity("X");
@@ -874,9 +870,7 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
@@ -897,9 +891,7 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
@@ -920,9 +912,7 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
@@ -943,9 +933,7 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
@@ -967,9 +955,7 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
@@ -995,15 +981,11 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    messages = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage
-    >();
+    messages = new ArrayList<>();
     message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
-    texts = new ArrayList<
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText
-    >();
+    texts = new ArrayList<>();
     text = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
     text.setLocale("xx");
     text.setText("test");

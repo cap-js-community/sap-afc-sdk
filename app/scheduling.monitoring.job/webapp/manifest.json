@@ -1,7 +1,7 @@
 {
   "_version": "1.60.0",
   "sap.app": {
-    "id": "scheduling.monitoring.job",
+    "id": "sapafcsdk.scheduling.monitoring.job",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -73,7 +73,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "scheduling.monitoring.job.i18n.i18n"
+          "bundleName": "sapafcsdk.scheduling.monitoring.job.i18n.i18n"
         }
       },
       "": {
@@ -173,7 +173,7 @@
                         "anchor": "DataFieldWithUrl::mimeType",
                         "placement": "After"
                       },
-                      "template": "scheduling.monitoring.job.ext.fragment.data"
+                      "template": "sapafcsdk.scheduling.monitoring.job.ext.fragment.data"
                     }
                   }
                 }
@@ -204,7 +204,7 @@
                 "header": {
                   "actions": {
                     "download": {
-                      "press": "scheduling.monitoring.job.ext.fragment.data.onPress",
+                      "press": "sapafcsdk.scheduling.monitoring.job.ext.fragment.data.onPress",
                       "visible": "{= %{type_code} === 'data'}",
                       "enabled": true,
                       "text": "{i18n>Download}",
@@ -222,10 +222,10 @@
       "extensions": {
         "sap.ui.controllerExtensions": {
           "sap.fe.templates.ListReport.ListReportController": {
-            "controllerName": "scheduling.monitoring.job.ext.controller.ListReportController"
+            "controllerName": "sapafcsdk.scheduling.monitoring.job.ext.controller.ListReportController"
           },
           "sap.fe.templates.ObjectPage.ObjectPageController": {
-            "controllerName": "scheduling.monitoring.job.ext.controller.ObjectPageController"
+            "controllerName": "sapafcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController"
           }
         }
       }
@@ -237,6 +237,6 @@
   },
   "sap.cloud": {
     "public": true,
-    "service": ""
+    "service": "sapafcsdk.service"
   }
 }

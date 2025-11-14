@@ -215,7 +215,7 @@ function processSchedulingProviderService(check, skip) {
       const keyParts = pathKey.split("/");
       const lastKeyPart = keyParts.pop();
       if (lastKeyPart.includes(".")) {
-        const [, action] = lastKeyPart.split(".");
+        const action = lastKeyPart.split(".").pop();
         keyParts.push(action);
         const newKey = keyParts.join("/");
         data.paths[newKey] = data.paths[pathKey];

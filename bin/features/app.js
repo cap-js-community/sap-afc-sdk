@@ -12,7 +12,6 @@ const {
   adjustAllLines,
   copyFolderAdjusted,
   projectName,
-  deriveServiceName,
   adjustYAMLDocument,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
@@ -23,8 +22,8 @@ const Exclude = {
   tasks: ["ui5-afc-sdk"],
 };
 const Adjust = {
-  extensions: [".js", ".xml", ".html"],
-  files: ["manifest.json", "fioriSandboxConfig.json"],
+  extensions: [".js", ".json", ".xml", ".html"],
+  files: [],
 };
 const Common = {
   extensions: [],
@@ -59,21 +58,9 @@ module.exports = (options) => {
           const ext = path.extname(srcPath);
           const fileName = path.basename(srcPath);
           if (Adjust.extensions.includes(ext) || Adjust.files.includes(fileName)) {
-            const appName = app.replace(/\./g, "\\.");
-            const appPath = app.replace(/\./g, "/");
-            const appPathRegex = app.replace(/\./g, "\\/");
-            content = content
-              .replace(new RegExp(`"(${appName})`, "gm"), `"${name}.$1`)
-              .replace(new RegExp(`${appPathRegex}`, "gm"), `${name}/${appPath}`);
+            return content.replace(/sapafcsdk/g, name);
           }
           return content;
-        });
-
-        adjustJSON(path.join(config.appRoot, app, "webapp/manifest.json"), (json) => {
-          if (!json?.["sap.cloud"]?.service) {
-            json["sap.cloud"] ??= {};
-            json["sap.cloud"].service = `${deriveServiceName(name)}.service`;
-          }
         });
 
         adjustYAMLAllDocument(path.join(config.appRoot, app, "ui5.yaml"), (yaml) => {
@@ -152,10 +139,7 @@ module.exports = (options) => {
         array: "merge",
         mergeKey: "id",
       });
-      let appConfigContent = JSON.stringify(mergedFioriSandboxConfig, null, 2);
-      for (const app of config.apps) {
-        appConfigContent = appConfigContent.replace(`SAPUI5.Component=${app}`, `SAPUI5.Component=${name}.${app}`);
-      }
+      const appConfigContent = JSON.stringify(mergedFioriSandboxConfig, null, 2).replace(/sapafcsdk/g, name);
       fs.writeFileSync(sandboxConfigFilePath, appConfigContent, "utf8");
 
       // cds add

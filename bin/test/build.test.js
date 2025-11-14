@@ -4,24 +4,25 @@ const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 
-process.env.APPROUTER_URL = "https://afcsdk-approuter.cloud.sap";
-process.env.SERVER_URL = "https://afcsdk-srv.cloud.sap";
+const PROJECT = "afcsdk";
+
+process.env.APPROUTER_URL = `https://${PROJECT}-approuter.cloud.sap`;
+process.env.SERVER_URL = `https://${PROJECT}-srv.cloud.sap`;
 process.env.BROKER_PASSWORD_HASH = "sha256:xxx=:xxx=";
 process.env.BROKER_SERVICE_ID = "e25a901f-43d1-43c0-bbd6-48b9c6aecb61";
 process.env.BROKER_SERVICE_PLAN_ID = "958cbd91-af93-4fdd-a793-16c82ae9e70b";
-process.env.CONTAINER_REPOSITORY = "afcsdk.common.repositories.cloud.sap";
+process.env.CONTAINER_REPOSITORY = `${PROJECT}.common.repositories.cloud.sap`;
 process.env.GLOBAL_DOMAIN = "xxx.stage.kyma.ondemand.com";
 
-const project = "afcsdk";
 const tempDir = "temp";
 const workingDir = path.join(__dirname, "..", tempDir);
-const projectDir = path.join(workingDir, project);
+const projectDir = path.join(workingDir, PROJECT);
 
 const Commands = {
   BEGIN: [`cd ${tempDir}`],
-  CDS_NODE: [`npx cds init ${project}`],
-  CDS_JAVA: [`npx cds init ${project} --java`],
-  INSTALL: [`cd ${project}`, "cp ../../test/.npmrc .", "npm install"],
+  CDS_NODE: [`npx cds init ${PROJECT}`],
+  CDS_JAVA: [`npx cds init ${PROJECT} --java`],
+  INSTALL: [`cd ${PROJECT}`, "cp ../../test/.npmrc .", "npm install"],
   AFC_CF: ["npx afc init cf"],
   AFC_KYMA: ["npx afc init kyma"],
   AFC_NODE: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
@@ -56,10 +57,10 @@ const Files = {
     ".cdsrc.json",
     "srv/pom.xml",
     "srv/src/main/resources/application.yaml",
-    "srv/src/main/java/customer/afcsdk/ApplicationConfig.java",
-    "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java",
-    "srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java",
-    "srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java",
+    `srv/src/main/java/customer/${PROJECT}/ApplicationConfig.java`,
+    `srv/src/main/java/customer/${PROJECT}/scheduling/CustomSchedulingProcessingHandler.java`,
+    `srv/src/main/java/customer/${PROJECT}/scheduling/CustomSchedulingProviderHandler.java`,
+    `srv/src/test/java/customer/${PROJECT}/scheduling/SchedulingProviderHandlerTest.java`,
   ],
   CF: ["mta.yaml"],
   KYMA: ["chart/Chart.yaml", "chart/values.yaml", "containerize.yaml"],

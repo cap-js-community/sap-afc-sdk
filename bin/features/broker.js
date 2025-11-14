@@ -72,7 +72,7 @@ const CATALOG = {
       ],
       metadata: {
         displayName: "AFC Scheduling Provider Service",
-        longDescription: "Scheduling Provider Service for SAP Advanced Financial Closing",
+        longDescription: "AFC Scheduling Provider Service for SAP Advanced Financial Closing",
       },
     },
   ],
