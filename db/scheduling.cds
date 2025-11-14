@@ -1,4 +1,4 @@
-namespace scheduling;
+namespace sapafcsdk.scheduling;
 
 using {
   cuid,

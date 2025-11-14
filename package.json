@@ -144,7 +144,7 @@
       }
     },
     "requires": {
-      "SchedulingProcessingService": {
+      "sapafcsdk.scheduling.SchedulingProcessingService": {
         "outbox": {
           "kind": "persistent-outbox",
           "maxAttempts": 5,
@@ -157,7 +157,7 @@
           }
         }
       },
-      "SchedulingWebsocketService": {
+      "sapafcsdk.scheduling.SchedulingWebsocketService": {
         "outbox": {
           "kind": "persistent-outbox",
           "transactionMode": "alwaysRollback",

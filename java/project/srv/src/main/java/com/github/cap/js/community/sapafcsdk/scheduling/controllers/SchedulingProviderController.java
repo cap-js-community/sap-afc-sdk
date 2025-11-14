@@ -1,11 +1,11 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
-import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.SchedulingProviderService_.*;
 
 import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.DataTypeCode;
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.DataTypeCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.CdsException;
 import com.sap.cds.CdsJsonConverter;
@@ -437,19 +437,19 @@ public class SchedulingProviderController {
     @PathVariable(name = "ID", required = true) String ID,
     HttpServletResponse response
   ) {
-    Select<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult_> query = Select.from(
-      com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT
+    Select<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult_> query = Select.from(
+      com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_RESULT
     ).byId(ID);
-    Optional<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> _jobResult = persistenceService
+    Optional<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult> _jobResult = persistenceService
       .run(query)
-      .first(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.class);
+      .first(com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
     if (_jobResult.isEmpty()) {
       response.setStatus(HttpStatus.NOT_FOUND.value());
       return null;
     }
-    com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult jobResult = _jobResult.get();
+    com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult jobResult = _jobResult.get();
     String dispositionType = cdsModel
-      .getEntity(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult_.CDS_NAME)
+      .getEntity(com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult_.CDS_NAME)
       .getElement("data")
       .getAnnotationValue("@Core.ContentDisposition.Type", "attachment");
     response.setContentType(jobResult.getMimeType());

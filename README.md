@@ -152,11 +152,11 @@ Furthermore, it brings the following out-of-the-box features:
     - CDS Internal API
       - `SchedulingProcessingService`: Scheduling Processing service
         ```js
-        const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+        const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProcessingService");
         ```
       - `SchedulingWebsocketService`: Scheduling Websocket service
         ```js
-        const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+        const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
         ```
 
 ### Architecture
@@ -230,7 +230,7 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default is `true`
     - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default is `true`
-  - `ui."scheduling.monitoring.job": Boolean`: Serve Scheduling Monitoring Job UI separately if no Launchpad is served. Default is `true`
+  - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job UI separately if no Launchpad is served. Default is `true`
 - `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default is `false` and `true` in `production`
 - `mockProcessing: Boolean | Object`: Activate mocked job processing. Default is `false`
   - `mockProcessing.min: Number`: Minimum processing time in seconds. Default is `0`
@@ -560,7 +560,7 @@ To change the cron interval, the Event Queue configuration can be adjusted in th
 {
   "cds": {
     "requires": {
-      "SchedulingProcessingService": {
+      "sapafcsdk.scheduling.SchedulingProcessingService": {
         "outbox": {
           "events": {
             "syncJob": {
@@ -917,7 +917,7 @@ To implement custom job processing, extend the job processing service definition
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
@@ -1083,7 +1083,7 @@ To implement a custom job provider, extend the job provider service definition a
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -1161,7 +1161,7 @@ sap-afc-sdk:
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
@@ -1221,7 +1221,7 @@ Available notifications are:
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;

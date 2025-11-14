@@ -1,4 +1,4 @@
-using SchedulingMonitoringService from '../../srv/scheduling/monitoring-service';
+using sapafcsdk.scheduling.SchedulingMonitoringService from '../../srv/scheduling/monitoring-service';
 
 annotate SchedulingMonitoringService.Job with @(
   UI.Identification            : [{

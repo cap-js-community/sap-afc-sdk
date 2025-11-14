@@ -126,14 +126,14 @@ describe("Monitoring Service", () => {
     expect(response.data.status_code).toBe("cancelRequested");
 
     let message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("cancelRequested");
 
     message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingProcessingService");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("canceled");
@@ -164,7 +164,7 @@ describe("Monitoring Service", () => {
       await expect(POST("/odata/v4/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -172,7 +172,7 @@ describe("Monitoring Service", () => {
       await expect(PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -180,7 +180,7 @@ describe("Monitoring Service", () => {
       await expect(DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -190,7 +190,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -200,7 +200,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -210,20 +210,28 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
     it("PUT Job", async () => {
       await expect(
         PUT("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
-      ).rejects.toThrowCDSError(405, "ENTITY_IS_READ_ONLY", `Entity "SchedulingMonitoringService.Job" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.Job" is read-only`,
+      );
     });
 
     it("DELETE Job", async () => {
       await expect(
         DELETE("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)", {}),
-      ).rejects.toThrowCDSError(405, "ENTITY_IS_READ_ONLY", `Entity "SchedulingMonitoringService.Job" is read-only`);
+      ).rejects.toThrowCDSError(
+        405,
+        "ENTITY_IS_READ_ONLY",
+        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.Job" is read-only`,
+      );
     });
 
     it("Cancel Job", async () => {
@@ -240,7 +248,7 @@ describe("Monitoring Service", () => {
         ["cancelRequested"],
       );
 
-      const providerService = await cds.connect.to("SchedulingProviderService");
+      const providerService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProviderService");
       providerService.before("cancel", async (req) => {
         throw new Error("Unexpected error");
       });

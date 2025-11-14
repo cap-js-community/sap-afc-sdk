@@ -22,7 +22,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
     <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
   </edmx:Reference>
   <edmx:DataServices>
-    <Schema Namespace="SchedulingMonitoringService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <Schema Namespace="sapafcsdk.scheduling.SchedulingMonitoringService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
       <Annotation Term="Core.Links">
         <Collection>
           <Record>
@@ -32,12 +32,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Collection>
       </Annotation>
       <EntityContainer Name="EntityContainer">
-        <EntitySet Name="JobDefinition" EntityType="SchedulingMonitoringService.JobDefinition">
+        <EntitySet Name="JobDefinition" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition">
           <NavigationPropertyBinding Path="parameters" Target="JobParameterDefinition"/>
           <NavigationPropertyBinding Path="texts" Target="JobDefinition_texts"/>
           <NavigationPropertyBinding Path="localized" Target="JobDefinition_texts"/>
         </EntitySet>
-        <EntitySet Name="JobParameterDefinition" EntityType="SchedulingMonitoringService.JobParameterDefinition">
+        <EntitySet Name="JobParameterDefinition" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition">
           <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
           <NavigationPropertyBinding Path="type" Target="ParameterType"/>
           <NavigationPropertyBinding Path="dataType" Target="DataType"/>
@@ -45,62 +45,62 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <NavigationPropertyBinding Path="texts" Target="JobParameterDefinition_texts"/>
           <NavigationPropertyBinding Path="localized" Target="JobParameterDefinition_texts"/>
         </EntitySet>
-        <EntitySet Name="ParameterType" EntityType="SchedulingMonitoringService.ParameterType">
+        <EntitySet Name="ParameterType" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType">
           <NavigationPropertyBinding Path="texts" Target="ParameterType_texts"/>
           <NavigationPropertyBinding Path="localized" Target="ParameterType_texts"/>
         </EntitySet>
-        <EntitySet Name="DataType" EntityType="SchedulingMonitoringService.DataType">
+        <EntitySet Name="DataType" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.DataType">
           <NavigationPropertyBinding Path="texts" Target="DataType_texts"/>
           <NavigationPropertyBinding Path="localized" Target="DataType_texts"/>
         </EntitySet>
-        <EntitySet Name="MappingType" EntityType="SchedulingMonitoringService.MappingType">
+        <EntitySet Name="MappingType" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType">
           <NavigationPropertyBinding Path="texts" Target="MappingType_texts"/>
           <NavigationPropertyBinding Path="localized" Target="MappingType_texts"/>
         </EntitySet>
-        <EntitySet Name="Job" EntityType="SchedulingMonitoringService.Job">
+        <EntitySet Name="Job" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.Job">
           <NavigationPropertyBinding Path="definition" Target="JobDefinition"/>
           <NavigationPropertyBinding Path="status" Target="JobStatus"/>
           <NavigationPropertyBinding Path="parameters" Target="JobParameter"/>
           <NavigationPropertyBinding Path="results" Target="JobResult"/>
         </EntitySet>
-        <EntitySet Name="JobStatus" EntityType="SchedulingMonitoringService.JobStatus">
+        <EntitySet Name="JobStatus" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus">
           <NavigationPropertyBinding Path="texts" Target="JobStatus_texts"/>
           <NavigationPropertyBinding Path="localized" Target="JobStatus_texts"/>
         </EntitySet>
-        <EntitySet Name="JobParameter" EntityType="SchedulingMonitoringService.JobParameter">
+        <EntitySet Name="JobParameter" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter">
           <NavigationPropertyBinding Path="job" Target="Job"/>
           <NavigationPropertyBinding Path="definition" Target="JobParameterDefinition"/>
         </EntitySet>
-        <EntitySet Name="JobResult" EntityType="SchedulingMonitoringService.JobResult">
+        <EntitySet Name="JobResult" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult">
           <NavigationPropertyBinding Path="job" Target="Job"/>
           <NavigationPropertyBinding Path="type" Target="ResultType"/>
           <NavigationPropertyBinding Path="messages" Target="JobResultMessage"/>
         </EntitySet>
-        <EntitySet Name="ResultType" EntityType="SchedulingMonitoringService.ResultType">
+        <EntitySet Name="ResultType" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType">
           <NavigationPropertyBinding Path="texts" Target="ResultType_texts"/>
           <NavigationPropertyBinding Path="localized" Target="ResultType_texts"/>
         </EntitySet>
-        <EntitySet Name="JobResultMessage" EntityType="SchedulingMonitoringService.JobResultMessage">
+        <EntitySet Name="JobResultMessage" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage">
           <NavigationPropertyBinding Path="result" Target="JobResult"/>
           <NavigationPropertyBinding Path="severity" Target="MessageSeverity"/>
           <NavigationPropertyBinding Path="texts" Target="JobResultMessage_texts"/>
           <NavigationPropertyBinding Path="localized" Target="JobResultMessage_texts"/>
         </EntitySet>
-        <EntitySet Name="MessageSeverity" EntityType="SchedulingMonitoringService.MessageSeverity">
+        <EntitySet Name="MessageSeverity" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity">
           <NavigationPropertyBinding Path="texts" Target="MessageSeverity_texts"/>
           <NavigationPropertyBinding Path="localized" Target="MessageSeverity_texts"/>
         </EntitySet>
-        <EntitySet Name="ParameterType_texts" EntityType="SchedulingMonitoringService.ParameterType_texts"/>
-        <EntitySet Name="DataType_texts" EntityType="SchedulingMonitoringService.DataType_texts"/>
-        <EntitySet Name="MappingType_texts" EntityType="SchedulingMonitoringService.MappingType_texts"/>
-        <EntitySet Name="JobParameterDefinition_texts" EntityType="SchedulingMonitoringService.JobParameterDefinition_texts">
+        <EntitySet Name="ParameterType_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts"/>
+        <EntitySet Name="DataType_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts"/>
+        <EntitySet Name="MappingType_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts"/>
+        <EntitySet Name="JobParameterDefinition_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts">
           <NavigationPropertyBinding Path="job" Target="JobDefinition"/>
         </EntitySet>
-        <EntitySet Name="JobDefinition_texts" EntityType="SchedulingMonitoringService.JobDefinition_texts"/>
-        <EntitySet Name="JobStatus_texts" EntityType="SchedulingMonitoringService.JobStatus_texts"/>
-        <EntitySet Name="ResultType_texts" EntityType="SchedulingMonitoringService.ResultType_texts"/>
-        <EntitySet Name="MessageSeverity_texts" EntityType="SchedulingMonitoringService.MessageSeverity_texts"/>
-        <EntitySet Name="JobResultMessage_texts" EntityType="SchedulingMonitoringService.JobResultMessage_texts"/>
+        <EntitySet Name="JobDefinition_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts"/>
+        <EntitySet Name="JobStatus_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts"/>
+        <EntitySet Name="ResultType_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts"/>
+        <EntitySet Name="MessageSeverity_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts"/>
+        <EntitySet Name="JobResultMessage_texts" EntityType="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts"/>
       </EntityContainer>
       <EntityType Name="JobDefinition">
         <Key>
@@ -112,16 +112,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="vendorName" Type="Edm.String"/>
         <Property Name="vendorSystem" Type="Edm.String"/>
-        <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
+        <NavigationProperty Name="parameters" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
         <Property Name="supportsStartDateTime" Type="Edm.Boolean"/>
         <Property Name="supportsTestRun" Type="Edm.Boolean"/>
         <Property Name="supportsErrorOnlyRun" Type="Edm.Boolean"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobDefinition_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobDefinition_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts">
           <ReferentialConstraint Property="name" ReferencedProperty="name"/>
         </NavigationProperty>
       </EntityType>
@@ -130,31 +130,31 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="job_name"/>
           <PropertyRef Name="name"/>
         </Key>
-        <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false" Partner="parameters">
+        <NavigationProperty Name="job" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" Nullable="false" Partner="parameters">
           <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="description" Type="Edm.String" MaxLength="5000"/>
-        <NavigationProperty Name="type" Type="SchedulingMonitoringService.ParameterType" Nullable="false">
+        <NavigationProperty Name="type" Type="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="dataType" Type="SchedulingMonitoringService.DataType" Nullable="false">
+        <NavigationProperty Name="dataType" Type="sapafcsdk.scheduling.SchedulingMonitoringService.DataType" Nullable="false">
           <ReferentialConstraint Property="dataType_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="dataType_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="mappingType" Type="SchedulingMonitoringService.MappingType">
+        <NavigationProperty Name="mappingType" Type="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType">
           <ReferentialConstraint Property="mappingType_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="mappingType_code" Type="Edm.String" MaxLength="255"/>
         <Property Name="value" Type="Edm.String" MaxLength="5000"/>
         <Property Name="enumValues" Type="Collection(Edm.String)" MaxLength="5000" Nullable="true"/>
         <Property Name="required" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobParameterDefinition_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobParameterDefinition_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts">
           <ReferentialConstraint Property="job_name" ReferencedProperty="job_name"/>
           <ReferentialConstraint Property="name" ReferencedProperty="name"/>
         </NavigationProperty>
@@ -166,10 +166,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ParameterType_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.ParameterType_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -180,10 +180,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.DataType_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.DataType_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -194,10 +194,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MappingType_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.MappingType_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -211,12 +211,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
         <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
         <Property Name="referenceID" Type="Edm.Guid" Nullable="false"/>
-        <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
+        <NavigationProperty Name="definition" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" Nullable="false">
           <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="definition_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="version" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="status" Type="SchedulingMonitoringService.JobStatus" Nullable="false">
+        <NavigationProperty Name="status" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus" Nullable="false">
           <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="status_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="requested"/>
@@ -224,10 +224,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="startDateTime" Type="Edm.DateTimeOffset"/>
         <Property Name="testRun" Type="Edm.Boolean"/>
         <Property Name="errorOnlyRun" Type="Edm.Boolean"/>
-        <NavigationProperty Name="parameters" Type="Collection(SchedulingMonitoringService.JobParameter)" Partner="job">
+        <NavigationProperty Name="parameters" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="results" Type="Collection(SchedulingMonitoringService.JobResult)" Partner="job">
+        <NavigationProperty Name="results" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobResult)" Partner="job">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
         <Property Name="criticality" Type="Edm.Int32"/>
@@ -239,10 +239,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobStatus_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobStatus_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -251,11 +251,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="ID"/>
         </Key>
         <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
-        <NavigationProperty Name="job" Type="SchedulingMonitoringService.Job" Nullable="false" Partner="parameters">
+        <NavigationProperty Name="job" Type="sapafcsdk.scheduling.SchedulingMonitoringService.Job" Nullable="false" Partner="parameters">
           <ReferentialConstraint Property="job_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
-        <NavigationProperty Name="definition" Type="SchedulingMonitoringService.JobParameterDefinition" Nullable="false">
+        <NavigationProperty Name="definition" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" Nullable="false">
           <ReferentialConstraint Property="definition_job_name" ReferencedProperty="job_name"/>
           <ReferentialConstraint Property="definition_name" ReferencedProperty="name"/>
         </NavigationProperty>
@@ -268,12 +268,12 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="ID"/>
         </Key>
         <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
-        <NavigationProperty Name="job" Type="SchedulingMonitoringService.Job" Nullable="false" Partner="results">
+        <NavigationProperty Name="job" Type="sapafcsdk.scheduling.SchedulingMonitoringService.Job" Nullable="false" Partner="results">
           <ReferentialConstraint Property="job_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="job_ID" Type="Edm.Guid" Nullable="false"/>
         <Property Name="name" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="type" Type="SchedulingMonitoringService.ResultType" Nullable="false">
+        <NavigationProperty Name="type" Type="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType" Nullable="false">
           <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="type_code" Type="Edm.String" MaxLength="255" Nullable="false"/>
@@ -281,7 +281,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="mimeType" Type="Edm.String" MaxLength="255"/>
         <Property Name="filename" Type="Edm.String" MaxLength="5000"/>
         <Property Name="data" Type="Edm.Stream"/>
-        <NavigationProperty Name="messages" Type="Collection(SchedulingMonitoringService.JobResultMessage)" Partner="result">
+        <NavigationProperty Name="messages" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage)" Partner="result">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
       </EntityType>
@@ -292,10 +292,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="name" Type="Edm.String" MaxLength="255"/>
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.ResultType_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.ResultType_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -304,21 +304,21 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="ID"/>
         </Key>
         <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
-        <NavigationProperty Name="result" Type="SchedulingMonitoringService.JobResult" Nullable="false" Partner="messages">
+        <NavigationProperty Name="result" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult" Nullable="false" Partner="messages">
           <ReferentialConstraint Property="result_ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="result_ID" Type="Edm.Guid" Nullable="false"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
-        <NavigationProperty Name="severity" Type="SchedulingMonitoringService.MessageSeverity" Nullable="false">
+        <NavigationProperty Name="severity" Type="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity" Nullable="false">
           <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
         </NavigationProperty>
         <Property Name="severity_code" Type="Edm.String" MaxLength="255" Nullable="false" DefaultValue="info"/>
         <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.JobResultMessage_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.JobResultMessage_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts">
           <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
         </NavigationProperty>
         <Property Name="criticality" Type="Edm.Int32"/>
@@ -331,10 +331,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
         <Property Name="numericCode" Type="Edm.Int32"/>
-        <NavigationProperty Name="texts" Type="Collection(SchedulingMonitoringService.MessageSeverity_texts)">
+        <NavigationProperty Name="texts" Type="Collection(sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts)">
           <OnDelete Action="Cascade"/>
         </NavigationProperty>
-        <NavigationProperty Name="localized" Type="SchedulingMonitoringService.MessageSeverity_texts">
+        <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts">
           <ReferentialConstraint Property="code" ReferencedProperty="code"/>
         </NavigationProperty>
       </EntityType>
@@ -375,7 +375,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           <PropertyRef Name="name"/>
         </Key>
         <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
-        <NavigationProperty Name="job" Type="SchedulingMonitoringService.JobDefinition" Nullable="false">
+        <NavigationProperty Name="job" Type="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" Nullable="false">
           <ReferentialConstraint Property="job_name" ReferencedProperty="name"/>
         </NavigationProperty>
         <Property Name="job_name" Type="Edm.String" MaxLength="255" Nullable="false"/>
@@ -432,13 +432,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
       </EntityType>
       <Action Name="cancel" IsBound="true" EntitySetPath="in">
-        <Parameter Name="in" Type="SchedulingMonitoringService.Job"/>
-        <ReturnType Type="SchedulingMonitoringService.Job"/>
+        <Parameter Name="in" Type="sapafcsdk.scheduling.SchedulingMonitoringService.Job"/>
+        <ReturnType Type="sapafcsdk.scheduling.SchedulingMonitoringService.Job"/>
       </Action>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition">
         <Annotation Term="Common.Label" String="Job Definition"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobDefinition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobDefinition">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -455,40 +455,40 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/description">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/description">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/longDescription">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/longDescription">
         <Annotation Term="Common.Label" String="Long Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/version">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/version">
         <Annotation Term="Common.Label" String="Version"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/vendorName">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/vendorName">
         <Annotation Term="Common.Label" String="Vendor Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/vendorSystem">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/vendorSystem">
         <Annotation Term="Common.Label" String="Vendor System"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/parameters">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/parameters">
         <Annotation Term="Common.Label" String="Parameters"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/supportsStartDateTime">
         <Annotation Term="Common.Label" String="Supports Start Date and Time"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsTestRun">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/supportsTestRun">
         <Annotation Term="Common.Label" String="Supports Test Run"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition/supportsErrorOnlyRun">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition/supportsErrorOnlyRun">
         <Annotation Term="Common.Label" String="Supports Error-Only Run"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition">
         <Annotation Term="Common.Label" String="Job Parameter Definition"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobParameterDefinition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobParameterDefinition">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -505,22 +505,22 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/job">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/job_name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/job_name">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/description">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/description">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/type">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/type">
         <Annotation Term="Common.Label" String="Parameter Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/type_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/type_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="type/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -544,10 +544,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/dataType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/dataType">
         <Annotation Term="Common.Label" String="Data Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/dataType_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/dataType_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="dataType/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -571,10 +571,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/mappingType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/mappingType">
         <Annotation Term="Common.Label" String="Mapping Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/mappingType_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/mappingType_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="mappingType/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -598,16 +598,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/value">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/value">
         <Annotation Term="Common.Label" String="Value"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/enumValues">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/enumValues">
         <Annotation Term="Common.Label" String="Enum Values"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition/required">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition/required">
         <Annotation Term="Common.Label" String="Required"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -617,7 +617,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Parameter Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/ParameterType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/ParameterType">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -634,13 +634,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType/code">
         <Annotation Term="Common.Label" String="Parameter Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -659,7 +659,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -669,7 +669,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Data Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/DataType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/DataType">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -686,13 +686,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType/code">
         <Annotation Term="Common.Label" String="Data Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -719,7 +719,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -729,7 +729,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Mapping Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/MappingType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/MappingType">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -746,13 +746,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType/code">
         <Annotation Term="Common.Label" String="Mapping Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -867,7 +867,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataFieldForAction">
@@ -1071,7 +1071,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/Job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/Job">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
             <PropertyValue Property="Visualizations">
@@ -1105,17 +1105,17 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/ID">
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/createdAt">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/createdAt">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
         <Annotation Term="Core.Immutable" Bool="true"/>
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Common.Label" String="Created At"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/createdBy">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/createdBy">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
         <Annotation Term="Core.Immutable" Bool="true"/>
@@ -1123,26 +1123,26 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Core.Description" String="User's unique ID"/>
         <Annotation Term="Common.Label" String="Created By"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/modifiedAt">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/modifiedAt">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Common.Label" String="Changed On"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/modifiedBy">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/modifiedBy">
         <Annotation Term="UI.HiddenFilter" Bool="true"/>
         <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Core.Description" String="User's unique ID"/>
         <Annotation Term="Common.Label" String="Changed By"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/referenceID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/referenceID">
         <Annotation Term="Common.Label" String="Reference ID"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/definition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/definition">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/definition_name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/definition_name">
         <Annotation Term="Common.Text" Path="definition/description">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
         </Annotation>
@@ -1177,14 +1177,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/version">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/version">
         <Annotation Term="Common.Label" String="Version"/>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/status">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/status">
         <Annotation Term="Common.Label" String="Status"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/status_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/status_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="status/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -1209,32 +1209,32 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/link">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/link">
         <Annotation Term="HTML5.LinkTarget" String="_blank"/>
         <Annotation Term="Common.Label" String="Link"/>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/startDateTime">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/startDateTime">
         <Annotation Term="Common.Label" String="Start Date &amp; Time"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/testRun">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/testRun">
         <Annotation Term="Common.Label" String="Test Run"/>
         <Annotation Term="Core.Computed" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/errorOnlyRun">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/errorOnlyRun">
         <Annotation Term="Common.Label" String="Error-Only Run"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/parameters">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/parameters">
         <Annotation Term="Common.Label" String="Parameters"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/results">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/results">
         <Annotation Term="Common.Label" String="Results"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.Job/criticality">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.Job/criticality">
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Common.Label" String="Criticality"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.cancel(SchedulingMonitoringService.Job)">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.cancel(sapafcsdk.scheduling.SchedulingMonitoringService.Job)">
         <Annotation Term="Common.IsActionCritical" Bool="true"/>
         <Annotation Term="Core.OperationAvailable">
           <Or>
@@ -1249,7 +1249,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Or>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -1259,7 +1259,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Status"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobStatus">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobStatus">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -1276,13 +1276,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus/code">
         <Annotation Term="Common.Label" String="Status"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -1321,7 +1321,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
@@ -1416,7 +1416,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Job Parameter"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobParameter">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobParameter">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
             <PropertyValue Property="Visualizations">
@@ -1450,30 +1450,30 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/ID">
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/job">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/job_ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/job_ID">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/definition">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/definition">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_job_name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/definition_job_name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/definition_name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/definition_name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameter/value">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameter/value">
         <Annotation Term="Common.Label" String="Value"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
@@ -1646,7 +1646,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResult">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobResult">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
             <PropertyValue Property="Visualizations">
@@ -1680,24 +1680,24 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/ID">
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/job">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/job_ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/job_ID">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/type">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/type">
         <Annotation Term="Common.Label" String="Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/type_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/type_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="type/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -1721,18 +1721,18 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/link">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/link">
         <Annotation Term="HTML5.LinkTarget" String="_blank"/>
         <Annotation Term="Common.Label" String="Link"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/mimeType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/mimeType">
         <Annotation Term="Core.IsMediaType" Bool="true"/>
         <Annotation Term="Common.Label" String="Mime Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/filename">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/filename">
         <Annotation Term="Common.Label" String="File Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/data">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/data">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Core.MediaType" Path="mimeType"/>
         <Annotation Term="Core.ContentDisposition">
@@ -1743,10 +1743,10 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Data"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResult/messages">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResult/messages">
         <Annotation Term="Common.Label" String="Messages"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -1756,7 +1756,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Result Type"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/ResultType">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/ResultType">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -1773,13 +1773,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType/code">
         <Annotation Term="Common.Label" String="Result Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -1798,7 +1798,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage">
         <Annotation Term="UI.FieldGroup" Qualifier="Details">
           <Record Type="UI.FieldGroupType">
             <PropertyValue Property="Data">
@@ -1884,7 +1884,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Job Result Message"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/JobResultMessage">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/JobResultMessage">
         <Annotation Term="UI.PresentationVariant">
           <Record Type="UI.PresentationVariantType">
             <PropertyValue Property="Visualizations">
@@ -1918,27 +1918,27 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/ID">
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/result">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/result">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/result_ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/result_ID">
         <Annotation Term="UI.Hidden" Bool="true"/>
         <Annotation Term="Common.Label" String="Job Result"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/code">
         <Annotation Term="Common.Label" String="Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/text">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/text">
         <Annotation Term="Common.Label" String="Message"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/severity">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/severity">
         <Annotation Term="Common.Label" String="Severity"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/severity_code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/severity_code">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="severity/name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -1962,14 +1962,14 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/createdAt">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/createdAt">
         <Annotation Term="Common.Label" String="Created At"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage/criticality">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage/criticality">
         <Annotation Term="Core.Computed" Bool="true"/>
         <Annotation Term="Common.Label" String="Criticality"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity">
         <Annotation Term="UI.Identification">
           <Collection>
             <Record Type="UI.DataField">
@@ -1979,7 +1979,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </Annotation>
         <Annotation Term="Common.Label" String="Message Severity"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.EntityContainer/MessageSeverity">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.EntityContainer/MessageSeverity">
         <Annotation Term="Capabilities.DeleteRestrictions">
           <Record Type="Capabilities.DeleteRestrictionsType">
             <PropertyValue Property="Deletable" Bool="false"/>
@@ -1996,13 +1996,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity/code">
         <Annotation Term="Common.Label" String="Message Severity"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2025,7 +2025,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity/numericCode">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity/numericCode">
         <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
         <Annotation Term="Common.Text" Path="name">
           <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextFirst"/>
@@ -2052,16 +2052,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ParameterType_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ParameterType_texts/code">
         <Annotation Term="Common.Label" String="Parameter Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2080,16 +2080,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.DataType_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.DataType_texts/code">
         <Annotation Term="Common.Label" String="Data Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2116,16 +2116,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MappingType_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MappingType_texts/code">
         <Annotation Term="Common.Label" String="Mapping Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2240,43 +2240,43 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts/job">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/job_name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts/job_name">
         <Annotation Term="Common.Label" String="Job"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobParameterDefinition_texts/description">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition_texts/description">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/description">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts/description">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobDefinition_texts/longDescription">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition_texts/longDescription">
         <Annotation Term="Common.Label" String="Long Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobStatus_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobStatus_texts/code">
         <Annotation Term="Common.Label" String="Status"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2315,16 +2315,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.ResultType_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.ResultType_texts/code">
         <Annotation Term="Common.Label" String="Result Type"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2343,16 +2343,16 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/name">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts/name">
         <Annotation Term="Common.Label" String="Name"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/descr">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts/descr">
         <Annotation Term="Common.Label" String="Description"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.MessageSeverity_texts/code">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.MessageSeverity_texts/code">
         <Annotation Term="Common.Label" String="Message Severity"/>
         <Annotation Term="Validation.AllowedValues">
           <Collection>
@@ -2375,13 +2375,13 @@ exports[`Monitoring Service Get $metadata 1`] = `
           </Collection>
         </Annotation>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/locale">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts/locale">
         <Annotation Term="Common.Label" String="Language Code"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/ID">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts/ID">
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
-      <Annotations Target="SchedulingMonitoringService.JobResultMessage_texts/text">
+      <Annotations Target="sapafcsdk.scheduling.SchedulingMonitoringService.JobResultMessage_texts/text">
         <Annotation Term="Common.Label" String="Message"/>
       </Annotations>
     </Schema>

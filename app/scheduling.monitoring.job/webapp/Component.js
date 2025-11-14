@@ -5,7 +5,7 @@ sap.ui.define(
   function (Component, WebSocket, ReadyState) {
     const KEEP_ALIVE_INTERVAL = 60 * 1000; // 1 minute
 
-    return Component.extend("scheduling.monitoring.job.Component", {
+    return Component.extend("sapafcsdk.scheduling.monitoring.job.Component", {
       metadata: {
         manifest: "json",
       },

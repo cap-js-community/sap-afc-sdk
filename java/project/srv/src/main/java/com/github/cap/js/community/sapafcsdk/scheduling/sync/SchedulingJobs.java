@@ -5,7 +5,7 @@ import static com.github.cap.js.community.sapafcsdk.model.cds.outbox.Outbox_.MES
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
 import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages;
 import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.mt.TenantProviderService;
@@ -61,7 +61,7 @@ public class SchedulingJobs {
             .where(m ->
               m
                 .msg()
-                .contains("\"event\":\"SchedulingProcessingService\"")
+                .contains("\"event\":\"sapafcsdk.scheduling.SchedulingProcessingService\"")
                 .and(m.msg().contains("\"event\":\"syncJob\""))
             )
             .orderBy(m -> m.timestamp().asc());

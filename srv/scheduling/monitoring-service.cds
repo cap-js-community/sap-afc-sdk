@@ -1,4 +1,6 @@
-using scheduling from '../../db/scheduling';
+namespace sapafcsdk.scheduling;
+
+using sapafcsdk.scheduling from '../../db/scheduling';
 
 @path: 'job-scheduling/monitoring'
 service SchedulingMonitoringService {

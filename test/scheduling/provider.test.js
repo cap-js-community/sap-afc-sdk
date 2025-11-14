@@ -405,19 +405,19 @@ describe("Provider Service", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
-    let entry = await eventQueueEntry("SchedulingProcessingService");
+    let entry = await eventQueueEntry("sapafcsdk.scheduling.SchedulingProcessingService");
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
     expect(entry.referenceEntityKey).toBe(ID);
 
     const ws = await connectToWS("job-scheduling", ID);
     let message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("requested");
 
-    entry = await eventQueueEntry("SchedulingWebsocketService.jobStatusChanged");
+    entry = await eventQueueEntry("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     expect(entry).toBeDefined();
     expect(entry.referenceEntityKey).toBe(ID);
 
@@ -428,8 +428,8 @@ describe("Provider Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
 
     message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingProcessingService");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.running);
@@ -544,7 +544,7 @@ describe("Provider Service", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -552,7 +552,7 @@ describe("Provider Service", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     const resultID1 = response.data[0].ID;
@@ -682,7 +682,7 @@ describe("Provider Service", () => {
       max: 0,
       default: JobStatus.completed,
     };
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
@@ -690,7 +690,7 @@ describe("Provider Service", () => {
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
     for (const result of response.data) {
@@ -730,12 +730,12 @@ describe("Provider Service", () => {
     expect(cleanData({ ...response.data })).toMatchSnapshot();
     const ID = response.data.ID;
     cds.env.requires["sap-afc-sdk"].mockProcessing = true;
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     let entry = await eventQueueEntry();
     expect(entry).toBeDefined();
     expect(entry.referenceEntityKey).toBe(ID);
-    entry = await eventQueueEntry("SchedulingProcessingService", ID, "updateJob");
+    entry = await eventQueueEntry("sapafcsdk.scheduling.SchedulingProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
     expect(new Date(entry.startAfter).getTime()).toBeGreaterThan(new Date(Date.now() + mockDuration).getTime() - 10000);
     const result = await UPDATE.entity("sap.eventqueue.Event")
@@ -744,7 +744,7 @@ describe("Provider Service", () => {
       })
       .where({ ID: entry.ID });
     expect(result).toBe(1);
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
     expect(cleanData(response.data)).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/Job/${ID}/results`);
@@ -904,7 +904,10 @@ describe("Provider Service", () => {
   });
 
   it("Create Job (headers)", async () => {
-    cds.env.requires.SchedulingProcessingService.outbox.propagateHeaders = ["customheader", "authid"];
+    cds.env.requires["sapafcsdk.scheduling.SchedulingProcessingService"].outbox.propagateHeaders = [
+      "customheader",
+      "authid",
+    ];
 
     let response = await POST(
       "/api/job-scheduling/v1/Job",
@@ -937,7 +940,7 @@ describe("Provider Service", () => {
     expect(response.status).toBe(201);
     expect(cleanData({ ...response.data })).toMatchSnapshot();
 
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     const entry = await eventQueueEntry();
     const payload = JSON.parse(entry.payload);
     expect(payload.headers).toMatchObject({
@@ -956,14 +959,14 @@ describe("Provider Service", () => {
     expect(response.data.status).toEqual(JobStatus.cancelRequested);
 
     let message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.cancelRequested);
 
     message = ws.message("jobStatusChanged");
-    await processQueue("SchedulingProcessingService");
-    await processQueue("SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe(JobStatus.canceled);
@@ -1002,7 +1005,7 @@ describe("Provider Service", () => {
       await expect(POST("/api/job-scheduling/v1/JobDefinition", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
@@ -1010,7 +1013,7 @@ describe("Provider Service", () => {
       await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
@@ -1018,7 +1021,7 @@ describe("Provider Service", () => {
       await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1")).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobDefinition" is read-only`,
       );
     });
 
@@ -1026,7 +1029,7 @@ describe("Provider Service", () => {
       await expect(POST("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -1034,19 +1037,19 @@ describe("Provider Service", () => {
       await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowCDSError(
         400,
         "400",
-        `Entity "SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
       );
       await expect(PUT("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
       await expect(
         PUT("/api/job-scheduling/v1/JobDefinition('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -1054,19 +1057,19 @@ describe("Provider Service", () => {
       await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A", {})).rejects.toThrowCDSError(
         400,
         "400",
-        `Entity "SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" has 2 keys. Only 1 was provided.`,
       );
       await expect(DELETE("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters/A/JOB_1", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
       await expect(
         DELETE("/api/job-scheduling/v1/JobDefinition('JOB_1')/parameters(name='A',jobName='JOB_1')", {}),
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "SchedulingProviderService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.SchedulingProviderService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -1152,7 +1155,7 @@ describe("Provider Service", () => {
       ).rejects.toThrowCDSError(
         400,
         "ASSERT_DATA_TYPE",
-        `Value test is not a valid SchedulingProviderService.JobParameter`,
+        `Value test is not a valid sapafcsdk.scheduling.SchedulingProviderService.JobParameter`,
       );
       await expect(
         POST("/api/job-scheduling/v1/Job", {
@@ -1383,7 +1386,7 @@ describe("Provider Service", () => {
       ],
     });
     expect(response.status).toBe(204);
-    await processQueue("SchedulingProcessingService");
+    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
     expect(log.output).toEqual(
       expect.stringMatching(
         /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,

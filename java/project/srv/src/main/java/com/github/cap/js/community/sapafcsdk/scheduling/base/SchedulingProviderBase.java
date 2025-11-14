@@ -1,14 +1,14 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.base;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_RESULT;
 
 import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult_;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.JobResultDataContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult_;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.JobResultDataContext;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;

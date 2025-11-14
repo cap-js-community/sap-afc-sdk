@@ -1,6 +1,6 @@
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;

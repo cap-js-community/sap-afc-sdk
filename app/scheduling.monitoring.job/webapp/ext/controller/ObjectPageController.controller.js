@@ -3,7 +3,7 @@
 sap.ui.define(
   ["sap/ui/core/mvc/ControllerExtension", "sap/m/MessageToast"],
   function (ControllerExtension, MessageToast) {
-    return ControllerExtension.extend("scheduling.monitoring.job.ext.controller.ObjectPageController", {
+    return ControllerExtension.extend("sapafcsdk.scheduling.monitoring.job.ext.controller.ObjectPageController", {
       override: {
         onInit: function () {
           this.base.onInit();

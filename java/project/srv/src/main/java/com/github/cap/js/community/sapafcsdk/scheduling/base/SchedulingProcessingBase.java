@@ -1,17 +1,17 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.base;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_RESULT;
 
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.JobResult;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.JobResultMessage;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChanged;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChangedContext;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Update;
@@ -125,10 +125,8 @@ public class SchedulingProcessingBase {
     CqnUpdate update = Update.entity(JOB).data(job);
     persistenceService.run(update);
     if (results != null && !results.isEmpty()) {
-      Collection<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> insertResults = this.checkJobResults(
-        context,
-        results
-      );
+      Collection<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult> insertResults =
+        this.checkJobResults(context, results);
       Insert insert = Insert.into(JOB_RESULT).entries(insertResults);
       persistenceService.run(insert);
     }
@@ -147,17 +145,17 @@ public class SchedulingProcessingBase {
     return validTransitions.contains(statusAfter);
   }
 
-  protected Collection<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> checkJobResults(
+  protected Collection<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult> checkJobResults(
     EventContext context,
     Collection<JobResult> results
   ) {
     String jobId = (String) context.get("ID");
     List<Locale> locales = getAvailableBundleLocales("i18n/messages", this.getClass().getClassLoader());
-    List<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult> dbResults = new ArrayList<>();
+    List<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult> dbResults = new ArrayList<>();
 
     for (JobResult result : results) {
-      com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult dbResult =
-        com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.create();
+      com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult dbResult =
+        com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult.create();
 
       if (result.getName() == null || result.getName().isEmpty()) {
         throw JobSchedulingException.resultNameMissing();
@@ -207,11 +205,12 @@ public class SchedulingProcessingBase {
             throw JobSchedulingException.messagesMissing(result.getType());
           }
 
-          List<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessage> dbMessages = new ArrayList<>();
+          List<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessage> dbMessages =
+            new ArrayList<>();
 
           for (JobResultMessage message : messages) {
-            com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessage dbMessage =
-              com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessage.create();
+            com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessage dbMessage =
+              com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessage.create();
 
             if (message.getCode() == null) {
               throw JobSchedulingException.codeMissing();
@@ -228,12 +227,12 @@ public class SchedulingProcessingBase {
               dbMessage.setText(defaultText);
             }
 
-            List<com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts> dbTexts =
+            List<com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts> dbTexts =
               new ArrayList<>();
             if (message.getTexts() == null) {
               for (Locale locale : locales) {
-                com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts dbText =
-                  com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts.create();
+                com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts dbText =
+                  com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts.create();
                 dbText.setLocale(locale.toString());
                 dbText.setText(messageProvider.get(message.getCode(), null, locale));
                 dbTexts.add(dbText);
@@ -250,8 +249,8 @@ public class SchedulingProcessingBase {
                 if (!isValidLocale) {
                   throw JobSchedulingException.invalidLocale(text.getLocale());
                 }
-                com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts dbText =
-                  com.github.cap.js.community.sapafcsdk.model.scheduling.JobResultMessageTexts.create();
+                com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts dbText =
+                  com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts.create();
                 dbText.setLocale(text.getLocale());
                 dbText.setText(text.getText());
                 if (dbText.getText() == null || dbText.getText().isEmpty()) {

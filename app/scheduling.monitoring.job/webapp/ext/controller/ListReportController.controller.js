@@ -3,7 +3,7 @@
 sap.ui.define(
   ["sap/ui/core/mvc/ControllerExtension", "sap/m/MessageToast"],
   function (ControllerExtension, MessageToast) {
-    return ControllerExtension.extend("scheduling.monitoring.job.ext.controller.ListReportController", {
+    return ControllerExtension.extend("sapafcsdk.scheduling.monitoring.job.ext.controller.ListReportController", {
       override: {
         onInit: function () {
           this.base.onInit();
@@ -20,7 +20,9 @@ sap.ui.define(
       },
 
       refreshForContext(oMessage) {
-        const table = this.getView().byId("scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table");
+        const table = this.getView().byId(
+          "sapafcsdk.scheduling.monitoring.job::JobList--fe::table::Job::LineItem::Table",
+        );
         const contexts = table.tableBindingInfo?.binding?.getAllCurrentContexts();
         for (const context of contexts ?? []) {
           if (oMessage.data?.IDs?.includes(context.getObject().ID)) {

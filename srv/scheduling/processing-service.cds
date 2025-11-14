@@ -1,7 +1,9 @@
+namespace sapafcsdk.scheduling;
+
 using sap.common.Locale from '@sap/cds/common';
-using scheduling.JobStatusCode from '../../db/scheduling';
-using scheduling.ResultTypeCode from '../../db/scheduling';
-using scheduling.MessageSeverityCode from '../../db/scheduling';
+using sapafcsdk.scheduling.JobStatusCode from '../../db/scheduling';
+using sapafcsdk.scheduling.ResultTypeCode from '../../db/scheduling';
+using sapafcsdk.scheduling.MessageSeverityCode from '../../db/scheduling';
 
 @protocol: 'none'
 service SchedulingProcessingService {

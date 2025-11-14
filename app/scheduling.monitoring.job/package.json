@@ -1,5 +1,5 @@
 {
-  "name": "scheduling.monitoring.job",
+  "name": "sapafcsdk.scheduling.monitoring.job",
   "version": "1.0.0",
   "description": "Monitor Scheduling Jobs",
   "keywords": [

@@ -10,10 +10,10 @@
     "scheduling.monitoring.job": {}
   },
   "services": {
-    "SchedulingProcessingService": {
+    "sapafcsdk.scheduling.SchedulingProcessingService": {
       "outbox": true
     },
-    "SchedulingWebsocketService": {
+    "sapafcsdk.scheduling.SchedulingWebsocketService": {
       "outbox": true
     }
   },

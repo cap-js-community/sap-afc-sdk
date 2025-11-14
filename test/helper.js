@@ -44,7 +44,7 @@ async function processQueue(subType) {
 }
 
 async function eventQueueEntry(subType, referenceEntityKey, payload) {
-  subType ??= "SchedulingProcessingService";
+  subType ??= "sapafcsdk.scheduling.SchedulingProcessingService";
   return await SELECT.one.from("sap.eventqueue.Event").where({
     type: "CAP_OUTBOX",
     subType,

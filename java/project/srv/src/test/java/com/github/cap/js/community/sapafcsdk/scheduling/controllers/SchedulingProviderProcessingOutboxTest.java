@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.CancelJobContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.ProcessJobContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService_;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.CancelJobContext;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.ProcessJobContext;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService_;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
@@ -91,12 +91,12 @@ public class SchedulingProviderProcessingOutboxTest {
     setup.eventTriggered.countDown();
 
     JSONObject processingEvent = setup.messageEvents.get(0);
-    assertEquals("SchedulingProcessingService", processingEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.SchedulingProcessingService", processingEvent.get("event"));
     assertEquals("processJob", processingEvent.getJSONObject("message").get("event"));
     assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 
     JSONObject websocketEvent = setup.messageEvents.get(1);
-    assertEquals("SchedulingWebsocketService", websocketEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.SchedulingWebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
       JobStatusCode.REQUESTED,
@@ -132,7 +132,7 @@ public class SchedulingProviderProcessingOutboxTest {
     setup.eventTriggered.countDown();
 
     JSONObject processingEvent = setup.messageEvents.get(0);
-    assertEquals("SchedulingProcessingService", processingEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.SchedulingProcessingService", processingEvent.get("event"));
     assertEquals("cancelJob", processingEvent.getJSONObject("message").get("event"));
     assertEquals(
       "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
@@ -140,7 +140,7 @@ public class SchedulingProviderProcessingOutboxTest {
     );
 
     JSONObject websocketEvent = setup.messageEvents.get(1);
-    assertEquals("SchedulingWebsocketService", websocketEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.SchedulingWebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
       "cancelRequested",

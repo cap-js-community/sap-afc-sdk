@@ -1,15 +1,15 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.MessageSeverityCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.ResultTypeCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Job;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.MessageSeverityCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.ResultTypeCode;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedConfig;
 import com.sap.cds.Result;
@@ -1725,7 +1725,11 @@ public class SchedulingProviderControllerTest {
       )
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("parserError"))
-      .andExpect(jsonPath("$.message").value("Cannot parse value for SchedulingProviderService.Job:startDateTime"));
+      .andExpect(
+        jsonPath("$.message").value(
+          "Cannot parse value for sapafcsdk.scheduling.SchedulingProviderService.Job:startDateTime"
+        )
+      );
     job = new JSONObject(Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327", "x", "y"));
     mockMvc
       .perform(
@@ -1736,7 +1740,9 @@ public class SchedulingProviderControllerTest {
       )
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("parserError"))
-      .andExpect(jsonPath("$.message").value("No element with name 'x' in 'SchedulingProviderService.Job'"));
+      .andExpect(
+        jsonPath("$.message").value("No element with name 'x' in 'sapafcsdk.scheduling.SchedulingProviderService.Job'")
+      );
     job = new JSONObject(
       Map.of(
         "name",

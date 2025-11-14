@@ -1,12 +1,12 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
 
 import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.Job_;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Job;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Job_;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.CQL;

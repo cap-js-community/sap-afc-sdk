@@ -1,12 +1,12 @@
 package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.*;
+import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.*;
+import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
 import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
 import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedConfig;
 import com.sap.cds.Result;
@@ -125,7 +125,7 @@ public class SchedulingProcessingHandlerSimpleMockCompletedTest {
 
     JobResult jobResult = persistenceService
       .run(Select.from(Scheduling_.JOB_RESULT).byId(textResultID))
-      .single(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.class);
+      .single(com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
     assertEquals("Job completed successfully", new String(jobResult.getData().readAllBytes()));
 
     String pdfResultID = jobResults
@@ -137,7 +137,7 @@ public class SchedulingProcessingHandlerSimpleMockCompletedTest {
 
     jobResult = persistenceService
       .run(Select.from(Scheduling_.JOB_RESULT).byId(pdfResultID))
-      .single(com.github.cap.js.community.sapafcsdk.model.scheduling.JobResult.class);
+      .single(com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
     InputStream pdfStream = this.getClass().getClassLoader().getResourceAsStream("log.pdf");
     byte[] pdfBytes = pdfStream.readAllBytes();
     assertArrayEquals(pdfBytes, jobResult.getData().readAllBytes());
