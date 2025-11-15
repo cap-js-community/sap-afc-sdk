@@ -474,7 +474,11 @@ In addition, to overwriting the default implementation via an `on` handler, also
 
 The following error codes are defined to be used in exceptions as part of the stable interface (`x-extensible-enum`):
 
+- `jobCannotBeCanceled`: Jobs cannot be canceled in current status
 - `statusTransitionNotAllowed`: Status transition is not allowed for the current job status
+- etc.
+
+See full list in `error` schema of [Scheduling Servcie Provider API](./openapi/SchedulingProviderV1Service.openapi3.json).
 
 #### Job Provider
 
