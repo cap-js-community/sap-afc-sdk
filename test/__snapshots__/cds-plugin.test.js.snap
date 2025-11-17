@@ -16,7 +16,7 @@ exports[`CDS Plugin GET App Config 1`] = `
             "JobMonitor": {
               "action": "monitor",
               "resolutionResult": {
-                "additionalInformation": "SAPUI5.Component=scheduling.monitoring.job",
+                "additionalInformation": "SAPUI5.Component=sapafcsdk.scheduling.monitoring.job",
                 "applicationType": "SAPUI5",
                 "url": "/custom/./scheduling.monitoring.job/webapp",
               },

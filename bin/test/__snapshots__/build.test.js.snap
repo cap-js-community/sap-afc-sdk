@@ -918,7 +918,8 @@ spring:
                 plan_updateable: true
             metadata:
               displayName: AFC Scheduling Provider Service
-              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+              longDescription: AFC Scheduling Provider Service for SAP Advanced Financial
+                Closing
 "
 `;
 
@@ -2284,7 +2285,8 @@ spring:
                 plan_updateable: true
             metadata:
               displayName: AFC Scheduling Provider Service
-              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+              longDescription: AFC Scheduling Provider Service for SAP Advanced Financial
+                Closing
 "
 `;
 
@@ -3509,7 +3511,7 @@ exports[`Build Node / CF 10`] = `
       ],
       "metadata": {
         "displayName": "AFC Scheduling Provider Service",
-        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+        "longDescription": "AFC Scheduling Provider Service for SAP Advanced Financial Closing"
       }
     }
   ]
@@ -4667,7 +4669,7 @@ exports[`Build Node / Kyma 10`] = `
       ],
       "metadata": {
         "displayName": "AFC Scheduling Provider Service",
-        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+        "longDescription": "AFC Scheduling Provider Service for SAP Advanced Financial Closing"
       }
     }
   ]
