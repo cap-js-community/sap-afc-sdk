@@ -941,8 +941,8 @@ describe("Provider Service", () => {
     const entry = await eventQueueEntry();
     const payload = JSON.parse(entry.payload);
     expect(payload.headers).toMatchObject({
-      customHeader: 123,
-      authId: 1234,
+      authid: "1234",
+      customheader: "123",
     });
   });
 

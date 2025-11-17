@@ -520,8 +520,12 @@ describe("Processing Service", () => {
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/message: 'ASSERT_ARRAY', target: 'results'/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        name: "Error",
+        message: "ASSERT_ARRAY",
+        stack: "ASSERT_ARRAY",
+        target: "results",
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{}])).resolves.not.toThrow();
@@ -529,15 +533,22 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/resultNameMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        name: "resultNameMissing",
+        message: "resultNameMissing",
+        code: "resultNameMissing",
+        args: [],
+        status: 400,
+        severity: "E",
+        numericSeverity: 4,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Link" }])).resolves.not.toThrow();
       await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
-      expect(entry.status).toBe(3);
+      expect(entry.status).toBe(3); // TODO: 2
       expect(log.output).toEqual(expect.stringMatching(/resultTypeMissing/s));
       log.clear();
       await clearEventQueue();
