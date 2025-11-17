@@ -377,6 +377,7 @@ describe("Processing Service", () => {
   it("updateJob - results - arraybuffer", async () => {
     await expect(processingService.updateJob(ID, JobStatus.running)).resolves.not.toThrow();
     await processQueue("SchedulingProcessingService");
+    await clearEventQueue();
     await expect(
       processingService.updateJob(ID, JobStatus.completed, [
         {
@@ -389,7 +390,15 @@ describe("Processing Service", () => {
       ]),
     ).resolves.not.toThrow();
     await processQueue("SchedulingProcessingService");
-    expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*LargeBinary {.*type: 'cds.LargeBinary'.*}/s));
+    const entry = await eventQueueEntry();
+    expect(entry).toBeDefined();
+    expect(entry.status).toBe(3);
+    expect(JSON.parse(entry.error)).toMatchObject({
+      message: "ASSERT_DATA_TYPE",
+      name: "Error",
+      stack: "ASSERT_DATA_TYPE",
+      target: "data",
+    });
   });
 
   it("updateJob - processJobUpdate", async () => {
@@ -471,8 +480,15 @@ describe("Processing Service", () => {
       const entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["XXX"],
+        code: "jobNotFound",
+        message: "jobNotFound",
+        name: "jobNotFound",
+        numericSeverity: 4,
+        severity: "E",
+        status: 404,
+      });
       await clearEventQueue();
     });
 
@@ -482,8 +498,15 @@ describe("Processing Service", () => {
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["XXX"],
+        code: "jobNotFound",
+        message: "jobNotFound",
+        name: "jobNotFound",
+        numericSeverity: 4,
+        severity: "E",
+        status: 404,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID)).resolves.not.toThrow();
@@ -491,8 +514,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/statusValueMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "statusValueMissing",
+        message: "statusValueMissing",
+        name: "statusValueMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, "XXX")).resolves.not.toThrow();
@@ -500,8 +530,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/invalidJobStatus.*XXX/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["XXX"],
+        code: "invalidJobStatus",
+        message: "invalidJobStatus",
+        name: "invalidJobStatus",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.completed)).resolves.not.toThrow();
@@ -509,8 +546,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*requested.*completed/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["requested", "completed"],
+        code: "statusTransitionNotAllowed",
+        message: "statusTransitionNotAllowed",
+        name: "statusTransitionNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
     });
 
@@ -548,9 +592,16 @@ describe("Processing Service", () => {
       await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
-      expect(entry.status).toBe(3); // TODO: 2
-      expect(log.output).toEqual(expect.stringMatching(/resultTypeMissing/s));
-      log.clear();
+      expect(entry.status).toBe(3);
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "resultTypeMissing",
+        message: "resultTypeMissing",
+        name: "resultTypeMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -560,8 +611,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/invalidResultType.*'X'/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["X"],
+        code: "invalidResultType",
+        message: "invalidResultType",
+        name: "invalidResultType",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -576,8 +634,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/linkMissing.*link/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["link"],
+        code: "linkMissing",
+        message: "linkMissing",
+        name: "linkMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -594,8 +659,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed.*link/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["link"],
+        code: "mimeTypeNotAllowed",
+        message: "mimeTypeNotAllowed",
+        name: "mimeTypeNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -612,8 +684,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed.*link/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["link"],
+        code: "filenameNotAllowed",
+        message: "filenameNotAllowed",
+        name: "filenameNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -630,8 +709,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed.*link/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["link"],
+        code: "dataNotAllowed",
+        message: "dataNotAllowed",
+        name: "dataNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -648,8 +734,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed.*link/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["link"],
+        code: "messagesNotAllowed",
+        message: "messagesNotAllowed",
+        name: "messagesNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, JobStatus.running, [{ name: "Data" }])).resolves.not.toThrow();
@@ -657,8 +750,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/resultTypeMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "resultTypeMissing",
+        message: "resultTypeMissing",
+        name: "resultTypeMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -673,8 +773,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/mimeTypeMissing.*data/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["data"],
+        code: "mimeTypeMissing",
+        message: "mimeTypeMissing",
+        name: "mimeTypeMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -690,8 +797,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/filenameMissing.*data/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["data"],
+        code: "filenameMissing",
+        message: "filenameMissing",
+        name: "filenameMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -708,8 +822,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/dataMissing.*data/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["data"],
+        code: "dataMissing",
+        message: "dataMissing",
+        name: "dataMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -728,8 +849,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed.*data/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["data"],
+        code: "linkNotAllowed",
+        message: "linkNotAllowed",
+        name: "linkNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -748,8 +876,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesNotAllowed.*data/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["data"],
+        code: "messagesNotAllowed",
+        message: "messagesNotAllowed",
+        name: "messagesNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -764,8 +899,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesMissing.*message/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "messagesMissing",
+        message: "messagesMissing",
+        name: "messagesMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -781,8 +923,12 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/ASSERT_ARRAY', target: 'messages'/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        message: "ASSERT_ARRAY",
+        name: "Error",
+        stack: "ASSERT_ARRAY",
+        target: "messages",
+      });
       await clearEventQueue();
 
       await expect(
@@ -798,8 +944,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/messagesMissing.*message/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "messagesMissing",
+        message: "messagesMissing",
+        name: "messagesMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -815,8 +968,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/codeMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "codeMissing",
+        message: "codeMissing",
+        name: "codeMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -836,8 +996,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/textMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "textMissing",
+        message: "textMissing",
+        name: "textMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -858,8 +1025,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/severityMissing/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "severityMissing",
+        message: "severityMissing",
+        name: "severityMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -881,8 +1055,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/invalidMessageSeverity.*'X'/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["X"],
+        code: "invalidMessageSeverity",
+        message: "invalidMessageSeverity",
+        name: "invalidMessageSeverity",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -905,8 +1086,18 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/ASSERT_DATA_TYPE.*Timestamp { type: 'cds.Timestamp' }/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [
+          "xxx",
+          {
+            type: "cds.Timestamp",
+          },
+        ],
+        message: "ASSERT_DATA_TYPE",
+        name: "Error",
+        stack: "ASSERT_DATA_TYPE",
+        target: "createdAt",
+      });
       await clearEventQueue();
 
       await expect(
@@ -929,8 +1120,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/linkNotAllowed/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "linkNotAllowed",
+        message: "linkNotAllowed",
+        name: "linkNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -953,8 +1151,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/mimeTypeNotAllowed/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "mimeTypeNotAllowed",
+        message: "mimeTypeNotAllowed",
+        name: "mimeTypeNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -977,8 +1182,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/filenameNotAllowed/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "filenameNotAllowed",
+        message: "filenameNotAllowed",
+        name: "filenameNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -1001,8 +1213,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/dataNotAllowed/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["message"],
+        code: "dataNotAllowed",
+        message: "dataNotAllowed",
+        name: "dataNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
 
       await expect(
@@ -1024,7 +1243,16 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/localeMissing/s));
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: [],
+        code: "localeMissing",
+        message: "localeMissing",
+        name: "localeMissing",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
+      await clearEventQueue();
 
       await expect(
         processingService.updateJob(ID, JobStatus.running, [
@@ -1045,7 +1273,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/invalidLocale.*xx/s));
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["xx"],
+        code: "invalidLocale",
+        message: "invalidLocale",
+        name: "invalidLocale",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
     });
 
     it("cancelJob - status", async () => {
@@ -1054,21 +1290,34 @@ describe("Processing Service", () => {
       let entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/jobNotFound.*XXX/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["XXX"],
+        code: "jobNotFound",
+        message: "jobNotFound",
+        name: "jobNotFound",
+        numericSeverity: 4,
+        severity: "E",
+        status: 404,
+      });
       await clearEventQueue();
 
       await expect(processingService.updateJob(ID, "running")).resolves.not.toThrow();
       await processQueue("SchedulingProcessingService");
-      log.clear();
       await clearEventQueue();
       await expect(processingService.cancelJob(ID)).resolves.not.toThrow();
       await processQueue("SchedulingProcessingService");
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*running.*canceled/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["running", "canceled"],
+        code: "statusTransitionNotAllowed",
+        message: "statusTransitionNotAllowed",
+        name: "statusTransitionNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
     });
 
@@ -1102,8 +1351,15 @@ describe("Processing Service", () => {
       entry = await eventQueueEntry();
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
-      expect(log.output).toEqual(expect.stringMatching(/statusTransitionNotAllowed.*completed.*canceled/s));
-      log.clear();
+      expect(JSON.parse(entry.error)).toMatchObject({
+        args: ["completed", "canceled"],
+        code: "statusTransitionNotAllowed",
+        message: "statusTransitionNotAllowed",
+        name: "statusTransitionNotAllowed",
+        numericSeverity: 4,
+        severity: "E",
+        status: 400,
+      });
       await clearEventQueue();
     });
 
