@@ -129,9 +129,7 @@
       }
     },
     "eventQueue": {
-      "useAsCAPQueue": true,
-      "namespace": "sapafcsdk",
-      "processingNamespaces": ["sapafcsdk"]
+      "useAsCAPQueue": true
     },
     "featureToggles": {
       "config": {
