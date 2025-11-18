@@ -16,6 +16,8 @@ const FIELDS_TO_CLEAN = [
   "modifiedAt",
 ];
 
+const CAP_QUEUE = "CAP_OUTBOX";
+
 const ALICE = `Basic ${Buffer.from("alice:", "utf8").toString("base64")}`;
 const ZEUS = `Basic ${Buffer.from("zeus:", "utf8").toString("base64")}`;
 
@@ -40,13 +42,13 @@ function cleanData(data) {
 }
 
 async function processQueue(subType) {
-  await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", subType);
+  await eventQueue.processEventQueue(new cds.EventContext(), CAP_QUEUE, subType);
 }
 
 async function eventQueueEntry(subType, referenceEntityKey, payload) {
   subType ??= "SchedulingProcessingService";
   return await SELECT.one.from("sap.eventqueue.Event").where({
-    type: "CAP_OUTBOX",
+    type: CAP_QUEUE,
     subType,
     ...(referenceEntityKey && { referenceEntityKey }),
     ...(payload && { payload: { like: `%${payload}%` } }),

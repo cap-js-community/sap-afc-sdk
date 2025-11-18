@@ -40,11 +40,11 @@ module.exports = (options) => {
         json.cds ??= {};
         json.cds.requires ??= {};
         json.cds.requires.SchedulingProcessingService ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox.events ??= {};
-        json.cds.requires.SchedulingProcessingService.outbox.events.syncJob ??= {};
-        if (!json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron) {
-          json.cds.requires.SchedulingProcessingService.outbox.events.syncJob.cron = "*/1 * * * *";
+        json.cds.requires.SchedulingProcessingService.queued ??= {};
+        json.cds.requires.SchedulingProcessingService.queued.events ??= {};
+        json.cds.requires.SchedulingProcessingService.queued.events.syncJob ??= {};
+        if (!json.cds.requires.SchedulingProcessingService.queued.events.syncJob.cron) {
+          json.cds.requires.SchedulingProcessingService.queued.events.syncJob.cron = "*/1 * * * *";
         }
       });
     }

@@ -35,7 +35,7 @@ cds.on("bootstrap", () => {
 cds.on("listening", () => {
   rerouteWebsocket();
   serveApiRoot();
-  outboxServices();
+  queueServices();
   handleFeatureToggles();
 });
 
@@ -331,11 +331,11 @@ function addLinkToIndexHtml(service, apiPath) {
   service.$linkProviders ? service.$linkProviders.push(provider) : (service.$linkProviders = [provider]);
 }
 
-function outboxServices() {
+function queueServices() {
   for (const service in config.services) {
-    if (cds.services[service] && cds.requires[service]?.outbox && config.services[service].outbox) {
-      cds.services[service].options.outbox = cds.requires[service].outbox;
-      cds.services[service] = cds.outboxed(cds.services[service]);
+    if (cds.services[service] && cds.requires[service]?.queued && config.services[service].queued) {
+      cds.services[service].options.queued = cds.requires[service].queued;
+      cds.services[service] = cds.queued(cds.services[service]);
     }
   }
 }

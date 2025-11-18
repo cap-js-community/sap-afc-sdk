@@ -1,7 +1,7 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "https://excalidraw-jetbrains-plugin",
   "elements": [
     {
       "id": "dWBuvN6sd1pK36g09xkQg",
@@ -745,13 +745,13 @@
       "updated": 1747522718633,
       "link": null,
       "locked": false,
-      "text": "CDS Transactional Outbox",
+      "text": "CDS Transactional Queue",
       "fontSize": 36,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "TNSwShoDg9c-ToRYqM-Sw",
-      "originalText": "CDS Transactional Outbox",
+      "originalText": "CDS Transactional Queue",
       "autoResize": true,
       "lineHeight": 1.25,
       "baseline": 32
@@ -1142,9 +1142,7 @@
     }
   ],
   "appState": {
-    "gridSize": 20,
-    "gridStep": 5,
-    "gridModeEnabled": false,
+    "gridSize": null,
     "viewBackgroundColor": "#ffffff"
   },
   "files": {}
