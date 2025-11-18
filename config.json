@@ -11,10 +11,10 @@
   },
   "services": {
     "sapafcsdk.scheduling.SchedulingProcessingService": {
-      "outbox": true
+      "queued": true
     },
     "sapafcsdk.scheduling.SchedulingWebsocketService": {
-      "outbox": true
+      "queued": true
     }
   },
   "toggles": {

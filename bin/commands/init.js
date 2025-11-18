@@ -193,10 +193,10 @@ function processNode() {
 function processJava() {
   // cdsrc
   const cdsrc = adjustJSON(".cdsrc.json", (json) => {
-    if (json.requires?.outbox?.kind !== "persistent-outbox") {
+    if (json.requires?.queue?.kind !== "persistent-queue") {
       json.requires ??= {};
-      json.requires.outbox ??= {};
-      json.requires.outbox.kind = "persistent-outbox";
+      json.requires.queue ??= {};
+      json.requires.queue.kind = "persistent-queue";
     }
   });
 
@@ -206,9 +206,9 @@ function processJava() {
     json.cds.requires ??= {};
     json.cds.requires["event-queue"] = false;
     if (!cdsrc) {
-      if (json.cds?.requires?.outbox?.kind !== "persistent-outbox") {
-        json.cds.requires.outbox ??= {};
-        json.cds.requires.outbox.kind = "persistent-outbox";
+      if (json.cds?.requires?.queue?.kind !== "persistent-queue") {
+        json.cds.requires.queue ??= {};
+        json.cds.requires.queue.kind = "persistent-queue";
       }
     }
     if (!json.scripts?.postinstall) {

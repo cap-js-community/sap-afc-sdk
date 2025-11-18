@@ -2,8 +2,6 @@ package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
 
 import static com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.SchedulingProviderService_.*;
 
-import com.github.cap.js.community.sapafcsdk.common.EndpointProvider;
-import com.github.cap.js.community.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.DataTypeCode;
 import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
 import com.github.cap.js.community.sapafcsdk.scheduling.common.JobSchedulingException;
@@ -47,12 +45,6 @@ public class SchedulingProviderController {
 
   @Autowired
   private CdsModel cdsModel;
-
-  @Autowired
-  protected AfcSdkProperties afcsdkProperties;
-
-  @Autowired
-  protected EndpointProvider endpointProvider;
 
   @Value("${cds.query.limit.max:1000}")
   private int queryMaxLimit;

@@ -6,7 +6,7 @@ import com.sap.cds.services.ServiceException;
 
 public class JobSchedulingException extends ServiceException {
 
-  private String code;
+  private final String code;
 
   public JobSchedulingException(ErrorStatus errorStatus, String messageOrKey, Object... args) {
     super(errorStatus, messageOrKey, args);

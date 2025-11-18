@@ -107,7 +107,7 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let messages = ws.message("jobStatusChanged");
 
-    cds.env.requires["sapafcsdk.scheduling.SchedulingWebsocketService"].outbox.events.jobStatusChanged.timeBucket =
+    cds.env.requires["sapafcsdk.scheduling.SchedulingWebsocketService"].queued.events.jobStatusChanged.timeBucket =
       cron;
     const event = eventQueue.config.events.find(
       (event) => event.subType === "sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged",

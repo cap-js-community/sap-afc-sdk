@@ -553,10 +553,10 @@ sap.ui.define(
 
       constructor: function () {
         Component.prototype.constructor.apply(this, arguments);
-        this.ws(this.getManifestObject().resolveUri("ws/job-scheduling"));
+        this.websocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
       },
 
-      ws: function (sUrl, sName = "main") {
+      websocket: function (sUrl, sName = "main") {
         window.websockets ??= {};
         window.websockets[sName] = {
           _ws: undefined,
@@ -679,8 +679,8 @@ exports[`Build Java / CF 9`] = `
       "auth": "xsuaa"
     },
     "cloud-logging": true,
-    "outbox": {
-      "kind": "persistent-outbox"
+    "queue": {
+      "kind": "persistent-queue"
     },
     "workzone": true
   }
@@ -918,7 +918,8 @@ spring:
                 plan_updateable: true
             metadata:
               displayName: AFC Scheduling Provider Service
-              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+              longDescription: AFC Scheduling Provider Service for SAP Advanced Financial
+                Closing
 "
 `;
 
@@ -1914,10 +1915,10 @@ sap.ui.define(
 
       constructor: function () {
         Component.prototype.constructor.apply(this, arguments);
-        this.ws(this.getManifestObject().resolveUri("ws/job-scheduling"));
+        this.websocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
       },
 
-      ws: function (sUrl, sName = "main") {
+      websocket: function (sUrl, sName = "main") {
         window.websockets ??= {};
         window.websockets[sName] = {
           _ws: undefined,
@@ -2040,8 +2041,8 @@ exports[`Build Java / Kyma 9`] = `
       "auth": "xsuaa"
     },
     "cloud-logging": true,
-    "outbox": {
-      "kind": "persistent-outbox"
+    "queue": {
+      "kind": "persistent-queue"
     },
     "workzone": true
   }
@@ -2284,7 +2285,8 @@ spring:
                 plan_updateable: true
             metadata:
               displayName: AFC Scheduling Provider Service
-              longDescription: Scheduling Provider Service for SAP Advanced Financial Closing
+              longDescription: AFC Scheduling Provider Service for SAP Advanced Financial
+                Closing
 "
 `;
 
@@ -2789,7 +2791,7 @@ exports[`Build Node / CF 1`] = `
       },
       "workzone": true,
       "SchedulingProcessingService": {
-        "outbox": {
+        "queued": {
           "events": {
             "syncJob": {
               "cron": "*/1 * * * *"
@@ -3335,10 +3337,10 @@ sap.ui.define(
 
       constructor: function () {
         Component.prototype.constructor.apply(this, arguments);
-        this.ws(this.getManifestObject().resolveUri("ws/job-scheduling"));
+        this.websocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
       },
 
-      ws: function (sUrl, sName = "main") {
+      websocket: function (sUrl, sName = "main") {
         window.websockets ??= {};
         window.websockets[sName] = {
           _ws: undefined,
@@ -3509,7 +3511,7 @@ exports[`Build Node / CF 10`] = `
       ],
       "metadata": {
         "displayName": "AFC Scheduling Provider Service",
-        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+        "longDescription": "AFC Scheduling Provider Service for SAP Advanced Financial Closing"
       }
     }
   ]
@@ -3947,7 +3949,7 @@ exports[`Build Node / Kyma 1`] = `
       },
       "workzone": true,
       "SchedulingProcessingService": {
-        "outbox": {
+        "queued": {
           "events": {
             "syncJob": {
               "cron": "*/1 * * * *"
@@ -4493,10 +4495,10 @@ sap.ui.define(
 
       constructor: function () {
         Component.prototype.constructor.apply(this, arguments);
-        this.ws(this.getManifestObject().resolveUri("ws/job-scheduling"));
+        this.websocket(this.getManifestObject().resolveUri("ws/job-scheduling"));
       },
 
-      ws: function (sUrl, sName = "main") {
+      websocket: function (sUrl, sName = "main") {
         window.websockets ??= {};
         window.websockets[sName] = {
           _ws: undefined,
@@ -4667,7 +4669,7 @@ exports[`Build Node / Kyma 10`] = `
       ],
       "metadata": {
         "displayName": "AFC Scheduling Provider Service",
-        "longDescription": "Scheduling Provider Service for SAP Advanced Financial Closing"
+        "longDescription": "AFC Scheduling Provider Service for SAP Advanced Financial Closing"
       }
     }
   ]
