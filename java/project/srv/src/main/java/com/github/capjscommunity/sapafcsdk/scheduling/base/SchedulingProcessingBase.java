@@ -6,12 +6,12 @@ import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Sch
 import com.github.capjscommunity.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.JobResult;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.JobResultMessage;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChanged;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChanged;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChangedContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Update;
@@ -77,10 +77,10 @@ public class SchedulingProcessingBase {
   );
 
   @Autowired
-  protected SchedulingProcessingService processingService;
+  protected ProcessingService processingService;
 
   @Autowired
-  protected SchedulingWebsocketService websocketService;
+  protected WebsocketService websocketService;
 
   @Autowired
   protected LocalizedMessageProvider messageProvider;
@@ -130,7 +130,7 @@ public class SchedulingProcessingBase {
       persistenceService.run(insert);
     }
 
-    SchedulingWebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
     JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
     JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
     jobStatusChangedData.setStatus(status);
@@ -400,7 +400,7 @@ public class SchedulingProcessingBase {
       ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
       scheduler.schedule(
         () -> {
-          SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+          ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
           processingServiceOutboxed.updateJob(ID, status, updateResults);
           scheduler.shutdown();
         },
@@ -408,7 +408,7 @@ public class SchedulingProcessingBase {
         TimeUnit.MILLISECONDS
       );
     } else {
-      SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+      ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
       processingServiceOutboxed.updateJob(ID, status, updateResults);
     }
 

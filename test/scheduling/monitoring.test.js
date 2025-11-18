@@ -126,14 +126,14 @@ describe("Monitoring Service", () => {
     expect(response.data.status_code).toBe("cancelRequested");
 
     let message = ws.message("jobStatusChanged");
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("cancelRequested");
 
     message = ws.message("jobStatusChanged");
-    await processQueue("sapafcsdk.scheduling.SchedulingProcessingService");
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.ProcessingService");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     event = await message;
     expect(event.IDs).toEqual([ID]);
     expect(event.status).toBe("canceled");
@@ -164,7 +164,7 @@ describe("Monitoring Service", () => {
       await expect(POST("/odata/v4/job-scheduling/monitoring/JobDefinition", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -172,7 +172,7 @@ describe("Monitoring Service", () => {
       await expect(PUT("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')", {})).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -180,7 +180,7 @@ describe("Monitoring Service", () => {
       await expect(DELETE("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')")).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobDefinition" is read-only`,
       );
     });
 
@@ -190,7 +190,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -200,7 +200,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -210,7 +210,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.JobParameterDefinition" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.JobParameterDefinition" is read-only`,
       );
     });
 
@@ -220,7 +220,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.Job" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.Job" is read-only`,
       );
     });
 
@@ -230,7 +230,7 @@ describe("Monitoring Service", () => {
       ).rejects.toThrowCDSError(
         405,
         "ENTITY_IS_READ_ONLY",
-        `Entity "sapafcsdk.scheduling.SchedulingMonitoringService.Job" is read-only`,
+        `Entity "sapafcsdk.scheduling.MonitoringService.Job" is read-only`,
       );
     });
 
@@ -248,7 +248,7 @@ describe("Monitoring Service", () => {
         ["cancelRequested"],
       );
 
-      const providerService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProviderService");
+      const providerService = await cds.connect.to("sapafcsdk.scheduling.ProviderService");
       providerService.before("cancel", async (req) => {
         throw new Error("Unexpected error");
       });

@@ -334,7 +334,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.after("CREATE", Job, async (data, req) => {
-      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send(
         "processJob",
         {
@@ -346,7 +346,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
-      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
       await schedulingWebsocketService.tx(req).emit(
         "jobStatusChanged",
         {
@@ -379,7 +379,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.after(Job.actions.cancel, Job, async (data, req) => {
-      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send(
         "cancelJob",
         {
@@ -389,7 +389,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": req.job.ID,
         },
       );
-      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
       await schedulingWebsocketService.tx(req).emit(
         "jobStatusChanged",
         {
@@ -416,7 +416,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.on(notify, async (req) => {
-      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send("notify", req.data);
     });
 

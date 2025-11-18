@@ -1,6 +1,6 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.ProviderService_.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -8,7 +8,7 @@ import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusC
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.MessageSeverityCode;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.ResultTypeCode;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
@@ -36,7 +36,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class SchedulingProviderHandlerTest {
 
   @Autowired
-  private SchedulingProviderService providerService;
+  private ProviderService providerService;
 
   @Autowired
   private PersistenceService persistenceService;

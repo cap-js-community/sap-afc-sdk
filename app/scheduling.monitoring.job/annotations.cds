@@ -1,10 +1,10 @@
-using sapafcsdk.scheduling.SchedulingMonitoringService from '../../srv/scheduling/monitoring-service';
+using sapafcsdk.scheduling.MonitoringService from '../../srv/scheduling/monitoring-service';
 
-annotate SchedulingMonitoringService.Job with @(
+annotate MonitoringService.Job with @(
   UI.Identification            : [{
     $Type             : 'UI.DataFieldForAction',
     Label             : '{i18n>Cancel}',
-    Action            : 'SchedulingMonitoringService.cancel',
+    Action            : 'MonitoringService.cancel',
     InvocationGrouping: #Isolated,
     Criticality       : #Negative
   }],
@@ -196,7 +196,7 @@ annotate SchedulingMonitoringService.Job with @(
   ],
 );
 
-annotate SchedulingMonitoringService.Job {
+annotate MonitoringService.Job {
   status      @Common.ValueListWithFixedValues  @Common.Text: status.name             @Common.TextArrangement: #TextFirst;
   link        @HTML5.LinkTarget: '_blank';
   definition  @ValueList: {
@@ -205,7 +205,7 @@ annotate SchedulingMonitoringService.Job {
   }                                             @Common.Text: definition.description  @Common.TextArrangement: #TextFirst;
 };
 
-annotate SchedulingMonitoringService.Job actions {
+annotate MonitoringService.Job actions {
   cancel  @Common.IsActionCritical  @Core.OperationAvailable: {$edmJson: {$Or: [
     {$Eq: [
       {$Path: 'in/status_code'},
@@ -218,9 +218,9 @@ annotate SchedulingMonitoringService.Job actions {
   ]}}
 };
 
-annotate SchedulingMonitoringService.Job with @(UI.LineItem.@UI.Criticality: criticality, );
+annotate MonitoringService.Job with @(UI.LineItem.@UI.Criticality: criticality, );
 
-annotate SchedulingMonitoringService.JobParameter with @(
+annotate MonitoringService.JobParameter with @(
   UI.FieldGroup #Details: {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -298,17 +298,17 @@ annotate SchedulingMonitoringService.JobParameter with @(
   UI.SelectionFields    : [definition.name],
 );
 
-annotate SchedulingMonitoringService.JobParameter {
+annotate MonitoringService.JobParameter {
   job @UI.Hidden;
 }
 
-annotate SchedulingMonitoringService.JobParameterDefinition {
+annotate MonitoringService.JobParameterDefinition {
   type         @Common.ValueListWithFixedValues  @Common.Text: type.name         @Common.TextArrangement: #TextFirst;
   dataType     @Common.ValueListWithFixedValues  @Common.Text: dataType.name     @Common.TextArrangement: #TextFirst;
   mappingType  @Common.ValueListWithFixedValues  @Common.Text: mappingType.name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate SchedulingMonitoringService.JobResult with @(
+annotate MonitoringService.JobResult with @(
   UI.FieldGroup #Details : {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -401,14 +401,14 @@ annotate SchedulingMonitoringService.JobResult with @(
   UI.SelectionFields     : [],
 );
 
-annotate SchedulingMonitoringService.JobResult {
+annotate MonitoringService.JobResult {
   job   @UI.Hidden;
   type  @Common.ValueListWithFixedValues  @Common.Text: type.name  @Common.TextArrangement: #TextFirst;
   link  @HTML5.LinkTarget: '_blank';
   data  @UI.Hidden;
 };
 
-annotate SchedulingMonitoringService.JobResultMessage with @(
+annotate MonitoringService.JobResultMessage with @(
   UI.FieldGroup #Details: {
     $Type: 'UI.FieldGroupType',
     Data : [
@@ -474,13 +474,13 @@ annotate SchedulingMonitoringService.JobResultMessage with @(
   UI.SelectionFields    : [],
 );
 
-annotate SchedulingMonitoringService.JobResultMessage {
+annotate MonitoringService.JobResultMessage {
   result    @UI.Hidden;
   severity  @Common.ValueListWithFixedValues  @Common.Text: severity.name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate SchedulingMonitoringService.MessageSeverity {
+annotate MonitoringService.MessageSeverity {
   numericCode  @Common.ValueListWithFixedValues  @Common.Text: name  @Common.TextArrangement: #TextFirst;
 };
 
-annotate SchedulingMonitoringService.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );
+annotate MonitoringService.JobResultMessage with @(UI.LineItem.@UI.Criticality: criticality, );

@@ -18,13 +18,13 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let message = ws.message("jobStatusChanged");
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
 
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -38,13 +38,13 @@ describe("Websocket Service", () => {
     });
     let message = ws.message("jobStatusChanged");
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
 
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -58,13 +58,13 @@ describe("Websocket Service", () => {
     });
     let message = ws.message("jobStatusChanged");
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
 
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let event = await message;
     expect(event.IDs).toEqual(["XXX"]);
     expect(event.status).toBe("running");
@@ -76,7 +76,7 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let messages = ws.message("jobStatusChanged", 2);
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
@@ -92,7 +92,7 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let events = await messages;
     events.sort((a, b) => a.status.localeCompare(b.status));
     expect(events).toEqual([
@@ -107,26 +107,21 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let messages = ws.message("jobStatusChanged");
 
-    cds.env.requires["sapafcsdk.scheduling.SchedulingWebsocketService"].queued.events.jobStatusChanged.timeBucket =
-      cron;
+    cds.env.requires["sapafcsdk.scheduling.WebsocketService"].queued.events.jobStatusChanged.timeBucket = cron;
     const event = eventQueue.config.events.find(
-      (event) => event.subType === "sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged",
+      (event) => event.subType === "sapafcsdk.scheduling.WebsocketService.jobStatusChanged",
     );
     if (event) {
       event.timeBucket = cron;
     }
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
 
-    let entry = await eventQueueEntry(
-      "sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged",
-      undefined,
-      "XXX",
-    );
+    let entry = await eventQueueEntry("sapafcsdk.scheduling.WebsocketService.jobStatusChanged", undefined, "XXX");
     expect(entry.startAfter).toBeDefined();
 
     await schedulingWebsocketService.emit("jobStatusChanged", {
@@ -134,12 +129,12 @@ describe("Websocket Service", () => {
       status: "running",
     });
 
-    entry = await eventQueueEntry("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged", undefined, "YYY");
+    entry = await eventQueueEntry("sapafcsdk.scheduling.WebsocketService.jobStatusChanged", undefined, "YYY");
     expect(entry.startAfter).toBeDefined();
 
     await wait(1000);
 
-    await processQueue("sapafcsdk.scheduling.SchedulingWebsocketService.jobStatusChanged");
+    await processQueue("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     let events = await messages;
     expect(events).toEqual({ status: "running", IDs: ["XXX", "YYY"] });
     ws.close();

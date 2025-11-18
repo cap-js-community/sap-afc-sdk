@@ -1726,9 +1726,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("parserError"))
       .andExpect(
-        jsonPath("$.message").value(
-          "Cannot parse value for sapafcsdk.scheduling.SchedulingProviderService.Job:startDateTime"
-        )
+        jsonPath("$.message").value("Cannot parse value for sapafcsdk.scheduling.ProviderService.Job:startDateTime")
       );
     job = new JSONObject(Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327", "x", "y"));
     mockMvc
@@ -1740,9 +1738,7 @@ public class SchedulingProviderControllerTest {
       )
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("parserError"))
-      .andExpect(
-        jsonPath("$.message").value("No element with name 'x' in 'sapafcsdk.scheduling.SchedulingProviderService.Job'")
-      );
+      .andExpect(jsonPath("$.message").value("No element with name 'x' in 'sapafcsdk.scheduling.ProviderService.Job'"));
     job = new JSONObject(
       Map.of(
         "name",

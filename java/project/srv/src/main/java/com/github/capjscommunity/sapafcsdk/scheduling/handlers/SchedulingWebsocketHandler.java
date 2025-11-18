@@ -1,8 +1,8 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.common.WebSocketHandler;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChangedContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService_;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 
 @Component
-@ServiceName(SchedulingWebsocketService_.CDS_NAME)
+@ServiceName(WebsocketService_.CDS_NAME)
 public class SchedulingWebsocketHandler implements EventHandler {
 
   @Autowired

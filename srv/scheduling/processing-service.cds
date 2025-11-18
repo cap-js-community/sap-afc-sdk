@@ -6,7 +6,7 @@ using sapafcsdk.scheduling.ResultTypeCode from '../../db/scheduling';
 using sapafcsdk.scheduling.MessageSeverityCode from '../../db/scheduling';
 
 @protocol: 'none'
-service SchedulingProcessingService {
+service ProcessingService {
 
   type JobResult {
     name     : String(255) not null;

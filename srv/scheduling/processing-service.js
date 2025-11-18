@@ -115,7 +115,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const insertResults = await this.checkJobResults(req, results);
       await INSERT.into(JobResult).entries(insertResults);
     }
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.tx(req).emit(
       "jobStatusChanged",
       {

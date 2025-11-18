@@ -1,9 +1,9 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.controllers;
 
-import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.ProviderService_.*;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.DataTypeCode;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.CdsException;
 import com.sap.cds.CdsJsonConverter;
@@ -38,7 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class SchedulingProviderController {
 
   @Autowired
-  private SchedulingProviderService providerService;
+  private ProviderService providerService;
 
   @Autowired
   private PersistenceService persistenceService;

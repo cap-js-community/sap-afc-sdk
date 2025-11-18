@@ -5,7 +5,7 @@ import static com.github.capjscommunity.sapafcsdk.model.cds.outbox.Outbox_.MESSA
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages;
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.mt.TenantProviderService;
@@ -34,7 +34,7 @@ public class SchedulingJobs {
   protected OutboxService outboxService;
 
   @Autowired
-  private SchedulingProcessingService processingService;
+  private ProcessingService processingService;
 
   @Autowired
   private PersistenceService persistenceService;
@@ -61,7 +61,7 @@ public class SchedulingJobs {
             .where(m ->
               m
                 .msg()
-                .contains("\"event\":\"sapafcsdk.scheduling.SchedulingProcessingService\"")
+                .contains("\"event\":\"sapafcsdk.scheduling.ProcessingService\"")
                 .and(m.msg().contains("\"event\":\"syncJob\""))
             )
             .orderBy(m -> m.timestamp().asc());
@@ -70,7 +70,7 @@ public class SchedulingJobs {
             return;
           }
 
-          SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+          ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
           processingServiceOutboxed.syncJob();
 
           messages = persistenceService.run(query).listOf(Messages.class);

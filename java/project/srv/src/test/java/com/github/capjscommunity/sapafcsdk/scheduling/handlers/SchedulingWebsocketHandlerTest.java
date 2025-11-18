@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChanged;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChanged;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChangedContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService_;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
@@ -42,7 +42,7 @@ public class SchedulingWebsocketHandlerTest {
   protected OutboxService outboxService;
 
   @Autowired
-  private SchedulingWebsocketService websocketService;
+  private WebsocketService websocketService;
 
   @Autowired
   private PersistenceService persistenceService;
@@ -50,9 +50,9 @@ public class SchedulingWebsocketHandlerTest {
   @Test
   @WithMockUser("authenticated")
   public void jobStatusChanged() throws Exception {
-    OutboxTestSetup setup = prepareOutboxTest(SchedulingWebsocketService_.CDS_NAME, JobStatusChangedContext.CDS_NAME);
+    OutboxTestSetup setup = prepareOutboxTest(WebsocketService_.CDS_NAME, JobStatusChangedContext.CDS_NAME);
 
-    SchedulingWebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
     JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
     JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
     jobStatusChangedData.setStatus(JobStatusCode.COMPLETED);
@@ -63,7 +63,7 @@ public class SchedulingWebsocketHandlerTest {
     setup.eventTriggered.countDown();
 
     JSONObject websocketEvent = setup.messageEvents.get(0);
-    assertEquals("sapafcsdk.scheduling.SchedulingWebsocketService", websocketEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
       JobStatusCode.COMPLETED,

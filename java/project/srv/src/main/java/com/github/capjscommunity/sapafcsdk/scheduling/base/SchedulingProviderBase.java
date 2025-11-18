@@ -6,9 +6,9 @@ import com.github.capjscommunity.sapafcsdk.common.EndpointProvider;
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult_;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.JobResultDataContext;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobResultDataContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
@@ -26,10 +26,10 @@ public class SchedulingProviderBase {
   protected PersistenceService persistenceService;
 
   @Autowired
-  protected SchedulingProcessingService processingService;
+  protected ProcessingService processingService;
 
   @Autowired
-  protected SchedulingWebsocketService websocketService;
+  protected WebsocketService websocketService;
 
   @Autowired
   @Qualifier(OutboxConfig.OUTBOX_SERVICE)

@@ -3,7 +3,7 @@ namespace sapafcsdk.scheduling;
 using sapafcsdk.scheduling from '../../db/scheduling';
 
 @path: 'job-scheduling/monitoring'
-service SchedulingMonitoringService {
+service MonitoringService {
   entity JobDefinition @readonly          as projection on scheduling.JobDefinition;
   entity JobParameterDefinition @readonly as projection on scheduling.JobParameterDefinition;
 
@@ -23,7 +23,7 @@ service SchedulingMonitoringService {
   entity MessageSeverity @readonly        as projection on scheduling.MessageSeverity;
 };
 
-extend SchedulingMonitoringService.Job with columns {
+extend MonitoringService.Job with columns {
   @title: '{i18n>Criticality}'
   case
     status.code
@@ -46,7 +46,7 @@ extend SchedulingMonitoringService.Job with columns {
   end as criticality : Integer
 }
 
-extend SchedulingMonitoringService.JobResultMessage with columns {
+extend MonitoringService.JobResultMessage with columns {
   @title: '{i18n>Criticality}'
   case
     severity.code

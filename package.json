@@ -144,7 +144,7 @@
       }
     },
     "requires": {
-      "sapafcsdk.scheduling.SchedulingProcessingService": {
+      "sapafcsdk.scheduling.ProcessingService": {
         "queued": {
           "kind": "persistent-queue",
           "maxAttempts": 5,
@@ -157,7 +157,7 @@
           }
         }
       },
-      "sapafcsdk.scheduling.SchedulingWebsocketService": {
+      "sapafcsdk.scheduling.WebsocketService": {
         "queued": {
           "kind": "persistent-queue",
           "transactionMode": "alwaysRollback",

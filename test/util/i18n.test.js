@@ -14,7 +14,7 @@ describe("i18n", () => {
         definition.kind === "entity" &&
         !definition.query &&
         definition.name.startsWith("sapafcsdk.scheduling.") &&
-        !definition.name.startsWith("sapafcsdk.scheduling.Scheduling") &&
+        !definition.name.includes("Service.") &&
         !definition.name.endsWith(".texts")
       );
     });

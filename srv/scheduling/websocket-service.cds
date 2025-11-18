@@ -4,7 +4,7 @@ using sapafcsdk.scheduling.JobStatusCode from '../../db/scheduling';
 
 @path    : 'job-scheduling'
 @protocol: 'ws'
-service SchedulingWebsocketService {
+service WebsocketService {
 
   event jobStatusChanged {
     IDs    : many UUID;

@@ -1,13 +1,14 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
 import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
-import com.github.capjscommunity.sapafcsdk.test.TestSimpleFailedConfig;
+import com.github.capjscommunity.sapafcsdk.test.TestSimpleCompletedConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
@@ -15,6 +16,7 @@ import com.sap.cds.ql.Select;
 import com.sap.cds.services.messages.LocalizedMessageProvider;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,11 +31,11 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleFailedConfig.class })
-public class SchedulingProcessingHandlerSimpleMockFailedTest {
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedConfig.class })
+public class SchedulingProcessingHandlerSimpleMockCompletedTest {
 
   @Autowired
-  private SchedulingProcessingService processingService;
+  private ProcessingService processingService;
 
   @Autowired
   private PersistenceService persistenceService;
@@ -47,7 +49,7 @@ public class SchedulingProcessingHandlerSimpleMockFailedTest {
 
   @Test
   @WithMockUser("authenticated")
-  void processJob() {
+  void processJob() throws Exception {
     Locale.setDefault(Locale.ENGLISH);
 
     Job job = Job.of(
@@ -65,21 +67,32 @@ public class SchedulingProcessingHandlerSimpleMockFailedTest {
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = result.single().as(Job.class).getId();
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(ID, false);
 
     Job processedJob = persistenceService.run(Select.from(JOB).byId(ID)).single(Job.class);
-    assertEquals(JobStatusCode.FAILED, processedJob.getStatusCode());
+    assertEquals(JobStatusCode.COMPLETED, processedJob.getStatusCode());
 
     List<JobResult> jobResults = persistenceService
       .run(Select.from(JOB_RESULT).where(jr -> jr.job_ID().eq(ID)))
       .listOf(JobResult.class);
 
-    assertEquals(2, jobResults.size());
+    assertEquals(5, jobResults.size());
     assertEquals("Basic Mocked Run", jobResults.get(0).getName());
     assertEquals(ResultTypeCode.MESSAGE, jobResults.get(0).getTypeCode());
     assertEquals("Message", jobResults.get(1).getName());
     assertEquals(ResultTypeCode.MESSAGE, jobResults.get(1).getTypeCode());
+    assertEquals("Link", jobResults.get(2).getName());
+    assertEquals(ResultTypeCode.LINK, jobResults.get(2).getTypeCode());
+    assertEquals("https://sap.com", jobResults.get(2).getLink());
+    assertEquals("Data", jobResults.get(3).getName());
+    assertEquals(ResultTypeCode.DATA, jobResults.get(3).getTypeCode());
+    assertEquals("text/plain", jobResults.get(3).getMimeType());
+    assertEquals("log.txt", jobResults.get(3).getFilename());
+    assertEquals("Data", jobResults.get(4).getName());
+    assertEquals(ResultTypeCode.DATA, jobResults.get(4).getTypeCode());
+    assertEquals("application/pdf", jobResults.get(4).getMimeType());
+    assertEquals("log.pdf", jobResults.get(4).getFilename());
 
     List<String> messageResultIDs = jobResults
       .stream()
@@ -99,9 +112,35 @@ public class SchedulingProcessingHandlerSimpleMockFailedTest {
       .run(Select.from(JOB_RESULT_MESSAGE).where(jr -> jr.result_ID().eq(messageResultIDs.get(1))))
       .listOf(JobResultMessage.class);
     assertEquals(1, jobResultMessages.size());
-    assertEquals("jobFailed", jobResultMessages.get(0).getCode());
-    assertEquals(MessageSeverityCode.ERROR, jobResultMessages.get(0).getSeverityCode());
-    assertEquals(messageProvider.get("jobFailed", null, Locale.ENGLISH), jobResultMessages.get(0).getText());
+    assertEquals("jobCompleted", jobResultMessages.get(0).getCode());
+    assertEquals(MessageSeverityCode.INFO, jobResultMessages.get(0).getSeverityCode());
+    assertEquals(messageProvider.get("jobCompleted", null, Locale.ENGLISH), jobResultMessages.get(0).getText());
+
+    String textResultID = jobResults
+      .stream()
+      .filter(r -> "text/plain".equals(r.getMimeType()))
+      .map(JobResult::getId)
+      .findFirst()
+      .orElseThrow();
+
+    JobResult jobResult = persistenceService
+      .run(Select.from(Scheduling_.JOB_RESULT).byId(textResultID))
+      .single(com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
+    assertEquals("Job completed successfully", new String(jobResult.getData().readAllBytes()));
+
+    String pdfResultID = jobResults
+      .stream()
+      .filter(r -> "application/pdf".equals(r.getMimeType()))
+      .map(JobResult::getId)
+      .findFirst()
+      .orElseThrow();
+
+    jobResult = persistenceService
+      .run(Select.from(Scheduling_.JOB_RESULT).byId(pdfResultID))
+      .single(com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
+    InputStream pdfStream = this.getClass().getClassLoader().getResourceAsStream("log.pdf");
+    byte[] pdfBytes = pdfStream.readAllBytes();
+    assertArrayEquals(pdfBytes, jobResult.getData().readAllBytes());
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
   }
