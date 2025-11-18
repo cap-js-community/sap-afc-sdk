@@ -8,7 +8,7 @@ const { projectName, isNode, adjustXML } = require("../common/util");
 
 const Plugins = [
   {
-    groupId: "com.github.cap.js.community",
+    groupId: "com.github.capjscommunity",
     artifactId: "sap-afc-sdk",
     packaging: "jar",
   },

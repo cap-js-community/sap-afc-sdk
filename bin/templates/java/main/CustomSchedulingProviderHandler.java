@@ -1,7 +1,7 @@
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
+import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;

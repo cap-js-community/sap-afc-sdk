@@ -1,6 +1,6 @@
-package com.github.cap.js.community.sapafcsdk.test;
+package com.github.capjscommunity.sapafcsdk.test;
 
-import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.runtime.CdsRuntime;
 import org.springframework.beans.factory.annotation.Autowired;

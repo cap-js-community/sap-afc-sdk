@@ -1,17 +1,17 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
+package com.github.capjscommunity.sapafcsdk.scheduling.controllers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.github.cap.js.community.sapafcsdk.model.scheduling.Job;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.MessageSeverityCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.ResultTypeCode;
-import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
-import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedConfig;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.Job;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.MessageSeverityCode;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.ResultTypeCode;
+import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
+import com.github.capjscommunity.sapafcsdk.test.TestSimpleCompletedConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;

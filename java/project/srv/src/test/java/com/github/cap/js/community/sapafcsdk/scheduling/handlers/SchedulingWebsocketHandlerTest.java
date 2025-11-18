@@ -1,15 +1,15 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
+package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
-import com.github.cap.js.community.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService_;
+import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
+import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
+import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService_;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;

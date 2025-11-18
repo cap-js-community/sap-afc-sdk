@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.github.cap.js.community.sapafcsdk.Application;
+import com.github.capjscommunity.sapafcsdk.Application;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;

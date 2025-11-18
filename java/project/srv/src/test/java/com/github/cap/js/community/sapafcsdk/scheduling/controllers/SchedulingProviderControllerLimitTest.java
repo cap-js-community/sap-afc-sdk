@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
+package com.github.capjscommunity.sapafcsdk.scheduling.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

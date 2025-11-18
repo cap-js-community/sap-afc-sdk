@@ -1,13 +1,13 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
+package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.*;
+import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
-import com.github.cap.js.community.sapafcsdk.test.TestSimpleCompletedWithErrorConfig;
+import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.*;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
+import com.github.capjscommunity.sapafcsdk.test.TestSimpleCompletedWithErrorConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;

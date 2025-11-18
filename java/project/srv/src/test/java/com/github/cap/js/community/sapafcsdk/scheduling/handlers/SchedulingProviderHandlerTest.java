@@ -1,15 +1,15 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
+package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
+import static com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.MessageSeverityCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.ResultTypeCode;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_;
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.MessageSeverityCode;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.ResultTypeCode;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_;
+import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Delete;
@@ -182,8 +182,8 @@ public class SchedulingProviderHandlerTest {
   @Test
   @WithMockUser("authenticated")
   void cancelJob() {
-    com.github.cap.js.community.sapafcsdk.model.scheduling.Job job =
-      com.github.cap.js.community.sapafcsdk.model.scheduling.Job.of(
+    com.github.capjscommunity.sapafcsdk.model.scheduling.Job job =
+      com.github.capjscommunity.sapafcsdk.model.scheduling.Job.of(
         Map.of(
           "definition_name",
           "JOB_5",
@@ -196,7 +196,7 @@ public class SchedulingProviderHandlerTest {
         )
       );
     Result result = persistenceService.run(Insert.into(Scheduling_.JOB).entry(job));
-    String ID = result.single().as(com.github.cap.js.community.sapafcsdk.model.scheduling.Job.class).getId();
+    String ID = result.single().as(com.github.capjscommunity.sapafcsdk.model.scheduling.Job.class).getId();
 
     Job_ jobRef = CQL.entity(Job_.class).filter(j -> j.ID().eq(ID));
     providerService.cancel(jobRef);

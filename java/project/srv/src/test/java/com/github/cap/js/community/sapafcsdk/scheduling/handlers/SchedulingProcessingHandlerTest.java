@@ -1,16 +1,16 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.handlers;
+package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.*;
+import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.github.cap.js.community.sapafcsdk.configuration.OutboxConfig;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.*;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.Notification;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.cap.js.community.sapafcsdk.test.OutboxTestConfig;
+import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.*;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.Notification;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
@@ -136,22 +136,22 @@ public class SchedulingProcessingHandlerTest {
     SchedulingProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
 
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText deText =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText deText =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
     deText.setLocale(Locale.GERMAN.getLanguage());
     deText.setText("Job abgeschlossen");
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText frText =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText frText =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
     frText.setLocale(Locale.FRENCH.getLanguage());
     message.setTexts(List.of(deText, frText));
 
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult resultEntry =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.create();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult resultEntry =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.create();
     resultEntry.setType(ResultTypeCode.MESSAGE);
     resultEntry.setName("Result");
     resultEntry.setMessages(List.of(message));
@@ -163,7 +163,7 @@ public class SchedulingProcessingHandlerTest {
 
     List<JobResult> results = persistenceService
       .run(
-        Select.from(com.github.cap.js.community.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT).where(jr ->
+        Select.from(com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT).where(jr ->
           jr.job_ID().eq(ID)
         )
       )
@@ -215,11 +215,11 @@ public class SchedulingProcessingHandlerTest {
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("type", ResultTypeCode.LINK, "name", "Link", "link", "https://sap.com")
       ),
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "type",
           ResultTypeCode.DATA,
@@ -233,7 +233,7 @@ public class SchedulingProcessingHandlerTest {
           dataStream
         )
       ),
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "type",
           ResultTypeCode.MESSAGE,
@@ -310,8 +310,8 @@ public class SchedulingProcessingHandlerTest {
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "type",
           ResultTypeCode.DATA,
@@ -361,8 +361,8 @@ public class SchedulingProcessingHandlerTest {
     String ID = insertResult.single().as(Job.class).getId();
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "type",
           ResultTypeCode.DATA,
@@ -518,8 +518,8 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.create()
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.create()
     );
     Exception exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
@@ -531,8 +531,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(Map.of("name", "Link"))
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(Map.of("name", "Link"))
     );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
@@ -544,8 +544,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", "X")
       )
     );
@@ -557,8 +557,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.LINK)
       )
     );
@@ -570,8 +570,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "mimeType", "text/plain")
       )
     );
@@ -585,8 +585,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "filename", "test.txt")
       )
     );
@@ -601,8 +601,8 @@ public class SchedulingProcessingHandlerTest {
     );
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "data", dataStream)
       )
     );
@@ -614,8 +614,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "name",
           "Link",
@@ -624,7 +624,7 @@ public class SchedulingProcessingHandlerTest {
           "link",
           "https://sap.com",
           "messages",
-          new ArrayList<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
         )
       )
     );
@@ -660,8 +660,8 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.DATA)
       )
     );
@@ -673,8 +673,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain")
       )
     );
@@ -686,8 +686,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain", "filename", "test.txt")
       )
     );
@@ -700,8 +700,8 @@ public class SchedulingProcessingHandlerTest {
     );
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "name",
           "Link",
@@ -726,8 +726,8 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "name",
           "Link",
@@ -740,7 +740,7 @@ public class SchedulingProcessingHandlerTest {
           "data",
           dataStream,
           "messages",
-          new ArrayList<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
         )
       )
     );
@@ -776,8 +776,8 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE)
       )
     );
@@ -791,15 +791,15 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of(
           "name",
           "Link",
           "type",
           ResultTypeCode.MESSAGE,
           "messages",
-          new ArrayList<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
         )
       )
     );
@@ -813,13 +813,13 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage> messages =
-      new ArrayList<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>();
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage> messages =
+      new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
       )
     );
@@ -833,11 +833,11 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
       )
     );
@@ -851,12 +851,12 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setSeverity("X");
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
       )
     );
@@ -871,13 +871,13 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "link", "https://sap.com")
       )
     );
@@ -892,13 +892,13 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "mimeType", "text/plain")
       )
     );
@@ -913,13 +913,13 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "filename", "test.txt")
       )
     );
@@ -934,14 +934,14 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results9 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results9 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "data", dataStream)
       )
     );
@@ -956,18 +956,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
-    List<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText> texts =
-      new ArrayList<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText>();
-    com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText text =
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText> texts =
+      new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText>();
+    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText text =
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
     texts.add(text);
     message.setTexts(texts);
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results10 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results10 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
       )
     );
@@ -982,18 +982,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
     texts = new ArrayList<>();
-    text = com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    text = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
     text.setLocale("xx");
     text.setText("test");
     texts.add(text);
     message.setTexts(texts);
     messages.add(message);
-    Collection<com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult> results11 = List.of(
-      com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
+    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results11 = List.of(
+      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
         Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
       )
     );

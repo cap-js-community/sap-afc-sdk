@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.scheduling.controllers;
+package com.github.capjscommunity.sapafcsdk.scheduling.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.github.cap.js.community.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.cap.js.community.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.CancelJobContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.ProcessJobContext;
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService_;
+import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
+import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.CancelJobContext;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.ProcessJobContext;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService_;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;

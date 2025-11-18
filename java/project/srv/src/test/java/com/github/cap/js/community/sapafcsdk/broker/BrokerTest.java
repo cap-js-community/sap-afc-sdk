@@ -1,4 +1,4 @@
-package com.github.cap.js.community.sapafcsdk.broker;
+package com.github.capjscommunity.sapafcsdk.broker;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

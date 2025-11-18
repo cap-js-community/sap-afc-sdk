@@ -29,7 +29,7 @@ const Dependencies = {
   Node: [],
   Java: [
     {
-      groupId: "com.github.cap.js.community",
+      groupId: "com.github.capjscommunity",
       artifactId: "sap-afc-sdk",
       version: Version,
     },
@@ -271,7 +271,7 @@ function processJava() {
     }
     if (!yaml.get("springdoc")) {
       yaml.set("springdoc", {
-        "packages-to-scan": ["com.github.cap.js.community.sapafcsdk.scheduling.controllers"],
+        "packages-to-scan": ["com.github.capjscommunity.sapafcsdk.scheduling.controllers"],
         "swagger-ui": {
           path: "/api-docs/api/job-scheduling/v1",
         },
