@@ -22,7 +22,7 @@ cds:
     enabled: true
 springdoc:
   packages-to-scan:
-    - com.github.cap.js.community.sapafcsdk.scheduling.controllers
+    - com.github.capjscommunity.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 sap-afc-sdk:

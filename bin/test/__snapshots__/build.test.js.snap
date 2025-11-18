@@ -737,7 +737,7 @@ exports[`Build Java / CF 10`] = `
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.github.cap.js.community</groupId>
+      <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
       <version>0.8.1</version>
     </dependency>
@@ -873,7 +873,7 @@ management:
     db:
       enabled: true
 springdoc:
-  packages-to-scan[0]: com.github.cap.js.community.sapafcsdk.scheduling.controllers
+  packages-to-scan[0]: com.github.capjscommunity.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 sap-afc-sdk:
@@ -944,8 +944,8 @@ exports[`Build Java / CF 13`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -998,8 +998,8 @@ exports[`Build Java / CF 14`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
+import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -2104,7 +2104,7 @@ exports[`Build Java / Kyma 10`] = `
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.cap.js.community</groupId>
+      <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
       <version>0.8.1</version>
     </dependency>
@@ -2240,7 +2240,7 @@ management:
     db:
       enabled: true
 springdoc:
-  packages-to-scan[0]: com.github.cap.js.community.sapafcsdk.scheduling.controllers
+  packages-to-scan[0]: com.github.capjscommunity.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 sap-afc-sdk:
@@ -2311,8 +2311,8 @@ exports[`Build Java / Kyma 13`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -2365,8 +2365,8 @@ exports[`Build Java / Kyma 14`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
+import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;

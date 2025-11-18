@@ -1,7 +1,7 @@
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;

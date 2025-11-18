@@ -5,7 +5,7 @@
 
     <parent>
         <artifactId>sap-afc-sdk-parent</artifactId>
-        <groupId>com.github.cap.js.community</groupId>
+        <groupId>com.github.capjscommunity</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -177,7 +177,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <basePackage>com.github.cap.js.community.sapafcsdk.model</basePackage>
+                            <basePackage>com.github.capjscommunity.sapafcsdk.model</basePackage>
                         </configuration>
                     </execution>
                 </executions>

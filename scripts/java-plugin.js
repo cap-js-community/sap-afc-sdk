@@ -5,7 +5,7 @@ const fs = require("fs");
 const shelljs = require("shelljs");
 const { adjustXML } = require("../bin/common/util");
 
-const BasePath = "com/github/cap/js/community/sapafcsdk";
+const BasePath = "com/github/capjscommunity/sapafcsdk";
 
 const Plugins = {
   file: "sap-afc-sdk",

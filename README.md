@@ -921,8 +921,8 @@ To implement custom job processing, extend the job processing service definition
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -1087,8 +1087,8 @@ To implement a custom job provider, extend the job provider service definition a
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProviderBase;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
@@ -1165,8 +1165,8 @@ sap-afc-sdk:
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -1225,8 +1225,8 @@ Available notifications are:
 ```java
 package customer.scheduling;
 
-import com.github.cap.js.community.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
-import com.github.cap.js.community.sapafcsdk.scheduling.base.SchedulingProcessingBase;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
