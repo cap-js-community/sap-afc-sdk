@@ -1,4 +1,4 @@
-package customer.scheduling;
+package customer.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;

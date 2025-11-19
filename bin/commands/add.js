@@ -32,6 +32,7 @@ Features:
   sample \t\t - add sample data
   stub \t\t\t - add stub implementation
   test \t\t\t - add test
+  undeploy \t\t - add db undeploy
 
 Examples:
   afc add broker
@@ -70,7 +71,7 @@ Examples:
     for (const feature of features) {
       let featureFn;
       try {
-        if (options.xremove && !["mock"].includes(feature)) {
+        if (options.xremove && !["mock", "undeploy"].includes(feature)) {
           console.log("Feature removal is only supported for 'mock'");
           continue;
         }

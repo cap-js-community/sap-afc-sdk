@@ -1,6 +1,6 @@
 {
   "name": "@cap-js-community/sap-afc-sdk",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "SAP Advanced Financial Closing SDK for CDS",
   "homepage": "https://cap.cloud.sap/",
   "engines": {
@@ -67,7 +67,7 @@
     "java:check": "npm run test:java && node scripts/java-plugin -c",
     "audit": "npm audit --only=prod",
     "check": "npm run lint:ci && npm run openapi:check && npm test && npm run java:check && npm run test:bin",
-    "sync": "npm run upgrade-lock && npm run i18n:pull && npm run openapi:update && npm run lint && npm run test:update && npm run java:update && npm run test:bin:update",
+    "sync": "npm run upgrade-lock && npm run openapi:update && npm run lint && npm run test:update && npm run java:update && npm run test:bin:update",
     "update": "npm run java:update"
   },
   "dependencies": {
