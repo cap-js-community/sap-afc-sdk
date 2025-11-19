@@ -739,7 +739,7 @@ exports[`Build Java / CF 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.8.1</version>
+      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -944,7 +944,7 @@ exports[`Build Java / CF 13`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
@@ -998,7 +998,7 @@ exports[`Build Java / CF 14`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -2106,7 +2106,7 @@ exports[`Build Java / Kyma 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.8.1</version>
+      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -2311,7 +2311,7 @@ exports[`Build Java / Kyma 13`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.sap.cds.services.handler.annotations.HandlerOrder;
 import com.sap.cds.services.handler.annotations.On;
@@ -2365,7 +2365,7 @@ exports[`Build Java / Kyma 14`] = `
 
 package customer.afcsdk.scheduling;
 
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -3521,7 +3521,7 @@ exports[`Build Node / CF 10`] = `
 exports[`Build Node / CF 11`] = `
 "srv/scheduling-processing-service.cds
 
-using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
 annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
 "
@@ -3574,7 +3574,7 @@ module.exports = CustomSchedulingProcessingService;
 exports[`Build Node / CF 13`] = `
 "srv/scheduling-provider-service.cds
 
-using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
 annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
@@ -4679,7 +4679,7 @@ exports[`Build Node / Kyma 10`] = `
 exports[`Build Node / Kyma 11`] = `
 "srv/scheduling-processing-service.cds
 
-using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
 annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
 "
@@ -4732,7 +4732,7 @@ module.exports = CustomSchedulingProcessingService;
 exports[`Build Node / Kyma 13`] = `
 "srv/scheduling-provider-service.cds
 
-using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
 annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
