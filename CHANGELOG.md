@@ -10,8 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Switch from `outbox` to `queued`
+- Adjusted App namespace
 - Adjusted CDS namespace for model uniqueness
 - Adjusted Java package name
+- Fix labels
 
 ## Version 0.8.0 - 2025-11-06
 
