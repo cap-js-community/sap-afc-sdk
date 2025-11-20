@@ -1,12 +1,12 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.github.capjscommunity.sapafcsdk.model.scheduling.Job;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
@@ -206,7 +206,9 @@ public class SchedulingMonitoringHandlerTest {
       .perform(post("/odata/v4/job-scheduling/monitoring/JobDefinition").contentType("application/json").content("{}"))
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
-        jsonPath("$.error.message").value("Entity 'SchedulingMonitoringService.JobDefinition' is not insertable")
+        jsonPath("$.error.message").value(
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobDefinition' is not insertable"
+        )
       );
   }
 
@@ -219,7 +221,9 @@ public class SchedulingMonitoringHandlerTest {
       )
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
-        jsonPath("$.error.message").value("Entity 'SchedulingMonitoringService.JobDefinition' is not updatable")
+        jsonPath("$.error.message").value(
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobDefinition' is not updatable"
+        )
       );
   }
 
@@ -230,7 +234,9 @@ public class SchedulingMonitoringHandlerTest {
       .perform(delete("/odata/v4/job-scheduling/monitoring/JobDefinition('JOB_1')"))
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
-        jsonPath("$.error.message").value("Entity 'SchedulingMonitoringService.JobDefinition' is not deletable")
+        jsonPath("$.error.message").value(
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobDefinition' is not deletable"
+        )
       );
   }
 
@@ -246,7 +252,7 @@ public class SchedulingMonitoringHandlerTest {
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
         jsonPath("$.error.message").value(
-          "Entity 'SchedulingMonitoringService.JobParameterDefinition' is not insertable"
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobParameterDefinition' is not insertable"
         )
       );
   }
@@ -263,7 +269,7 @@ public class SchedulingMonitoringHandlerTest {
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
         jsonPath("$.error.message").value(
-          "Entity 'SchedulingMonitoringService.JobParameterDefinition' is not updatable"
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobParameterDefinition' is not updatable"
         )
       );
   }
@@ -278,7 +284,7 @@ public class SchedulingMonitoringHandlerTest {
       .andExpect(status().isMethodNotAllowed())
       .andExpect(
         jsonPath("$.error.message").value(
-          "Entity 'SchedulingMonitoringService.JobParameterDefinition' is not deletable"
+          "Entity 'sapafcsdk.scheduling.MonitoringService.JobParameterDefinition' is not deletable"
         )
       );
   }
@@ -293,7 +299,9 @@ public class SchedulingMonitoringHandlerTest {
           .content("{}")
       )
       .andExpect(status().isMethodNotAllowed())
-      .andExpect(jsonPath("$.error.message").value("Entity 'SchedulingMonitoringService.Job' is not updatable"));
+      .andExpect(
+        jsonPath("$.error.message").value("Entity 'sapafcsdk.scheduling.MonitoringService.Job' is not updatable")
+      );
   }
 
   @Test
@@ -302,7 +310,9 @@ public class SchedulingMonitoringHandlerTest {
     mockMvc
       .perform(delete("/odata/v4/job-scheduling/monitoring/Job(3a89dfec-59f9-4a91-90fe-3c7ca7407103)"))
       .andExpect(status().isMethodNotAllowed())
-      .andExpect(jsonPath("$.error.message").value("Entity 'SchedulingMonitoringService.Job' is not deletable"));
+      .andExpect(
+        jsonPath("$.error.message").value("Entity 'sapafcsdk.scheduling.MonitoringService.Job' is not deletable")
+      );
   }
 
   @Test
@@ -325,7 +335,7 @@ public class SchedulingMonitoringHandlerTest {
 
     mockMvc
       .perform(
-        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/SchedulingMonitoringService.cancel")
+        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/sapafcsdk.scheduling.MonitoringService.cancel")
           .locale(Locale.ENGLISH)
           .contentType("application/json")
           .content("{}")
@@ -355,7 +365,7 @@ public class SchedulingMonitoringHandlerTest {
     mockMvc
       .perform(
         post(
-          "/odata/v4/job-scheduling/monitoring/Job(1a89dfec-59f9-4a91-90fe-3c7ca7407103)/SchedulingMonitoringService.cancel"
+          "/odata/v4/job-scheduling/monitoring/Job(1a89dfec-59f9-4a91-90fe-3c7ca7407103)/sapafcsdk.scheduling.MonitoringService.cancel"
         )
           .locale(Locale.ENGLISH)
           .contentType("application/json")
@@ -389,7 +399,7 @@ public class SchedulingMonitoringHandlerTest {
 
     mockMvc
       .perform(
-        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/SchedulingMonitoringService.cancel")
+        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/sapafcsdk.scheduling.MonitoringService.cancel")
           .locale(Locale.ENGLISH)
           .contentType("application/json")
           .content("{}")
@@ -398,7 +408,7 @@ public class SchedulingMonitoringHandlerTest {
 
     mockMvc
       .perform(
-        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/SchedulingMonitoringService.cancel")
+        post("/odata/v4/job-scheduling/monitoring/Job(" + ID + ")/sapafcsdk.scheduling.MonitoringService.cancel")
           .locale(Locale.ENGLISH)
           .contentType("application/json")
           .content("{}")

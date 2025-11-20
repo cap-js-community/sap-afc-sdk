@@ -2,11 +2,11 @@ package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.common.EndpointProvider;
 import com.github.capjscommunity.sapafcsdk.configuration.AfcSdkProperties;
-import com.github.capjscommunity.sapafcsdk.model.schedulingmonitoringservice.Job;
-import com.github.capjscommunity.sapafcsdk.model.schedulingmonitoringservice.JobCancelContext;
-import com.github.capjscommunity.sapafcsdk.model.schedulingmonitoringservice.Job_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingmonitoringservice.SchedulingMonitoringService_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.monitoringservice.Job;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.monitoringservice.JobCancelContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.monitoringservice.Job_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.monitoringservice.MonitoringService_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.ProviderService;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.cqn.CqnAnalyzer;
 import com.sap.cds.services.EventContext;
@@ -21,14 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingMonitoringService_.CDS_NAME)
+@ServiceName(MonitoringService_.CDS_NAME)
 public class SchedulingMonitoringHandler implements EventHandler {
 
   @Autowired
   private PersistenceService persistenceService;
 
   @Autowired
-  private SchedulingProviderService schedulingProviderService;
+  private ProviderService providerService;
 
   @Autowired
   private EndpointProvider endpointProvider;
@@ -54,10 +54,10 @@ public class SchedulingMonitoringHandler implements EventHandler {
       .targetKeys()
       .get("ID")
       .toString();
-    com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.Job_ job = CQL.entity(
-      com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.Job_.class
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.Job_ job = CQL.entity(
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.Job_.class
     ).filter(j -> j.ID().eq(ID));
-    this.schedulingProviderService.cancel(job);
+    this.providerService.cancel(job);
     context.setResult(persistenceService.run(context.getCqn()).single(Job.class));
     context.getMessages().success("cancelJobSuccess").code("200");
     context.setCompleted();

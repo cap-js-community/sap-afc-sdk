@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.CancelJobContext;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.ProcessJobContext;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.CancelJobContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessJobContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService_;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
@@ -51,7 +51,7 @@ public class SchedulingProviderProcessingOutboxTest {
   @Test
   @WithMockUser("authenticated")
   public void createJobOutboxed() throws Exception {
-    OutboxTestSetup setup = prepareOutboxTest(SchedulingProcessingService_.CDS_NAME, ProcessJobContext.CDS_NAME);
+    OutboxTestSetup setup = prepareOutboxTest(ProcessingService_.CDS_NAME, ProcessJobContext.CDS_NAME);
     JSONObject job = new JSONObject(
       Map.of(
         "name",
@@ -91,12 +91,12 @@ public class SchedulingProviderProcessingOutboxTest {
     setup.eventTriggered.countDown();
 
     JSONObject processingEvent = setup.messageEvents.get(0);
-    assertEquals("SchedulingProcessingService", processingEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.ProcessingService", processingEvent.get("event"));
     assertEquals("processJob", processingEvent.getJSONObject("message").get("event"));
     assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 
     JSONObject websocketEvent = setup.messageEvents.get(1);
-    assertEquals("SchedulingWebsocketService", websocketEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
       JobStatusCode.REQUESTED,
@@ -118,7 +118,7 @@ public class SchedulingProviderProcessingOutboxTest {
   @Test
   @WithMockUser("authenticated")
   public void cancelJobOutboxed() throws Exception {
-    OutboxTestSetup setup = prepareOutboxTest(SchedulingProcessingService_.CDS_NAME, CancelJobContext.CDS_NAME);
+    OutboxTestSetup setup = prepareOutboxTest(ProcessingService_.CDS_NAME, CancelJobContext.CDS_NAME);
 
     mockMvc
       .perform(post("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel").locale(Locale.ENGLISH))
@@ -132,7 +132,7 @@ public class SchedulingProviderProcessingOutboxTest {
     setup.eventTriggered.countDown();
 
     JSONObject processingEvent = setup.messageEvents.get(0);
-    assertEquals("SchedulingProcessingService", processingEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.ProcessingService", processingEvent.get("event"));
     assertEquals("cancelJob", processingEvent.getJSONObject("message").get("event"));
     assertEquals(
       "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
@@ -140,7 +140,7 @@ public class SchedulingProviderProcessingOutboxTest {
     );
 
     JSONObject websocketEvent = setup.messageEvents.get(1);
-    assertEquals("SchedulingWebsocketService", websocketEvent.get("event"));
+    assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
       "cancelRequested",

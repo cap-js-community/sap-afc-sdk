@@ -17,9 +17,12 @@ function processSchedulingProviderService(check, skip) {
   const filePath = path.join(process.cwd(), "./openapi/SchedulingProviderV1Service.openapi3.json");
   const jsonBefore = fs.existsSync(filePath) ? JSON.stringify(JSON.parse(fs.readFileSync(filePath)), null, 2) : "";
   const data = JSON.parse(
-    shelljs.exec("cds compile srv/scheduling/provider-service --service SchedulingProviderService --to openapi", {
-      silent: true,
-    }).stdout,
+    shelljs.exec(
+      "cds compile srv/scheduling/provider-service --service sapafcsdk.scheduling.ProviderService --to openapi",
+      {
+        silent: true,
+      },
+    ).stdout,
   );
 
   if (!skip) {
@@ -46,13 +49,8 @@ function processSchedulingProviderService(check, skip) {
     // Components
     data.components.parameters = {};
     data.components.responses = DEFAULT_RESPONSES;
-    data.components.schemas["SchedulingProviderService.Notification"].properties.value["x-extensible-enum"] = [
-      "released",
-      "active",
-      "paused",
-      "completed",
-      "obsolete",
-    ];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.Notification"].properties.value["x-extensible-enum"] =
+      ["released", "active", "paused", "completed", "obsolete"];
     data.components.schemas.error = {
       type: "object",
       required: ["code", "message"],
@@ -71,81 +69,91 @@ function processSchedulingProviderService(check, skip) {
       },
     };
     delete data.components.schemas.count;
-    data.components.schemas["SchedulingProviderService.Job"].properties.status.description =
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].properties.status.description =
       "Final statuses are 'completed', 'completedWithWarning', 'completedWithError', 'failed', and 'canceled', no further status transitions are then allowed";
-    data.components.schemas["SchedulingProviderService.Job"].required = [
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].required = [
       "ID",
       "name",
       "referenceID",
       "version",
       "status",
     ];
-    data.components.schemas["SchedulingProviderService.JobDefinition"].required = ["name", "version"];
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.type;
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.maxLength;
-    data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.value.oneOf = [
-      { type: "string", maxLength: 5000 },
-      { type: "boolean" },
-      { type: "number" },
-    ];
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items.type;
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobDefinition"].required = ["name", "version"];
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.value.type;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.value
       .maxLength;
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.type;
-    delete data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.items;
-    data.components.schemas["SchedulingProviderService.JobParameterDefinition"].properties.enumValues.oneOf = [
-      {
-        type: "array",
-        items: {
-          type: "string",
-          maxLength: 5000,
-        },
-      },
-      {
-        type: "array",
-        items: {
-          type: "boolean",
-        },
-      },
-      {
-        type: "array",
-        items: {
-          type: "number",
-        },
-      },
-    ];
-    data.components.schemas["SchedulingProviderService.JobParameterDefinition"].required = ["name", "dataType", "type"];
-    data.components.schemas["SchedulingProviderService.Job-create"].required = ["name", "referenceID"];
-    data.components.schemas["SchedulingProviderService.JobParameter"].required = ["ID", "name", "value"];
-    delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.type;
-    delete data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.maxLength;
-    data.components.schemas["SchedulingProviderService.JobParameter"].properties.value.oneOf = [
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.value.oneOf = [
       { type: "string", maxLength: 5000 },
       { type: "boolean" },
       { type: "number" },
     ];
-    data.components.schemas["SchedulingProviderService.JobParameter-create"].required = ["name", "value"];
-    delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.type;
-    delete data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.maxLength;
-    data.components.schemas["SchedulingProviderService.JobParameter-create"].properties.value.oneOf = [
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.enumValues
+      .items.type;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.enumValues
+      .items.maxLength;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.enumValues
+      .type;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.enumValues
+      .items;
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].properties.enumValues.oneOf =
+      [
+        {
+          type: "array",
+          items: {
+            type: "string",
+            maxLength: 5000,
+          },
+        },
+        {
+          type: "array",
+          items: {
+            type: "boolean",
+          },
+        },
+        {
+          type: "array",
+          items: {
+            type: "number",
+          },
+        },
+      ];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameterDefinition"].required = [
+      "name",
+      "dataType",
+      "type",
+    ];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.Job-create"].required = ["name", "referenceID"];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter"].required = ["ID", "name", "value"];
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter"].properties.value.type;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter"].properties.value.maxLength;
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter"].properties.value.oneOf = [
+      { type: "string", maxLength: 5000 },
+      { type: "boolean" },
+      { type: "number" },
+    ];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter-create"].required = ["name", "value"];
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter-create"].properties.value.type;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter-create"].properties.value
+      .maxLength;
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobParameter-create"].properties.value.oneOf = [
       { type: "string", maxLength: 5000 },
       { type: "boolean" },
       { type: "number" },
     ];
 
-    data.components.schemas["SchedulingProviderService.JobResult"].required = ["ID", "type", "name"];
-    delete data.components.schemas["SchedulingProviderService.Job-create"].properties.results;
-    delete data.components.schemas["SchedulingProviderService.JobResult"].properties.data;
-    delete data.components.schemas["SchedulingProviderService.JobResult-create"];
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobResult"].required = ["ID", "type", "name"];
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.Job-create"].properties.results;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobResult"].properties.data;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobResult-create"];
 
-    data.components.schemas["SchedulingProviderService.JobResultMessage"].required = [
+    data.components.schemas["sapafcsdk.scheduling.ProviderService.JobResultMessage"].required = [
       "ID",
       "severity",
       "code",
       "text",
       "createdAt",
     ];
-    delete data.components.schemas["SchedulingProviderService.JobResultMessage-create"];
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.JobResultMessage-create"];
 
     // Paths
     data.paths["/Capabilities"].get.summary = "Retrieves capabilities.";
@@ -168,7 +176,7 @@ function processSchedulingProviderService(check, skip) {
       },
     };
     delete data.paths["/JobResult"];
-    delete data.paths["/JobResult/{ID}/SchedulingProviderService.data"];
+    delete data.paths["/JobResult/{ID}/sapafcsdk.scheduling.ProviderService.data"];
     data.paths["/JobResult/{ID}/data"] = {
       parameters: [
         {

@@ -7,12 +7,12 @@ const BaseApplicationService = require("../common/BaseApplicationService");
 module.exports = class SchedulingMonitoringService extends BaseApplicationService {
   async init() {
     const { Job } = this.entities;
-    const { Job: ProviderJob } = cds.entities("SchedulingProviderService");
+    const { Job: ProviderJob } = cds.entities("sapafcsdk.scheduling.ProviderService");
 
     this.fillLink(Job, "Job", "monitor");
 
     this.on(Job.actions.cancel, Job, async (req, next) => {
-      const providerService = await cds.connect.to("SchedulingProviderService");
+      const providerService = await cds.connect.to("sapafcsdk.scheduling.ProviderService");
       const ID = req.params[0].ID;
       await providerService.tx(req).cancel(ProviderJob, ID);
       req.notify(200, "cancelJobSuccess");

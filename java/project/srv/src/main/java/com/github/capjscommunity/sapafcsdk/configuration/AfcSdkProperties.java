@@ -1,6 +1,6 @@
 package com.github.capjscommunity.sapafcsdk.configuration;
 
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

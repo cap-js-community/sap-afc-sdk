@@ -1,12 +1,12 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
 
 import com.github.capjscommunity.sapafcsdk.configuration.AfcSdkProperties;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.Job;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.Job_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.CQL;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class SchedulingProcessingHandler extends SchedulingProcessingBase implements EventHandler {
 
   @Before(event = { ProcessJobContext.CDS_NAME, UpdateJobContext.CDS_NAME, CancelJobContext.CDS_NAME })

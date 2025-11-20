@@ -1,15 +1,15 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.*;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.*;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.Notification;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
@@ -40,7 +40,7 @@ public class SchedulingProcessingHandlerTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private SchedulingProcessingService processingService;
+  private ProcessingService processingService;
 
   @Autowired
   private LocalizedMessageProvider messageProvider;
@@ -70,7 +70,7 @@ public class SchedulingProcessingHandlerTest {
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = result.single().as(Job.class).getId();
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(ID, false);
 
     Job processedJob = persistenceService.run(Select.from(JOB).byId(ID)).single(Job.class);
@@ -97,7 +97,7 @@ public class SchedulingProcessingHandlerTest {
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = result.single().as(Job.class).getId();
 
-    SchedulingProcessingService outboxedProcessingService = outboxService.outboxed(processingService);
+    ProcessingService outboxedProcessingService = outboxService.outboxed(processingService);
     outboxedProcessingService.updateJob(ID, JobStatusCode.RUNNING, null);
 
     Job runningJob = persistenceService.run(Select.from(JOB).byId(ID)).single(Job.class);
@@ -133,25 +133,25 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    SchedulingProcessingService outboxedService = outboxService.outboxed(processingService);
+    ProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
 
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText deText =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText deText =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
     deText.setLocale(Locale.GERMAN.getLanguage());
     deText.setText("Job abgeschlossen");
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText frText =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText frText =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
     frText.setLocale(Locale.FRENCH.getLanguage());
     message.setTexts(List.of(deText, frText));
 
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult resultEntry =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.create();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult resultEntry =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.create();
     resultEntry.setType(ResultTypeCode.MESSAGE);
     resultEntry.setName("Result");
     resultEntry.setMessages(List.of(message));
@@ -163,7 +163,7 @@ public class SchedulingProcessingHandlerTest {
 
     List<JobResult> results = persistenceService
       .run(
-        Select.from(com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT).where(jr ->
+        Select.from(com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_RESULT).where(jr ->
           jr.job_ID().eq(ID)
         )
       )
@@ -211,39 +211,40 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    SchedulingProcessingService outboxedService = outboxService.outboxed(processingService);
+    ProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("type", ResultTypeCode.LINK, "name", "Link", "link", "https://sap.com")
-      ),
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "type",
-          ResultTypeCode.DATA,
-          "name",
-          "Data",
-          "filename",
-          "test.txt",
-          "mimeType",
-          "text/plain",
-          "data",
-          dataStream
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> jobResults =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("type", ResultTypeCode.LINK, "name", "Link", "link", "https://sap.com")
+        ),
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "type",
+            ResultTypeCode.DATA,
+            "name",
+            "Data",
+            "filename",
+            "test.txt",
+            "mimeType",
+            "text/plain",
+            "data",
+            dataStream
+          )
+        ),
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "type",
+            ResultTypeCode.MESSAGE,
+            "name",
+            "Result",
+            "messages",
+            List.of(Map.of("code", "jobCompleted", "severity", MessageSeverityCode.INFO))
+          )
         )
-      ),
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "type",
-          ResultTypeCode.MESSAGE,
-          "name",
-          "Result",
-          "messages",
-          List.of(Map.of("code", "jobCompleted", "severity", MessageSeverityCode.INFO))
-        )
-      )
-    );
+      );
 
     outboxedService.updateJob(ID, JobStatusCode.COMPLETED, jobResults);
 
@@ -306,26 +307,27 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    SchedulingProcessingService outboxedService = outboxService.outboxed(processingService);
+    ProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "type",
-          ResultTypeCode.DATA,
-          "name",
-          "Data",
-          "filename",
-          "test.txt",
-          "mimeType",
-          "text/plain",
-          "data",
-          dataStream
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> jobResults =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "type",
+            ResultTypeCode.DATA,
+            "name",
+            "Data",
+            "filename",
+            "test.txt",
+            "mimeType",
+            "text/plain",
+            "data",
+            dataStream
+          )
         )
-      )
-    );
+      );
 
     outboxedService.updateJob(ID, JobStatusCode.COMPLETED, jobResults);
 
@@ -361,22 +363,23 @@ public class SchedulingProcessingHandlerTest {
     String ID = insertResult.single().as(Job.class).getId();
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> jobResults = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "type",
-          ResultTypeCode.DATA,
-          "name",
-          "Data",
-          "filename",
-          "test.txt",
-          "mimeType",
-          "text/plain",
-          "data",
-          dataStream
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> jobResults =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "type",
+            ResultTypeCode.DATA,
+            "name",
+            "Data",
+            "filename",
+            "test.txt",
+            "mimeType",
+            "text/plain",
+            "data",
+            dataStream
+          )
         )
-      )
-    );
+      );
 
     processingService.updateJob(ID, JobStatusCode.RUNNING, jobResults);
 
@@ -518,37 +521,40 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.create()
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results1 =
+      List.of(com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.create());
     Exception exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
     });
     assertTrue(
       exception
         .getMessage()
-        .contains("Value of element 'name' in entity 'SchedulingProcessingService.JobResult' is required"),
+        .contains("Value of element 'name' in entity 'sapafcsdk.scheduling.ProcessingService.JobResult' is required"),
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(Map.of("name", "Link"))
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results2 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
     });
     assertTrue(
       exception
         .getMessage()
-        .contains("Value of element 'type' in entity 'SchedulingProcessingService.JobResult' is required"),
+        .contains("Value of element 'type' in entity 'sapafcsdk.scheduling.ProcessingService.JobResult' is required"),
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", "X")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results3 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", "X")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
@@ -557,11 +563,12 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.LINK)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results4 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.LINK)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
@@ -570,11 +577,12 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "mimeType", "text/plain")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results5 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "mimeType", "text/plain")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results5);
     });
@@ -585,11 +593,12 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "filename", "test.txt")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results6 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "filename", "test.txt")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results6);
     });
@@ -601,11 +610,12 @@ public class SchedulingProcessingHandlerTest {
     );
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "data", dataStream)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results7 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.LINK, "link", "https://sap.com", "data", dataStream)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results7);
     });
@@ -614,20 +624,23 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "name",
-          "Link",
-          "type",
-          ResultTypeCode.LINK,
-          "link",
-          "https://sap.com",
-          "messages",
-          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results8 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "name",
+            "Link",
+            "type",
+            ResultTypeCode.LINK,
+            "link",
+            "https://sap.com",
+            "messages",
+            new ArrayList<
+              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
+            >()
+          )
         )
-      )
-    );
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results8);
     });
@@ -660,11 +673,12 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.DATA)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results1 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.DATA)
+        )
+      );
     Exception exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
     });
@@ -673,11 +687,12 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results2 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
     });
@@ -686,11 +701,12 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain", "filename", "test.txt")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results3 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.DATA, "mimeType", "text/plain", "filename", "test.txt")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
@@ -700,24 +716,25 @@ public class SchedulingProcessingHandlerTest {
     );
 
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "name",
-          "Link",
-          "type",
-          ResultTypeCode.DATA,
-          "mimeType",
-          "text/plain",
-          "filename",
-          "test.txt",
-          "data",
-          dataStream,
-          "link",
-          "https://sap.com"
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results4 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "name",
+            "Link",
+            "type",
+            ResultTypeCode.DATA,
+            "mimeType",
+            "text/plain",
+            "filename",
+            "test.txt",
+            "data",
+            dataStream,
+            "link",
+            "https://sap.com"
+          )
         )
-      )
-    );
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
@@ -726,24 +743,27 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "name",
-          "Link",
-          "type",
-          ResultTypeCode.DATA,
-          "mimeType",
-          "text/plain",
-          "filename",
-          "test.txt",
-          "data",
-          dataStream,
-          "messages",
-          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results5 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "name",
+            "Link",
+            "type",
+            ResultTypeCode.DATA,
+            "mimeType",
+            "text/plain",
+            "filename",
+            "test.txt",
+            "data",
+            dataStream,
+            "messages",
+            new ArrayList<
+              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
+            >()
+          )
         )
-      )
-    );
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results5);
     });
@@ -776,11 +796,12 @@ public class SchedulingProcessingHandlerTest {
     Result insertResult = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = insertResult.single().as(Job.class).getId();
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results1 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results1 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE)
+        )
+      );
     Exception exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
     });
@@ -791,18 +812,21 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results2 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of(
-          "name",
-          "Link",
-          "type",
-          ResultTypeCode.MESSAGE,
-          "messages",
-          new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>()
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results2 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of(
+            "name",
+            "Link",
+            "type",
+            ResultTypeCode.MESSAGE,
+            "messages",
+            new ArrayList<
+              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
+            >()
+          )
         )
-      )
-    );
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
     });
@@ -813,53 +837,64 @@ public class SchedulingProcessingHandlerTest {
       "Expected exception message not found: " + exception.getMessage()
     );
 
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage> messages =
-      new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage>();
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage message =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage> messages =
+      new ArrayList<
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
+      >();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results3 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results3 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
     assertTrue(
       exception
         .getMessage()
-        .contains("Value of element 'code' in entity 'SchedulingProcessingService.JobResultMessage' is required")
+        .contains(
+          "Value of element 'code' in entity 'sapafcsdk.scheduling.ProcessingService.JobResultMessage' is required"
+        )
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results4 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results4 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
     assertTrue(
       exception
         .getMessage()
-        .contains("Value of element 'severity' in entity 'SchedulingProcessingService.JobResultMessage' is required")
+        .contains(
+          "Value of element 'severity' in entity 'sapafcsdk.scheduling.ProcessingService.JobResultMessage' is required"
+        )
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setSeverity("X");
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results5 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results5 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results5);
     });
@@ -871,16 +906,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results6 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "link", "https://sap.com")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results6 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "link", "https://sap.com")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results6);
     });
@@ -892,16 +929,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results7 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "mimeType", "text/plain")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results7 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "mimeType", "text/plain")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results7);
     });
@@ -913,16 +952,18 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results8 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "filename", "test.txt")
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results8 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "filename", "test.txt")
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results8);
     });
@@ -934,17 +975,19 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("abc");
     message.setText("This is a test");
     message.setSeverity(MessageSeverityCode.ERROR);
     messages.add(message);
     InputStream dataStream = new ByteArrayInputStream("This is a test".getBytes(StandardCharsets.UTF_8));
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results9 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "data", dataStream)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results9 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages, "data", dataStream)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results9);
     });
@@ -956,47 +999,54 @@ public class SchedulingProcessingHandlerTest {
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText> texts =
-      new ArrayList<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText>();
-    com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText text =
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText> texts =
+      new ArrayList<>();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText text =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
     texts.add(text);
     message.setTexts(texts);
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results10 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results10 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results10);
     });
     assertTrue(
       exception
         .getMessage()
-        .contains("Value of element 'locale' in entity 'SchedulingProcessingService.JobResultMessageText' is required"),
+        .contains(
+          "Value of element 'locale' in entity 'sapafcsdk.scheduling.ProcessingService.JobResultMessageText' is required"
+        ),
       "Expected exception message not found: " + exception.getMessage()
     );
 
     messages = new ArrayList<>();
-    message = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessage.create();
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
     message.setSeverity(MessageSeverityCode.INFO);
     texts = new ArrayList<>();
-    text = com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResultMessageText.create();
+    text =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
     text.setLocale("xx");
     text.setText("test");
     texts.add(text);
     message.setTexts(texts);
     messages.add(message);
-    Collection<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult> results11 = List.of(
-      com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.JobResult.of(
-        Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
-      )
-    );
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult> results11 =
+      List.of(
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.of(
+          Map.of("name", "Link", "type", ResultTypeCode.MESSAGE, "messages", messages)
+        )
+      );
     exception = assertThrows(Exception.class, () -> {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results11);
     });
@@ -1100,7 +1150,7 @@ public class SchedulingProcessingHandlerTest {
   @Test
   @WithMockUser("authenticated")
   public void notification() {
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.notify(
       List.of(
         Notification.of(

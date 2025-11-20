@@ -264,130 +264,130 @@ footer {
         </ul>
       </div>
   
-      <div id="schedulingmonitoringservice-odata">
+      <div id="sapafcsdk_scheduling_monitoringservice-odata">
         <h3 class="header">
           <a href="/odata/v4/job-scheduling/monitoring"><span>/odata/v4/job-scheduling/monitoring</span></a><span>/</span> <a href="/odata/v4/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
         </h3>
         <ul>
-          <li id="schedulingmonitoringservice-odata-jobdefinition">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobdefinition">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-jobparameterdefinition">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobparameterdefinition">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-parametertype">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-parametertype">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-datatype">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-datatype">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/DataType"><span>DataType</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-mappingtype">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-mappingtype">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-job">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-job">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/Job"><span>Job</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-jobstatus">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobstatus">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-jobparameter">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobparameter">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-jobresult">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobresult">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-resulttype">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-resulttype">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-jobresultmessage">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobresultmessage">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="schedulingmonitoringservice-odata-messageseverity">
+          <li id="sapafcsdk_scheduling_monitoringservice-odata-messageseverity">
             <div>
               <a href="/odata/v4/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
             </div>
-            <div><a href="/$fiori-preview/SchedulingMonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
+            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
         </ul>
         <ul>
         </ul>
       </div>
   
-      <div id="schedulingproviderservice-rest">
+      <div id="sapafcsdk_scheduling_providerservice-rest">
         <h3 class="header">
           <a href="/api/job-scheduling/v1"><span>/api/job-scheduling/v1</span></a> <span><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></span>
         </h3>
         <ul>
-          <li id="schedulingproviderservice-rest-capabilities">
+          <li id="sapafcsdk_scheduling_providerservice-rest-capabilities">
             <div>
               <a href="/api/job-scheduling/v1/Capabilities"><span>Capabilities</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-jobdefinition">
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobdefinition">
             <div>
               <a href="/api/job-scheduling/v1/JobDefinition"><span>JobDefinition</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-jobparameterdefinition">
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobparameterdefinition">
             <div>
               <a href="/api/job-scheduling/v1/JobParameterDefinition"><span>JobParameterDefinition</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-job">
+          <li id="sapafcsdk_scheduling_providerservice-rest-job">
             <div>
               <a href="/api/job-scheduling/v1/Job"><span>Job</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-jobparameter">
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobparameter">
             <div>
               <a href="/api/job-scheduling/v1/JobParameter"><span>JobParameter</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-jobresult">
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobresult">
             <div>
               <a href="/api/job-scheduling/v1/JobResult"><span>JobResult</span></a>
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="schedulingproviderservice-rest-jobresultmessage">
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobresultmessage">
             <div>
               <a href="/api/job-scheduling/v1/JobResultMessage"><span>JobResultMessage</span></a>
             </div>
@@ -398,7 +398,7 @@ footer {
         </ul>
       </div>
   
-      <div id="schedulingwebsocketservice-ws">
+      <div id="sapafcsdk_scheduling_websocketservice-ws">
         <h3 class="header">
           <a href="/ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
         </h3>

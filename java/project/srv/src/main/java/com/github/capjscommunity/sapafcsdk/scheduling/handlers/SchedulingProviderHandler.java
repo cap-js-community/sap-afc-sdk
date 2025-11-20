@@ -1,23 +1,23 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB;
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB_DEFINITION;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_DEFINITION;
 
 import com.github.capjscommunity.sapafcsdk.configuration.AfcSdkProperties;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.*;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobDefinition;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobDefinition_;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobParameter;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobParameterDefinition;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.*;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.Job;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobResult;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobResult_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.Job_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.JobStatusChanged;
-import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.JobStatusChangedContext;
-import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobDefinition;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobDefinition_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobParameter;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobParameterDefinition;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.Job;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobResult;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobResult_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.Job_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChanged;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.JobStatusChangedContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.Result;
@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProviderService_.CDS_NAME)
+@ServiceName(ProviderService_.CDS_NAME)
 public class SchedulingProviderHandler extends SchedulingProviderBase implements EventHandler {
 
   @Autowired
@@ -106,8 +106,8 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     }
 
     // Header
-    com.github.capjscommunity.sapafcsdk.model.scheduling.Job job =
-      com.github.capjscommunity.sapafcsdk.model.scheduling.Job.create();
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job job =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job.create();
     job.setReferenceID(data.getReferenceID());
     if (jobDefinition.getSupportsStartDateTime()) {
       job.setStartDateTime(data.getStartDateTime());
@@ -127,10 +127,12 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       parameterDefinitions.put(parameterDefinition.getName(), parameterDefinition);
     }
 
-    Map<String, com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobParameter> parameters =
-      new HashMap<>();
+    Map<
+      String,
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobParameter
+    > parameters = new HashMap<>();
     if (data.getParameters() != null) {
-      for (com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobParameter parameter : data.getParameters()) {
+      for (com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobParameter parameter : data.getParameters()) {
         if (parameter.getName() == null) {
           throw JobSchedulingException.jobParameterNameMissing();
         }
@@ -142,9 +144,8 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     }
 
     for (JobParameterDefinition jobParameterDefinition : jobDefinition.getParameters()) {
-      com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobParameter parameter = parameters.get(
-        jobParameterDefinition.getName()
-      );
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobParameter parameter =
+        parameters.get(jobParameterDefinition.getName());
       if (parameter == null && jobParameterDefinition.getRequired()) {
         throw JobSchedulingException.jobParameterRequired(jobParameterDefinition.getName());
       }
@@ -254,15 +255,15 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   public void createJob(CdsCreateEventContext context, List<Job> jobs) {
-    com.github.capjscommunity.sapafcsdk.model.scheduling.Job job =
-      (com.github.capjscommunity.sapafcsdk.model.scheduling.Job) context.get("job");
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job job =
+      (com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job) context.get("job");
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
-    com.github.capjscommunity.sapafcsdk.model.scheduling.Job createdJob = result.single(
-      com.github.capjscommunity.sapafcsdk.model.scheduling.Job.class
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job createdJob = result.single(
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job.class
     );
     context.put("job", createdJob);
-    Select<com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.Job_> read = Select.from(
-      com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.SchedulingProviderService_.JOB
+    Select<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.Job_> read = Select.from(
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.ProviderService_.JOB
     ).byId(createdJob.getId());
     context.setResult(context.getService().run(read));
     context.setCompleted();
@@ -270,13 +271,13 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
 
   @After(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   public void afterCreateJob(CdsCreateEventContext context, List<Job> jobs) {
-    com.github.capjscommunity.sapafcsdk.model.scheduling.Job job =
-      (com.github.capjscommunity.sapafcsdk.model.scheduling.Job) context.get("job");
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job job =
+      (com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job) context.get("job");
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(job.getId(), job.getTestRun());
 
-    SchedulingWebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
     JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
     JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
     jobStatusChangedData.setStatus(JobStatusCode.REQUESTED);
@@ -309,10 +310,10 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .targetKeys()
       .get("ID")
       .toString();
-    com.github.capjscommunity.sapafcsdk.model.scheduling.Job dbJob =
-      com.github.capjscommunity.sapafcsdk.model.scheduling.Job.create(ID);
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job dbJob =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job.create(ID);
     dbJob.setStatusCode(JobStatusCode.CANCEL_REQUESTED);
-    Update<com.github.capjscommunity.sapafcsdk.model.scheduling.Job_> update = Update.entity(JOB).data(dbJob);
+    Update<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job_> update = Update.entity(JOB).data(dbJob);
     persistenceService.run(update);
     context.setCompleted();
   }
@@ -325,10 +326,10 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .get("ID")
       .toString();
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.cancelJob(ID);
 
-    SchedulingWebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
     JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
     JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
     jobStatusChangedData.setStatus(JobStatusCode.CANCEL_REQUESTED);
@@ -364,12 +365,12 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
   @On(event = NotifyContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)
   public void notify(NotifyContext context) {
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
-    List<com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.Notification> notifications =
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification> notifications =
       new ArrayList<>();
     for (Notification notification : context.getNotifications()) {
       notifications.add(
-        com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.Notification.of(notification)
+        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification.of(notification)
       );
     }
     processingServiceOutboxed.notify(notifications);

@@ -1,13 +1,13 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.*;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.*;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
-import com.github.capjscommunity.sapafcsdk.test.TestSimpleCompletedWithWarningConfig;
+import com.github.capjscommunity.sapafcsdk.test.TestSimpleFailedConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
@@ -29,11 +29,11 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedWithWarningConfig.class })
-public class SchedulingProcessingHandlerSimpleMockCompletedWithWarningTest {
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleFailedConfig.class })
+public class SchedulingProcessingHandlerSimpleMockFailedTest {
 
   @Autowired
-  private SchedulingProcessingService processingService;
+  private ProcessingService processingService;
 
   @Autowired
   private PersistenceService persistenceService;
@@ -65,11 +65,11 @@ public class SchedulingProcessingHandlerSimpleMockCompletedWithWarningTest {
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = result.single().as(Job.class).getId();
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(ID, false);
 
     Job processedJob = persistenceService.run(Select.from(JOB).byId(ID)).single(Job.class);
-    assertEquals(JobStatusCode.COMPLETED_WITH_WARNING, processedJob.getStatusCode());
+    assertEquals(JobStatusCode.FAILED, processedJob.getStatusCode());
 
     List<JobResult> jobResults = persistenceService
       .run(Select.from(JOB_RESULT).where(jr -> jr.job_ID().eq(ID)))
@@ -99,12 +99,9 @@ public class SchedulingProcessingHandlerSimpleMockCompletedWithWarningTest {
       .run(Select.from(JOB_RESULT_MESSAGE).where(jr -> jr.result_ID().eq(messageResultIDs.get(1))))
       .listOf(JobResultMessage.class);
     assertEquals(1, jobResultMessages.size());
-    assertEquals("jobCompletedWithWarning", jobResultMessages.get(0).getCode());
-    assertEquals(MessageSeverityCode.WARNING, jobResultMessages.get(0).getSeverityCode());
-    assertEquals(
-      messageProvider.get("jobCompletedWithWarning", null, Locale.ENGLISH),
-      jobResultMessages.get(0).getText()
-    );
+    assertEquals("jobFailed", jobResultMessages.get(0).getCode());
+    assertEquals(MessageSeverityCode.ERROR, jobResultMessages.get(0).getSeverityCode());
+    assertEquals(messageProvider.get("jobFailed", null, Locale.ENGLISH), jobResultMessages.get(0).getText());
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
   }

@@ -39,7 +39,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async init() {
-    const { Job } = cds.entities("scheduling");
+    const { Job } = cds.entities("sapafcsdk.scheduling");
     const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
@@ -91,7 +91,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
   }
 
   async processJobUpdate(req, status, results) {
-    const { Job, JobResult } = cds.entities("scheduling");
+    const { Job, JobResult } = cds.entities("sapafcsdk.scheduling");
     const job = req.job;
     if (!status) {
       return req.reject(JobSchedulingError.statusValueMissing());
@@ -115,7 +115,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const insertResults = await this.checkJobResults(req, results);
       await INSERT.into(JobResult).entries(insertResults);
     }
-    const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
     await schedulingWebsocketService.tx(req).emit(
       "jobStatusChanged",
       {

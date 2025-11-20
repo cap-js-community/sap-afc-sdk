@@ -40,7 +40,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SchedulingProviderService.Capabilities"
+                  "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Capabilities"
                 }
               }
             }
@@ -140,7 +140,7 @@
                   "type": "array",
                   "title": "Collection of Job",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Job"
                   }
                 }
               }
@@ -205,7 +205,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SchedulingProviderService.Job-create"
+                "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Job-create"
               }
             }
           }
@@ -216,7 +216,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                  "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Job"
                 }
               }
             }
@@ -287,7 +287,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SchedulingProviderService.Job"
+                  "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Job"
                 }
               }
             }
@@ -380,7 +380,7 @@
                   "type": "array",
                   "title": "Collection of JobParameter",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.JobParameter"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobParameter"
                   }
                 }
               }
@@ -482,7 +482,7 @@
                   "type": "array",
                   "title": "Collection of JobResult",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.JobResult"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobResult"
                   }
                 }
               }
@@ -590,7 +590,7 @@
                   "type": "array",
                   "title": "Collection of JobDefinition",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.JobDefinition"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobDefinition"
                   }
                 }
               }
@@ -670,7 +670,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SchedulingProviderService.JobDefinition"
+                  "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobDefinition"
                 }
               }
             }
@@ -763,7 +763,7 @@
                   "type": "array",
                   "title": "Collection of JobParameterDefinition",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.JobParameterDefinition"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobParameterDefinition"
                   }
                 }
               }
@@ -843,7 +843,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SchedulingProviderService.JobResult"
+                  "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobResult"
                 }
               }
             }
@@ -936,7 +936,7 @@
                   "type": "array",
                   "title": "Collection of JobResultMessage",
                   "items": {
-                    "$ref": "#/components/schemas/SchedulingProviderService.JobResultMessage"
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobResultMessage"
                   }
                 }
               }
@@ -1053,7 +1053,7 @@
                     "items": {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/SchedulingProviderService.Notification"
+                          "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.Notification"
                         }
                       ],
                       "nullable": true
@@ -1219,7 +1219,7 @@
   },
   "components": {
     "schemas": {
-      "SchedulingProviderService.Capabilities": {
+      "sapafcsdk.scheduling.ProviderService.Capabilities": {
         "title": "Capabilities",
         "type": "object",
         "properties": {
@@ -1231,7 +1231,7 @@
           }
         }
       },
-      "SchedulingProviderService.Job": {
+      "sapafcsdk.scheduling.ProviderService.Job": {
         "title": "Job",
         "type": "object",
         "properties": {
@@ -1303,7 +1303,7 @@
         },
         "required": ["ID", "name", "referenceID", "version", "status"]
       },
-      "SchedulingProviderService.Job-create": {
+      "sapafcsdk.scheduling.ProviderService.Job-create": {
         "title": "Job (for create)",
         "type": "object",
         "properties": {
@@ -1327,13 +1327,13 @@
           "parameters": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SchedulingProviderService.JobParameter-create"
+              "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobParameter-create"
             }
           }
         },
         "required": ["name", "referenceID"]
       },
-      "SchedulingProviderService.JobDefinition": {
+      "sapafcsdk.scheduling.ProviderService.JobDefinition": {
         "title": "JobDefinition",
         "type": "object",
         "properties": {
@@ -1371,7 +1371,7 @@
         },
         "required": ["name", "version"]
       },
-      "SchedulingProviderService.JobParameter": {
+      "sapafcsdk.scheduling.ProviderService.JobParameter": {
         "title": "JobParameter",
         "type": "object",
         "properties": {
@@ -1404,7 +1404,7 @@
         },
         "required": ["ID", "name", "value"]
       },
-      "SchedulingProviderService.JobParameter-create": {
+      "sapafcsdk.scheduling.ProviderService.JobParameter-create": {
         "title": "JobParameter (for create)",
         "type": "object",
         "properties": {
@@ -1429,7 +1429,7 @@
         },
         "required": ["name", "value"]
       },
-      "SchedulingProviderService.JobParameterDefinition": {
+      "sapafcsdk.scheduling.ProviderService.JobParameterDefinition": {
         "title": "JobParameterDefinition",
         "type": "object",
         "properties": {
@@ -1532,7 +1532,7 @@
         },
         "required": ["name", "dataType", "type"]
       },
-      "SchedulingProviderService.JobResult": {
+      "sapafcsdk.scheduling.ProviderService.JobResult": {
         "title": "JobResult",
         "type": "object",
         "properties": {
@@ -1568,7 +1568,7 @@
         },
         "required": ["ID", "type", "name"]
       },
-      "SchedulingProviderService.JobResultMessage": {
+      "sapafcsdk.scheduling.ProviderService.JobResultMessage": {
         "title": "JobResultMessage",
         "type": "object",
         "properties": {
@@ -1601,12 +1601,12 @@
         },
         "required": ["ID", "severity", "code", "text", "createdAt"]
       },
-      "SchedulingProviderService.Notification": {
+      "sapafcsdk.scheduling.ProviderService.Notification": {
         "title": "Notification",
         "type": "object",
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/SchedulingProviderService.NotificationName",
+            "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.NotificationName",
             "enum": ["taskListStatusChanged"]
           },
           "ID": {
@@ -1620,7 +1620,7 @@
           }
         }
       },
-      "SchedulingProviderService.NotificationName": {
+      "sapafcsdk.scheduling.ProviderService.NotificationName": {
         "type": "string",
         "maxLength": 255,
         "enum": ["taskListStatusChanged"],

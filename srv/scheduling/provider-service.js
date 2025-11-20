@@ -16,7 +16,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   async init() {
     const { Capabilities, JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } =
       this.entities;
-    const { JobDefinition: DBJobDefinition, Job: DBJob } = cds.entities("scheduling");
+    const { JobDefinition: DBJobDefinition, Job: DBJob } = cds.entities("sapafcsdk.scheduling");
     const { notify } = this.operations;
 
     this.fillLink(Job, "Job", "monitor");
@@ -334,7 +334,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.after("CREATE", Job, async (data, req) => {
-      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send(
         "processJob",
         {
@@ -346,7 +346,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
-      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
       await schedulingWebsocketService.tx(req).emit(
         "jobStatusChanged",
         {
@@ -379,7 +379,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.after(Job.actions.cancel, Job, async (data, req) => {
-      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send(
         "cancelJob",
         {
@@ -389,7 +389,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           "x-eventQueue-referenceEntityKey": req.job.ID,
         },
       );
-      const schedulingWebsocketService = await cds.connect.to("SchedulingWebsocketService");
+      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
       await schedulingWebsocketService.tx(req).emit(
         "jobStatusChanged",
         {
@@ -416,7 +416,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.on(notify, async (req) => {
-      const schedulingProcessingService = await cds.connect.to("SchedulingProcessingService");
+      const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
       await schedulingProcessingService.tx(req).send("notify", req.data);
     });
 
@@ -424,7 +424,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   }
 
   async createJob(req, job) {
-    const { Job: DBJob } = cds.entities("scheduling");
+    const { Job: DBJob } = cds.entities("sapafcsdk.scheduling");
     for (const parameter of job.parameters) {
       if (parameter.value !== null) {
         parameter.value = String(parameter.value);
@@ -434,12 +434,12 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
   }
 
   async updateJob(req, job, data) {
-    const { Job: DBJob } = cds.entities("scheduling");
+    const { Job: DBJob } = cds.entities("sapafcsdk.scheduling");
     await UPDATE.entity(DBJob).set(data).where({ ID: job.ID });
   }
 
   async downloadData(req, ID) {
-    const { JobResult: DBJobResult } = cds.entities("scheduling");
+    const { JobResult: DBJobResult } = cds.entities("sapafcsdk.scheduling");
     const { data } = await SELECT.one.from(DBJobResult).columns("data").where({ ID });
     return {
       value: data,

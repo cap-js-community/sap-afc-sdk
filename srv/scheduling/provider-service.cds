@@ -1,4 +1,6 @@
-using scheduling from '../../db/scheduling';
+namespace sapafcsdk.scheduling;
+
+using sapafcsdk.scheduling from '../../db/scheduling';
 
 @Capabilities        : {
   KeyAsSegmentSupported: true,
@@ -32,7 +34,7 @@ using scheduling from '../../db/scheduling';
 @title               : 'SAP Advanced Financial Closing Scheduling Service Provider Interface'
 @Core.Description    : 'Defines how an application can integrate with job scheduling provider service'
 @Core.LongDescription: 'The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.'
-service SchedulingProviderService {
+service ProviderService {
 
   @readonly
   entity Capabilities {
@@ -219,10 +221,10 @@ service SchedulingProviderService {
   action notify(notifications: many Notification);
 }
 
-extend SchedulingProviderService.Capabilities with SchedulingProviderService.singleton;
-extend SchedulingProviderService.JobDefinition with SchedulingProviderService.definition;
-extend SchedulingProviderService.JobParameterDefinition with SchedulingProviderService.compositionDefinition;
-extend SchedulingProviderService.Job with SchedulingProviderService.definition;
-extend SchedulingProviderService.JobParameter with SchedulingProviderService.compositionDefinition;
-extend SchedulingProviderService.JobResult with SchedulingProviderService.compositionDefinition;
-extend SchedulingProviderService.JobResultMessage with SchedulingProviderService.compositionDefinition;
+extend ProviderService.Capabilities with ProviderService.singleton;
+extend ProviderService.JobDefinition with ProviderService.definition;
+extend ProviderService.JobParameterDefinition with ProviderService.compositionDefinition;
+extend ProviderService.Job with ProviderService.definition;
+extend ProviderService.JobParameter with ProviderService.compositionDefinition;
+extend ProviderService.JobResult with ProviderService.compositionDefinition;
+extend ProviderService.JobResultMessage with ProviderService.compositionDefinition;

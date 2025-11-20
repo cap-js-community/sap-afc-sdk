@@ -1,14 +1,14 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.base;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB_RESULT;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB_RESULT;
 
 import com.github.capjscommunity.sapafcsdk.common.EndpointProvider;
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobResult;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobResult_;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
-import com.github.capjscommunity.sapafcsdk.model.schedulingproviderservice.JobResultDataContext;
-import com.github.capjscommunity.sapafcsdk.model.schedulingwebsocketservice.SchedulingWebsocketService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult_;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.JobResultDataContext;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
 import com.sap.cds.ql.Select;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
@@ -26,10 +26,10 @@ public class SchedulingProviderBase {
   protected PersistenceService persistenceService;
 
   @Autowired
-  protected SchedulingProcessingService processingService;
+  protected ProcessingService processingService;
 
   @Autowired
-  protected SchedulingWebsocketService websocketService;
+  protected WebsocketService websocketService;
 
   @Autowired
   @Qualifier(OutboxConfig.OUTBOX_SERVICE)

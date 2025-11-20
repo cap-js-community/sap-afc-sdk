@@ -1,14 +1,14 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.handlers;
 
-import static com.github.capjscommunity.sapafcsdk.model.scheduling.Scheduling_.JOB;
+import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Scheduling_.JOB;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.Job;
-import com.github.capjscommunity.sapafcsdk.model.scheduling.JobStatusCode;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.Notification;
-import com.github.capjscommunity.sapafcsdk.model.schedulingprocessingservice.SchedulingProcessingService;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.github.capjscommunity.sapafcsdk.test.TestAdvancedConfig;
 import com.sap.cds.Result;
@@ -37,7 +37,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class SchedulingProcessingHandlerAdvancedMockTest {
 
   @Autowired
-  private SchedulingProcessingService processingService;
+  private ProcessingService processingService;
 
   @Autowired
   private PersistenceService persistenceService;
@@ -66,7 +66,7 @@ public class SchedulingProcessingHandlerAdvancedMockTest {
     Result result = persistenceService.run(Insert.into(JOB).entry(job));
     String ID = result.single().as(Job.class).getId();
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.processJob(ID, false);
 
     Job processedJob = persistenceService.run(Select.from(JOB).byId(ID)).single(Job.class);
@@ -97,7 +97,7 @@ public class SchedulingProcessingHandlerAdvancedMockTest {
     ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStreamCaptor));
 
-    SchedulingProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+    ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
     processingServiceOutboxed.notify(
       List.of(
         Notification.of(
