@@ -3,7 +3,7 @@
 const { adjustJSON } = require("../common/util");
 
 const Entries = {
-  add: ["src/gen/**/*.hdbtable"],
+  add: ["src/gen/**/*.hdbtable", "src/gen/**/*.hdbtabledata"],
   remove: [],
 };
 

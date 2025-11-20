@@ -940,9 +940,9 @@ public class ApplicationConfig {}
 `;
 
 exports[`Build Java / CF 13`] = `
-"srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java
+"srv/src/main/java/customer/afcsdk/scheduling/handlers/CustomSchedulingProcessingHandler.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
@@ -952,7 +952,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
@@ -994,9 +994,9 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 `;
 
 exports[`Build Java / CF 14`] = `
-"srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java
+"srv/src/main/java/customer/afcsdk/scheduling/handlers/CustomSchedulingProviderHandler.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
@@ -1009,7 +1009,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProviderService_.CDS_NAME)
+@ServiceName(ProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
@@ -1037,9 +1037,9 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 `;
 
 exports[`Build Java / CF 15`] = `
-"srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java
+"srv/src/test/java/customer/afcsdk/scheduling/handlers/SchedulingProviderHandlerTest.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -2307,9 +2307,9 @@ public class ApplicationConfig {}
 `;
 
 exports[`Build Java / Kyma 13`] = `
-"srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProcessingHandler.java
+"srv/src/main/java/customer/afcsdk/scheduling/handlers/CustomSchedulingProcessingHandler.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProcessingBase;
@@ -2319,7 +2319,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
@@ -2361,9 +2361,9 @@ public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase 
 `;
 
 exports[`Build Java / Kyma 14`] = `
-"srv/src/main/java/customer/afcsdk/scheduling/CustomSchedulingProviderHandler.java
+"srv/src/main/java/customer/afcsdk/scheduling/handlers/CustomSchedulingProviderHandler.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
@@ -2376,7 +2376,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProviderService_.CDS_NAME)
+@ServiceName(ProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
@@ -2404,9 +2404,9 @@ public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 `;
 
 exports[`Build Java / Kyma 15`] = `
-"srv/src/test/java/customer/afcsdk/scheduling/SchedulingProviderHandlerTest.java
+"srv/src/test/java/customer/afcsdk/scheduling/handlers/SchedulingProviderHandlerTest.java
 
-package customer.afcsdk.scheduling;
+package customer.afcsdk.scheduling.handlers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -3523,7 +3523,7 @@ exports[`Build Node / CF 11`] = `
 
 using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 "
 `;
 
@@ -3576,7 +3576,7 @@ exports[`Build Node / CF 13`] = `
 
 using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
+annotate ProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
 
 exports[`Build Node / CF 14`] = `
@@ -4681,7 +4681,7 @@ exports[`Build Node / Kyma 11`] = `
 
 using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 "
 `;
 
@@ -4734,7 +4734,7 @@ exports[`Build Node / Kyma 13`] = `
 
 using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';"
+annotate ProviderService with @impl: '/srv/scheduling-provider-service.js';"
 `;
 
 exports[`Build Node / Kyma 14`] = `

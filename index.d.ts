@@ -1,57 +1,49 @@
-export namespace scheduling {
+export namespace sapafcsdk.scheduling {
   export type JobStatusCode =
-    | 'requested'
-    | 'running'
-    | 'completed'
-    | 'completedWithWarning'
-    | 'completedWithError'
-    | 'failed'
-    | 'cancelRequested'
-    | 'canceled';
+    | "requested"
+    | "running"
+    | "completed"
+    | "completedWithWarning"
+    | "completedWithError"
+    | "failed"
+    | "cancelRequested"
+    | "canceled";
 
-  export type ParameterTypeCode =
-    | 'readOnlyValue'
-    | 'writableValue'
-    | 'mapping';
+  export type ParameterTypeCode = "readOnlyValue" | "writableValue" | "mapping";
 
-  export type DataTypeCode =
-    | 'string'
-    | 'number'
-    | 'date'
-    | 'datetime'
-    | 'boolean';
+  export type DataTypeCode = "string" | "number" | "date" | "datetime" | "boolean";
 
   export type MappingTypeCode =
-    | 'accountingPrinciple'
-    | 'companyCode'
-    | 'plant'
-    | 'controllingArea'
-    | 'fiscalPeriod'
-    | 'fiscalYearPeriod'
-    | 'fiscalYear'
-    | 'keyDate'
-    | 'chartOfAccounts'
-    | 'fiscalYearVariant'
-    | 'ledger'
-    | 'testRun'
-    | 'postingPeriodVariant'
-    | 'processingUser'
-    | 'interestedUser'
-    | 'userResponsible'
-    | 'processingUserEmail'
-    | 'interestedUserEmail'
-    | 'userResponsibleEmail'
-    | 'executionID'
-    | 'customField1'
-    | 'customField2'
-    | 'customField3'
-    | 'taskListID'
-    | 'taskListDescription'
-    | 'taskID'
-    | 'taskDescription';
+    | "accountingPrinciple"
+    | "companyCode"
+    | "plant"
+    | "controllingArea"
+    | "fiscalPeriod"
+    | "fiscalYearPeriod"
+    | "fiscalYear"
+    | "keyDate"
+    | "chartOfAccounts"
+    | "fiscalYearVariant"
+    | "ledger"
+    | "testRun"
+    | "postingPeriodVariant"
+    | "processingUser"
+    | "interestedUser"
+    | "userResponsible"
+    | "processingUserEmail"
+    | "interestedUserEmail"
+    | "userResponsibleEmail"
+    | "executionID"
+    | "customField1"
+    | "customField2"
+    | "customField3"
+    | "taskListID"
+    | "taskListDescription"
+    | "taskID"
+    | "taskDescription";
 
-  export type ResultTypeCode = 'link' | 'data' | 'message';
-  export type MessageSeverityCode = 'success' | 'info' | 'warning' | 'error';
+  export type ResultTypeCode = "link" | "data" | "message";
+  export type MessageSeverityCode = "success" | "info" | "warning" | "error";
   export type MessageSeverityNumericCode = 1 | 2 | 3 | 4;
 
   export interface JobDefinition {
@@ -233,58 +225,57 @@ export namespace scheduling {
     name?: string;
     descr?: string;
   }
-}
 
-export namespace SchedulingProcessingService {
+  export namespace ProcessingService {
 
-  export const STATUS_TRANSITIONS: {
-    [K in JobStatusCode]: readonly JobStatusCode[];
-  };
+    export const STATUS_TRANSITIONS: {
+      [K in JobStatusCode]: readonly JobStatusCode[];
+    };
 
-  export type ResultTypeCode = scheduling.ResultTypeCode;
-  export type MessageSeverityCode = scheduling.MessageSeverityCode;
-  export type JobStatusCode = scheduling.JobStatusCode;
-  export type Locale = string;
+    export type ResultTypeCode = sapafcsdk.scheduling.ResultTypeCode;
+    export type MessageSeverityCode = sapafcsdk.scheduling.MessageSeverityCode;
+    export type JobStatusCode = sapafcsdk.scheduling.JobStatusCode;
+    export type Locale = string;
 
-  export interface JobResult {
-    name: string;
-    type: ResultTypeCode;
-    link?: string;
-    mimeType?: string;
-    filename?: string;
-    data?: string;
-    messages?: JobResultMessage[];
+    export interface JobResult {
+      name: string;
+      type: ResultTypeCode;
+      link?: string;
+      mimeType?: string;
+      filename?: string;
+      data?: string;
+      messages?: JobResultMessage[];
+    }
+
+    export interface JobResultMessage {
+      code: string;
+      text?: string;
+      severity: MessageSeverityCode;
+      createdAt?: string;
+      texts?: JobResultMessageText[];
+    }
+
+    export interface JobResultMessageText {
+      locale: Locale;
+      text: string;
+    }
+
+    export interface ProcessingRequest {
+      job: sapafcsdk.scheduling.Job;
+      [key: string]: unknown;
+    }
+
   }
 
-  export interface JobResultMessage {
-    code: string;
-    text?: string;
-    severity: MessageSeverityCode;
-    createdAt?: string;
-    texts?: JobResultMessageText[];
+  export interface ProcessingService {
+    processJobUpdate(req: ProcessingService.ProcessingRequest, status: JobStatusCode, results?: JobResult[]): Promise<void>;
   }
 
-  export interface JobResultMessageText {
-    locale: Locale;
-    text: string;
+  export interface ProviderService {
+      downloadData(req: object, ID: string): Promise<void>;
   }
 
-  export interface SchedulingProcessingRequest {
-    job: scheduling.Job;
-    [key: string]: unknown;
-  }
+  export interface SchedulingMonitoringService {}
 
-  export interface SchedulingProviderService {
-    downloadData(req: object, ID: string): Promise<void>;
-  }
-
-  export interface SchedulingProcessingService {
-    processJobUpdate(req: SchedulingProcessingRequest, status: JobStatusCode, results?: JobResult[]): Promise<void>;
-  }
-
-  export interface SchedulingMonitoringService {
-  }
-
-  export interface SchedulingWebsocketService {
-  }
+  export interface SchedulingWebsocketService {}
 }

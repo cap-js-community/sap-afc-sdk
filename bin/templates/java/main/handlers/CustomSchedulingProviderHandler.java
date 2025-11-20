@@ -1,4 +1,4 @@
-package customer.scheduling;
+package customer.scheduling.handlers;
 
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.base.SchedulingProviderBase;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProviderService_.CDS_NAME)
+@ServiceName(ProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)

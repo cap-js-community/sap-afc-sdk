@@ -150,11 +150,11 @@ Furthermore, it brings the following out-of-the-box features:
     - REST API
       - [/rest/feature](http://localhost:4004/rest/feature): Feature Toggle API
     - CDS Internal API
-      - `SchedulingProcessingService`: Scheduling Processing service
+      - `sapafcsdk.scheduling.ProcessingService`: Scheduling Processing service
         ```js
         const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
         ```
-      - `SchedulingWebsocketService`: Scheduling Websocket service
+      - `sapafcsdk.scheduling.WebsocketService`: Scheduling Websocket service
         ```js
         const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
         ```
@@ -228,7 +228,7 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `ui.path: String`: Path to the served UI5 application. Default is `''`
   - `ui.link: Boolean`: Fill link of jobs to served UI5 launchpad, if `null`. Default is `true`
   - `ui.swagger: Boolean | Object`: Serve API docs via Swagger UI. Default is `true`
-    - `ui.swagger.SchedulingProviderService: Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
+    - `ui.swagger."sapafcsdk.scheduling.ProviderService": Boolean`: Serve API docs of Scheduling Provider via Swagger UI. Default is `true`
   - `ui.launchpad: Boolean`: Serve launchpad. Default is `true`
   - `ui.scheduling.monitoring.job: Boolean`: Serve Scheduling Monitoring Job UI separately if no Launchpad is served. Default is `true`
 - `broker: Boolean | Object`: Broker configuration. Serve broker endpoint, if truthy. Default is `false` and `true` in `production`
@@ -327,9 +327,9 @@ To implement custom job processing, extend the job processing service definition
 **CDS file:** `/srv/scheduling-processing-service.cds`
 
 ```cds
-using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 ```
 
 **Implementation file:** `/srv/scheduling-processing-service.js`
@@ -494,9 +494,9 @@ To implement a custom job provider, extend the job provider service definition a
 **CDS file:** `/srv/scheduling-provider-service.cds`
 
 ```cds
-using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProviderService with @impl: '/srv/scheduling-provider-service.js';
+annotate ProviderService with @impl: '/srv/scheduling-provider-service.js';
 ```
 
 **Implementation file:** `/srv/scheduling-provider-service.js`
@@ -552,7 +552,7 @@ In addition, to overwriting the default implementation via an `on`-handler, also
 
 #### Periodic Job Sync
 
-A periodic scheduling job synchronization event named `SchedulingProcessingService.syncJob` is running per default every **1 minute**
+A periodic scheduling job synchronization event named `sapafcsdk.scheduling.ProcessingService.syncJob` is running per default every **1 minute**
 in the Event Queue, to perform job synchronization from an external source. The default implementation is a no-op.
 
 The event `syncJob` is registered automatically with cron interval `*/1 * * * *` in the Event Queue configuration.
@@ -583,9 +583,9 @@ The `cron` interval option defines the periodicity of the scheduling job synchro
 **CDS file:** `/srv/scheduling-processing-service.cds`
 
 ```cds
-using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 ```
 
 **Implementation file:** `/srv/scheduling-processing-service.js`
@@ -658,9 +658,9 @@ Available notifications are:
 **CDS file:** `/srv/scheduling-processing-service.cds`
 
 ```cds
-using SchedulingProcessingService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProcessingService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProcessingService with @impl: '/srv/scheduling-processing-service.js';
+annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 ```
 
 **Implementation file:** `/srv/scheduling-processing-service.js`
@@ -762,18 +762,18 @@ to expose a Scheduling Provider service to manage Job definitions and Jobs. Furt
     - WebSocket API
       - [/ws/job-scheduling](http://localhost:8080/ws/job-scheduling): Scheduling WebSocket endpoint
     - CDS Internal API
-    - `SchedulingProcessingService`: Scheduling Processing service
+    - `sapafcsdk.scheduling.processingservice.ProcessingService`: Scheduling Processing service
 
       ```java
       @Autowired
-      private SchedulingProcessingService processingService;
+      private ProcessingService processingService;
       ```
 
-      - `SchedulingWebsocketService`: Scheduling Websocket service
+    - `sapafcsdk.scheduling.websocketservice.WebsocketService`: Scheduling Websocket service
 
       ```java
       @Autowired
-      private SchedulingWebsocketService websocketService;
+      private WebsocketService websocketService;
       ```
 
 ### Architecture
@@ -929,7 +929,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
@@ -1098,7 +1098,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProviderService_.CDS_NAME)
+@ServiceName(ProviderService_.CDS_NAME)
 public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
@@ -1173,7 +1173,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = SyncJobContext.CDS_NAME)
@@ -1233,7 +1233,7 @@ import com.sap.cds.services.handler.annotations.ServiceName;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServiceName(SchedulingProcessingService_.CDS_NAME)
+@ServiceName(ProcessingService_.CDS_NAME)
 public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = NotifyContext.CDS_NAME)
@@ -1388,9 +1388,9 @@ For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is req
 Scheduling Provider Service can be restricted for authorization adding `@requires` annotation:
 
 ```cds
-using SchedulingProviderService from '@cap-js-community/sap-afc-sdk';
+using sapafcsdk.scheduling.ProviderService from '@cap-js-community/sap-afc-sdk';
 
-annotate SchedulingProviderService with @requires: 'JobScheduling';
+annotate ProviderService with @requires: 'JobScheduling';
 ```
 
 Details can be found in [CDS-based Authorization](https://cap.cloud.sap/docs/guides/security/authorization).

@@ -29,7 +29,7 @@ module.exports = (options) => {
     }
     copyFolderAdjusted(srcFolder, destFolder, {}, (content) => {
       if (isJava(options)) {
-        content = content.replace("package customer.scheduling;", `package customer.${packageName}.scheduling;`);
+        content = content.replace("package customer.scheduling", `package customer.${packageName}.scheduling`);
       }
       return content;
     });
