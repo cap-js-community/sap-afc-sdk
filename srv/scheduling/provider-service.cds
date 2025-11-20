@@ -31,7 +31,7 @@ using sapafcsdk.scheduling from '../../db/scheduling';
 @openapi             : 'SchedulingProviderV1Service'
 @protocol            : 'rest'
 @(path: '/api/job-scheduling/v1')
-@title               : 'SAP Advanced Financial Closing Scheduling Service Provider Interface'
+@title               : 'SAP Advanced Financial Closing Scheduling Provider Interface'
 @Core.Description    : 'Defines how an application can integrate with job scheduling provider service'
 @Core.LongDescription: 'The Scheduling Service Provider Interface of SAP Advanced Financial Closing allows the integration of third-party scheduling systems with SAP Advanced Financial Closing. It includes the retrieval of job definitions, as well as the scheduling and synchronization of jobs.'
 service ProviderService {
