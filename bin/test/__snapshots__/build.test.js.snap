@@ -1357,6 +1357,9 @@ resources:
         oauth2-configuration:
           redirect-uris:
             - https://*~{app-api/app-uri}/**
+          credential-types:
+            - binding-secret
+            - x509
     requires:
       - name: app-api
 "
@@ -3902,6 +3905,9 @@ resources:
         oauth2-configuration:
           redirect-uris:
             - https://*~{app-api/app-uri}/**
+          credential-types:
+            - binding-secret
+            - x509
     requires:
       - name: app-api
 "
