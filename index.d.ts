@@ -227,7 +227,6 @@ export namespace sapafcsdk.scheduling {
   }
 
   export namespace ProcessingService {
-
     export const STATUS_TRANSITIONS: {
       [K in JobStatusCode]: readonly JobStatusCode[];
     };
@@ -260,22 +259,25 @@ export namespace sapafcsdk.scheduling {
       text: string;
     }
 
-    export interface ProcessingRequest {
+    export interface Request {
       job: sapafcsdk.scheduling.Job;
       [key: string]: unknown;
     }
-
   }
 
   export interface ProcessingService {
-    processJobUpdate(req: ProcessingService.ProcessingRequest, status: JobStatusCode, results?: JobResult[]): Promise<void>;
+    processJobUpdate(
+      req: ProcessingService.Request,
+      status: JobStatusCode,
+      results?: JobResult[],
+    ): Promise<void>;
   }
 
   export interface ProviderService {
-      downloadData(req: object, ID: string): Promise<void>;
+    downloadData(req: object, ID: string): Promise<void>;
   }
 
-  export interface SchedulingMonitoringService {}
+  export interface MonitoringService {}
 
-  export interface SchedulingWebsocketService {}
+  export interface WebsocketService {}
 }
