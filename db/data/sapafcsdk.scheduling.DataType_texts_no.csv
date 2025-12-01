@@ -1,5 +1,6 @@
 locale;code;name;descr
 "no";string;Streng;Streng
 "no";number;Tall;Tall
+"no";date;Dato;Dato
 "no";datetime;Dato og klokkeslett;Dato og klokkeslett
 "no";boolean;Boolsk;Boolsk

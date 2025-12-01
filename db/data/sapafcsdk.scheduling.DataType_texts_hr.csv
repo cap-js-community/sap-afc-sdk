@@ -1,5 +1,6 @@
 locale;code;name;descr
 "hr";string;Niz;Niz
 "hr";number;Broj;Broj
+"hr";date;Datum;Datum
 "hr";datetime;Datum i vrijeme;Datum i vrijeme
 "hr";boolean;Booleov;Booleov

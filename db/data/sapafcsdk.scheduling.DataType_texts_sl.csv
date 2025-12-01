@@ -1,5 +1,6 @@
 locale;code;name;descr
 "sl";string;Niz;Niz
 "sl";number;Številka;Številka
+"sl";date;Datum;Datum
 "sl";datetime;Datum in čas;Datum in čas
 "sl";boolean;Boolova vrednost;Boolova vrednost

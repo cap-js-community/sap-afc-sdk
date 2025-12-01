@@ -1,5 +1,6 @@
 locale;code;name;descr
 "ms";string;Rentetan;Rentetan
 "ms";number;Nombor;Nombor
+"ms";date;Tarikh;Tarikh
 "ms";datetime;Tarikh & Masa;Tarikh & Masa
 "ms";boolean;Boolean;Boolean

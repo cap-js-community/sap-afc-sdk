@@ -1,5 +1,6 @@
 locale;code;name;descr
 "zh_CN";string;字符串;字符串
 "zh_CN";number;数字;数字
+"zh_CN";date;日期;日期
 "zh_CN";datetime;日期 & 时间;日期 & 时间
 "zh_CN";boolean;布尔值;布尔值

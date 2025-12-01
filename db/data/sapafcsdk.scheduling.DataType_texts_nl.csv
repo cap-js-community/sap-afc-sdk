@@ -1,5 +1,6 @@
 locale;code;name;descr
 "nl";string;String;String
 "nl";number;Nummer;Nummer
+"nl";date;Datum;Datum
 "nl";datetime;Datum en tijd;Datum en tijd
 "nl";boolean;Booleaans;Booleaans

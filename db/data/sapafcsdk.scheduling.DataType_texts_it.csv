@@ -1,5 +1,6 @@
 locale;code;name;descr
 "it";string;Stringa;Stringa
 "it";number;Numero;Numero
+"it";date;Data;Data
 "it";datetime;Data e ora;Data e ora
 "it";boolean;Booleano;Booleano

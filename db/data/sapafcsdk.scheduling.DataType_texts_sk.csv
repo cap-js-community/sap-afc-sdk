@@ -1,5 +1,6 @@
 locale;code;name;descr
 "sk";string;Reťazec;Reťazec
 "sk";number;Číslo;Číslo
+"sk";date;Dátum;Dátum
 "sk";datetime;Dátum a čas;Dátum a čas
 "sk";boolean;Booleovské;Booleovské

@@ -1,5 +1,6 @@
 locale;code;name;descr
 "vi";string;Chuỗi;Chuỗi
 "vi";number;Số;Số
+"vi";date;Ngày;Ngày
 "vi";datetime;Ngày & Giờ;Ngày & Giờ
 "vi";boolean;Boolean;Boolean

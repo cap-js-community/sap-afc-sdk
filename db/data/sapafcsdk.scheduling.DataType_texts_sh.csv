@@ -1,5 +1,6 @@
 locale;code;name;descr
 "sh";string;Niz;Niz
 "sh";number;Broj;Broj
+"sh";date;Datum;Datum
 "sh";datetime;Datum i vreme;Datum i vreme
 "sh";boolean;Bulova vrednost;Bulova vrednost

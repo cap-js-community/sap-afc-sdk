@@ -1,5 +1,6 @@
 locale;code;name;descr
 "kk";string;Жол;Жол
 "kk";number;Нөмір;Нөмір
+"kk";date;Күн;Күн
 "kk";datetime;Күні және уақыты;Күні және уақыты
 "kk";boolean;Буль;Буль

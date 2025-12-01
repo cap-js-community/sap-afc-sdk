@@ -1,5 +1,6 @@
 locale;code;name;descr
 "es";string;Cadena;Cadena
 "es";number;Número;Número
+"es";date;Fecha;Fecha
 "es";datetime;Fecha y hora;Fecha y hora
 "es";boolean;Booleano;Booleano

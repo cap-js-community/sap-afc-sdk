@@ -12,6 +12,7 @@ process.env.VCAP_APPLICATION = JSON.stringify({
 });
 
 cds.env.requires["sap-afc-sdk"].api.csp = true;
+cds.env.requires.queue.propagateHeaders = ["customheader", "authid"];
 
 process.env.PORT = 0; // Random
 
@@ -904,8 +905,6 @@ describe("Provider Service", () => {
   });
 
   it("Create Job (headers)", async () => {
-    cds.env.requires.queue.propagateHeaders = ["customheader", "authid"];
-
     let response = await POST(
       "/api/job-scheduling/v1/Job",
       {

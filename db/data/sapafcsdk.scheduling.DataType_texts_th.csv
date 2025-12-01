@@ -1,5 +1,6 @@
 locale;code;name;descr
 "th";string;สตริง;สตริง
 "th";number;ตัวเลข;ตัวเลข
+"th";date;วันที่;วันที่
 "th";datetime;วันที่และเวลา;วันที่และเวลา
 "th";boolean;บูลีน;บูลีน
