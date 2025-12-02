@@ -470,13 +470,24 @@ provides resilient processing (circuit breaker, retry, load-balancing, etc.).
 
 In addition, to overwriting the default implementation via an `on` handler, also additional `before` and `after` handlers can be registered.
 
+##### Test Queue
+
+In test environment the Event Queue processing is disabled per default to simplify testing. See https://cap-js-community.github.io/event-queue/unit-testing.
+In order to manually process event queue events of `ProcessingService` in test environment, the following code can be used in tests:
+
+```js
+const cds = require("@sap/cds");
+const eventQueue = require("@cap-js-community/event-queue");
+await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", "sapafcsdk.scheduling.ProcessingService");
+```
+
 ##### Error Codes
 
 The following error codes are defined to be used in exceptions as part of the stable interface (`x-extensible-enum`):
 
 - `jobCannotBeCanceled`: Jobs cannot be canceled in current status
 - `statusTransitionNotAllowed`: Status transition is not allowed for the current job status
-- etc.
+- ...
 
 See full list in `error` schema of [Scheduling Servcie Provider API](./openapi/SchedulingProviderV1Service.openapi3.json).
 

@@ -211,12 +211,6 @@ function addXsuaaBroker() {
     for (const resource of yaml.get("resources").items) {
       if (resource.getIn(["parameters", "service"]) === "xsuaa") {
         resource.setIn(["parameters", "service-plan"], "broker");
-        if (!resource.getIn(["parameters", "config", "oauth2-configuration", "credential-types"])) {
-          resource.setIn(
-            ["parameters", "config", "oauth2-configuration", "credential-types"],
-            ["binding-secret", "x509"],
-          );
-        }
       }
     }
 

@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/cap-js-community/sap-afc-sdk.git",
   "devDependencies": {
-    "@sap/cds-dk": "^9.4.3"
+    "@sap/cds-dk": "^9.5.0"
   },
   "dependencies": {
     "@cap-js-community/sap-afc-sdk": "../../",

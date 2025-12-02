@@ -664,6 +664,9 @@ builder:
         relativePaths: true
         additionalFiles:
           - xs-app.json
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 "
 `;
 
@@ -735,6 +738,11 @@ exports[`Build Java / CF 10`] = `
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.hcp.cf.logging</groupId>
+      <artifactId>cf-java-logging-support-logback</artifactId>
+      <version>\${logging.support.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
@@ -1329,11 +1337,6 @@ resources:
                 HTML5.DynamicDestination: true
     requires:
       - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
-          forwardAuthToken: true
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -1355,11 +1358,11 @@ resources:
         xsappname: afcsdk-\${org}-\${space}
         tenant-mode: dedicated
         oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-          credential-types:
-            - binding-secret
-            - x509
     requires:
       - name: app-api
 "
@@ -2029,6 +2032,9 @@ builder:
         relativePaths: true
         additionalFiles:
           - xs-app.json
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 "
 `;
 
@@ -2105,6 +2111,11 @@ exports[`Build Java / Kyma 10`] = `
       <groupId>com.sap.cds</groupId>
       <artifactId>cds-starter-cloudfoundry</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sap.hcp.cf.logging</groupId>
+      <artifactId>cf-java-logging-support-logback</artifactId>
+      <version>\${logging.support.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
@@ -3451,6 +3462,9 @@ builder:
         relativePaths: true
         additionalFiles:
           - xs-app.json
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 "
 `;
 
@@ -3883,11 +3897,6 @@ resources:
                 HTML5.DynamicDestination: true
     requires:
       - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
-          forwardAuthToken: true
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -3909,11 +3918,11 @@ resources:
         xsappname: afcsdk-\${org}-\${space}
         tenant-mode: dedicated
         oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-          credential-types:
-            - binding-secret
-            - x509
     requires:
       - name: app-api
 "
@@ -4618,6 +4627,9 @@ builder:
         relativePaths: true
         additionalFiles:
           - xs-app.json
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
 "
 `;
 
