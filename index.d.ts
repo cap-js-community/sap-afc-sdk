@@ -281,3 +281,170 @@ export namespace sapafcsdk.scheduling {
 
   export interface WebsocketService {}
 }
+
+export const JobStatus: {
+  requested: "requested";
+  running: "running";
+  completed: "completed";
+  completedWithWarning: "completedWithWarning";
+  completedWithError: "completedWithError";
+  failed: "failed";
+  cancelRequested: "cancelRequested";
+  canceled: "canceled";
+};
+
+export const ParameterType: {
+  readOnlyValue: "readOnlyValue";
+  writableValue: "writableValue";
+  mapping: "mapping";
+};
+
+export const DataType: {
+  string: "string";
+  number: "number";
+  date: "date";
+  datetime: "datetime";
+  boolean: "boolean";
+};
+
+export const MappingType: {
+  accountingPrinciple: "accountingPrinciple";
+  companyCode: "companyCode";
+  plant: "plant";
+  controllingArea: "controllingArea";
+  fiscalPeriod: "fiscalPeriod";
+  fiscalYearPeriod: "fiscalYearPeriod";
+  fiscalYear: "fiscalYear";
+  keyDate: "keyDate";
+  chartOfAccounts: "chartOfAccounts";
+  fiscalYearVariant: "fiscalYearVariant";
+  ledger: "ledger";
+  testRun: "testRun";
+  postingPeriodVariant: "postingPeriodVariant";
+  processingUser: "processingUser";
+  interestedUser: "interestedUser";
+  userResponsible: "userResponsible";
+  processingUserEmail: "processingUserEmail";
+  interestedUserEmail: "interestedUserEmail";
+  userResponsibleEmail: "userResponsibleEmail";
+  executionID: "executionID";
+  customField1: "customField1";
+  customField2: "customField2";
+  customField3: "customField3";
+  taskListID: "taskListID";
+  taskListDescription: "taskListDescription";
+  taskID: "taskID";
+  taskDescription: "taskDescription";
+}
+
+export const ResultType: {
+  link: "link";
+  data: "data";
+  message: "message";
+};
+
+export const MessageSeverity: {
+  success: "success";
+  info: "info";
+  warning: "warning";
+  error: "error";
+};
+
+export const MessageSeverityNumeric: {
+  1: 1;
+  2: 2;
+  3: 3;
+  4: 4;
+};
+
+export namespace BaseError {
+  export const Severity: {
+    Error: "E";
+    Warning: "W";
+    Information: "I";
+    Success: "S";
+  };
+}
+
+export class BaseError extends Error {
+  code: string;
+  args: any[];
+  status?: number;
+  target?: string;
+  severity: typeof BaseError.Severity;
+  info: Record<string, any>;
+  cause?: Error;
+}
+
+export class JobSchedulingError extends BaseError {
+  static accessOnlyViaParent(): JobSchedulingError;
+  static accessOnlyByKey(): JobSchedulingError;
+  static jobNotFound(ID: string): JobSchedulingError;
+  static statusValueMissing(): JobSchedulingError;
+  static invalidJobStatus(status: string): JobSchedulingError;
+  static statusTransitionNotAllowed(statusBefore: string, statusAfter: string): JobSchedulingError;
+  static invalidOption(value: any, option: string): JobSchedulingError;
+  static jobDefinitionNotFound(name: string): JobSchedulingError;
+  static referenceIDMissing(): JobSchedulingError;
+  static referenceIDNoUUID(referenceID: string): JobSchedulingError;
+  static jobResultsReadOnly(): JobSchedulingError;
+  static startDateTimeNotSupported(name: string): JobSchedulingError;
+  static errorOnlyRunNotSupported(name: string): JobSchedulingError;
+  static jobParameterNameMissing(): JobSchedulingError;
+  static jobParameterNotKnown(name: string): JobSchedulingError;
+  static jobParameterRequired(name: string): JobSchedulingError;
+  static jobParameterReadOnly(name: string): JobSchedulingError;
+  static jobParameterValueRequired(name: string): JobSchedulingError;
+  static jobParameterValueInvalidType(value: any, name: string, type: string): JobSchedulingError;
+  static jobParameterValueInvalidEnum(value: any, name: string): JobSchedulingError;
+  static jobCannotBeCanceled(status: string): JobSchedulingError;
+  static jobResultNotFound(ID: string): JobSchedulingError;
+  static resultNameMissing(): JobSchedulingError;
+  static resultTypeMissing(): JobSchedulingError;
+  static invalidResultType(resultType: string): JobSchedulingError;
+  static linkMissing(resultType: string): JobSchedulingError;
+  static mimeTypeMissing(resultType: string): JobSchedulingError;
+  static filenameMissing(resultType: string): JobSchedulingError;
+  static dataMissing(resultType: string): JobSchedulingError;
+  static messagesMissing(resultType: string): JobSchedulingError;
+  static codeMissing(): JobSchedulingError;
+  static textMissing(): JobSchedulingError;
+  static localeMissing(): JobSchedulingError;
+  static invalidLocale(locale: string): JobSchedulingError;
+  static severityMissing(): JobSchedulingError;
+  static invalidMessageSeverity(messageSeverity: string): JobSchedulingError;
+  static linkNotAllowed(resultType: string): JobSchedulingError;
+  static mimeTypeNotAllowed(resultType: string): JobSchedulingError;
+  static filenameNotAllowed(resultType: string): JobSchedulingError;
+  static dataNotAllowed(resultType: string): JobSchedulingError;
+  static messagesNotAllowed(resultType: string): JobSchedulingError;
+}
+
+export interface BaseService {
+  init(): Promise<void>;
+}
+
+export interface BaseApplicationService extends BaseService {
+  handle(req): Promise<void>;
+}
+
+export interface SchedulingProviderService extends  BaseApplicationService {
+  createJob(req, job: sapafcsdk.scheduling.Job): Promise<void>;
+  updateJob(req, job: sapafcsdk.scheduling.Job, data: sapafcsdk.scheduling.Job): Promise<void>;
+  downloadData(req, ID: string): Promise<void>;
+}
+
+export interface SchedulingProviderService extends  BaseApplicationService {
+  processJobUpdate(req, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[]): Promise<void>;
+  checkStatusTransition(req, statusBefore: sapafcsdk.scheduling.JobStatusCode, statusAfter: sapafcsdk.scheduling.JobStatusCode): Promise<void>;
+  checkJobResults(req, results: sapafcsdk.scheduling.JobResult[]): Promise<void>;
+  mockJobProcessing(req, confif: object): Promise<void>;
+  mockJobSync(req): Promise<void>;
+  mockNotification(req): Promise<void>;
+}
+
+export interface SchedulingMonitoringService extends  BaseApplicationService {
+}
+
+export interface SchedulingWebsocketService extends  BaseApplicationService {
+}

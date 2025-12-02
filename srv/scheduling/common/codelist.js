@@ -63,7 +63,7 @@ module.exports = {
     warning: "warning",
     error: "error",
   },
-  MessageNumericSeverity: {
+  MessageSeverityNumeric: {
     success: 1,
     info: 2,
     warning: 3,

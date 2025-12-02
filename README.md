@@ -565,7 +565,7 @@ To change the cron interval, the Event Queue configuration can be adjusted in th
   "cds": {
     "requires": {
       "sapafcsdk.scheduling.ProcessingService": {
-        "outbox": {
+        "queued": {
           "events": {
             "syncJob": {
               "cron": "*/2 * * * *"
@@ -740,7 +740,7 @@ implementation of the [SAP Advanced Financial Closing Scheduling Service Provide
 to expose a Scheduling Provider service to manage Job definitions and Jobs. Furthermore, it brings the following out-of-the-box virtues:
 
 - **API**: Exposes a RESTful API implementing the AFC Scheduling Provider Interface to manage Job definitions and Jobs
-- **Outbox**: Provides an Outbox to process and synchronize Jobs (periodically) asynchronously and resiliently (circuit breaker, retry,
+- **Queue**: Provides a Queue to process and synchronize Jobs (periodically) asynchronously and resiliently (circuit breaker, retry,
   load-balancing, etc.)
 - **Websocket**: Provides websocket connection support to monitor Job processing live
 - **UI**: Provides a UI5 application to monitor and cancel Jobs
@@ -810,8 +810,8 @@ The following diagram illustrates the high-level architecture of the SAP Advance
   - Reads scheduling job details from the database
   - Supports monitoring via OData V4 API
   - Displays scheduling job statuses and updates in real-time via WebSockets
-- **Transactional Outbox:**
-  - CDS Transactional Outbox facilitates asynchronous job execution
+- **Transactional Queue:**
+  - CDS Transactional Queue facilitates asynchronous job execution
 - **Database:**
   - Stores job scheduling data in the database
 
@@ -984,7 +984,7 @@ As part of the custom scheduling process service implementation, the following o
   - Call `context.proceed()` to perform default implementation (set status to `running`)
   - Job update can be performed via `this.processJobUpdate()` providing the new status and job results
     - e.g. `this.processJobUpdate(context, JobStatusCode.completed, results)`
-  - Throwing exceptions will automatically trigger the retry process in outbox
+  - Throwing exceptions will automatically trigger the retry process in queue
   - Disable mocked job processing by deleting `sap-afc-sdk.mockProcessing` (default).
 - `updateJob`:
   - A job status update is requested and the job results are stored

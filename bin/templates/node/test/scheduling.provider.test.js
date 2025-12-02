@@ -1,8 +1,13 @@
 "use strict";
 
 const cds = require("@sap/cds");
+const eventQueue = require("@cap-js-community/event-queue");
 
 const { GET, POST, test } = cds.test(__dirname + "/..");
+
+async function processEventQueue() {
+  await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", "sapafcsdk.scheduling.ProcessingService");
+}
 
 describe("Scheduling Provider", () => {
   beforeEach(async () => {
@@ -35,6 +40,7 @@ describe("Scheduling Provider", () => {
       ],
     });
     expect(response.status).toBe(201);
+    await processEventQueue();
   });
 
   it("POST Job cancel", async () => {

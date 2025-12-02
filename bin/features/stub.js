@@ -39,12 +39,12 @@ module.exports = (options) => {
       adjustJSON("package.json", (json) => {
         json.cds ??= {};
         json.cds.requires ??= {};
-        json.cds.requires.SchedulingProcessingService ??= {};
-        json.cds.requires.SchedulingProcessingService.queued ??= {};
-        json.cds.requires.SchedulingProcessingService.queued.events ??= {};
-        json.cds.requires.SchedulingProcessingService.queued.events.syncJob ??= {};
-        if (!json.cds.requires.SchedulingProcessingService.queued.events.syncJob.cron) {
-          json.cds.requires.SchedulingProcessingService.queued.events.syncJob.cron = "*/1 * * * *";
+        const schedulingProcessingService = (json.cds.requires["sapafcsdk.scheduling.ProcessingService"] ??= {});
+        schedulingProcessingService.queued ??= {};
+        schedulingProcessingService.queued.events ??= {};
+        schedulingProcessingService.queued.events.syncJob ??= {};
+        if (!schedulingProcessingService.queued.events.syncJob.cron) {
+          schedulingProcessingService.queued.events.syncJob.cron = "*/1 * * * *";
         }
       });
     }
