@@ -51,8 +51,8 @@ public class SchedulingProviderController {
 
   @Tag(name = "Capabilities")
   @GetMapping("/Capabilities")
-  public Optional<Capabilities> capabilities(HttpServletResponse response) {
-    return providerService.run(Select.from(CAPABILITIES)).first(Capabilities.class);
+  public Capabilities capabilities(HttpServletResponse response) {
+    return providerService.run(Select.from(CAPABILITIES)).single(Capabilities.class);
   }
 
   @Tag(name = "Job Definition")

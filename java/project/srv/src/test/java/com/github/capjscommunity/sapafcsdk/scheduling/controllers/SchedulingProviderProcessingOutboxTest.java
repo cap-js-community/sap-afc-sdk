@@ -7,26 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
-import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.CancelJobContext;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessJobContext;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService_;
-import com.sap.cds.services.cds.CqnService;
-import com.sap.cds.services.changeset.ChangeSetListener;
-import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
-import com.sap.cds.services.outbox.OutboxService;
+import com.github.capjscommunity.sapafcsdk.test.OutboxTestSetup;
 import com.sap.cds.services.persistence.PersistenceService;
 import com.sap.cds.services.runtime.CdsRuntime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,7 +43,12 @@ public class SchedulingProviderProcessingOutboxTest {
   @Test
   @WithMockUser("authenticated")
   public void createJobOutboxed() throws Exception {
-    OutboxTestSetup setup = prepareOutboxTest(ProcessingService_.CDS_NAME, ProcessJobContext.CDS_NAME);
+    OutboxTestSetup setup = new OutboxTestSetup(
+      ProcessingService_.CDS_NAME,
+      ProcessJobContext.CDS_NAME,
+      cdsRuntime,
+      persistenceService
+    );
     JSONObject job = new JSONObject(
       Map.of(
         "name",
@@ -113,33 +110,85 @@ public class SchedulingProviderProcessingOutboxTest {
       .perform(get("/api/job-scheduling/v1/Job/" + ID))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.status").value(JobStatusCode.RUNNING));
+
+    setup.active = false;
   }
 
   @Test
   @WithMockUser("authenticated")
   public void cancelJobOutboxed() throws Exception {
-    OutboxTestSetup setup = prepareOutboxTest(ProcessingService_.CDS_NAME, CancelJobContext.CDS_NAME);
+    OutboxTestSetup createSetup = new OutboxTestSetup(
+      ProcessingService_.CDS_NAME,
+      ProcessJobContext.CDS_NAME,
+      cdsRuntime,
+      persistenceService
+    );
+
+    JSONObject job = new JSONObject(
+      Map.of(
+        "name",
+        "JOB_1",
+        "referenceID",
+        "c1253940-5f25-4a0b-8585-f62bd085b327",
+        "parameters",
+        new JSONArray(
+          List.of(
+            new JSONObject(Map.of("name", "A", "value", "abc")),
+            new JSONObject(Map.of("name", "C", "value", "true")),
+            new JSONObject(Map.of("name", "E", "value", JSONObject.NULL))
+          )
+        )
+      )
+    );
+    MvcResult result = mockMvc
+      .perform(post("/api/job-scheduling/v1/Job").contentType("application/json").content(job.toString()))
+      .andExpect(status().isCreated())
+      .andReturn();
+    String response = result.getResponse().getContentAsString();
+    JSONObject json = new JSONObject(response);
+    String ID = json.getString("ID");
+
+    createSetup.eventTriggered.countDown();
+    assertTrue(createSetup.messageFinished.await(3, TimeUnit.SECONDS));
 
     mockMvc
-      .perform(post("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel").locale(Locale.ENGLISH))
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.status").value(JobStatusCode.RUNNING));
+
+    createSetup.active = false;
+
+    OutboxTestSetup cancelSetup = new OutboxTestSetup(
+      ProcessingService_.CDS_NAME,
+      ProcessJobContext.CDS_NAME,
+      cdsRuntime,
+      persistenceService
+    );
+
+    mockMvc
+      .perform(post("/api/job-scheduling/v1/Job/" + ID + "/cancel").locale(Locale.ENGLISH))
       .andExpect(status().isNoContent());
 
+    cancelSetup.eventTriggered.countDown();
+
     mockMvc
-      .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103"))
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.status").value("cancelRequested"));
 
-    setup.eventTriggered.countDown();
+    assertTrue(cancelSetup.messageFinished.await(3, TimeUnit.SECONDS));
 
-    JSONObject processingEvent = setup.messageEvents.get(0);
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/Job/" + ID))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.status").value("canceled"));
+
+    JSONObject processingEvent = cancelSetup.messageEvents.get(0);
     assertEquals("sapafcsdk.scheduling.ProcessingService", processingEvent.get("event"));
     assertEquals("cancelJob", processingEvent.getJSONObject("message").get("event"));
-    assertEquals(
-      "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
-      processingEvent.getJSONObject("message").getJSONObject("params").get("ID")
-    );
+    assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 
-    JSONObject websocketEvent = setup.messageEvents.get(1);
+    JSONObject websocketEvent = cancelSetup.messageEvents.get(1);
     assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
     assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
     assertEquals(
@@ -147,69 +196,10 @@ public class SchedulingProviderProcessingOutboxTest {
       websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").get("status")
     );
     assertEquals(
-      "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      ID,
       websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").getJSONArray("IDs").get(0)
     );
 
-    assertTrue(setup.messageFinished.await(3, TimeUnit.SECONDS));
-
-    mockMvc
-      .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103"))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.status").value("canceled"));
-  }
-
-  private static class OutboxTestSetup {
-
-    CqnService service;
-    List<JSONObject> messageEvents;
-    CountDownLatch messageFinished;
-    CountDownLatch eventTriggered;
-  }
-
-  private OutboxTestSetup prepareOutboxTest(String serviceName, String eventName) {
-    OutboxService outboxService = cdsRuntime
-      .getServiceCatalog()
-      .getService(OutboxService.class, OutboxService.PERSISTENT_ORDERED_NAME);
-    CqnService service = outboxService.outboxed(
-      cdsRuntime.getServiceCatalog().getService(CqnService.class, serviceName)
-    );
-
-    OutboxTestSetup setup = new OutboxTestSetup();
-    setup.service = service;
-    setup.messageEvents = new ArrayList<>();
-    setup.messageFinished = new CountDownLatch(1);
-    setup.eventTriggered = new CountDownLatch(1);
-
-    persistenceService.after(CqnService.EVENT_CREATE, Messages_.CDS_NAME, context -> {
-      String message = ((CdsCreateEventContextImpl) context).getCqn().entries().get(0).get("msg").toString();
-      JSONObject object = Assertions.assertDoesNotThrow(() -> new JSONObject(message));
-      setup.messageEvents.add(object);
-    });
-
-    persistenceService.after(CqnService.EVENT_DELETE, Messages_.CDS_NAME, context -> {
-      context
-        .getChangeSetContext()
-        .register(
-          new ChangeSetListener() {
-            @Override
-            public void afterClose(boolean completed) {
-              setup.messageFinished.countDown();
-            }
-          }
-        );
-    });
-
-    if (eventName != null) {
-      setup.service.before(eventName, null, context -> {
-        try {
-          assertTrue(setup.eventTriggered.await(3, TimeUnit.SECONDS), "event triggered latch timed out");
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
-      });
-    }
-
-    return setup;
+    cancelSetup.active = false;
   }
 }

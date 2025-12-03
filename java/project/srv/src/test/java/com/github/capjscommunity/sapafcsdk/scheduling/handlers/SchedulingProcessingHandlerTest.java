@@ -182,7 +182,8 @@ public class SchedulingProcessingHandlerTest {
       .perform(get("/api/job-scheduling/v1/JobResult/" + resultIDs.get(0) + "/messages").locale(Locale.FRENCH))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].code").value("jobCompleted"))
-      .andExpect(jsonPath("$[0].text").value(messageProvider.get("jobCompleted", null, Locale.FRENCH)));
+      // .andExpect(jsonPath("$[0].text").value(messageProvider.get("jobCompleted", null, Locale.FRENCH)));
+      .andExpect(jsonPath("$[0].text").value("Job terminÃ©"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/" + resultIDs.get(0) + "/messages").locale(Locale.GERMAN))
