@@ -281,6 +281,19 @@ describe("Processing Service", () => {
                 },
               ],
             },
+            {
+              code: "invalidJobStatus",
+              values: ["xxx"],
+              severity: MessageSeverity.info,
+              texts: [
+                {
+                  locale: "de",
+                },
+                {
+                  locale: "fr",
+                },
+              ],
+            },
           ],
         },
       ]),
@@ -423,7 +436,7 @@ describe("Processing Service", () => {
         status_code: JobStatus.running,
       },
     };
-    const result = await schedulingProcessingService.processJobUpdate(req, JobStatus.completed, [
+    const result = await schedulingProcessingService.processJobUpdate(req, req.job, JobStatus.completed, [
       {
         type: ResultType.data,
         name: "Buffer",

@@ -26,6 +26,7 @@ service ProcessingService {
 
   type JobResultMessage {
     code      : String(255) not null;
+    values    : array of String(5000);
     text      : String(5000);
     severity  : MessageSeverityCode not null;
     createdAt : Timestamp;

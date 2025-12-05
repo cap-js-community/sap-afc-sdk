@@ -172,7 +172,10 @@ entity JobResultMessage : cuid, {
   @title: '{i18n>Code}'
   code      : String(255) not null;
 
-  @title: '{i18n>Message}'
+  @title: '{i18n>Values}'
+  values    : array of String(5000);
+
+  @title: '{i18n>Text}'
   text      : localized String(5000) not null;
 
   @title: '{i18n>Severity}'

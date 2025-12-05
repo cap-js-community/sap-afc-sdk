@@ -273,6 +273,7 @@ exports[`Provider Service Create Job (status and duration) 4`] = `
     "code": "jobBasicMock",
     "severity": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -316,6 +317,7 @@ exports[`Provider Service Create Job (test run) 4`] = `
     "code": "jobBasicMock",
     "severity": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -351,6 +353,7 @@ exports[`Provider Service Create Job (translation) 3`] = `
     "code": "jobBasicMock",
     "severity": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -361,6 +364,7 @@ exports[`Provider Service Create Job (translation) 4`] = `
     "code": "jobBasicMock",
     "severity": "info",
     "text": "Job läuft im einfachen Mock-Modus.",
+    "values": [],
   },
 ]
 `;
@@ -411,6 +415,7 @@ exports[`Provider Service Create Job (translation) 9`] = `
     "code": "jobCompleted",
     "severity": "info",
     "text": "Job completed successfully",
+    "values": [],
   },
 ]
 `;
@@ -421,6 +426,7 @@ exports[`Provider Service Create Job (translation) 10`] = `
     "code": "jobCompleted",
     "severity": "info",
     "text": "Job erfolgreich abgeschlossen.",
+    "values": [],
   },
 ]
 `;
@@ -441,6 +447,7 @@ exports[`Provider Service Create Job (translation) 12`] = `
     "code": "jobTestRun",
     "severity": "info",
     "text": "Job is running in test mode.",
+    "values": [],
   },
 ]
 `;
@@ -451,6 +458,7 @@ exports[`Provider Service Create Job (translation) 13`] = `
     "code": "jobTestRun",
     "severity": "info",
     "text": "Job läuft im Testmodus.",
+    "values": [],
   },
 ]
 `;
@@ -875,16 +883,19 @@ exports[`Provider Service GET Job Result Messages 2`] = `
     "code": "ERROR_01",
     "severity": "error",
     "text": "This is an error",
+    "values": [],
   },
   {
     "code": "INFO_01",
     "severity": "info",
     "text": "This is an information",
+    "values": [],
   },
   {
     "code": "WARNING_01",
     "severity": "warning",
     "text": "This is a warning",
+    "values": [],
   },
 ]
 `;
@@ -895,11 +906,13 @@ exports[`Provider Service GET Job Result Messages 3`] = `
     "code": "INFO_01",
     "severity": "info",
     "text": "This is an information",
+    "values": [],
   },
   {
     "code": "WARNING_01",
     "severity": "warning",
     "text": "This is a warning",
+    "values": [],
   },
 ]
 `;

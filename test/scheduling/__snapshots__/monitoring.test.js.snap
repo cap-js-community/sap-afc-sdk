@@ -309,6 +309,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         </NavigationProperty>
         <Property Name="result_ID" Type="Edm.Guid" Nullable="false"/>
         <Property Name="code" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="values" Type="Collection(Edm.String)" MaxLength="5000" Nullable="true"/>
         <Property Name="text" Type="Edm.String" MaxLength="5000" Nullable="false"/>
         <NavigationProperty Name="severity" Type="sapafcsdk.scheduling.MonitoringService.MessageSeverity" Nullable="false">
           <ReferentialConstraint Property="severity_code" ReferencedProperty="code"/>
@@ -1932,8 +1933,11 @@ exports[`Monitoring Service Get $metadata 1`] = `
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/code">
         <Annotation Term="Common.Label" String="Code"/>
       </Annotations>
+      <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/values">
+        <Annotation Term="Common.Label" String="Values"/>
+      </Annotations>
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/text">
-        <Annotation Term="Common.Label" String="Message"/>
+        <Annotation Term="Common.Label" String="Text"/>
       </Annotations>
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/severity">
         <Annotation Term="Common.Label" String="Severity"/>
@@ -2382,7 +2386,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
       </Annotations>
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage_texts/text">
-        <Annotation Term="Common.Label" String="Message"/>
+        <Annotation Term="Common.Label" String="Text"/>
       </Annotations>
     </Schema>
   </edmx:DataServices>

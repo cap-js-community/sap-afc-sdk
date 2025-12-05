@@ -387,7 +387,7 @@ As part of the custom scheduling process service implementation, the following o
   - Test run can be identified via flag `req.data.testRun` (if job definition supports test mode)
   - Call `await next()` to perform default implementation (set status to `running`)
   - Job update can be performed via `this.processJobUpdate()` providing the new status and job results
-    - e.g. `await this.processJobUpdate(req, JobStatus.completed, results)`
+    - e.g. `await this.processJobUpdate(req, job, JobStatus.completed, results)`
   - Result `data` object shall contain stream objects to prevent data materialization
   - Throwing exceptions will automatically trigger the retry process in Event Queue
   - Disable mocked job processing via `cds.requires.sap-afc-sdk.mockProcessing: false` (default).
@@ -395,11 +395,11 @@ As part of the custom scheduling process service implementation, the following o
   - A job status update is requested and the job results are stored
   - Implement your custom logic, how the job status should be updated
   - Job data can be retrieved via `req.job`
-  - Job status transition is validated via `async checkStatusTransition(req, statusBefore, statusAfter)`
+  - Job status transition is validated via `async checkStatusTransition(req, job, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
     - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
-  - Job results are checked and processed via `async checkJobResults(req, results)`
+  - Job results are checked and processed via `async checkJobResults(req, job, results)`
     - Valid results are valid, according to job results signature constraints (see below)
     - Returns the processed job results to be inserted
   - Call `await next()` to perform default implementation (update status to requested status)
@@ -437,6 +437,7 @@ type JobResult {
 
 type JobResultMessage {
   code      : String(255) not null;
+  values    : array of String(5000);
   text      : String(5000);
   severity  : MessageSeverityCode not null;
   createdAt : Timestamp;
@@ -994,18 +995,18 @@ As part of the custom scheduling process service implementation, the following o
   - Test run can be identified via flag `context.get("testRun")` (if job definition supports test mode)
   - Call `context.proceed()` to perform default implementation (set status to `running`)
   - Job update can be performed via `this.processJobUpdate()` providing the new status and job results
-    - e.g. `this.processJobUpdate(context, JobStatusCode.completed, results)`
+    - e.g. `this.processJobUpdate(context, job, JobStatusCode.completed, results)`
   - Throwing exceptions will automatically trigger the retry process in queue
   - Disable mocked job processing by deleting `sap-afc-sdk.mockProcessing` (default).
 - `updateJob`:
   - A job status update is requested and the job results are stored
   - Implement your custom logic, how the job status should be updated
   - Job ID is accessible via `context.get("ID")`
-  - Job status transition is validated via `this.checkStatusTransition(context, statusBefore, statusAfter)`
+  - Job status transition is validated via `this.checkStatusTransition(context, job, statusBefore, statusAfter)`
     - Valid status transitions are defined in `this.statusTransitions`
     - Check function and status transitions can be customized
     - Final statuses are `completed`, `completedWithWarning`, `completedWithError`, `failed`, and `canceled`, no further status transitions are then allowed
-  - Job results are checked and processed via `checkJobResults(context, results)`
+  - Job results are checked and processed via `checkJobResults(context, job, results)`
     - Valid results are valid, according to job results signature constraints (see below)
     - Returns the processed job results to be inserted
   - Call `context.proceed()` to perform default implementation (update status to requested status)
@@ -1043,6 +1044,7 @@ type JobResult {
 
 type JobResultMessage {
   code      : String(255) not null;
+  values    : array of String(5000);
   text      : String(5000);
   severity  : MessageSeverityCode not null;
   createdAt : Timestamp;

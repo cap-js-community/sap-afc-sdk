@@ -46,6 +46,7 @@ exports[`Processing Service processJob - simple mock - completed 2`] = `
     "code": "jobBasicMock",
     "severity_code": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -56,6 +57,7 @@ exports[`Processing Service processJob - simple mock - completed 3`] = `
     "code": "jobCompleted",
     "severity_code": "info",
     "text": "Job completed successfully",
+    "values": [],
   },
 ]
 `;
@@ -85,6 +87,7 @@ exports[`Processing Service processJob - simple mock - completed with error 2`] 
     "code": "jobBasicMock",
     "severity_code": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -95,6 +98,7 @@ exports[`Processing Service processJob - simple mock - completed with error 3`] 
     "code": "jobCompletedWithError",
     "severity_code": "error",
     "text": "Job completed. An error occurred during job processing.",
+    "values": [],
   },
 ]
 `;
@@ -124,6 +128,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 2`
     "code": "jobBasicMock",
     "severity_code": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -134,6 +139,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 3`
     "code": "jobCompletedWithWarning",
     "severity_code": "warning",
     "text": "Job completed. A warning occurred during job processing.",
+    "values": [],
   },
 ]
 `;
@@ -163,6 +169,7 @@ exports[`Processing Service processJob - simple mock - failed 2`] = `
     "code": "jobBasicMock",
     "severity_code": "info",
     "text": "Job is running in basic mock mode.",
+    "values": [],
   },
 ]
 `;
@@ -173,6 +180,7 @@ exports[`Processing Service processJob - simple mock - failed 3`] = `
     "code": "jobFailed",
     "severity_code": "error",
     "text": "Job failed. An error occurred during job processing.",
+    "values": [],
   },
 ]
 `;
@@ -209,6 +217,7 @@ exports[`Processing Service updateJob - results - base64 2`] = `
     "code": "jobCompleted",
     "severity_code": "info",
     "text": "Job completed successfully",
+    "values": [],
   },
 ]
 `;
@@ -245,6 +254,15 @@ exports[`Processing Service updateJob - translation 2`] = `
     "code": "jobCompleted",
     "severity_code": "info",
     "text": "Job completed successfully",
+    "values": [],
+  },
+  {
+    "code": "invalidJobStatus",
+    "severity_code": "info",
+    "text": "Job status 'xxx' is not valid.",
+    "values": [
+      "xxx",
+    ],
   },
 ]
 `;
@@ -255,6 +273,15 @@ exports[`Processing Service updateJob - translation 3`] = `
     "code": "jobCompleted",
     "severity_code": "info",
     "text": "Job terminé",
+    "values": [],
+  },
+  {
+    "code": "invalidJobStatus",
+    "severity_code": "info",
+    "text": "Le statut 'xxx' du job n'est pas valide.",
+    "values": [
+      "xxx",
+    ],
   },
 ]
 `;
@@ -265,6 +292,15 @@ exports[`Processing Service updateJob - translation 4`] = `
     "code": "jobCompleted",
     "severity_code": "info",
     "text": "Job abgeschlossen",
+    "values": [],
+  },
+  {
+    "code": "invalidJobStatus",
+    "severity_code": "info",
+    "text": "Jobstatus 'xxx' ist nicht gültig.",
+    "values": [
+      "xxx",
+    ],
   },
 ]
 `;

@@ -28,7 +28,7 @@ const Commands = {
   AFC_NODE: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
   AFC_JAVA: ["npx afc add -a app,broker,stub,mock,sample,test,http"],
   END: [],
-  TEST: ["npm test"],
+  TEST: [`cd ${PROJECT}`, "npm test"],
 };
 
 const Files = {
@@ -108,6 +108,7 @@ describe("Build", () => {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
+    // expect(cleanErr(result.stderr, ENV.NODE, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
   });
 
@@ -130,6 +131,7 @@ describe("Build", () => {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
+    // expect(cleanErr(result.stderr, ENV.NODE, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
   });
 
@@ -152,6 +154,7 @@ describe("Build", () => {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
+    // expect(cleanErr(result.stderr, ENV.JAVA, ENV.CF)).toBe("");
     expect(result.code).toBe(0);
   });
 
@@ -174,6 +177,7 @@ describe("Build", () => {
       compareFile(file);
     }
     result = shelljs.exec([...Commands.TEST].join(" && "));
+    // expect(cleanErr(result.stderr, ENV.JAVA, ENV.KYMA)).toBe("");
     expect(result.code).toBe(0);
   });
 });

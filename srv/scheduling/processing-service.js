@@ -60,17 +60,17 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       const processingConfig = cds.env.requires?.["sap-afc-sdk"]?.mockProcessing;
       let results = [];
       if (processingConfig) {
-        results = await this.mockJobProcessing(req, processingConfig);
+        results = await this.mockJobProcessing(req, req.job, processingConfig);
       }
-      await this.processJobUpdate(req, JobStatus.running, results);
+      await this.processJobUpdate(req, req.job, JobStatus.running, results);
     });
 
     this.on(updateJob, async (req, next) => {
-      await this.processJobUpdate(req, req.data.status, req.data.results);
+      await this.processJobUpdate(req, req.job, req.data.status, req.data.results);
     });
 
     this.on(cancelJob, async (req, next) => {
-      await this.processJobUpdate(req, JobStatus.canceled);
+      await this.processJobUpdate(req, req.job, JobStatus.canceled);
     });
 
     this.on(syncJob, async (req, next) => {
@@ -90,9 +90,8 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return super.init();
   }
 
-  async processJobUpdate(req, status, results) {
+  async processJobUpdate(req, job, status, results) {
     const { Job, JobResult } = cds.entities("sapafcsdk.scheduling");
-    const job = req.job;
     if (!status) {
       return req.reject(JobSchedulingError.statusValueMissing());
     }
@@ -102,7 +101,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (job.status_code === status) {
       return;
     }
-    if (!(await this.checkStatusTransition(req, job.status_code, status))) {
+    if (!(await this.checkStatusTransition(req, job, job.status_code, status))) {
       return req.reject(JobSchedulingError.statusTransitionNotAllowed(job.status_code, status));
     }
     job.status_code = status;
@@ -112,7 +111,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       })
       .where({ ID: job.ID });
     if (results && results.length > 0) {
-      const insertResults = await this.checkJobResults(req, results);
+      const insertResults = await this.checkJobResults(req, job, results);
       await INSERT.into(JobResult).entries(insertResults);
     }
     const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
@@ -128,13 +127,12 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     );
   }
 
-  async checkStatusTransition(req, statusBefore, statusAfter) {
+  async checkStatusTransition(req, job, statusBefore, statusAfter) {
     return this.statusTransitions[statusBefore].includes(statusAfter);
   }
 
-  async checkJobResults(req, results) {
+  async checkJobResults(req, job, results) {
     const locales = messageLocales();
-    const job = req.job;
     return results.map((result) => {
       if (!result.name) {
         return req.reject(JobSchedulingError.resultNameMissing());
@@ -185,8 +183,9 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
             if (!message.code) {
               return req.reject(JobSchedulingError.codeMissing());
             }
+            message.values ||= [];
             if (!message.text) {
-              const text = cds.i18n.messages.at(message.code);
+              const text = cds.i18n.messages.at(message.code, cds.env.i18n.default_language, message.values);
               if (!text) {
                 return req.reject(JobSchedulingError.textMissing());
               }
@@ -196,7 +195,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
               message.texts = locales.map((locale) => {
                 return {
                   locale,
-                  text: cds.i18n.messages.at(message.code, locale),
+                  text: cds.i18n.messages.at(message.code, locale, message.values),
                 };
               });
             } else {
@@ -208,7 +207,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
                   return req.reject(JobSchedulingError.invalidLocale(text.locale));
                 }
                 if (!text.text) {
-                  text.text = cds.i18n.messages.at(message.code, text.locale);
+                  text.text = cds.i18n.messages.at(message.code, text.locale, message.values);
                 }
               }
             }
@@ -249,6 +248,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         messages: (result.messages || []).map((message) => {
           return {
             code: message.code,
+            values: message.values,
             text: message.text,
             severity_code: message.severity,
             createdAt: message.createdAt,
@@ -266,7 +266,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     });
   }
 
-  async mockJobProcessing(req, config) {
+  async mockJobProcessing(req, job, config) {
     let min = config.min ?? 0;
     let max = config.max ?? 10;
     let processingTime = (Math.floor(Math.random() * (max - min)) + min) * 1000;
@@ -289,16 +289,16 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       }
     }
 
-    const durationParameter = req.job.parameters.find((parameter) => parameter.definition_name === "duration");
+    const durationParameter = job.parameters.find((parameter) => parameter.definition_name === "duration");
     if (durationParameter && parseFloat(durationParameter.value) > 0) {
       processingTime = parseFloat(durationParameter.value) * 1000;
     }
-    const statusParameter = req.job.parameters.find((parameter) => parameter.definition_name === "status");
+    const statusParameter = job.parameters.find((parameter) => parameter.definition_name === "status");
     if (statusParameter && JobStatus[statusParameter.value]) {
       processingStatus = statusParameter.value;
     }
 
-    const ID = req.data.ID;
+    const ID = job.ID;
     const updateResults = [];
     switch (processingStatus) {
       case JobStatus.completed:
@@ -410,7 +410,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         ],
       });
     }
-    if (req.data.testRun) {
+    if (job.testRun) {
       mockResults.push({
         type: ResultType.message,
         name: "Test Run",

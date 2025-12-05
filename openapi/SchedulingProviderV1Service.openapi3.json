@@ -1589,6 +1589,14 @@
             "type": "string",
             "maxLength": 255
           },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 5000,
+              "nullable": true
+            }
+          },
           "text": {
             "type": "string",
             "maxLength": 5000

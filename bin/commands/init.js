@@ -298,9 +298,10 @@ function processJava() {
   // TODO: Remove (cap/issues/18263)
   const sourcePath = path.resolve(__dirname, "../../db/data");
   const targetPath = path.resolve(process.cwd(), "db/csv");
-  if (!fs.existsSync(targetPath)) {
-    fs.symlinkSync(sourcePath, targetPath, "dir");
+  if (fs.existsSync(targetPath)) {
+    fs.rmSync(targetPath, { recursive: true });
   }
+  fs.cpSync(sourcePath, targetPath, { recursive: true });
 }
 
 function processAfter() {

@@ -1,8 +1,10 @@
 package com.github.capjscommunity.sapafcsdk.test;
 
+import static com.github.capjscommunity.sapafcsdk.model.cds.outbox.Outbox_.MESSAGES;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
+import com.sap.cds.ql.Delete;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
@@ -32,6 +34,9 @@ public class OutboxTestSetup {
     CdsRuntime cdsRuntime,
     PersistenceService persistenceService
   ) {
+    // start fresh
+    persistenceService.run(Delete.from(MESSAGES));
+
     OutboxService outboxService = cdsRuntime
       .getServiceCatalog()
       .getService(OutboxService.class, OutboxService.PERSISTENT_ORDERED_NAME);
@@ -55,7 +60,7 @@ public class OutboxTestSetup {
     });
 
     persistenceService.after(CqnService.EVENT_DELETE, Messages_.CDS_NAME, context -> {
-      if (!this.active || this.eventTriggered.getCount() > 0) {
+      if (!this.active) {
         return;
       }
       context

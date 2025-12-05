@@ -6,7 +6,6 @@ import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.DataTypeCo
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.providerservice.*;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.CdsException;
-import com.sap.cds.CdsJsonConverter;
 import com.sap.cds.Result;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Insert;
@@ -453,18 +452,9 @@ public class SchedulingProviderController {
 
   @Tag(name = "Job")
   @PostMapping("/Job")
-  public ResponseEntity<?> createJob(
-    @RequestBody String body,
-    HttpServletRequest request,
-    HttpServletResponse response
-  ) {
+  public ResponseEntity<?> createJob(@RequestBody Job job, HttpServletRequest request) {
     return ResponseHandler.execute(
       () -> {
-        CdsJsonConverter converter = CdsJsonConverter.builder(cdsModel)
-          .unknownPropertyHandling(CdsJsonConverter.UnknownPropertyHandling.REJECT)
-          .decimalSerialization(CdsJsonConverter.DecimalSerialization.STRING)
-          .build();
-        Job job = converter.fromJsonObject(body, Job.class);
         Insert insert = Insert.into(JOB).entry(job);
         return providerService.run(insert).single(Job.class);
       },

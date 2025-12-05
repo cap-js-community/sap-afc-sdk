@@ -129,7 +129,8 @@ export namespace sapafcsdk.scheduling {
     ID: string;
     result_ID: string;
     code: string;
-    text: string;
+    values?: string[];
+    text?: string;
     severity_code: MessageSeverityCode;
     createdAt: string;
     texts?: JobResultMessageTexts[];
@@ -248,6 +249,7 @@ export namespace sapafcsdk.scheduling {
 
     export interface JobResultMessage {
       code: string;
+      values?: string[];
       text?: string;
       severity: MessageSeverityCode;
       createdAt?: string;
@@ -268,6 +270,7 @@ export namespace sapafcsdk.scheduling {
   export interface ProcessingService {
     processJobUpdate(
       req: ProcessingService.Request,
+      job: Job,
       status: JobStatusCode,
       results?: JobResult[],
     ): Promise<void>;
@@ -435,10 +438,10 @@ export interface SchedulingProviderService extends  BaseApplicationService {
 }
 
 export interface SchedulingProviderService extends  BaseApplicationService {
-  processJobUpdate(req, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[]): Promise<void>;
-  checkStatusTransition(req, statusBefore: sapafcsdk.scheduling.JobStatusCode, statusAfter: sapafcsdk.scheduling.JobStatusCode): Promise<void>;
-  checkJobResults(req, results: sapafcsdk.scheduling.JobResult[]): Promise<void>;
-  mockJobProcessing(req, confif: object): Promise<void>;
+  processJobUpdate(req, job: sapafcsdk.scheduling.Job, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[]): Promise<void>;
+  checkStatusTransition(req, job: sapafcsdk.scheduling.Job, statusBefore: sapafcsdk.scheduling.JobStatusCode, statusAfter: sapafcsdk.scheduling.JobStatusCode): Promise<void>;
+  checkJobResults(req, job: sapafcsdk.scheduling.Job, results: sapafcsdk.scheduling.JobResult[]): Promise<void>;
+  mockJobProcessing(req, job: sapafcsdk.scheduling.Job, config: object): Promise<void>;
   mockJobSync(req): Promise<void>;
   mockNotification(req): Promise<void>;
 }

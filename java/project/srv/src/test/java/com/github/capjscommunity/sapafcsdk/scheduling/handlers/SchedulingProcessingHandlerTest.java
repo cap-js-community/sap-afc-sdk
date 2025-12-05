@@ -136,6 +136,10 @@ public class SchedulingProcessingHandlerTest {
     ProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
+    Collection<
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
+    > messages = new ArrayList<>();
+
     com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
       com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     message.setCode("jobCompleted");
@@ -149,12 +153,27 @@ public class SchedulingProcessingHandlerTest {
       com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
     frText.setLocale(Locale.FRENCH.getLanguage());
     message.setTexts(List.of(deText, frText));
+    messages.add(message);
+
+    message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
+    message.setCode("invalidJobStatus");
+    message.setValues(List.of("xxx"));
+    message.setSeverity(MessageSeverityCode.INFO);
+    deText =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
+    deText.setLocale(Locale.GERMAN.getLanguage());
+    frText =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessageText.create();
+    frText.setLocale(Locale.FRENCH.getLanguage());
+    message.setTexts(List.of(deText, frText));
+    messages.add(message);
 
     com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult resultEntry =
       com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.create();
     resultEntry.setType(ResultTypeCode.MESSAGE);
     resultEntry.setName("Result");
-    resultEntry.setMessages(List.of(message));
+    resultEntry.setMessages(messages);
 
     outboxedService.updateJob(ID, JobStatusCode.COMPLETED, List.of(resultEntry));
 
@@ -170,26 +189,41 @@ public class SchedulingProcessingHandlerTest {
       .listOf(JobResult.class);
     List<String> resultIDs = results.stream().map(JobResult::getId).toList();
 
-    List<JobResultMessage> messages = persistenceService
+    List<JobResultMessage> dbMessages = persistenceService
       .run(Select.from(JOB_RESULT_MESSAGE).where(m -> m.result_ID().in(resultIDs)))
       .listOf(JobResultMessage.class);
 
-    assertEquals(1, messages.size());
-    assertEquals("jobCompleted", messages.get(0).getCode());
-    assertEquals(messageProvider.get("jobCompleted", null, Locale.ENGLISH), messages.get(0).getText());
+    assertEquals(2, dbMessages.size());
+    assertEquals("jobCompleted", dbMessages.get(0).getCode());
+    assertEquals(messageProvider.get("jobCompleted", null, Locale.ENGLISH), dbMessages.get(0).getText());
+    assertEquals("invalidJobStatus", dbMessages.get(1).getCode());
+    assertEquals(List.of("xxx"), dbMessages.get(1).getValues());
+    assertEquals(
+      messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.ENGLISH),
+      dbMessages.get(1).getText()
+    );
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/" + resultIDs.get(0) + "/messages").locale(Locale.FRENCH))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$[0].code").value("jobCompleted"))
+      .andExpect(jsonPath("$[0].code").value("invalidJobStatus"))
+      .andExpect(
+        jsonPath("$[0].text").value(messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.FRENCH))
+      )
+      .andExpect(jsonPath("$[1].code").value("jobCompleted"))
       // .andExpect(jsonPath("$[0].text").value(messageProvider.get("jobCompleted", null, Locale.FRENCH)));
-      .andExpect(jsonPath("$[0].text").value("Job terminÃ©"));
+      .andExpect(jsonPath("$[1].text").value("Job terminÃ©"));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/" + resultIDs.get(0) + "/messages").locale(Locale.GERMAN))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$[0].code").value("jobCompleted"))
-      .andExpect(jsonPath("$[0].text").value("Job abgeschlossen"));
+      .andExpect(jsonPath("$[0].code").value("invalidJobStatus"))
+      // .andExpect(
+      //   jsonPath("$[0].text").value(messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.GERMAN))
+      // )
+      .andExpect(jsonPath("$[0].text").value("Jobstatus 'xxx' ist nicht gÃ¼ltig."))
+      .andExpect(jsonPath("$[1].code").value("jobCompleted"))
+      .andExpect(jsonPath("$[1].text").value("Job abgeschlossen"));
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
   }

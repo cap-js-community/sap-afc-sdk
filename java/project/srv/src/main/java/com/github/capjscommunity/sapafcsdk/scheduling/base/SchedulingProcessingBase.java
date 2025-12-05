@@ -101,9 +101,7 @@ public class SchedulingProcessingBase {
     this.statusTransitions = STATUS_TRANSITIONS;
   }
 
-  protected void processJobUpdate(EventContext context, String status, Collection<JobResult> results) {
-    Job job = (Job) context.get("job");
-
+  protected void processJobUpdate(EventContext context, Job job, String status, Collection<JobResult> results) {
     if (status == null || status.isEmpty()) {
       throw JobSchedulingException.statusValueMissing();
     }
@@ -116,7 +114,7 @@ public class SchedulingProcessingBase {
       return;
     }
 
-    if (!this.checkStatusTransition(context, job.getStatusCode(), status)) {
+    if (!this.checkStatusTransition(context, job, job.getStatusCode(), status)) {
       throw JobSchedulingException.statusTransitionNotAllowed(job.getStatusCode(), status);
     }
 
@@ -125,7 +123,7 @@ public class SchedulingProcessingBase {
     persistenceService.run(update);
     if (results != null && !results.isEmpty()) {
       Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult> insertResults =
-        this.checkJobResults(context, results);
+        this.checkJobResults(context, job, results);
       Insert insert = Insert.into(JOB_RESULT).entries(insertResults);
       persistenceService.run(insert);
     }
@@ -139,16 +137,17 @@ public class SchedulingProcessingBase {
     websocketServiceOutboxed.emit(jobStatusChanged);
   }
 
-  protected boolean checkStatusTransition(EventContext context, String statusBefore, String statusAfter) {
+  protected boolean checkStatusTransition(EventContext context, Job job, String statusBefore, String statusAfter) {
     List<String> validTransitions = this.statusTransitions.getOrDefault(statusBefore, List.of());
     return validTransitions.contains(statusAfter);
   }
 
   protected Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult> checkJobResults(
     EventContext context,
+    Job job,
     Collection<JobResult> results
   ) {
-    String jobId = (String) context.get("ID");
+    String jobId = job.getId();
     List<Locale> locales = getAvailableBundleLocales("i18n/messages", this.getClass().getClassLoader());
     List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult> dbResults = new ArrayList<>();
 
@@ -216,10 +215,12 @@ public class SchedulingProcessingBase {
             }
 
             dbMessage.setCode(message.getCode());
+            dbMessage.setValues(message.getValues() != null ? message.getValues() : Collections.emptyList());
+            Object[] values = dbMessage.getValues().toArray();
             dbMessage.setText(message.getText());
 
             if (dbMessage.getText() == null) {
-              String defaultText = messageProvider.get(message.getCode(), null, Locale.getDefault());
+              String defaultText = messageProvider.get(message.getCode(), values, Locale.getDefault());
               if (defaultText == null) {
                 throw JobSchedulingException.textMissing();
               }
@@ -233,7 +234,7 @@ public class SchedulingProcessingBase {
                 com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts dbText =
                   com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts.create();
                 dbText.setLocale(locale.toString());
-                dbText.setText(messageProvider.get(message.getCode(), null, locale));
+                dbText.setText(messageProvider.get(message.getCode(), values, locale));
                 dbTexts.add(dbText);
               }
             } else {
@@ -258,7 +259,7 @@ public class SchedulingProcessingBase {
                     .filter(l -> l.toString().equals(dbText.getLocale()))
                     .findFirst()
                     .orElseThrow(() -> JobSchedulingException.invalidLocale(dbText.getLocale()));
-                  dbText.setText(messageProvider.get(message.getCode(), null, locale));
+                  dbText.setText(messageProvider.get(message.getCode(), values, locale));
                 }
                 dbTexts.add(dbText);
               }
@@ -325,7 +326,7 @@ public class SchedulingProcessingBase {
     return dbResults;
   }
 
-  protected List<JobResult> mockJobProcessing(EventContext context) {
+  protected List<JobResult> mockJobProcessing(EventContext context, Job job) {
     AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
     List<JobResult> updateResults = new ArrayList<>();
 
@@ -350,9 +351,7 @@ public class SchedulingProcessingBase {
         value += status.getValue();
       }
     }
-    String ID = (String) context.get("ID");
-    Job job = (Job) context.get("job");
-
+    String ID = job.getId();
     Optional<JobParameter> durationParameter = job
       .getParameters()
       .stream()
@@ -422,7 +421,7 @@ public class SchedulingProcessingBase {
         createJobResult("Basic Mocked Run", ResultTypeCode.MESSAGE, "jobBasicMock", MessageSeverityCode.INFO)
       );
     }
-    if (context.get("testRun") != null && (boolean) context.get("testRun")) {
+    if (job.getTestRun() != null && (boolean) job.getTestRun()) {
       mockResults.add(createJobResult("Test Run", ResultTypeCode.MESSAGE, "jobTestRun", MessageSeverityCode.INFO));
     }
     return mockResults;

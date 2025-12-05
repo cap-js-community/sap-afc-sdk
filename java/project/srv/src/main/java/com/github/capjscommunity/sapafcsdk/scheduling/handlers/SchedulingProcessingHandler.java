@@ -41,22 +41,25 @@ public class SchedulingProcessingHandler extends SchedulingProcessingBase implem
   public void processJob(ProcessJobContext context) throws IOException {
     List<JobResult> results = new ArrayList<>();
     AfcSdkProperties.MockProcessing processingConfig = afcsdkProperties.getMockProcessing();
+    Job job = (Job) context.get("job");
     if (processingConfig != null) {
-      results = this.mockJobProcessing(context);
+      results = this.mockJobProcessing(context, job);
     }
-    this.processJobUpdate(context, JobStatusCode.RUNNING, results);
+    this.processJobUpdate(context, job, JobStatusCode.RUNNING, results);
     context.setCompleted();
   }
 
   @On(event = UpdateJobContext.CDS_NAME)
   public void updateJob(UpdateJobContext context) {
-    this.processJobUpdate(context, context.getStatus(), context.getResults());
+    Job job = (Job) context.get("job");
+    this.processJobUpdate(context, job, context.getStatus(), context.getResults());
     context.setCompleted();
   }
 
   @On(event = CancelJobContext.CDS_NAME)
   public void cancelJob(CancelJobContext context) {
-    this.processJobUpdate(context, JobStatusCode.CANCELED, null);
+    Job job = (Job) context.get("job");
+    this.processJobUpdate(context, job, JobStatusCode.CANCELED, null);
     context.setCompleted();
   }
 
