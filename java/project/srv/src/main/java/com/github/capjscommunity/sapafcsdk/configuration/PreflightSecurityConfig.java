@@ -1,7 +1,5 @@
 package com.github.capjscommunity.sapafcsdk.configuration;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -22,7 +20,7 @@ public class PreflightSecurityConfig {
     return http
       .csrf(AbstractHttpConfigurer::disable)
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-      .securityMatcher(antMatcher(HttpMethod.OPTIONS, "/**"))
+      .securityMatcher(request -> HttpMethod.OPTIONS.matches(request.getMethod()))
       .authorizeHttpRequests(request -> request.anyRequest().permitAll())
       .build();
   }

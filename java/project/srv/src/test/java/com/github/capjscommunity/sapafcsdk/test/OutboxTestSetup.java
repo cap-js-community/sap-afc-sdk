@@ -20,7 +20,9 @@ import org.junit.jupiter.api.Assertions;
 
 public class OutboxTestSetup {
 
-  public boolean active = true;
+  private boolean active = true;
+  private final PersistenceService persistenceService;
+
   public String serviceName;
   public String eventName;
   public CqnService service;
@@ -34,8 +36,8 @@ public class OutboxTestSetup {
     CdsRuntime cdsRuntime,
     PersistenceService persistenceService
   ) {
-    // start fresh
-    persistenceService.run(Delete.from(MESSAGES));
+    this.persistenceService = persistenceService;
+    this.persistenceService.run(Delete.from(MESSAGES));
 
     OutboxService outboxService = cdsRuntime
       .getServiceCatalog()
@@ -50,7 +52,7 @@ public class OutboxTestSetup {
     this.messageFinished = new CountDownLatch(1);
     this.eventTriggered = new CountDownLatch(1);
 
-    persistenceService.after(CqnService.EVENT_CREATE, Messages_.CDS_NAME, context -> {
+    this.persistenceService.after(CqnService.EVENT_CREATE, Messages_.CDS_NAME, context -> {
       if (!this.active) {
         return;
       }
@@ -59,7 +61,7 @@ public class OutboxTestSetup {
       this.messageEvents.add(object);
     });
 
-    persistenceService.after(CqnService.EVENT_DELETE, Messages_.CDS_NAME, context -> {
+    this.persistenceService.after(CqnService.EVENT_DELETE, Messages_.CDS_NAME, context -> {
       if (!this.active) {
         return;
       }
@@ -87,5 +89,10 @@ public class OutboxTestSetup {
         }
       });
     }
+  }
+
+  public void end() {
+    this.active = false;
+    this.persistenceService.run(Delete.from(MESSAGES));
   }
 }
