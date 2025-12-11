@@ -211,17 +211,15 @@ public class SchedulingProcessingHandlerTest {
         jsonPath("$[0].text").value(messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.FRENCH))
       )
       .andExpect(jsonPath("$[1].code").value("jobCompleted"))
-      // .andExpect(jsonPath("$[0].text").value(messageProvider.get("jobCompleted", null, Locale.FRENCH)));
-      .andExpect(jsonPath("$[1].text").value("Job terminÃ©"));
+      .andExpect(jsonPath("$[1].text").value(messageProvider.get("jobCompleted", null, Locale.FRENCH)));
 
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobResult/" + resultIDs.get(0) + "/messages").locale(Locale.GERMAN))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].code").value("invalidJobStatus"))
-      // .andExpect(
-      //   jsonPath("$[0].text").value(messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.GERMAN))
-      // )
-      .andExpect(jsonPath("$[0].text").value("Jobstatus 'xxx' ist nicht gÃ¼ltig."))
+      .andExpect(
+        jsonPath("$[0].text").value(messageProvider.get("invalidJobStatus", List.of("xxx").toArray(), Locale.GERMAN))
+      )
       .andExpect(jsonPath("$[1].code").value("jobCompleted"))
       .andExpect(jsonPath("$[1].text").value("Job abgeschlossen"));
 

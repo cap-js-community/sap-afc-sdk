@@ -71,7 +71,7 @@ public class SchedulingProviderControllerTest {
   public void getCapabilities() throws Exception {
     mockMvc
       .perform(get("/api/job-scheduling/v1/Capabilities"))
-      //.andExpect(header().string("Content-Type", "application/json"))
+      .andExpect(header().string("Content-Type", "application/json"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.supportsNotification").value(true))
       .andExpect(jsonPath("$.applicationUrl").value("http://localhost:8080/launchpad.html"));
@@ -82,7 +82,7 @@ public class SchedulingProviderControllerTest {
   public void getJobDefinitions() throws Exception {
     MvcResult result = mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition"))
-      //.andExpect(header().string("Content-Type", "application/json"))
+      .andExpect(header().string("Content-Type", "application/json"))
       .andExpect(status().isOk())
       .andReturn();
 
@@ -308,7 +308,7 @@ public class SchedulingProviderControllerTest {
 
     MvcResult result = mockMvc
       .perform(get("/api/job-scheduling/v1/Job"))
-      //.andExpect(header().string("Content-Type", "application/json"))
+      .andExpect(header().string("Content-Type", "application/json"))
       .andExpect(status().isOk())
       .andReturn();
 
@@ -1068,8 +1068,7 @@ public class SchedulingProviderControllerTest {
     resultMessage = resultMessages.getJSONObject(0);
     assertEquals("jobBasicMock", resultMessage.getString("code"));
     assertEquals(MessageSeverityCode.INFO, resultMessage.getString("severity"));
-    // assertEquals(messageProvider.get("jobBasicMock", null, Locale.GERMAN), resultMessage.getString("text"));
-    assertEquals("Job lÃ¤uft im einfachen Mock-Modus.", resultMessage.getString("text"));
+    assertEquals(messageProvider.get("jobBasicMock", null, Locale.GERMAN), resultMessage.getString("text"));
 
     jobResult = resultsArray.getJSONObject(1);
     assertEquals("Data", jobResult.get("name"));
@@ -1129,8 +1128,7 @@ public class SchedulingProviderControllerTest {
     resultMessage = resultMessages.getJSONObject(0);
     assertEquals("jobTestRun", resultMessage.getString("code"));
     assertEquals(MessageSeverityCode.INFO, resultMessage.getString("severity"));
-    // assertEquals(messageProvider.get("jobTestRun", null, Locale.GERMAN), resultMessage.getString("text"));
-    assertEquals("Job lÃ¤uft im Testmodus.", resultMessage.getString("text"));
+    assertEquals(messageProvider.get("jobTestRun", null, Locale.GERMAN), resultMessage.getString("text"));
 
     persistenceService.run(Delete.from(JOB).where(j -> j.ID().eq(ID)));
   }
@@ -1727,8 +1725,8 @@ public class SchedulingProviderControllerTest {
       )
       .andExpect(status().isBadRequest());
     // .andExpect(
-    //         jsonPath("$.message").value("Cannot parse value for sapafcsdk.scheduling.ProviderService.Job:startDateTime")
-    // );
+    //        jsonPath("$.message").value("Cannot parse value for sapafcsdk.scheduling.ProviderService.Job:startDateTime")
+    //);
     job = new JSONObject(Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327", "x", "y"));
     mockMvc
       .perform(
@@ -1738,7 +1736,6 @@ public class SchedulingProviderControllerTest {
           .locale(Locale.ENGLISH)
       )
       .andExpect(status().isBadRequest());
-    // .andExpect(jsonPath("$.code").value("parserError"))
     // .andExpect(jsonPath("$.message").value("No element with name 'x' in 'sapafcsdk.scheduling.ProviderService.Job'"));
     job = new JSONObject(
       Map.of(
