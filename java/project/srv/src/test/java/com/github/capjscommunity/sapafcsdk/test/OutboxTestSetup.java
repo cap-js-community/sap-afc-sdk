@@ -41,7 +41,11 @@ public class OutboxTestSetup implements AutoCloseable {
         return;
       }
       String message = ((CdsCreateEventContextImpl) context).getCqn().entries().getFirst().get("msg").toString();
+      System.out.println("-----> Outbox message created");
       messageEvents.add(new JSONObject(message));
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException ignored) {}
       messageCreated.countDown();
     });
 
@@ -55,6 +59,10 @@ public class OutboxTestSetup implements AutoCloseable {
           new ChangeSetListener() {
             @Override
             public void afterClose(boolean completed) {
+              System.out.println("-----> Outbox message deleted");
+              try {
+                Thread.sleep(100);
+              } catch (InterruptedException ignored) {}
               messageDeleted.countDown();
             }
           }

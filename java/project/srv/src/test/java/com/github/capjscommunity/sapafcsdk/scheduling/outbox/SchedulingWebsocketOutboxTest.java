@@ -20,17 +20,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SchedulingWebsocketOutboxTest {
-
-  @DynamicPropertySource
-  static void overrideProps(DynamicPropertyRegistry registry) {
-    registry.add("cds.persistence.schema", () -> "OUTBOX_WEBSOCKET");
-  }
 
   @Autowired
   private CdsRuntime cdsRuntime;
