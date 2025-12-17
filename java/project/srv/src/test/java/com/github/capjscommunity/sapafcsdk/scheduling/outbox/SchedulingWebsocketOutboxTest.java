@@ -13,7 +13,6 @@ import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
 import com.sap.cds.services.runtime.CdsRuntime;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SchedulingWebsocketOutboxTest {
+
+  @DynamicPropertySource
+  static void overrideProps(DynamicPropertyRegistry registry) {
+    registry.add("cds.persistence.schema", () -> "OUTBOX_WEBSOCKET");
+  }
 
   @Autowired
   private CdsRuntime cdsRuntime;
@@ -51,7 +57,7 @@ public class SchedulingWebsocketOutboxTest {
       jobStatusChanged.setData(jobStatusChangedData);
       websocketServiceOutboxed.emit(jobStatusChanged);
 
-      JSONObject websocketEvent = setup.awaitCompleted(5, TimeUnit.SECONDS).get(0);
+      JSONObject websocketEvent = setup.awaitCompleted().getFirst();
 
       assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
       assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));

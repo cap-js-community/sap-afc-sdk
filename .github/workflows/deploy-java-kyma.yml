@@ -29,7 +29,7 @@ jobs:
           cache: npm
       - uses: actions/setup-java@v5
         with:
-          distribution: sapmachine
+          distribution: temurin
           java-version: 21
           cache: maven
       - run: npm ci
@@ -54,7 +54,7 @@ jobs:
           BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_KYMA_ID }}
           BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_KYMA_PLAN_ID }}
       - name: Unit Test
-        run: mvn test -B
+        run: npm test
         working-directory: ./afcjdk
       - name: Setup Kyma
         uses: ./.github/actions/kyma-setup

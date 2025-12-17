@@ -13,7 +13,6 @@ import com.sap.cds.services.persistence.PersistenceService;
 import com.sap.cds.services.runtime.CdsRuntime;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SchedulingProviderOutboxCreateTest {
+
+  @DynamicPropertySource
+  static void overrideProps(DynamicPropertyRegistry registry) {
+    registry.add("cds.persistence.schema", () -> "OUTBOX_PROVIDER_CREATE");
+  }
 
   @Autowired
   private MockMvc mockMvc;
@@ -77,9 +83,9 @@ public class SchedulingProviderOutboxCreateTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.status").value(JobStatusCode.REQUESTED));
 
-      List<JSONObject> messageEvents = setup.awaitCompleted(5, TimeUnit.SECONDS);
+      List<JSONObject> messageEvents = setup.awaitCompleted();
 
-      JSONObject processingEvent = messageEvents.get(0);
+      JSONObject processingEvent = messageEvents.getFirst();
       assertEquals("sapafcsdk.scheduling.ProcessingService", processingEvent.get("event"));
       assertEquals("processJob", processingEvent.getJSONObject("message").get("event"));
       assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));

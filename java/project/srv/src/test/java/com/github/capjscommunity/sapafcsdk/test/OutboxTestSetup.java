@@ -25,6 +25,8 @@ public class OutboxTestSetup implements AutoCloseable {
   public final CountDownLatch messageCreated = new CountDownLatch(1);
   public final CountDownLatch messageDeleted = new CountDownLatch(1);
 
+  public final long Timeout = 10;
+
   public OutboxTestSetup(String serviceName, CdsRuntime cdsRuntime, PersistenceService persistenceService) {
     this.persistenceService = persistenceService;
     this.persistenceService.run(Delete.from(MESSAGES));
@@ -38,7 +40,7 @@ public class OutboxTestSetup implements AutoCloseable {
       if (!active) {
         return;
       }
-      String message = ((CdsCreateEventContextImpl) context).getCqn().entries().get(0).get("msg").toString();
+      String message = ((CdsCreateEventContextImpl) context).getCqn().entries().getFirst().get("msg").toString();
       messageEvents.add(new JSONObject(message));
       messageCreated.countDown();
     });
@@ -60,11 +62,11 @@ public class OutboxTestSetup implements AutoCloseable {
     });
   }
 
-  public List<JSONObject> awaitCompleted(long timeout, TimeUnit unit) throws InterruptedException {
-    if (!messageCreated.await(timeout, unit)) {
+  public List<JSONObject> awaitCompleted() throws InterruptedException {
+    if (!messageCreated.await(Timeout, TimeUnit.SECONDS)) {
       throw new AssertionError("Timed out waiting for outbox CREATE");
     }
-    if (!messageDeleted.await(timeout, unit)) {
+    if (!messageDeleted.await(Timeout, TimeUnit.SECONDS)) {
       throw new AssertionError("Timed out waiting for outbox DELETE");
     }
     return messageEvents;
