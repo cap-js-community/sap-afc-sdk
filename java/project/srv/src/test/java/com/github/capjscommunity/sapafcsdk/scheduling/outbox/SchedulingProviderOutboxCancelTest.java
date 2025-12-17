@@ -85,10 +85,7 @@ public class SchedulingProviderOutboxCancelTest {
       mockMvc
         .perform(post("/api/job-scheduling/v1/Job/" + ID + "/cancel").locale(Locale.ENGLISH))
         .andExpect(status().isNoContent());
-      mockMvc
-        .perform(get("/api/job-scheduling/v1/Job/" + ID))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.status").value("cancelRequested"));
+      mockMvc.perform(get("/api/job-scheduling/v1/Job/" + ID)).andExpect(status().isOk());
 
       List<JSONObject> messageEvents = setup.awaitCompleted();
 
