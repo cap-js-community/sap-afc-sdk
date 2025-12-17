@@ -860,9 +860,6 @@ spring:
 cds:
   data-source.auto-config.enabled: false
 ---
-cds:
-  index-page:
-    enabled: true
 management:
   endpoint:
     health:
@@ -880,13 +877,15 @@ management:
       enabled: true
     db:
       enabled: true
+cds:
+  index-page:
+    enabled: true
 springdoc:
-  packages-to-scan[0]: com.github.capjscommunity.sapafcsdk.scheduling.controllers
+  packages-to-scan:
+    - com.github.capjscommunity.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 sap-afc-sdk:
-  syncJob:
-    cron: 0 */1 * * * *
   broker:
     enabled: true
     name: afcsdk
@@ -899,6 +898,8 @@ sap-afc-sdk:
       credential-types:
         - binding-secret
         - x509
+  syncJob:
+    cron: 0 */1 * * * *
   mockProcessing:
     min: 0
     max: 10
@@ -1200,8 +1201,8 @@ modules:
           srv-url: \${default-url}
     requires:
       - name: afcsdk-db
-      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
+      - name: afcsdk-cloud-logging
       - name: afcsdk-auth
 
   - name: afcsdk-db-deployer
@@ -1230,8 +1231,8 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
+      - name: afcsdk-cloud-logging
       - name: afcsdk-html5-runtime
       - name: afcsdk-auth
     provides:
@@ -1309,14 +1310,6 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
-  - name: afcsdk-cloud-logging
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: cloud-logging
-      service-plan: standard
-      config:
-        ingest_otlp:
-          enabled: true
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -1337,6 +1330,14 @@ resources:
                 HTML5.DynamicDestination: true
     requires:
       - name: srv-api
+  - name: afcsdk-cloud-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: cloud-logging
+      service-plan: standard
+      config:
+        ingest_otlp:
+          enabled: true
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -2233,9 +2234,6 @@ spring:
 cds:
   data-source.auto-config.enabled: false
 ---
-cds:
-  index-page:
-    enabled: true
 management:
   endpoint:
     health:
@@ -2253,13 +2251,15 @@ management:
       enabled: true
     db:
       enabled: true
+cds:
+  index-page:
+    enabled: true
 springdoc:
-  packages-to-scan[0]: com.github.capjscommunity.sapafcsdk.scheduling.controllers
+  packages-to-scan:
+    - com.github.capjscommunity.sapafcsdk.scheduling.controllers
   swagger-ui:
     path: /api-docs/api/job-scheduling/v1
 sap-afc-sdk:
-  syncJob:
-    cron: 0 */1 * * * *
   broker:
     enabled: true
     name: afcsdk
@@ -2272,6 +2272,8 @@ sap-afc-sdk:
       credential-types:
         - binding-secret
         - x509
+  syncJob:
+    cron: 0 */1 * * * *
   mockProcessing:
     min: 0
     max: 10
@@ -2561,13 +2563,13 @@ dependencies:
     alias: cloud-logging
     version: ">0.0.0"
   - name: service-instance
+    alias: destination
+    version: ">0.0.0"
+  - name: service-instance
     alias: html5-apps-repo-host
     version: ">0.0.0"
   - name: content-deployment
     alias: html5-apps-deployer
-    version: ">0.0.0"
-  - name: service-instance
-    alias: destination
     version: ">0.0.0"
   - name: service-instance
     alias: html5-apps-repo-runtime
@@ -2594,13 +2596,13 @@ srv:
   bindings:
     db:
       serviceInstanceName: hana
+    destination:
+      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
         enabled: true
         rotationFrequency: 168h
-    destination:
-      serviceInstanceName: destination
     auth:
       serviceInstanceName: xsuaa
   image:
@@ -2667,18 +2669,18 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
-cloud-logging:
-  serviceOfferingName: cloud-logging
-  servicePlanName: standard
-  parameters:
-    ingest_otlp:
-      enabled: true
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
   parameters:
     version: 1.0.0
     HTML5Runtime_enabled: true
+cloud-logging:
+  serviceOfferingName: cloud-logging
+  servicePlanName: standard
+  parameters:
+    ingest_otlp:
+      enabled: true
 html5-apps-repo-host:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-host
@@ -3750,8 +3752,8 @@ modules:
     requires:
       - name: afcsdk-db
       - name: afcsdk-redis
-      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
+      - name: afcsdk-cloud-logging
       - name: afcsdk-auth
 
   - name: afcsdk-db-deployer
@@ -3775,8 +3777,8 @@ modules:
           name: srv-api # must be used in xs-app.json as well
           url: ~{srv-url}
           forwardAuthToken: true
-      - name: afcsdk-cloud-logging
       - name: afcsdk-destination
+      - name: afcsdk-cloud-logging
       - name: afcsdk-html5-runtime
       - name: afcsdk-auth
     provides:
@@ -3869,14 +3871,6 @@ resources:
       # day_of_week: Friday
       # start_hour_utc: 0
       # duration: 5 # hours
-  - name: afcsdk-cloud-logging
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: cloud-logging
-      service-plan: standard
-      config:
-        ingest_otlp:
-          enabled: true
   - name: afcsdk-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -3897,6 +3891,14 @@ resources:
                 HTML5.DynamicDestination: true
     requires:
       - name: srv-api
+  - name: afcsdk-cloud-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: cloud-logging
+      service-plan: standard
+      config:
+        ingest_otlp:
+          enabled: true
 
   - name: afcsdk-html5-repo-host
     type: org.cloudfoundry.managed-service
@@ -4911,13 +4913,13 @@ dependencies:
     alias: cloud-logging
     version: ">0.0.0"
   - name: service-instance
+    alias: destination
+    version: ">0.0.0"
+  - name: service-instance
     alias: html5-apps-repo-host
     version: ">0.0.0"
   - name: content-deployment
     alias: html5-apps-deployer
-    version: ">0.0.0"
-  - name: service-instance
-    alias: destination
     version: ">0.0.0"
   - name: service-instance
     alias: html5-apps-repo-runtime
@@ -4944,13 +4946,13 @@ srv:
   bindings:
     db:
       serviceInstanceName: hana
+    destination:
+      serviceInstanceName: destination
     cloud-logging:
       serviceInstanceName: cloud-logging
       credentialsRotationPolicy:
         enabled: true
         rotationFrequency: 168h
-    destination:
-      serviceInstanceName: destination
     auth:
       serviceInstanceName: xsuaa
   image:
@@ -5015,18 +5017,18 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
-cloud-logging:
-  serviceOfferingName: cloud-logging
-  servicePlanName: standard
-  parameters:
-    ingest_otlp:
-      enabled: true
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
   parameters:
     version: 1.0.0
     HTML5Runtime_enabled: true
+cloud-logging:
+  serviceOfferingName: cloud-logging
+  servicePlanName: standard
+  parameters:
+    ingest_otlp:
+      enabled: true
 html5-apps-repo-host:
   serviceOfferingName: html5-apps-repo
   servicePlanName: app-host

@@ -1723,10 +1723,15 @@ public class SchedulingProviderControllerTest {
           .contentType("application/json")
           .locale(Locale.ENGLISH)
       )
-      .andExpect(status().isBadRequest());
-    // .andExpect(
-    //        jsonPath("$.message").value("Cannot parse value for sapafcsdk.scheduling.ProviderService.Job:startDateTime")
-    //);
+      .andExpect(status().isBadRequest())
+      .andExpect(result -> {
+        assertEquals(400, result.getResponse().getStatus());
+        assertEquals("Failed to read CDS data", result.getResolvedException().getMessage());
+        assertEquals(
+          "Cannot parse value for sapafcsdk.scheduling.ProviderService.Job:startDateTime",
+          result.getResolvedException().getCause().getCause().getMessage()
+        );
+      });
     job = new JSONObject(Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327", "x", "y"));
     mockMvc
       .perform(
@@ -1735,8 +1740,15 @@ public class SchedulingProviderControllerTest {
           .contentType("application/json")
           .locale(Locale.ENGLISH)
       )
-      .andExpect(status().isBadRequest());
-    // .andExpect(jsonPath("$.message").value("No element with name 'x' in 'sapafcsdk.scheduling.ProviderService.Job'"));
+      .andExpect(status().isBadRequest())
+      .andExpect(result -> {
+        assertEquals(400, result.getResponse().getStatus());
+        assertEquals("Failed to read CDS data", result.getResolvedException().getMessage());
+        assertEquals(
+          "No element with name 'x' in 'sapafcsdk.scheduling.ProviderService.Job'",
+          result.getResolvedException().getCause().getCause().getMessage()
+        );
+      });
     job = new JSONObject(
       Map.of(
         "name",

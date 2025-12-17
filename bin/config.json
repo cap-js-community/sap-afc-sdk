@@ -11,14 +11,14 @@
       "node": ["sqlite", "redis"],
       "java": [],
       "cf": ["mta"],
-      "kyma": ["helm", "containerize"]
+      "kyma": ["kyma"]
     },
     "basic": {
       "common": ["approuter", "hana"],
       "node": ["sqlite"],
       "java": [],
       "cf": ["mta"],
-      "kyma": ["helm", "containerize"]
+      "kyma": ["kyma"]
     }
   },
   "dependencies": {

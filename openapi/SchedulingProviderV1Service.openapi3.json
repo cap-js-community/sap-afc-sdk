@@ -1213,6 +1213,16 @@
             }
           }
         ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "description": "The operation allows you to invoke action cancel based on the provided parameters."
       }
     }
@@ -1274,7 +1284,8 @@
           },
           "createdBy": {
             "type": "string",
-            "maxLength": 255
+            "maxLength": 255,
+            "description": "{i18n>UserID.Description}"
           },
           "modifiedAt": {
             "type": "string",
@@ -1283,7 +1294,8 @@
           },
           "modifiedBy": {
             "type": "string",
-            "maxLength": 255
+            "maxLength": 255,
+            "description": "{i18n>UserID.Description}"
           },
           "link": {
             "type": "string",
