@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adjusted CDS namespace for model uniqueness
 - Adjusted Java package name
 - Fix labels
+- CDS 9.6, Node 22, Java 21
 
 ## Version 0.8.0 - 2025-11-06
 
