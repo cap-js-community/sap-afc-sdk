@@ -22,7 +22,7 @@ const Commands = {
   BEGIN: [`cd ${tempDir}`],
   CDS_NODE: [`npx cds init ${PROJECT}`],
   CDS_JAVA: [`npx cds init ${PROJECT} --java`],
-  INSTALL: [`cd ${PROJECT}`, "cp ../../test/.npmrc .", "npm install ../../../"],
+  INSTALL: [`cd ${PROJECT}`, "cp ../../test/.npmrc .", "cp ../../test/.npmignore .", "npm install ../../../"],
   AFC_CF: ["npx afc init cf"],
   AFC_KYMA: ["npx afc init kyma"],
   AFC_NODE: ["npx afc add -a app,broker,stub,mock,sample,test,http"],

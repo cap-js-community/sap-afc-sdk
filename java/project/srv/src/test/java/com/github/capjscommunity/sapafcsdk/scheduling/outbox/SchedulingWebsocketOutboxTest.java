@@ -1,7 +1,6 @@
 package com.github.capjscommunity.sapafcsdk.scheduling.outbox;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobStatusCode;
@@ -43,36 +42,27 @@ public class SchedulingWebsocketOutboxTest {
   @Test
   @WithMockUser("authenticated")
   public void jobStatusChanged() throws Exception {
-    OutboxTestSetup setup = new OutboxTestSetup(
-      WebsocketService_.CDS_NAME,
-      JobStatusChangedContext.CDS_NAME,
-      cdsRuntime,
-      persistenceService
-    );
+    try (OutboxTestSetup setup = new OutboxTestSetup(WebsocketService_.CDS_NAME, cdsRuntime, persistenceService)) {
+      WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+      JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
+      JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
+      jobStatusChangedData.setStatus(JobStatusCode.COMPLETED);
+      jobStatusChangedData.setIDs(Collections.singletonList("3a89dfec-59f9-4a91-90fe-3c7ca7407103"));
+      jobStatusChanged.setData(jobStatusChangedData);
+      websocketServiceOutboxed.emit(jobStatusChanged);
 
-    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
-    JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
-    JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
-    jobStatusChangedData.setStatus(JobStatusCode.COMPLETED);
-    jobStatusChangedData.setIDs(Collections.singletonList("3a89dfec-59f9-4a91-90fe-3c7ca7407103"));
-    jobStatusChanged.setData(jobStatusChangedData);
-    websocketServiceOutboxed.emit(jobStatusChanged);
+      JSONObject websocketEvent = setup.awaitCompleted(5, TimeUnit.SECONDS).get(0);
 
-    setup.eventTriggered.countDown();
-
-    JSONObject websocketEvent = setup.messageEvents.get(0);
-    assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
-    assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
-    assertEquals(
-      JobStatusCode.COMPLETED,
-      websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").get("status")
-    );
-    assertEquals(
-      "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
-      websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").getJSONArray("IDs").get(0)
-    );
-    assertTrue(setup.messageFinished.await(3, TimeUnit.SECONDS));
-
-    setup.end();
+      assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
+      assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
+      assertEquals(
+        JobStatusCode.COMPLETED,
+        websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").get("status")
+      );
+      assertEquals(
+        "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+        websocketEvent.getJSONObject("message").getJSONObject("params").getJSONObject("data").getJSONArray("IDs").get(0)
+      );
+    }
   }
 }

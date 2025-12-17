@@ -1,7 +1,6 @@
 package com.github.capjscommunity.sapafcsdk.test;
 
 import static com.github.capjscommunity.sapafcsdk.model.cds.outbox.Outbox_.MESSAGES;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
 import com.sap.cds.ql.Delete;
@@ -16,53 +15,36 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 
-public class OutboxTestSetup {
+public class OutboxTestSetup implements AutoCloseable {
 
-  private boolean active = true;
+  private volatile boolean active = true;
   private final PersistenceService persistenceService;
 
-  public String serviceName;
-  public String eventName;
-  public CqnService service;
-  public List<JSONObject> messageEvents;
-  public CountDownLatch messageFinished;
-  public CountDownLatch eventTriggered;
+  public final List<JSONObject> messageEvents = new ArrayList<>();
+  public final CountDownLatch messageCreated = new CountDownLatch(1);
+  public final CountDownLatch messageDeleted = new CountDownLatch(1);
 
-  public OutboxTestSetup(
-    String serviceName,
-    String eventName,
-    CdsRuntime cdsRuntime,
-    PersistenceService persistenceService
-  ) {
+  public OutboxTestSetup(String serviceName, CdsRuntime cdsRuntime, PersistenceService persistenceService) {
     this.persistenceService = persistenceService;
     this.persistenceService.run(Delete.from(MESSAGES));
 
     OutboxService outboxService = cdsRuntime
       .getServiceCatalog()
       .getService(OutboxService.class, OutboxService.PERSISTENT_ORDERED_NAME);
-    CqnService service = outboxService.outboxed(
-      cdsRuntime.getServiceCatalog().getService(CqnService.class, serviceName)
-    );
-    this.serviceName = serviceName;
-    this.eventName = eventName;
-    this.service = service;
-    this.messageEvents = new ArrayList<>();
-    this.messageFinished = new CountDownLatch(1);
-    this.eventTriggered = new CountDownLatch(1);
+    outboxService.outboxed(cdsRuntime.getServiceCatalog().getService(CqnService.class, serviceName));
 
     this.persistenceService.after(CqnService.EVENT_CREATE, Messages_.CDS_NAME, context -> {
-      if (!this.active) {
+      if (!active) {
         return;
       }
       String message = ((CdsCreateEventContextImpl) context).getCqn().entries().get(0).get("msg").toString();
-      JSONObject object = Assertions.assertDoesNotThrow(() -> new JSONObject(message));
-      this.messageEvents.add(object);
+      messageEvents.add(new JSONObject(message));
+      messageCreated.countDown();
     });
 
     this.persistenceService.after(CqnService.EVENT_DELETE, Messages_.CDS_NAME, context -> {
-      if (!this.active) {
+      if (!active) {
         return;
       }
       context
@@ -71,28 +53,25 @@ public class OutboxTestSetup {
           new ChangeSetListener() {
             @Override
             public void afterClose(boolean completed) {
-              OutboxTestSetup.this.messageFinished.countDown();
+              messageDeleted.countDown();
             }
           }
         );
     });
-
-    if (eventName != null) {
-      this.service.before(eventName, null, context -> {
-        if (!this.active) {
-          return;
-        }
-        try {
-          assertTrue(this.eventTriggered.await(3, TimeUnit.SECONDS), "event triggered latch timed out");
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
-      });
-    }
   }
 
-  public void end() {
-    this.active = false;
-    this.persistenceService.run(Delete.from(MESSAGES));
+  public List<JSONObject> awaitCompleted(long timeout, TimeUnit unit) throws InterruptedException {
+    if (!messageCreated.await(timeout, unit)) {
+      throw new AssertionError("Timed out waiting for outbox CREATE");
+    }
+    if (!messageDeleted.await(timeout, unit)) {
+      throw new AssertionError("Timed out waiting for outbox DELETE");
+    }
+    return messageEvents;
+  }
+
+  @Override
+  public void close() {
+    active = false;
   }
 }
