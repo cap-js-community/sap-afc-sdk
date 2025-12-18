@@ -14,7 +14,14 @@ service MonitoringService {
 
   entity JobParameter @readonly           as projection on scheduling.JobParameter;
   entity JobResult @readonly              as projection on scheduling.JobResult;
-  entity JobResultMessage @readonly       as projection on scheduling.JobResultMessage;
+
+  entity JobResultMessage @readonly       as
+    projection on scheduling.JobResultMessage {
+      *,
+      @title: '{i18n>Values}'
+      values as valuesString : String(5000),
+    }
+
   entity JobStatus @readonly              as projection on scheduling.JobStatus;
   entity ResultType @readonly             as projection on scheduling.ResultType;
   entity ParameterType @readonly          as projection on scheduling.ParameterType;

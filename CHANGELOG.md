@@ -5,16 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Version 0.9.1 - 2026-01-xx
+
+### Fixed
+
+- tbd
+
 ## Version 0.9.0 - 2025-12-18
 
 ### Fixed
 
-- Switch from `outbox` to `queued`
-- Adjusted App namespace
-- Adjusted CDS namespace for model uniqueness
-- Adjusted Java package name
-- Fix labels
 - CDS 9.6, Node 22, Java 21
+- Switch from `outbox` to `queued`
+- Added result message values
+- Adjusted app namespace
+- Adjusted CDS namespace for model uniqueness
+- Adjusted Java package names
+- Fix labels
 
 ## Version 0.8.0 - 2025-11-06
 

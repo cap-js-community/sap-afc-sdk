@@ -1,6 +1,6 @@
 name: "kyma-setup"
 
-description: "Installs the Kyma dependencies"
+description: "Installs Kyma dependencies"
 
 inputs:
   kubeConfig:

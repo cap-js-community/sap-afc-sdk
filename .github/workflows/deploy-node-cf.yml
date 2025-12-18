@@ -48,14 +48,13 @@ jobs:
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
       - name: Setup CF
-        uses: ./.github/actions/cf-setup
-        env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        uses: cap-js/cf-setup@v1
         with:
-          api: ${{ secrets.CF_API }}
-          org: ${{ secrets.CF_ORG }}
-          space: ${{ secrets.CF_SPACE }}
+          cf-api: ${{ secrets.CF_API }}
+          cf-org: ${{ secrets.CF_ORG }}
+          cf-space: ${{ secrets.CF_SPACE }}
+          cf-username: ${{ secrets.CF_USERNAME }}
+          cf-password: ${{ secrets.CF_PASSWORD }}
       - name: CDS Up
         run: npx cds up --to cf
         working-directory: ./afcsdk

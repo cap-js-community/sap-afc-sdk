@@ -322,6 +322,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
         <NavigationProperty Name="localized" Type="sapafcsdk.scheduling.MonitoringService.JobResultMessage_texts">
           <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
         </NavigationProperty>
+        <Property Name="valuesString" Type="Edm.String" MaxLength="5000"/>
         <Property Name="criticality" Type="Edm.Int32"/>
       </EntityType>
       <EntityType Name="MessageSeverity">
@@ -1875,6 +1876,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" Path="code"/>
             </Record>
             <Record Type="UI.DataField">
+              <PropertyValue Property="Value" Path="valuesString"/>
+            </Record>
+            <Record Type="UI.DataField">
               <PropertyValue Property="Value" Path="text"/>
             </Record>
             <Record Type="UI.DataField">
@@ -1968,6 +1972,9 @@ exports[`Monitoring Service Get $metadata 1`] = `
       </Annotations>
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/createdAt">
         <Annotation Term="Common.Label" String="Created At"/>
+      </Annotations>
+      <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/valuesString">
+        <Annotation Term="Common.Label" String="Values"/>
       </Annotations>
       <Annotations Target="sapafcsdk.scheduling.MonitoringService.JobResultMessage/criticality">
         <Annotation Term="Core.Computed" Bool="true"/>

@@ -446,6 +446,10 @@ annotate MonitoringService.JobResultMessage with @(
     },
     {
       $Type: 'UI.DataField',
+      Value: valuesString,
+    },
+    {
+      $Type: 'UI.DataField',
       Value: text,
     },
     {
