@@ -8,9 +8,10 @@ permissions:
 
 # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Update PR"]
+    types:
+      - completed
 
 jobs:
   test:
