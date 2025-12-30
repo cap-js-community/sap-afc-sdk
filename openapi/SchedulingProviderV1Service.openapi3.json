@@ -1284,8 +1284,7 @@
           },
           "createdBy": {
             "type": "string",
-            "maxLength": 255,
-            "description": "{i18n>UserID.Description}"
+            "maxLength": 255
           },
           "modifiedAt": {
             "type": "string",
@@ -1294,8 +1293,7 @@
           },
           "modifiedBy": {
             "type": "string",
-            "maxLength": 255,
-            "description": "{i18n>UserID.Description}"
+            "maxLength": 255
           },
           "link": {
             "type": "string",

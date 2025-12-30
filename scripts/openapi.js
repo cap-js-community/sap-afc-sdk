@@ -69,6 +69,8 @@ function processSchedulingProviderService(check, skip) {
       },
     };
     delete data.components.schemas.count;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].properties.createdBy.description;
+    delete data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].properties.modifiedBy.description;
     data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].properties.status.description =
       "Final statuses are 'completed', 'completedWithWarning', 'completedWithError', 'failed', and 'canceled', no further status transitions are then allowed";
     data.components.schemas["sapafcsdk.scheduling.ProviderService.Job"].required = [
