@@ -102,7 +102,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.11.1",
     "eslint-plugin-n": "^17.23.1",
-    "globals": "^16.5.0",
+    "globals": "^17.0.0",
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
     "prettier-plugin-java": "^2.7.7",
