@@ -105,9 +105,10 @@ public class XsuaaClient {
       subaccountId,
       serviceInstanceId
     );
-    Function<UriBuilder, URI> uriPath = subaccountId != null
-      ? buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_SUBACCOUNT_ID, subaccountId)
-      : buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_ORG_ID, orgId);
+    Function<UriBuilder, URI> uriPath =
+      subaccountId != null
+        ? buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_SUBACCOUNT_ID, subaccountId)
+        : buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_ORG_ID, orgId);
     return getOauthToken(xsuaaData).flatMap(token ->
       this.webClient.post()
         .uri(uriPath)

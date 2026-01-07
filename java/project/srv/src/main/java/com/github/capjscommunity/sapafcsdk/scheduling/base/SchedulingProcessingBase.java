@@ -333,9 +333,8 @@ public class SchedulingProcessingBase {
     double min = processingConfig.getMin() != null ? processingConfig.getMin() : 0;
     double max = processingConfig.getMax() != null ? processingConfig.getMax() : 10;
     double processingTime = (Math.random() * (max - min) + min) * 1000;
-    String processingStatus = processingConfig.getDefault() != null
-      ? processingConfig.getDefault()
-      : JobStatusCode.COMPLETED;
+    String processingStatus =
+      processingConfig.getDefault() != null ? processingConfig.getDefault() : JobStatusCode.COMPLETED;
     boolean advancedMock = false;
     if (processingConfig.getStatus() != null && !processingConfig.getStatus().isEmpty()) {
       advancedMock = true;
