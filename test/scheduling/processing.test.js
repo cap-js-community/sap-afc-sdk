@@ -424,7 +424,7 @@ describe("Processing Service", () => {
       message: "ASSERT_DATA_TYPE",
       name: "Error",
       stack: "ASSERT_DATA_TYPE",
-      target: "data",
+      target: "results[0]/data",
     });
   });
 
@@ -956,7 +956,7 @@ describe("Processing Service", () => {
         message: "ASSERT_ARRAY",
         name: "Error",
         stack: "ASSERT_ARRAY",
-        target: "messages",
+        target: "results[0]/messages",
       });
       await clearEventQueue();
 
@@ -1125,7 +1125,7 @@ describe("Processing Service", () => {
         message: "ASSERT_DATA_TYPE",
         name: "Error",
         stack: "ASSERT_DATA_TYPE",
-        target: "createdAt",
+        target: "results[0]/messages[0]/createdAt",
       });
       await clearEventQueue();
 

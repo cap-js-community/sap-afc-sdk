@@ -98,33 +98,36 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     if (!JobStatus[status]) {
       return req.reject(JobSchedulingError.invalidJobStatus(status));
     }
-    if (job.status_code === status) {
-      return;
+    let statusChanged = false;
+    if (job.status_code !== status) {
+      if (!(await this.checkStatusTransition(req, job, job.status_code, status))) {
+        return req.reject(JobSchedulingError.statusTransitionNotAllowed(job.status_code, status));
+      }
+      job.status_code = status;
+      await UPDATE.entity(Job)
+        .set({
+          status_code: status,
+        })
+        .where({ ID: job.ID });
+      statusChanged = true;
     }
-    if (!(await this.checkStatusTransition(req, job, job.status_code, status))) {
-      return req.reject(JobSchedulingError.statusTransitionNotAllowed(job.status_code, status));
-    }
-    job.status_code = status;
-    await UPDATE.entity(Job)
-      .set({
-        status_code: status,
-      })
-      .where({ ID: job.ID });
-    if (results && results.length > 0) {
+    if (results?.length > 0) {
       const insertResults = await this.checkJobResults(req, job, results);
       await INSERT.into(JobResult).entries(insertResults);
     }
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.tx(req).emit(
-      "jobStatusChanged",
-      {
-        IDs: [job.ID],
-        status,
-      },
-      {
-        "x-eventQueue-referenceEntityKey": job.ID,
-      },
-    );
+    if (statusChanged) {
+      const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
+      await schedulingWebsocketService.tx(req).emit(
+        "jobStatusChanged",
+        {
+          IDs: [job.ID],
+          status,
+        },
+        {
+          "x-eventQueue-referenceEntityKey": job.ID,
+        },
+      );
+    }
   }
 
   async checkStatusTransition(req, job, statusBefore, statusAfter) {

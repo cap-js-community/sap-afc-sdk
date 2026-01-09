@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- tbd
+- Allow to record results without changing status in `processJobUpdate`
 
 ## Version 0.9.0 - 2025-12-18
 

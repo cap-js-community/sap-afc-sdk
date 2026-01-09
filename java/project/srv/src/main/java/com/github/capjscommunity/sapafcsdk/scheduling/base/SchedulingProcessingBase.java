@@ -110,17 +110,17 @@ public class SchedulingProcessingBase {
       throw JobSchedulingException.invalidJobStatus(status);
     }
 
-    if (status.equals(job.getStatusCode())) {
-      return;
+    boolean statusChanged = false;
+    if (!status.equals(job.getStatusCode())) {
+      if (!this.checkStatusTransition(context, job, job.getStatusCode(), status)) {
+        throw JobSchedulingException.statusTransitionNotAllowed(job.getStatusCode(), status);
+      }
+      job.setStatusCode(status);
+      CqnUpdate update = Update.entity(JOB).data(job);
+      persistenceService.run(update);
+      statusChanged = true;
     }
 
-    if (!this.checkStatusTransition(context, job, job.getStatusCode(), status)) {
-      throw JobSchedulingException.statusTransitionNotAllowed(job.getStatusCode(), status);
-    }
-
-    job.setStatusCode(status);
-    CqnUpdate update = Update.entity(JOB).data(job);
-    persistenceService.run(update);
     if (results != null && !results.isEmpty()) {
       Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult> insertResults =
         this.checkJobResults(context, job, results);
@@ -128,13 +128,15 @@ public class SchedulingProcessingBase {
       persistenceService.run(insert);
     }
 
-    WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
-    JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
-    JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
-    jobStatusChangedData.setStatus(status);
-    jobStatusChangedData.setIDs(Collections.singletonList(job.getId()));
-    jobStatusChanged.setData(jobStatusChangedData);
-    websocketServiceOutboxed.emit(jobStatusChanged);
+    if (statusChanged) {
+      WebsocketService websocketServiceOutboxed = outboxService.outboxed(websocketService);
+      JobStatusChangedContext jobStatusChanged = JobStatusChangedContext.create();
+      JobStatusChanged jobStatusChangedData = JobStatusChanged.create();
+      jobStatusChangedData.setStatus(status);
+      jobStatusChangedData.setIDs(Collections.singletonList(job.getId()));
+      jobStatusChanged.setData(jobStatusChangedData);
+      websocketServiceOutboxed.emit(jobStatusChanged);
+    }
   }
 
   protected boolean checkStatusTransition(EventContext context, Job job, String statusBefore, String statusAfter) {

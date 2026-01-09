@@ -95,7 +95,7 @@
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/cds-test": "^0.4.1",
     "@cap-js/sqlite": "^2.1.2",
-    "@sap/cds": "^9.6.1",
+    "@sap/cds": "^9.6.2",
     "@sap/cds-dk": "^9.6.0",
     "@sap/cds-lsp": "^9.6.2",
     "eslint": "^9.39.2",
