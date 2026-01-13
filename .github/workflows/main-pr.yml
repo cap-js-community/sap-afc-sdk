@@ -30,28 +30,6 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run lint:ci
-
-  openapi:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run openapi:check
-
   java-test:
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +46,7 @@ jobs:
       - run: npm ci
       - run: npm run test:java
 
-  java-plugin:
+  openapi:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -76,13 +54,19 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: 21
-          cache: maven
       - run: npm ci
-      - run: npm run java:check
+      - run: npm run openapi:check
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:ci
 
   bin:
     runs-on: ubuntu-latest
@@ -99,3 +83,30 @@ jobs:
           cache: maven
       - run: npm ci
       - run: npm run test:bin
+
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+      - run: npm ci
+      - name: Update
+        run: npm run update
+      - name: Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+        run: |
+          git config user.name "sap-afc-sdk"
+          git config user.email "sap-afc-sdk@users.noreply.github.com"
+          git add .
+          git diff --cached --quiet || git commit -m "Update"
+          git pull --rebase origin "${GITHUB_HEAD_REF}"
+          git push origin HEAD:${GITHUB_HEAD_REF}
