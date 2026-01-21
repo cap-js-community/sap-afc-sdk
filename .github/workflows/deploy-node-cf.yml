@@ -50,11 +50,11 @@ jobs:
       - name: Setup CF
         uses: cap-js/cf-setup@v2
         with:
-          cf-api: ${{ secrets.CF_API }}
-          cf-org: ${{ secrets.CF_ORG }}
-          cf-space: ${{ secrets.CF_SPACE }}
-          cf-username: ${{ secrets.CF_USERNAME }}
-          cf-password: ${{ secrets.CF_PASSWORD }}
+          api: ${{ secrets.CF_API }}
+          org: ${{ secrets.CF_ORG }}
+          space: ${{ secrets.CF_SPACE }}
+          username: ${{ secrets.CF_USERNAME }}
+          password: ${{ secrets.CF_PASSWORD }}
       - name: CDS Up
         run: npx cds up --to cf
         working-directory: ./afcsdk
