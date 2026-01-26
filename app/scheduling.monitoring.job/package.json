@@ -8,9 +8,9 @@
   "main": "webapp/index.html",
   "dependencies": {},
   "devDependencies": {
-    "@ui5/cli": "^4.0.39",
-    "@sap/ux-ui5-tooling": "^1.20.0",
-    "ui5-task-zipper": "^3.5.0"
+    "@ui5/cli": "^4.0.41",
+    "@sap/ux-ui5-tooling": "^1.20.1",
+    "ui5-task-zipper": "^3.5.1"
   },
   "scripts": {
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
