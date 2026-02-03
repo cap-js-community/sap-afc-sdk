@@ -1,32 +1,44 @@
 @api=<api endpoint from cloud deployment>
 @token=<xsuaa token>
 
-### Job Definition
+@job=JOB_1
+@jobId=<uuid of a job>
+@jobResultId=<uuid of a job result>
+
+### Job Definitions
 GET https://{{api}}/job-scheduling/v1/JobDefinition
 Authorization: Bearer {{token}}
 
+### Job Definition
+GET https://{{api}}/job-scheduling/v1/JobDefinition/{{job}}
+Authorization: Bearer {{token}}
+
 ### Job Definition Parameters
-GET https://{{api}}/job-scheduling/v1/JobDefinition/JOB_1/parameters
+GET https://{{api}}/job-scheduling/v1/JobDefinition/{{job}}/parameters
+Authorization: Bearer {{token}}
+
+### Jobs
+GET https://{{api}}/job-scheduling/v1/Job<
 Authorization: Bearer {{token}}
 
 ### Job
-GET https://{{api}}/job-scheduling/v1/Job
+GET https://{{api}}/job-scheduling/v1/Job/{{jobId}}
 Authorization: Bearer {{token}}
 
 ### Job Parameters
-GET https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+GET https://{{api}}/job-scheduling/v1/Job/{{jobId}}/parameters
 Authorization: Bearer {{token}}
 
 ### Job Results
-GET http://{{api}}/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+GET http://{{api}}/job-scheduling/v1/Job/{{jobId}}/results
 Authorization: Bearer {{token}}
 
 ### Job Result Messages
-GET http://{{api}}/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+GET http://{{api}}/job-scheduling/v1/JobResult/{{jobResultId}}/messages
 Authorization: Bearer {{token}}
 
 ### Job Result Message Data
-GET http://{{api}}/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+GET http://{{api}}/job-scheduling/v1/JobResult/{{jobResultId}}/data
 Authorization: Bearer {{token}}
 
 ### Create Job
@@ -35,33 +47,34 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "name": "JOB_1",
-    "referenceID": "abc4711",
-    "parameters": [{
-        "name": "A",
-        "value": "abc"
-      },
-      {
-        "name": "B",
-        "value": "21"
-      },
-      {
-        "name": "C",
-        "value": "false"
-      },
-      {
-        "name": "D",
-        "value": "11.12"
-      },
-      {
-        "name": "E",
-        "value": "2025-01-01T12:00:00Z"
-      }
-    ]
+  "name": "{{job}}",
+  "referenceID": "b001397c-b7f9-4f03-ba79-ec11297cae81",
+  "parameters": [
+    {
+      "name": "A",
+      "value": "abc"
+    },
+    {
+      "name": "B",
+      "value": 21
+    },
+    {
+      "name": "C",
+      "value": false
+    },
+    {
+      "name": "D",
+      "value": "11.12"
+    },
+    {
+      "name": "E",
+      "value": "2025-01-01T12:00:00Z"
+    }
+  ]
 }
 
 ### Cancel Job
-POST https://{{api}}/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+POST https://{{api}}/job-scheduling/v1/Job/{{jobId}}/cancel
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

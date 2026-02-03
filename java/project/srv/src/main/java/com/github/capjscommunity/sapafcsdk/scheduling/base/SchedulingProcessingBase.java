@@ -23,6 +23,7 @@ import com.sap.cds.services.persistence.PersistenceService;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -36,6 +37,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class SchedulingProcessingBase {
 
   public static final Map<String, List<String>> STATUS_TRANSITIONS = new HashMap<>();
+
+  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
   static {
     STATUS_TRANSITIONS.put(
@@ -99,6 +102,29 @@ public class SchedulingProcessingBase {
 
   public SchedulingProcessingBase() {
     this.statusTransitions = STATUS_TRANSITIONS;
+  }
+
+  protected void triggerJobUpdate(
+    EventContext context,
+    Job job,
+    String status,
+    Collection<JobResult> results,
+    Instant instant
+  ) {
+    long processingTime = instant != null ? Duration.between(Instant.now(), instant).toMillis() : 0;
+    if (processingTime > 0) {
+      this.scheduler.schedule(
+        () -> {
+          ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+          processingServiceOutboxed.updateJob(job.getId(), status, results);
+        },
+        processingTime,
+        TimeUnit.MILLISECONDS
+      );
+    } else {
+      ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
+      processingServiceOutboxed.updateJob(job.getId(), status, results);
+    }
   }
 
   protected void processJobUpdate(EventContext context, Job job, String status, Collection<JobResult> results) {
@@ -352,7 +378,6 @@ public class SchedulingProcessingBase {
         value += status.getValue();
       }
     }
-    String ID = job.getId();
     Optional<JobParameter> durationParameter = job
       .getParameters()
       .stream()
@@ -395,22 +420,8 @@ public class SchedulingProcessingBase {
         break;
     }
 
-    final String status = processingStatus;
-    if (processingTime > 0) {
-      ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-      scheduler.schedule(
-        () -> {
-          ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
-          processingServiceOutboxed.updateJob(ID, status, updateResults);
-          scheduler.shutdown();
-        },
-        (long) processingTime,
-        TimeUnit.MILLISECONDS
-      );
-    } else {
-      ProcessingService processingServiceOutboxed = outboxService.outboxed(processingService);
-      processingServiceOutboxed.updateJob(ID, status, updateResults);
-    }
+    Instant scheduledAt = processingTime > 0 ? Instant.now().plusMillis((long) processingTime) : null;
+    this.triggerJobUpdate(context, job, processingStatus, updateResults, scheduledAt);
 
     List<JobResult> mockResults = new ArrayList<>();
     if (advancedMock) {

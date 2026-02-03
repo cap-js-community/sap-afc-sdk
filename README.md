@@ -82,7 +82,7 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
 - Terminal: `npm install -g @sap/cds-dk`
 - Init a new CDS project:
   - Terminal:
-    - CAP Node.js: `cds init <name>`
+    - CAP Node.js: `cds init <name> --nodejs`
     - CAP Java: `cds init <name> --java`
 - Switch to the project folder:
   - Terminal: `cd <name>`

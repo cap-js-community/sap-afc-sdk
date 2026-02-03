@@ -3,32 +3,44 @@
 @username=alice
 @password=alice
 
-### Job Definition
+@job=JOB_1
+@jobId=<uuid of a job>
+@jobResultId=<uuid of a job result>
+
+### Job Definitions
 GET http://{{host}}/api/job-scheduling/v1/JobDefinition
 Authorization: Basic {{username}} {{password}}
 
-### Job Definition Parameters
-GET http://{{host}}/api/job-scheduling/v1/JobDefinition/JOB_1/parameters
+### Job Definition
+GET http://{{host}}/api/job-scheduling/v1/JobDefinition/{{job}}
 Authorization: Basic {{username}} {{password}}
 
-### Job
+### Job Definition Parameters
+GET http://{{host}}/api/job-scheduling/v1/JobDefinition/{{job}}/parameters
+Authorization: Basic {{username}} {{password}}
+
+### Jobs
 GET http://{{host}}/api/job-scheduling/v1/Job
 Authorization: Basic {{username}} {{password}}
 
+### Job
+GET http://{{host}}/api/job-scheduling/v1/Job/{{jobId}}
+Authorization: Basic {{username}} {{password}}
+
 ### Job Parameters
-GET http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/parameters
+GET http://{{host}}/api/job-scheduling/v1/Job/{{jobId}}/parameters
 Authorization: Basic {{username}} {{password}}
 
 ### Job Results
-GET http://{{host}}/api/job-scheduling/v1/Job/5a89dfec-59f9-4a91-90fe-3c7ca7407103/results
+GET http://{{host}}/api/job-scheduling/v1/Job/{{jobId}}/results
 Authorization: Basic {{username}} {{password}}
 
 ### Job Result Messages
-GET http://{{host}}/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages
+GET http://{{host}}/api/job-scheduling/v1/JobResult/{{jobResultId}}/messages
 Authorization: Basic {{username}} {{password}}
 
 ### Job Result Message Data
-GET http://{{host}}/api/job-scheduling/v1/JobResult/b2eb590f-9505-4fd6-a5e2-511a1b2ff47f/data
+GET http://{{host}}/api/job-scheduling/v1/JobResult/{{jobResultId}}/data
 Authorization: Basic {{username}} {{password}}
 
 ### Create Job
@@ -37,33 +49,34 @@ Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
-    "name": "JOB_1",
-    "referenceID": "abc4711",
-    "parameters": [{
-        "name": "A",
-        "value": "abc"
-      },
-      {
-        "name": "B",
-        "value": "21"
-      },
-      {
-        "name": "C",
-        "value": "false"
-      },
-      {
-        "name": "D",
-        "value": "11.12"
-      },
-      {
-        "name": "E",
-        "value": "2025-01-01T12:00:00Z"
-      }
-    ]
+  "name": "{{job}}",
+  "referenceID": "b001397c-b7f9-4f03-ba79-ec11297cae81",
+  "parameters": [
+    {
+      "name": "A",
+      "value": "abc"
+    },
+    {
+      "name": "B",
+      "value": 21
+    },
+    {
+      "name": "C",
+      "value": false
+    },
+    {
+      "name": "D",
+      "value": "11.12"
+    },
+    {
+      "name": "E",
+      "value": "2025-01-01T12:00:00Z"
+    }
+  ]
 }
 
 ### Cancel Job
-POST http://{{host}}/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103/cancel
+POST http://{{host}}/api/job-scheduling/v1/Job/{{jobId}}/cancel
 Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 

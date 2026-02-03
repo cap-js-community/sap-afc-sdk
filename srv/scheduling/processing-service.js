@@ -90,6 +90,22 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     return super.init();
   }
 
+  async triggerJobUpdate(req, job, status, results, startAfter) {
+    const ID = job.ID;
+    await cds.queued(this).send(
+      "updateJob",
+      {
+        ID,
+        status,
+        results,
+      },
+      {
+        "x-eventQueue-referenceEntityKey": ID,
+        "x-eventQueue-startAfter": startAfter,
+      },
+    );
+  }
+
   async processJobUpdate(req, job, status, results) {
     const { Job, JobResult } = cds.entities("sapafcsdk.scheduling");
     if (!status) {
@@ -301,7 +317,6 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
       processingStatus = statusParameter.value;
     }
 
-    const ID = job.ID;
     const updateResults = [];
     switch (processingStatus) {
       case JobStatus.completed:
@@ -376,18 +391,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         break;
     }
 
-    await cds.queued(this).send(
-      "updateJob",
-      {
-        ID,
-        status: processingStatus,
-        results: updateResults,
-      },
-      {
-        "x-eventQueue-referenceEntityKey": ID,
-        "x-eventQueue-startAfter": new Date(Date.now() + processingTime),
-      },
-    );
+    await this.triggerJobUpdate(req, job, processingStatus, updateResults, new Date(Date.now() + processingTime));
 
     const mockResults = [];
     if (advancedMock) {

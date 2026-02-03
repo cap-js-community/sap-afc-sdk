@@ -437,7 +437,8 @@ export interface SchedulingProviderService extends  BaseApplicationService {
   downloadData(req, ID: string): Promise<void>;
 }
 
-export interface SchedulingProviderService extends  BaseApplicationService {
+export interface SchedulingProcessingService extends  BaseApplicationService {
+  triggerJobUpdate(req, job: sapafcsdk.scheduling.Job, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[], startAfter?: Date): Promise<void>;
   processJobUpdate(req, job: sapafcsdk.scheduling.Job, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[]): Promise<void>;
   checkStatusTransition(req, job: sapafcsdk.scheduling.Job, statusBefore: sapafcsdk.scheduling.JobStatusCode, statusAfter: sapafcsdk.scheduling.JobStatusCode): Promise<void>;
   checkJobResults(req, job: sapafcsdk.scheduling.Job, results: sapafcsdk.scheduling.JobResult[]): Promise<void>;

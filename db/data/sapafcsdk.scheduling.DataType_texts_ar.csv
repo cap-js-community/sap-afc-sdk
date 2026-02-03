@@ -1,6 +1,6 @@
 locale;code;name;descr
 "ar";string;السلسلة;السلسلة
 "ar";number;رقم;رقم
-"ar";date;تاريخ;تاريخ
+"ar";date;التاريخ;التاريخ
 "ar";datetime;التاريخ والوقت;التاريخ والوقت
 "ar";boolean;منطقي;منطقي

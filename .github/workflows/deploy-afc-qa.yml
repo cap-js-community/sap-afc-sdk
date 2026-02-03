@@ -28,7 +28,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Setup CDS project
-        run: npx cds init afcqa
+        run: npx cds init afcqa --nodejs
       - name: Install SDK
         run: npm install github:cap-js-community/sap-afc-sdk
         working-directory: ./afcqa
