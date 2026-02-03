@@ -183,8 +183,6 @@ module.exports = (options) => {
 };
 
 function addXsuaaBroker() {
-  const name = projectName();
-
   // CF
   adjustYAMLDocument("mta.yaml", (yaml) => {
     for (const resource of yaml.get("resources").items) {
@@ -213,43 +211,6 @@ function addXsuaaBroker() {
         resource.setIn(["parameters", "service-plan"], "broker");
       }
     }
-
-    // TODO: Remove (cap/issues/19545)
-    for (const module of yaml.get("modules").items) {
-      if (module.get("name") === `${name}-app-deployer`) {
-        const requires = module.get("requires");
-        if (requires && !requires.items.find((r) => r.get("name") === `${name}-auth`)) {
-          requires.items.push(yaml.createNode({ name: `${name}-auth` }));
-        }
-      } else if (module.get("name") === `${name}-destinations`) {
-        const requires = module.get("requires");
-        if (requires && !requires.items.find((r) => r.get("name") === `${name}-auth`)) {
-          requires.items.push(
-            yaml.createNode({
-              name: `${name}-auth`,
-              parameters: {
-                "service-key": {
-                  name: `${name}-auth-key`,
-                },
-              },
-            }),
-          );
-        }
-        const destinations = module.getIn(["parameters", "content", "instance", "destinations"]);
-        if (destinations && !destinations.items.find((d) => d.get("Name") === `${name}-auth`)) {
-          destinations.items.push(
-            yaml.createNode({
-              Name: `${name}-auth`,
-              Authentication: "OAuth2UserTokenExchange",
-              ServiceInstanceName: `${name}-auth`,
-              ServiceKeyName: `${name}-auth-key`,
-              "sap.cloud.service": `${name}.service`,
-            }),
-          );
-        }
-      }
-    }
-
     return yaml;
   });
 
