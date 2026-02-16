@@ -64,6 +64,8 @@ service ProviderService {
   entity JobDefinition @readonly          as
     projection on scheduling.JobDefinition {
       *,
+      texts      : redirected to JobDefinitionText
+                     on texts.name = $self.name,
       parameters : redirected to JobParameterDefinition
                      on parameters.jobName = $self.name
     }
@@ -71,6 +73,9 @@ service ProviderService {
       texts,
       localized
     };
+
+  @title: null
+  entity JobDefinitionText @readonly      as projection on scheduling.JobDefinition.texts;
 
   @title: null
   entity JobParameterDefinition @readonly as
@@ -223,6 +228,7 @@ service ProviderService {
 
 extend ProviderService.Capabilities with ProviderService.singleton;
 extend ProviderService.JobDefinition with ProviderService.definition;
+extend ProviderService.JobDefinitionText with ProviderService.definition;
 extend ProviderService.JobParameterDefinition with ProviderService.compositionDefinition;
 extend ProviderService.Job with ProviderService.definition;
 extend ProviderService.JobParameter with ProviderService.compositionDefinition;

@@ -110,6 +110,64 @@ public class SchedulingProviderController {
   }
 
   @Hidden
+  @GetMapping("/JobDefinitionText")
+  public ResponseEntity<?> jobDefinitionText(
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
+  @Hidden
+  @GetMapping("/JobDefinitionText/{name}")
+  public ResponseEntity<?> jobDefinitionText(
+    @PathVariable(name = "name", required = true) String name,
+    HttpServletRequest request
+  ) {
+    return ResponseHandler.execute(
+      () -> {
+        throw JobSchedulingException.accessOnlyViaParent();
+      },
+      request,
+      HttpStatus.OK
+    );
+  }
+
+  @Tag(name = "Job Definition")
+  @GetMapping("/JobDefinition/{name}/texts")
+  public List<JobDefinitionText> jobDefinitionTexts(
+    @PathVariable(name = "name", required = true) String name,
+    @RequestParam(name = "skip", required = false) Integer skip,
+    @RequestParam(name = "top", required = false) Integer top,
+    HttpServletResponse response
+  ) {
+    Select<JobDefinition_> existsQuery = Select.from(JOB_DEFINITION).byId(name);
+    Optional<JobDefinition> jobDefinition = providerService.run(existsQuery).first(JobDefinition.class);
+    if (jobDefinition.isEmpty()) {
+      response.setStatus(HttpStatus.NOT_FOUND.value());
+      return null;
+    }
+
+    Select<JobDefinitionText_> query = Select.from(JOB_DEFINITION_TEXT)
+      .where(jdt -> jdt.name().eq(name))
+      .orderBy(jdt -> jdt.name().asc(), jdt -> jdt.name().asc());
+    query = applyLimit(query, top, skip);
+
+    query = query.inlineCount();
+    Result result = providerService.run(query);
+    response.setHeader("x-total-count", String.valueOf(result.inlineCount()));
+
+    return result.listOf(JobDefinitionText.class);
+  }
+
+  @Hidden
   @GetMapping("/JobParameterDefinition")
   public ResponseEntity<?> jobParameterDefinition(
     @RequestParam(name = "skip", required = false) Integer skip,
@@ -157,7 +215,7 @@ public class SchedulingProviderController {
 
     Select<JobParameterDefinition_> query = Select.from(JOB_PARAMETER_DEFINITION)
       .where(jpd -> jpd.jobName().eq(name))
-      .orderBy(jd -> jd.jobName().asc(), jd -> jd.name().asc());
+      .orderBy(jpd -> jpd.jobName().asc(), jpd -> jpd.name().asc());
     query = applyLimit(query, top, skip);
 
     query = query.inlineCount();

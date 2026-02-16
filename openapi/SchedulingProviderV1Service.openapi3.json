@@ -820,6 +820,108 @@
         "description": "The operation allows you to retrieve a list of parameters of a job definition based on the provided parameters."
       }
     },
+    "/JobDefinition/{name}/texts": {
+      "parameters": [
+        {
+          "description": "key: name",
+          "in": "path",
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 255
+          }
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a list of texts of a job definition.",
+        "tags": ["Job Definition"],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "description": "The number of query results to skip. A value less than 0 SHALL be interpreted as 0. Example: ?skip=10",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "description": "Non-negative integer. Specifies the desired maximum number of query results to return per page. Example: ?top=10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved texts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "title": "Collection of JobDefinitionText",
+                  "items": {
+                    "$ref": "#/components/schemas/sapafcsdk.scheduling.ProviderService.JobDefinitionText"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "x-total-count": {
+                "description": "Total number of records.",
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "406": {
+            "$ref": "#/components/responses/406"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "411": {
+            "$ref": "#/components/responses/411"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "501": {
+            "$ref": "#/components/responses/501"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "description": "The operation allows you to retrieve a list of texts of a job definition based on the provided parameters."
+      }
+    },
     "/JobResult/{ID}": {
       "parameters": [
         {
@@ -1380,6 +1482,28 @@
           }
         },
         "required": ["name", "version"]
+      },
+      "sapafcsdk.scheduling.ProviderService.JobDefinitionText": {
+        "title": "JobDefinitionText",
+        "type": "object",
+        "properties": {
+          "locale": {
+            "type": "string",
+            "maxLength": 14
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "longDescription": {
+            "type": "string",
+            "maxLength": 5000
+          }
+        }
       },
       "sapafcsdk.scheduling.ProviderService.JobParameter": {
         "title": "JobParameter",

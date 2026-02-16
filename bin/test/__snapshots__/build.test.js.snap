@@ -773,7 +773,7 @@ exports[`Build Java / CF 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.9.1</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -2173,7 +2173,7 @@ exports[`Build Java / Kyma 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>0.9.1</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -2721,6 +2721,7 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
+    Authentication: OAuth2UserTokenExchange
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
@@ -5119,6 +5120,7 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
+    Authentication: OAuth2UserTokenExchange
 destination:
   serviceOfferingName: destination
   servicePlanName: lite

@@ -173,6 +173,32 @@ describe("Provider Service", () => {
     expect(response.data).toHaveLength(1);
   });
 
+  it("GET Job Definition Texts", async () => {
+    let response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/texts");
+    expect(cleanData(response.data)).toMatchSnapshot();
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].locale).toBe("de");
+    expect(response.data[0].name).toBe("JOB_1");
+    expect(response.data[0].description).toBe("Job-Definition 1");
+    expect(response.data[0].longDescription).toBe("Job-Definition 1");
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?skip=1&top=1");
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0].locale).toBe("en");
+    expect(response.data[0].name).toBe("JOB_1");
+    expect(response.data[0].description).toBe("Job Definition 1");
+    expect(response.data[0].longDescription).toBe("Job Definition 1");
+    expect(response.headers["x-total-count"]).toBe("2");
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?skip=1");
+    expect(cleanData(response.data)).toMatchSnapshot();
+
+    const limitMax = cds.env.query.limit.max;
+    cds.env.query.limit.max = 1;
+    response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/texts");
+    expect(response.data).toHaveLength(1);
+    cds.env.query.limit.max = limitMax;
+  });
+
   it("GET Job Definition Parameters", async () => {
     let response = await GET("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters");
     expect(cleanData(response.data)).toMatchSnapshot();

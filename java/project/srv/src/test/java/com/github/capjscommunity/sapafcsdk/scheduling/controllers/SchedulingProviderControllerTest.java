@@ -295,6 +295,49 @@ public class SchedulingProviderControllerTest {
 
   @Test
   @WithMockUser("authenticated")
+  public void getJobDefinitionTexts() throws Exception {
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinitionText"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinitionText/A"))
+      .andExpect(jsonPath("$.message").value(messageProvider.get("accessOnlyViaParent", null, Locale.ENGLISH)));
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/texts"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(2))
+      .andExpect(jsonPath("$[0].locale").value("de"))
+      .andExpect(jsonPath("$[0].name").value("JOB_1"))
+      .andExpect(jsonPath("$[0].description").value("Job-Definition 1"))
+      .andExpect(jsonPath("$[0].longDescription").value("Job-Definition 1"))
+      .andExpect(jsonPath("$[1].locale").value("en"))
+      .andExpect(jsonPath("$[1].name").value("JOB_1"))
+      .andExpect(jsonPath("$[1].description").value("Job Definition 1"))
+      .andExpect(jsonPath("$[1].longDescription").value("Job Definition 1"));
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?top=1"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(1))
+      .andExpect(jsonPath("$[0].locale").value("de"));
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?skip=1&top=1"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(1))
+      .andExpect(jsonPath("$[0].locale").value("en"))
+      .andExpect(header().string("x-total-count", "2"));
+
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/texts?skip=1"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(1))
+      .andExpect(jsonPath("$[0].locale").value("en"));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
   public void getJobs() throws Exception {
     mockMvc
       .perform(get("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103"))

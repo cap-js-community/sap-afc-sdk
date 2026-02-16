@@ -369,6 +369,12 @@ footer {
             </div>
             <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
+          <li id="sapafcsdk_scheduling_providerservice-rest-jobdefinitiontext">
+            <div>
+              <a href="/api/job-scheduling/v1/JobDefinitionText"><span>JobDefinitionText</span></a>
+            </div>
+            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
+          </li>
           <li id="sapafcsdk_scheduling_providerservice-rest-job">
             <div>
               <a href="/api/job-scheduling/v1/Job"><span>Job</span></a>

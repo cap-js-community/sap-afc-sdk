@@ -36,6 +36,15 @@ public class SchedulingProviderControllerLimitTest {
 
   @Test
   @WithMockUser("authenticated")
+  public void getJobDefinitionTexts() throws Exception {
+    mockMvc
+      .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/texts"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.length()").value(2));
+  }
+
+  @Test
+  @WithMockUser("authenticated")
   public void getJobDefinitionParameters() throws Exception {
     mockMvc
       .perform(get("/api/job-scheduling/v1/JobDefinition/JOB_1/parameters"))

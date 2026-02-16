@@ -14,8 +14,16 @@ const isUUID = (input) =>
 
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
-    const { Capabilities, JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage } =
-      this.entities;
+    const {
+      Capabilities,
+      JobDefinition,
+      JobDefinitionText,
+      JobParameterDefinition,
+      Job,
+      JobParameter,
+      JobResult,
+      JobResultMessage,
+    } = this.entities;
     const { JobDefinition: DBJobDefinition, Job: DBJob } = cds.entities("sapafcsdk.scheduling");
     const { notify } = this.operations;
 
@@ -62,7 +70,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.before(
       "READ",
-      [JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
+      [JobDefinition, JobDefinitionText, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
       (req) => {
         if (!req.query.SELECT.one) {
           req.query.SELECT.count = true;
@@ -72,7 +80,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.after(
       "READ",
-      [JobDefinition, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
+      [JobDefinition, JobDefinitionText, JobParameterDefinition, Job, JobParameter, JobResult, JobResultMessage],
       (data, req) => {
         if (data.$count !== undefined) {
           req.http.res.setHeader("x-total-count", `${data.$count}`);

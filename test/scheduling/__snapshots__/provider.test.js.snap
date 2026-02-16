@@ -736,6 +736,34 @@ exports[`Provider Service GET Job Definition Parameters 2`] = `
 ]
 `;
 
+exports[`Provider Service GET Job Definition Texts 1`] = `
+[
+  {
+    "description": "Job-Definition 1",
+    "locale": "de",
+    "longDescription": "Job-Definition 1",
+    "name": "JOB_1",
+  },
+  {
+    "description": "Job Definition 1",
+    "locale": "en",
+    "longDescription": "Job Definition 1",
+    "name": "JOB_1",
+  },
+]
+`;
+
+exports[`Provider Service GET Job Definition Texts 2`] = `
+[
+  {
+    "description": "Job Definition 1",
+    "locale": "en",
+    "longDescription": "Job Definition 1",
+    "name": "JOB_1",
+  },
+]
+`;
+
 exports[`Provider Service GET Job Definitions 1`] = `
 [
   {

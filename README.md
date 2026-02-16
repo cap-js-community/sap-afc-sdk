@@ -5,10 +5,6 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/cap-js-community/sap-afc-sdk)](https://api.reuse.software/info/github.com/cap-js-community/sap-afc-sdk)
 [![Main CI](https://github.com/cap-js-community/sap-afc-sdk/actions/workflows/main-ci.yml/badge.svg)](https://github.com/cap-js-community/sap-afc-sdk/commits/main)
 
-> Integration with SAP Advanced Financial Closing is not yet published.
-> Please refer to [What's New for SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing/whats-new/whats-new)
-> for the latest updates.
-
 ## About this Project
 
 [SAP Advanced Financial Closing SDK for CDS](https://www.npmjs.com/package/@cap-js-community/sap-afc-sdk) provides an SDK for [SAP Advanced Financial Closing](https://help.sap.com/docs/advanced-financial-closing) to
@@ -63,7 +59,7 @@ process, and monitor the entity close for your organization.
 A new CDS project can be initialized using [SAP Build Code](https://help.sap.com/docs/build_code) tools on SAP Business Technology Platform (BTP)
 or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP application. [See capire](https://cap.cloud.sap/docs/tools/cds-cli#cds-init).
 
-### Boostrap CDS
+### Bootstrap CDS
 
 **SAP Build Code**:
 
@@ -114,6 +110,8 @@ or `@sap/cds-dk` CLI command `cds init` can be used to bootstrap a new CAP appli
 - Browser:
   - CAP Node.js: http://localhost:4004
   - CAP Java: http://localhost:8080
+
+An introductory blog post is available on SAP Community: [SAP Advanced Financial Closing: Third-Party Integration](https://community.sap.com/t5/financial-management-blog-posts-by-sap/sap-advanced-financial-closing-third-party-integration/ba-p/14317791).
 
 ## CAP Node.js
 
