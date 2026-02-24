@@ -5,6 +5,7 @@ import static com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Sch
 
 import com.github.capjscommunity.sapafcsdk.configuration.AfcSdkProperties;
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult;
@@ -14,9 +15,11 @@ import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websockets
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.websocketservice.WebsocketService;
 import com.github.capjscommunity.sapafcsdk.scheduling.common.JobSchedulingException;
 import com.sap.cds.ql.Insert;
+import com.sap.cds.ql.Select;
 import com.sap.cds.ql.Update;
 import com.sap.cds.ql.cqn.CqnUpdate;
 import com.sap.cds.services.EventContext;
+import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.messages.LocalizedMessageProvider;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
@@ -79,11 +82,39 @@ public class SchedulingProcessingBase {
     MessageSeverityCode.INFO
   );
 
+  protected static final List<Locale> LOCALES = computeAvailableLocales(
+    "i18n/messages",
+    Thread.currentThread().getContextClassLoader()
+  );
+
+  private static List<Locale> computeAvailableLocales(String baseName, ClassLoader classLoader) {
+    ResourceBundle.Control control = ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_DEFAULT);
+
+    return Arrays.stream(Locale.getAvailableLocales())
+      .filter(locale -> {
+        try {
+          if (locale.toString().isEmpty()) {
+            return false;
+          }
+          ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, classLoader, control);
+
+          return bundle.getLocale().equals(locale);
+        } catch (MissingResourceException e) {
+          return false;
+        }
+      })
+      .toList();
+  }
+
   @Autowired
   protected ProcessingService processingService;
 
   @Autowired
   protected WebsocketService websocketService;
+
+  @Autowired
+  @Qualifier(IntegrationService_.CDS_NAME)
+  protected CqnService afc;
 
   @Autowired
   protected LocalizedMessageProvider messageProvider;
@@ -176,7 +207,6 @@ public class SchedulingProcessingBase {
     Collection<JobResult> results
   ) {
     String jobId = job.getId();
-    List<Locale> locales = getAvailableBundleLocales("i18n/messages", this.getClass().getClassLoader());
     List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult> dbResults = new ArrayList<>();
 
     for (JobResult result : results) {
@@ -253,12 +283,17 @@ public class SchedulingProcessingBase {
                 throw JobSchedulingException.textMissing();
               }
               dbMessage.setText(defaultText);
+              try {
+                message.setText(defaultText);
+              } catch (UnsupportedOperationException error) {
+                // Ignore
+              }
             }
 
             List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts> dbTexts =
               new ArrayList<>();
             if (message.getTexts() == null) {
-              for (Locale locale : locales) {
+              for (Locale locale : LOCALES) {
                 com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts dbText =
                   com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResultMessageTexts.create();
                 dbText.setLocale(locale.toString());
@@ -270,8 +305,7 @@ public class SchedulingProcessingBase {
                 if (text.getLocale() == null || text.getLocale().isEmpty()) {
                   throw JobSchedulingException.localeMissing();
                 }
-                boolean isValidLocale = locales
-                  .stream()
+                boolean isValidLocale = LOCALES.stream()
                   .map(Locale::toString)
                   .anyMatch(l -> l.equals(text.getLocale()));
                 if (!isValidLocale) {
@@ -282,8 +316,7 @@ public class SchedulingProcessingBase {
                 dbText.setLocale(text.getLocale());
                 dbText.setText(text.getText());
                 if (dbText.getText() == null || dbText.getText().isEmpty()) {
-                  Locale locale = locales
-                    .stream()
+                  Locale locale = LOCALES.stream()
                     .filter(l -> l.toString().equals(dbText.getLocale()))
                     .findFirst()
                     .orElseThrow(() -> JobSchedulingException.invalidLocale(dbText.getLocale()));
@@ -315,6 +348,11 @@ public class SchedulingProcessingBase {
 
             if (message.getCreatedAt() == null) {
               dbMessage.setCreatedAt(Instant.now());
+              try {
+                message.setCreatedAt(dbMessage.getCreatedAt());
+              } catch (UnsupportedOperationException error) {
+                // Ignore
+              }
             }
 
             dbMessages.add(dbMessage);
@@ -478,30 +516,45 @@ public class SchedulingProcessingBase {
     for (Notification notification : context.getNotifications()) {
       jobSyncLog.info(
         String.format(
-          "{\"name\":\"%s\",\"ID\":\"%s\",\"value\":\"%s\"}",
+          "{\"name\":\"%s\",\"ID\":\"%s\",\"code\":\"%s\",\"value\":\"%s\"}",
           notification.getName(),
           notification.getId(),
+          notification.getCode(),
           notification.getValue()
         )
       );
     }
   }
 
-  protected static List<Locale> getAvailableBundleLocales(String baseName, ClassLoader classLoader) {
-    ResourceBundle.Control control = ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_DEFAULT);
-    Locale[] availableLocales = Locale.getAvailableLocales();
-    return Arrays.stream(availableLocales)
-      .filter(locale -> {
-        try {
-          if (locale.toString().isEmpty()) {
-            return false;
-          }
-          ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale, classLoader, control);
-          return bundle.getLocale().equals(locale);
-        } catch (MissingResourceException e) {
-          return false;
-        }
-      })
-      .toList();
+  public Optional<TaskExternalJob> afcReadJob(EventContext context, Job job) {
+    String referenceId = job != null ? job.getReferenceID() : null;
+    if (referenceId == null || referenceId.isBlank()) {
+      throw JobSchedulingException.referenceIDMissing();
+    }
+    return afc.run(Select.from(TaskExternalJob_.class).byId(referenceId)).first(TaskExternalJob.class);
+  }
+
+  public void afcUpdateJob(EventContext context, Job job, String status, List<JobResult> results) {
+    String referenceId = job != null ? job.getReferenceID() : null;
+    if (referenceId == null || referenceId.isBlank()) {
+      throw JobSchedulingException.referenceIDMissing();
+    }
+    results = (results != null) ? results : new ArrayList<>();
+    for (JobResult result : results) {
+      if (!ResultTypeCode.MESSAGE.equals(result.getType())) {
+        throw JobSchedulingException.invalidResultType(result.getType());
+      }
+    }
+    if (this.afcReadJob(context, job).isEmpty()) {
+      throw JobSchedulingException.jobNotFound(referenceId);
+    }
+    this.checkJobResults(context, job, results);
+    List<TaskExternalJobInputResult> inputResults = results.stream().map(TaskExternalJobInputResult::of).toList();
+    TaskExternalJobInput input = TaskExternalJobInput.create();
+    input.setExternalJobId(referenceId);
+    input.setJobStatus(status);
+    input.setResults(inputResults);
+    CqnService afcOutboxed = outboxService.outboxed(afc);
+    afcOutboxed.run(Insert.into(TaskExternalJobInput_.class).entry(input));
   }
 }

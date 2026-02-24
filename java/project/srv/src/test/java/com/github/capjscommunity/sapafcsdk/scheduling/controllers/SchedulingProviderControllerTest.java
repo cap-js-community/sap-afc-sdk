@@ -2157,7 +2157,16 @@ public class SchedulingProviderControllerTest {
     ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStreamCaptor));
     JSONObject notification = new JSONObject(
-      Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+      Map.of(
+        "name",
+        "taskListStatusChanged",
+        "ID",
+        "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+        "code",
+        "TASKLIST-1",
+        "value",
+        "obsolete"
+      )
     );
     JSONArray notifications = new JSONArray();
     notifications.put(notification);
@@ -2170,7 +2179,7 @@ public class SchedulingProviderControllerTest {
     assertTrue(logs.contains("sapafcsdk/notification"), "Expected log message not found in: " + logs);
     assertTrue(
       logs.contains(
-        " {\"name\":\"taskListStatusChanged\",\"ID\":\"3a89dfec-59f9-4a91-90fe-3c7ca7407103\",\"value\":\"obsolete\"}"
+        " {\"name\":\"taskListStatusChanged\",\"ID\":\"3a89dfec-59f9-4a91-90fe-3c7ca7407103\",\"code\":\"TASKLIST-1\",\"value\":\"obsolete\"}"
       ),
       "Expected log message not found in: " + logs
     );

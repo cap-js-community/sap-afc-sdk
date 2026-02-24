@@ -45,6 +45,7 @@ service ProcessingService {
   type Notification {
     name  : NotificationName not null;
     ID    : String(255);
+    code  : String(255);
     value : String(5000);
   };
 

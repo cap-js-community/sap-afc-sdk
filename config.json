@@ -15,6 +15,12 @@
     },
     "sapafcsdk.scheduling.WebsocketService": {
       "queued": true
+    },
+    "sap.afc.IntegrationService": {
+      "queued": true
+    },
+    "afc": {
+      "queued": true
     }
   },
   "toggles": {

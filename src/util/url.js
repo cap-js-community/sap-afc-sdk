@@ -41,7 +41,7 @@ function approuterWildcardUrl() {
 
 function approuterTenantUrl(req) {
   if (cds.env.requires.multitenancy) {
-    const subdomain = req.user?.authInfo?.getSubdomain?.();
+    const subdomain = req?.user?.authInfo?.getSubdomain?.();
     if (subdomain) {
       return `https://${subdomain}${cds.env.tenant_separator ?? "."}${approuterDomain()}`;
     }
@@ -76,7 +76,12 @@ function serverUrl() {
       return (_serverUrl = `https://${url}`);
     }
   }
-  return (_serverUrl = cds.server.url ?? `http://localhost:${process.env.PORT || cds.env.server?.port || 4004}`);
+  return (_serverUrl = cds.server.url ?? `http://localhost:${cds.env.server?.port || process.env.PORT || 4004}`);
+}
+
+function reset() {
+  _approuterUrl = undefined;
+  _serverUrl = undefined;
 }
 
 module.exports = {
@@ -87,4 +92,5 @@ module.exports = {
   launchpadUrl,
   authorizationUrl,
   serverUrl,
+  reset,
 };

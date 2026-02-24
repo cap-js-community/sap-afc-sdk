@@ -80,8 +80,4 @@ public class SchedulingProcessingHandler extends SchedulingProcessingBase implem
     }
     context.setCompleted();
   }
-
-  // protected void reportStatus(EventContext context, String status) {
-  //   afcService.reportStatus(Status);
-  // }
 }

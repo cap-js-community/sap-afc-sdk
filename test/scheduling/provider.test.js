@@ -85,6 +85,7 @@ describe("Provider Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
     cds.env.requires["sap-afc-sdk"].ui.link = false;
     response = await GET("/api/job-scheduling/v1/Capabilities");
+    cds.env.requires["sap-afc-sdk"].ui.link = true;
     expect(cleanData(response.data)).toMatchSnapshot();
     cds.env.requires["sap-afc-sdk"].capabilities = capabilities;
   });
@@ -435,6 +436,7 @@ describe("Provider Service", () => {
     let entry = await eventQueueEntry("sapafcsdk.scheduling.ProcessingService");
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
+    expect(entry.referenceEntity).toBe("sapafcsdk.scheduling.Job");
     expect(entry.referenceEntityKey).toBe(ID);
 
     const ws = await connectToWS("job-scheduling", ID);
@@ -446,6 +448,7 @@ describe("Provider Service", () => {
 
     entry = await eventQueueEntry("sapafcsdk.scheduling.WebsocketService.jobStatusChanged");
     expect(entry).toBeDefined();
+    expect(entry.referenceEntity).toBe("sapafcsdk.scheduling.Job");
     expect(entry.referenceEntityKey).toBe(ID);
 
     response = await GET(`/api/job-scheduling/v1/Job/${ID}`);
@@ -576,6 +579,7 @@ describe("Provider Service", () => {
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
+    expect(entry.referenceEntity).toBe("sapafcsdk.scheduling.Job");
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
@@ -714,6 +718,7 @@ describe("Provider Service", () => {
     const entry = await eventQueueEntry();
     expect(entry).toBeDefined();
     expect(entry.startAfter).toBe("2025-01-01T12:00:00.000Z");
+    expect(entry.referenceEntity).toBe("sapafcsdk.scheduling.Job");
     expect(entry.referenceEntityKey).toBe(ID);
     expect(entry.payload).toMatch(/"testRun":true/);
 
@@ -761,6 +766,7 @@ describe("Provider Service", () => {
     cds.env.requires["sap-afc-sdk"].mockProcessing = false;
     let entry = await eventQueueEntry();
     expect(entry).toBeDefined();
+    expect(entry.referenceEntity).toBe("sapafcsdk.scheduling.Job");
     expect(entry.referenceEntityKey).toBe(ID);
     entry = await eventQueueEntry("sapafcsdk.scheduling.ProcessingService", ID, "updateJob");
     expect(entry).toBeDefined();
@@ -1403,6 +1409,7 @@ describe("Provider Service", () => {
         {
           name: "taskListStatusChanged",
           ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+          code: "TASKLIST-1",
           value: "obsolete",
         },
       ],
@@ -1411,7 +1418,7 @@ describe("Provider Service", () => {
     await processQueue("sapafcsdk.scheduling.ProcessingService");
     expect(log.output).toEqual(
       expect.stringMatching(
-        /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,
+        /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*code: 'TASKLIST-1',\n\s*value: 'obsolete'\n\s*}/s,
       ),
     );
     log.clear();

@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`Processing Service AFC AFC Update Job 4`] = `
+[
+  {
+    "externalJobId": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+    "jobStatus": "completed",
+    "requestStatus": 0,
+  },
+]
+`;
+
 exports[`Processing Service processJob - simple mock - completed 1`] = `
 [
   {

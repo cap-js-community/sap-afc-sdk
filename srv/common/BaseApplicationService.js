@@ -28,14 +28,14 @@ module.exports = class BaseApplicationService extends cds.ApplicationService {
   }
 
   fillLink(entity, object, action) {
-    if (cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
-      this.after("READ", entity, async (result, req) => {
+    this.after("READ", entity, async (result, req) => {
+      if (cds.env.requires?.["sap-afc-sdk"]?.ui?.link) {
         for (const row of result) {
           if (row.ID && row.link === null) {
             row.link = `${launchpadUrl(req)}#${object}-${action}&/${object}(${row.ID})`;
           }
         }
-      });
-    }
+      }
+    });
   }
 };

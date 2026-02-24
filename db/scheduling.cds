@@ -253,8 +253,10 @@ type MappingTypeCode            : String(255) enum {
   customField2;
   customField3;
   taskListID;
+  taskListUUID;
   taskListDescription;
   taskID;
+  taskUUID;
   taskDescription;
 };
 

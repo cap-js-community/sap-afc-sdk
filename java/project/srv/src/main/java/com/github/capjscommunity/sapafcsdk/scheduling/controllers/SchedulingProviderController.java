@@ -544,7 +544,16 @@ public class SchedulingProviderController {
         for (NotifyNotification notifyNotification : body.notifications) {
           notifications.add(
             Notification.of(
-              Map.of("name", notifyNotification.name, "ID", notifyNotification.ID, "value", notifyNotification.value)
+              Map.of(
+                "name",
+                notifyNotification.name,
+                "ID",
+                notifyNotification.ID,
+                "code",
+                notifyNotification.code,
+                "value",
+                notifyNotification.value
+              )
             )
           );
         }
@@ -620,6 +629,7 @@ public class SchedulingProviderController {
 
     public String name;
     public String ID;
+    public String code;
     public String value;
   }
 }

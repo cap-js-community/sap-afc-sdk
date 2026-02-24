@@ -42,6 +42,13 @@ describe("Monitoring Service", () => {
     expect(cleanData(response.data)).toMatchSnapshot();
   });
 
+  it("Get Jobs (no link)", async () => {
+    cds.env.requires["sap-afc-sdk"].ui.link = false;
+    let response = await GET("/odata/v4/job-scheduling/monitoring/Job");
+    cds.env.requires["sap-afc-sdk"].ui.link = true;
+    expect(cleanData(response.data)).toMatchSnapshot();
+  });
+
   it("Get UI Flow", async () => {
     let response = await GET(
       "/odata/v4/job-scheduling/monitoring/Job?$count=true&$orderby=createdAt%20desc&$select=ID,createdAt,criticality,definition_name,modifiedAt,referenceID,status_code,testRun,version&$expand=definition($select=description,name),status($select=code,name)&$skip=0&$top=30",

@@ -18,7 +18,7 @@ GET https://{{api}}/job-scheduling/v1/JobDefinition/{{job}}/parameters
 Authorization: Bearer {{token}}
 
 ### Jobs
-GET https://{{api}}/job-scheduling/v1/Job<
+GET https://{{api}}/job-scheduling/v1/Job
 Authorization: Bearer {{token}}
 
 ### Job
@@ -88,6 +88,7 @@ Content-Type: application/json
     {
       "name": "taskListStatusChanged",
       "ID": "1a89dfec-59f9-4a91-90fe-3c7ca7407103",
+      "code": "TASKLIST-1",
       "value": "obsolete"
     }
   ]

@@ -855,12 +855,20 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="taskListID"/>
             </Record>
             <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListUUID"/>
+              <PropertyValue Property="Value" String="taskListUUID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
               <PropertyValue Property="Value" String="taskListDescription"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskID"/>
               <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskUUID"/>
+              <PropertyValue Property="Value" String="taskUUID"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskDescription"/>
@@ -2237,12 +2245,20 @@ exports[`Monitoring Service Get $metadata 1`] = `
               <PropertyValue Property="Value" String="taskListID"/>
             </Record>
             <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskListUUID"/>
+              <PropertyValue Property="Value" String="taskListUUID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskListDescription"/>
               <PropertyValue Property="Value" String="taskListDescription"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskID"/>
               <PropertyValue Property="Value" String="taskID"/>
+            </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskUUID"/>
+              <PropertyValue Property="Value" String="taskUUID"/>
             </Record>
             <Record Type="Validation.AllowedValue">
               <Annotation Term="Core.SymbolicName" String="taskDescription"/>
@@ -3039,6 +3055,17 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "type_code": "writableValue",
           "value": "completed",
         },
+        {
+          "dataType_code": "string",
+          "description": "Task List ID",
+          "enumValues": [],
+          "job_name": "JOB_6",
+          "mappingType_code": "taskListID",
+          "name": "taskListID",
+          "required": false,
+          "type_code": "mapping",
+          "value": null,
+        },
       ],
       "supportsErrorOnlyRun": false,
       "supportsStartDateTime": false,
@@ -3275,6 +3302,47 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
   "vendorName": "Test Company",
   "vendorSystem": "Test System",
   "version": "1",
+}
+`;
+
+exports[`Monitoring Service Get Jobs (no link) 1`] = `
+{
+  "@odata.context": "$metadata#Job",
+  "value": [
+    {
+      "criticality": 5,
+      "definition_name": "JOB_1",
+      "errorOnlyRun": false,
+      "link": null,
+      "referenceID": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+      "startDateTime": "2025-01-01T12:00:00Z",
+      "status_code": "requested",
+      "testRun": false,
+      "version": "1",
+    },
+    {
+      "criticality": 5,
+      "definition_name": "JOB_2",
+      "errorOnlyRun": true,
+      "link": null,
+      "referenceID": "8158cbab-a42b-4cb9-9656-8db72521d13d",
+      "startDateTime": "2025-01-02T12:00:00Z",
+      "status_code": "running",
+      "testRun": true,
+      "version": "1",
+    },
+    {
+      "criticality": 2,
+      "definition_name": "JOB_3",
+      "errorOnlyRun": null,
+      "link": null,
+      "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
+      "startDateTime": "2025-01-02T12:00:00Z",
+      "status_code": "completedWithError",
+      "testRun": false,
+      "version": "1",
+    },
+  ],
 }
 `;
 

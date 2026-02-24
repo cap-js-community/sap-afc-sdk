@@ -351,6 +351,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         },
         {
           "x-eventQueue-startAfter": data.startDateTime,
+          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
@@ -362,6 +363,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           status: data.status,
         },
         {
+          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
           "x-eventQueue-referenceEntityKey": data.ID,
         },
       );
@@ -394,6 +396,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           ID: req.job.ID,
         },
         {
+          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
           "x-eventQueue-referenceEntityKey": req.job.ID,
         },
       );
@@ -405,6 +408,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
           status: JobStatus.cancelRequested,
         },
         {
+          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
           "x-eventQueue-referenceEntityKey": req.job.ID,
         },
       );

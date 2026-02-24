@@ -100,6 +100,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
         results,
       },
       {
+        "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
         "x-eventQueue-referenceEntityKey": ID,
         "x-eventQueue-startAfter": startAfter,
       },
@@ -140,6 +141,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
           status,
         },
         {
+          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
           "x-eventQueue-referenceEntityKey": job.ID,
         },
       );
@@ -442,8 +444,47 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     }
   }
 
-  // async reportStatus(req, status) {
-  //   const afc = await cds.connect.to("afc");
-  //   await afc.tx(req).reportStatus(status);
-  // }
+  async afcReadJob(req, job) {
+    if (!job?.referenceID) {
+      return req.reject(JobSchedulingError.referenceIDMissing());
+    }
+    const afc = await cds.connect.to("afc");
+    const { TaskExternalJob } = afc.entities;
+    return await cds.unqueued(afc).tx(req).run(SELECT.one(TaskExternalJob, job.referenceID));
+  }
+
+  async afcUpdateJob(req, job, status, results) {
+    if (!job?.referenceID) {
+      return req.reject(JobSchedulingError.referenceIDMissing());
+    }
+    results ??= [];
+    for (const result of results) {
+      if (![ResultType.message].includes(result.type)) {
+        return req.reject(JobSchedulingError.invalidResultType(result.type));
+      }
+    }
+    if (!(await this.afcReadJob(req, job))) {
+      return req.reject(JobSchedulingError.jobNotFound(job.referenceID));
+    }
+    await this.checkJobResults(req, job, results);
+    for (const result of results) {
+      for (const message of result.messages) {
+        delete message.values;
+        delete message.texts;
+      }
+    }
+    const afc = await cds.connect.to("afc");
+    const { TaskExternalJobInput } = afc.entities;
+    await afc.tx(req).send({
+      query: afc.create(TaskExternalJobInput).entries({
+        externalJobId: job.referenceID,
+        jobStatus: status,
+        results,
+      }),
+      headers: {
+        "x-eventQueue-referenceEntity": "sap.afc.IntegrationService.TaskExternalJob",
+        "x-eventQueue-referenceEntityKey": job.referenceID,
+      },
+    });
+  }
 };

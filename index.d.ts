@@ -428,23 +428,43 @@ export interface BaseService {
 }
 
 export interface BaseApplicationService extends BaseService {
-  handle(req): Promise<void>;
+  handle(req: object): Promise<void>;
 }
 
-export interface SchedulingProviderService extends  BaseApplicationService {
-  createJob(req, job: sapafcsdk.scheduling.Job): Promise<void>;
-  updateJob(req, job: sapafcsdk.scheduling.Job, data: sapafcsdk.scheduling.Job): Promise<void>;
-  downloadData(req, ID: string): Promise<void>;
+export interface SchedulingProviderService extends BaseApplicationService {
+  createJob(req: object, job: sapafcsdk.scheduling.Job): Promise<void>;
+  updateJob(req: object, job: sapafcsdk.scheduling.Job, data: sapafcsdk.scheduling.Job): Promise<void>;
+  downloadData(req: object, ID: string): Promise<void>;
 }
 
-export interface SchedulingProcessingService extends  BaseApplicationService {
-  triggerJobUpdate(req, job: sapafcsdk.scheduling.Job, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[], startAfter?: Date): Promise<void>;
-  processJobUpdate(req, job: sapafcsdk.scheduling.Job, status: sapafcsdk.scheduling.JobStatusCode, results?: sapafcsdk.scheduling.JobResult[]): Promise<void>;
-  checkStatusTransition(req, job: sapafcsdk.scheduling.Job, statusBefore: sapafcsdk.scheduling.JobStatusCode, statusAfter: sapafcsdk.scheduling.JobStatusCode): Promise<void>;
-  checkJobResults(req, job: sapafcsdk.scheduling.Job, results: sapafcsdk.scheduling.JobResult[]): Promise<void>;
-  mockJobProcessing(req, job: sapafcsdk.scheduling.Job, config: object): Promise<void>;
-  mockJobSync(req): Promise<void>;
-  mockNotification(req): Promise<void>;
+export interface SchedulingProcessingService extends BaseApplicationService {
+  triggerJobUpdate(
+    req: object,
+    job: sapafcsdk.scheduling.Job,
+    status: sapafcsdk.scheduling.ProcessingService.JobStatusCode,
+    results?: sapafcsdk.scheduling.ProcessingService.JobResult[],
+    startAfter?: Date,
+  ): Promise<void>;
+  processJobUpdate(
+    req: object,
+    job: sapafcsdk.scheduling.Job,
+    status: sapafcsdk.scheduling.ProcessingService.JobStatusCode,
+    results?: sapafcsdk.scheduling.ProcessingService.JobResult[],
+  ): Promise<void>;
+  checkStatusTransition(
+    req: object,
+    job: sapafcsdk.scheduling.Job,
+    statusBefore: sapafcsdk.scheduling.ProcessingService.JobStatusCode,
+    statusAfter: sapafcsdk.scheduling.ProcessingService.JobStatusCode,
+  ): Promise<void>;
+  checkJobResults(
+    req: object,
+    job: sapafcsdk.scheduling.Job,
+    results: sapafcsdk.scheduling.ProcessingService.JobResult[],
+  ): Promise<void>;
+  mockJobProcessing(req: object, job: sapafcsdk.scheduling.Job, config: object): Promise<void>;
+  mockJobSync(req: object): Promise<void>;
+  mockNotification(req: object): Promise<void>;
 }
 
 export interface SchedulingMonitoringService extends  BaseApplicationService {

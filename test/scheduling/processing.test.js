@@ -9,19 +9,23 @@ const { cleanData, connectToWS, clearEventQueue, eventQueueEntry, processQueue }
 const { JobStatus, ResultType, MessageSeverity } = require("../../srv/scheduling/common/codelist");
 const SchedulingProcessingService = require("../../srv/scheduling/processing-service");
 
-const { test } = cds.test(__dirname + "/../..");
+const { test } = cds.test(__dirname + "/../..", "--with-mocks");
 
 process.env.PORT = 0; // Random
 
 let processingService;
 
 const ID = "3a89dfec-59f9-4a91-90fe-3c7ca7407103";
+const REFERENCE_ID = "7158cbab-a42b-4cb9-9656-8db72521d13d";
 
 describe("Processing Service", () => {
   const log = cds.test.log();
 
   beforeAll(async () => {
     processingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
+    const afc = await cds.connect.to("afc");
+    afc.on("#succeeded", () => {});
+    afc.on("#failed", () => {});
   });
 
   beforeEach(async () => {
@@ -500,6 +504,117 @@ describe("Processing Service", () => {
     expect(event.status).toBe(JobStatus.canceled);
 
     ws.close();
+  });
+
+  describe("AFC", () => {
+    it("AFC Read Job", async () => {
+      const req = new cds.Request({
+        job: {
+          ID,
+        },
+      });
+      await expect(processingService.afcReadJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"referenceIDMissing"`,
+      );
+      req.job.referenceID = REFERENCE_ID;
+      const job = await processingService.afcReadJob(req, req.job);
+      expect(job).toMatchObject({
+        ID: "7158cbab-a42b-4cb9-9656-8db72521d13d",
+        taskId: "6158cbab-a42b-4cb9-9656-8db72521d13d",
+        taskName: "Task 1",
+        taskListId: "5158cbab-a42b-4cb9-9656-8db72521d13d",
+        taskListName: "Task List 1",
+        taskListInstance: "1",
+        externalJobId: "7158cbab-a42b-4cb9-9656-8db72521d13d",
+        externalJobGroupId: "7158cbab-a42b-4cb9-9656-8db72521d13e",
+        externalJobName: "JOB_1",
+        externalJobReferenceId: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+        jobStatus: "requested",
+        jobType: "thirdparty",
+      });
+    });
+
+    it("AFC Update Job", async () => {
+      const req = {
+        job: {
+          ID,
+        },
+        reject: jest.fn((error) => {
+          throw error;
+        }),
+      };
+      await expect(processingService.afcUpdateJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"referenceIDMissing"`,
+      );
+      req.job.referenceID = "xxx";
+      await expect(processingService.afcUpdateJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"jobNotFound"`,
+      );
+      req.job.referenceID = REFERENCE_ID;
+      await expect(
+        processingService.afcUpdateJob(req, req.job, JobStatus.completed, [
+          {
+            type: ResultType.link,
+            name: "link",
+          },
+        ]),
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"invalidResultType"`);
+      await processingService.afcUpdateJob(req, req.job, JobStatus.completed, [
+        {
+          type: ResultType.message,
+          name: "messages",
+          messages: [
+            {
+              code: "jobCompleted",
+              severity: MessageSeverity.info,
+            },
+          ],
+        },
+      ]);
+      await cds.tx(req).commit();
+      await processQueue("afc");
+      let entry = await eventQueueEntry("afc", undefined);
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(2);
+      expect(entry.referenceEntity).toBe("sap.afc.IntegrationService.TaskExternalJob");
+      expect(entry.referenceEntityKey).toBe(REFERENCE_ID);
+      const payload = JSON.parse(entry.payload);
+      expect(payload.query).toBeDefined();
+      expect(payload.query.INSERT).toBeDefined();
+      await processQueue("afc"); // #succeeded
+      entry = await eventQueueEntry("afc", undefined, "#succeeded");
+      expect(entry).toBeDefined();
+      expect(entry.status).toBe(2);
+      const input = JSON.parse(entry.payload).data;
+      expect(input.ID).toBeDefined();
+      expect(input.results[0].ID).toBeDefined();
+      expect(input.results[0].messages[0].ID).toBeDefined();
+      expect(input.results[0].messages[0].createdAt).toBeDefined();
+      expect(input).toMatchObject({
+        externalJobId: "7158cbab-a42b-4cb9-9656-8db72521d13d",
+        jobStatus: "completed",
+        results: [
+          {
+            name: "messages",
+            messages: [
+              {
+                code: "jobCompleted",
+                text: "Job completed successfully",
+                severity: "info",
+              },
+            ],
+            type: "message",
+          },
+        ],
+      });
+
+      await cds.tx({ locale: "de" }, async (tx) => {
+        const jobInput = await tx.run(
+          SELECT.from("sap.afc.IntegrationService.TaskExternalJobInput").where({ ID: input.ID }),
+        );
+        expect(cleanData(jobInput)).toMatchSnapshot();
+      });
+    });
   });
 
   describe("Error Situations", () => {
@@ -1400,6 +1515,7 @@ describe("Processing Service", () => {
             {
               name: "taskListStatusChanged",
               ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              code: "TASKLIST-1",
               value: "obsolete",
             },
           ],
@@ -1417,6 +1533,7 @@ describe("Processing Service", () => {
             {
               name: "taskListStatusChanged",
               ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              code: "TASKLIST-1",
               value: "obsolete",
             },
           ],
@@ -1426,7 +1543,7 @@ describe("Processing Service", () => {
       await processQueue("sapafcsdk.scheduling.ProcessingService");
       expect(log.output).toEqual(
         expect.stringMatching(
-          /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*value: 'obsolete'\n\s*}/s,
+          /\[sapafcsdk\/notification] - \{\n\s*name: 'taskListStatusChanged',\n\s*ID: '3a89dfec-59f9-4a91-90fe-3c7ca7407103',\n\s*code: 'TASKLIST-1',\n\s*value: 'obsolete'\n\s*}/s,
         ),
       );
       log.clear();

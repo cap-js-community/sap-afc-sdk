@@ -43,6 +43,14 @@ sap-afc-sdk:
 ---
 spring:
   config.activate.on-profile: cloud
+cds:
+  remote.services:
+    "[sap.afc.IntegrationService]":
+      type: odata-v4
+      destination:
+        name: "SAP_AFC"
+      http:
+        service: "/odata/integration/v1"
 sap-afc-sdk:
   ui:
     enabled: true

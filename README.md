@@ -654,6 +654,7 @@ The signature of a single notification is defined as follows:
 type Notification {
   name  : String(255) not null;
   ID    : String(255);
+  code  : String(255);
   value : String(5000);
 };
 ```
@@ -663,6 +664,7 @@ Available notifications are:
 - `taskListStatusChanged`: Notification to inform about changed task list status.
   - `name`: Notification name `taskListStatusChanged`
   - `ID`: Task list ID
+  - `code`: Task list code
   - `value`: New task list status
 
 **CDS file:** `/srv/scheduling-processing-service.cds`
@@ -1229,6 +1231,7 @@ Available notifications are:
 - `taskListStatusChanged`: Notification to inform about changed task list status.
   - `name`: Notification name `taskListStatusChanged`
   - `ID`: Task list ID
+  - `code`: Task list code
   - `value`: New task list status
 
 **Implementation file:** `srv/src/main/java/customer/scheduling/CustomSchedulingProcessingHandler.java`
@@ -1293,7 +1296,7 @@ BTP offers different deployment options, depending on the target environment (Cl
   - Terminal: `cds up --to cf`
 - For details see guide [Deployment to CF](https://cap.cloud.sap/docs/guides/deployment/to-cf)
 
-#### Kyma
+### Kyma
 
 - Initialize project for Kyma:
   - Terminal: `afc init kyma`
@@ -1308,7 +1311,7 @@ BTP offers different deployment options, depending on the target environment (Cl
 
 ## Service Broker
 
-An Open Service Broker compliant broker implementation can be added to the CAP project.
+An Open Service Broker compliant broker implementation can be added via AFC SDK to the CAP project using XSUAA for authentication.
 The broker is used to manage service key management to the API in a Cloud Foundry environment.
 
 > For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required
@@ -1344,6 +1347,9 @@ The broker is used to manage service key management to the API in a Cloud Foundr
       - Terminal: `afc add key -d -j`
 - Reset API management in CF
   - Terminal: `afc api key -r`
+
+> Own broker is not necessary for projects using IAS-based authentication. SAP Identity Services brings its own service broker implementation
+> and supports App2App communication as described at https://cap.cloud.sap/docs/guides/security/remote-authentication#app-to-app.
 
 ## Miscellaneous
 
@@ -1387,12 +1393,15 @@ HTTP files will be placed at `/http`.
 #### Authentication Method
 
 The authentication strategy can be configured via CDS env according to [CDS documentation](https://cap.cloud.sap/docs/node.js/authentication#strategies).
+For production scenarios, it's recommended to use IAS-based (kind: `ias`) authentication or XSUAA-based authentication (kind: `xsuaa`).
 
-For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required:
+For XSUAA-based authentication, the broker is used to manage service key management to the API in a Cloud Foundry environment.
 
 - Terminal: `afc add broker`
 - Service `xsuaa` with plan `broker` is applied via `cds add xsuaa`
 - [Service Broker](#service-broker) feature can be used to manage service keys and access tokens
+
+> For AFC SDK feature `broker` the auth strategy `xsuaa` with plan `broker` is required:
 
 #### Service Restrictions
 

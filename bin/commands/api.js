@@ -83,6 +83,7 @@ module.exports = {
       .option("-r, --reset", "Reset API management")
       .option("-x, --xreset", "Reset API management")
       .option("-g, --generate", "Generate broker password and hash")
+      .option("-u, --url", "Clickable token url")
       .option("-v, --verbose", "Verbose log output")
       .addHelpText(
         "afterAll",
@@ -213,6 +214,11 @@ async function manageInternal(options) {
     if (config.internalKey) {
       console.log(`key (internal): ${config.internalKey}`);
     }
+    if (config.url) {
+      console.log(
+        `url (internal): https://${config.internalClientId}:${config.internalClientSecret}@${config.tokenUrl.substring(8)}?grant_type=client_credentials`,
+      );
+    }
   }
   if (options.destination) {
     serverUrl(config);
@@ -290,6 +296,11 @@ async function manageKey(options) {
     }
     if (config.key) {
       console.log(`key: ${config.key}`);
+    }
+    if (config.url) {
+      console.log(
+        `url: https://${config.clientId}:${config.clientSecret}@${config.tokenUrl.substring(8)}?grant_type=client_credentials`,
+      );
     }
   }
   if (options.destination) {

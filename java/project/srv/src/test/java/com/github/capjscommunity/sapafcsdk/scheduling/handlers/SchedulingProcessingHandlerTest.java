@@ -7,14 +7,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification;
+import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessJobContext;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessingService;
 import com.github.capjscommunity.sapafcsdk.test.OutboxTestConfig;
 import com.sap.cds.Result;
 import com.sap.cds.ql.Delete;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.ql.Select;
+import com.sap.cds.services.EventContext;
 import com.sap.cds.services.messages.LocalizedMessageProvider;
 import com.sap.cds.services.outbox.OutboxService;
 import com.sap.cds.services.persistence.PersistenceService;
@@ -51,6 +54,9 @@ public class SchedulingProcessingHandlerTest {
   @Autowired
   @Qualifier(OutboxConfig.OUTBOX_SERVICE)
   protected OutboxService outboxService;
+
+  @Autowired
+  private SchedulingProcessingHandler processingHandler;
 
   @Test
   @WithMockUser("authenticated")
@@ -1187,9 +1193,110 @@ public class SchedulingProcessingHandlerTest {
     processingServiceOutboxed.notify(
       List.of(
         Notification.of(
-          Map.of("name", "taskListStatusChanged", "ID", "3a89dfec-59f9-4a91-90fe-3c7ca7407103", "value", "obsolete")
+          Map.of(
+            "name",
+            "taskListStatusChanged",
+            "ID",
+            "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+            "code",
+            "TASKLIST-1",
+            "value",
+            "obsolete"
+          )
         )
       )
     );
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void afcJobRead() {
+    Locale.setDefault(Locale.ENGLISH);
+    final Job job1 = Job.of(Map.of("definition_name", "JOB_1", "status_code", JobStatusCode.REQUESTED, "version", "1"));
+    EventContext eventContext = EventContext.create(ProcessJobContext.CDS_NAME, Job_.CDS_NAME);
+    Exception exception = assertThrows(Exception.class, () -> processingHandler.afcReadJob(eventContext, job1));
+    assertEquals(messageProvider.get("referenceIDMissing", null, Locale.ENGLISH), exception.getMessage());
+    final Job job2 = Job.of(
+      Map.of(
+        "definition_name",
+        "JOB_1",
+        "referenceID",
+        "7158cbab-a42b-4cb9-9656-8db72521d13d",
+        "status_code",
+        JobStatusCode.REQUESTED,
+        "version",
+        "1"
+      )
+    );
+    Optional<TaskExternalJob> afcJob = processingHandler.afcReadJob(eventContext, job2);
+    assertTrue((afcJob.isPresent()));
+
+    TaskExternalJob job = afcJob.get();
+    assertEquals("7158cbab-a42b-4cb9-9656-8db72521d13d", job.getId());
+    assertEquals("6158cbab-a42b-4cb9-9656-8db72521d13d", job.getTaskId());
+    assertEquals("Task 1", job.getTaskName());
+    assertEquals("5158cbab-a42b-4cb9-9656-8db72521d13d", job.getTaskListId());
+    assertEquals("Task List 1", job.getTaskListName());
+    assertEquals("1", job.getTaskListInstance());
+    assertEquals("7158cbab-a42b-4cb9-9656-8db72521d13d", job.getExternalJobId());
+    assertEquals("7158cbab-a42b-4cb9-9656-8db72521d13e", job.getExternalJobGroupId());
+    assertEquals("JOB_1", job.getExternalJobName());
+    assertEquals("3a89dfec-59f9-4a91-90fe-3c7ca7407103", job.getExternalJobReferenceId());
+    assertEquals("requested", job.getJobStatus());
+    assertEquals("thirdparty", job.getJobType());
+  }
+
+  @Test
+  @WithMockUser("authenticated")
+  public void afcJobUpdate() {
+    Locale.setDefault(Locale.ENGLISH);
+    Job job = Job.of(
+      Map.of(
+        "definition_name",
+        "JOB_1",
+        "referenceID",
+        "7158cbab-a42b-4cb9-9656-8db72521d13d",
+        "status_code",
+        JobStatusCode.REQUESTED,
+        "version",
+        "1"
+      )
+    );
+    EventContext eventContext = EventContext.create(ProcessJobContext.CDS_NAME, Job_.CDS_NAME);
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult result =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResult.create();
+    result.setType(ResultTypeCode.MESSAGE);
+    result.setName("messages");
+    com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
+    message.setCode("jobCompleted");
+    message.setSeverity(MessageSeverityCode.INFO);
+    result.setMessages(List.of(message));
+
+    Job job1 = Job.of(Map.of("definition_name", "JOB_1", "status_code", JobStatusCode.REQUESTED, "version", "1"));
+
+    Exception exception = assertThrows(Exception.class, () ->
+      processingHandler.afcUpdateJob(eventContext, job1, JobStatusCode.COMPLETED, List.of(result))
+    );
+    assertEquals(messageProvider.get("referenceIDMissing", null, Locale.ENGLISH), exception.getMessage());
+
+    Job job2 = Job.of(
+      Map.of("definition_name", "JOB_1", "referenceID", "xxx", "status_code", JobStatusCode.REQUESTED, "version", "1")
+    );
+
+    exception = assertThrows(Exception.class, () ->
+      processingHandler.afcUpdateJob(eventContext, job2, JobStatusCode.COMPLETED, List.of(result))
+    );
+
+    assertEquals(messageProvider.get("jobNotFound", new String[] { "xxx" }, Locale.ENGLISH), exception.getMessage());
+
+    processingHandler.afcUpdateJob(eventContext, job, JobStatusCode.COMPLETED, List.of(result));
+
+    TaskExternalJobInput jobInput = persistenceService
+      .run(Select.from(TaskExternalJobInput_.class))
+      .single(TaskExternalJobInput.class);
+    assertEquals(job.getReferenceID(), jobInput.getExternalJobId());
+    assertEquals(JobStatusCode.COMPLETED, jobInput.getJobStatus());
+    assertEquals(ExternalRequestStatus.OPEN, jobInput.getRequestStatus());
   }
 }

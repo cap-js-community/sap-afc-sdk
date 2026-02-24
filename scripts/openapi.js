@@ -171,6 +171,7 @@ function processSchedulingProviderService(check, skip) {
             {
               name: "taskListStatusChanged",
               ID: "3a89dfec-59f9-4a91-90fe-3c7ca7407103",
+              code: "TASKLIST-1",
               value: "obsolete",
             },
           ],
