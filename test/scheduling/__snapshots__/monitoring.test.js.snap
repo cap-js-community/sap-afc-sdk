@@ -3060,7 +3060,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
           "description": "Task List ID",
           "enumValues": [],
           "job_name": "JOB_6",
-          "mappingType_code": "taskListID",
+          "mappingType_code": "taskListUUID",
           "name": "taskListID",
           "required": false,
           "type_code": "mapping",

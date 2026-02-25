@@ -22,4 +22,4 @@ E;JOB_4;Parameter E;mapping;number;;true;fiscalYear;
 status;JOB_6;Status;writableValue;string;completed;false;;
 duration;JOB_6;Duration;writableValue;number;10;false;;
 date;JOB_6;Date;writableValue;date;;false;;
-taskListID;JOB_6;Task List ID;mapping;string;;false;taskListID;
+taskListID;JOB_6;Task List ID;mapping;string;;false;taskListUUID;
