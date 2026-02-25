@@ -1,12 +1,12 @@
 {
   "name": "@cap-js-community/sap-afc-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SAP Advanced Financial Closing SDK for CDS",
   "homepage": "https://cap.cloud.sap/",
   "engines": {
     "node": ">=22"
   },
-  "author": "Oliver Klemenz <oliver.klemenz@sap.com>, Gruenfelder, Maximilian <maximilian.gruenfelder@sap.com>",
+  "author": "Oliver Klemenz <oliver.klemenz@sap.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
