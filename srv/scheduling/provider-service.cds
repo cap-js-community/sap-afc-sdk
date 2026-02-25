@@ -217,6 +217,7 @@ service ProviderService {
     taskListStatusChanged;
   };
 
+  @open
   type Notification {
     name  : NotificationName not null;
     ID    : String(255);
