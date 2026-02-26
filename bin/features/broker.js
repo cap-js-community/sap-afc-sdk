@@ -219,18 +219,6 @@ function addXsuaaBroker() {
     if (yaml.getIn(["xsuaa", "servicePlanName"])) {
       yaml.setIn(["xsuaa", "servicePlanName"], "broker");
     }
-
-    // TODO: Remove (cap/issues/19545)
-    const bindings = yaml.getIn(["html5-apps-deployer", "bindings"]);
-    if (bindings && !bindings.get("xsuaa")) {
-      bindings.set(
-        "xsuaa",
-        yaml.createNode({
-          serviceInstanceName: "xsuaa",
-        }),
-      );
-    }
-
     return yaml;
   });
 }

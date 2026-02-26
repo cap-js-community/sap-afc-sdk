@@ -13,5 +13,5 @@ npx cds init afcjdk --java
 cd afcjdk
 cp ../../.npmrc . && npm install ../../../ # npm install github:cap-js-community/sap-afc-sdk
 npx afc init cf
-npx afc add -a broker,stub,mock,sample,test,http
+npx afc add -a app,broker,stub,mock,sample,test,http
 npm test
