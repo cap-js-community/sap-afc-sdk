@@ -3571,7 +3571,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "1247",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3603,7 +3604,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "681",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3654,7 +3656,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "589",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3775,7 +3778,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "1760",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3823,7 +3827,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "709",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3847,7 +3852,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "221",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3895,7 +3901,8 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "contentTransferEncoding": "binary",
     "error": undefined,
     "headers": {
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-length": "709",
+      "content-type": "application/json; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3909,7 +3916,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-disposition": "attachment; filename="test.txt"",
-      "content-type": "application/json;odata.metadata=minimal",
+      "content-type": "text/plain; charset=utf-8",
       "odata-version": "4.0",
     },
     "status": 200,
