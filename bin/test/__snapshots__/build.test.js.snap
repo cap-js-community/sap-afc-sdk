@@ -1365,6 +1365,7 @@ resources:
                 ProxyType: Internet
                 HTML5.ForwardAuthToken: true
                 HTML5.DynamicDestination: true
+
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
@@ -3992,6 +3993,7 @@ resources:
                 ProxyType: Internet
                 HTML5.ForwardAuthToken: true
                 HTML5.DynamicDestination: true
+
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
