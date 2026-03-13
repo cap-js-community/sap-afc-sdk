@@ -10,7 +10,7 @@
   "devDependencies": {
     "@ui5/cli": "^4.0.48",
     "@sap/ux-ui5-tooling": "^1.20.4",
-    "ui5-task-zipper": "^3.5.1"
+    "ui5-task-zipper": "^3.6.0"
   },
   "scripts": {
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
