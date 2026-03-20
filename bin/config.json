@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "broker": ["xsuaa"],
-    "app": ["html5-repo", "workzone"]
+    "app": ["workzone"]
   },
   "excludes": {
     "kyma": ["redis"]
