@@ -15,9 +15,9 @@ runs:
     - name: Setup Kubectl
       uses: azure/setup-kubectl@v5
     - name: Setup Tools
-      uses: buildpacks/github-actions/setup-tools@v5.11.0
+      uses: buildpacks/github-actions/setup-tools@v5.12.0
     - name: Setup Pack
-      uses: buildpacks/github-actions/setup-pack@v5.11.0
+      uses: buildpacks/github-actions/setup-pack@v5.12.0
     - name: Setup Kube
       run: |
         mkdir ${HOME}/kyma-binaries
