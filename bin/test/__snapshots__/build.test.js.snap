@@ -1284,6 +1284,13 @@ modules:
   - name: afcsdk-app-deployer
     type: com.sap.application.content
     path: .
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: afcsdkscheduling.monitoring.job
+          artifacts:
+            - scheduling.monitoring.job.zip
+          target-path: resources
     requires:
       - name: srv-api
       - name: afcsdk-html5-repo-host
@@ -1292,13 +1299,6 @@ modules:
           config:
             HTML5Runtime_enabled: true
       - name: afcsdk-auth
-    build-parameters:
-      build-result: resources
-      requires:
-        - name: afcsdkscheduling.monitoring.job
-          artifacts:
-            - scheduling.monitoring.job.zip
-          target-path: resources
 
   - name: afcsdkscheduling.monitoring.job
     type: html5
@@ -3898,6 +3898,13 @@ modules:
   - name: afcsdk-app-deployer
     type: com.sap.application.content
     path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: afcsdkscheduling.monitoring.job
+          artifacts:
+            - scheduling.monitoring.job.zip
+          target-path: app/
     requires:
       - name: srv-api
       - name: afcsdk-html5-repo-host
@@ -3906,13 +3913,6 @@ modules:
           config:
             HTML5Runtime_enabled: true
       - name: afcsdk-auth
-    build-parameters:
-      build-result: app/
-      requires:
-        - name: afcsdkscheduling.monitoring.job
-          artifacts:
-            - scheduling.monitoring.job.zip
-          target-path: app/
 
   - name: afcsdkscheduling.monitoring.job
     type: html5
