@@ -12,6 +12,7 @@ const {
   generateHashBrokerPassword,
   adjustYAMLDocument,
   adjustYAMLAllDocuments,
+  adjustJSON,
 } = require("../common/util");
 const YAML = require("yaml");
 const shelljs = require("shelljs");
@@ -130,6 +131,18 @@ module.exports = (options) => {
 
   let brokerWritten = false;
   if (isNode(options)) {
+    adjustJSON("package.json", (json) => {
+      if (!json.cds?.requires?.["sap-afc-sdk"]?.broker) {
+        json.cds ??= {};
+        json.cds.requires ??= {};
+        json.cds.requires["sap-afc-sdk"] ??= {};
+        json.cds.requires.broker = {
+          "[production]": {
+            broker: true,
+          },
+        };
+      }
+    });
     writeFile(CATALOG_PATH, CATALOG);
     if (writeFile(BROKER_PATH, BROKER)) {
       brokerWritten = true;

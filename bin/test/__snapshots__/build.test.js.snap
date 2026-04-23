@@ -1299,6 +1299,16 @@ modules:
           config:
             HTML5Runtime_enabled: true
       - name: afcsdk-auth
+    parameters:
+      config:
+        destinations:
+          - Name: srv-api
+            URL: ~{srv-api/srv-url}
+            Authentication: NoAuthentication
+            Type: HTTP
+            ProxyType: Internet
+            HTML5.ForwardAuthToken: true
+            HTML5.DynamicDestination: true
 
   - name: afcsdkscheduling.monitoring.job
     type: html5
@@ -1354,20 +1364,6 @@ resources:
     parameters:
       service: destination
       service-plan: lite
-      config:
-        HTML5Runtime_enabled: true
-        init_data:
-          instance:
-            existing_destinations_policy: update
-            destinations:
-              - Name: srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
-
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
@@ -2885,6 +2881,11 @@ exports[`Build Node / CF 1`] = `
         }
       },
       "workzone": true,
+      "broker": {
+        "[production]": {
+          "broker": true
+        }
+      },
       "sapafcsdk.scheduling.ProcessingService": {
         "queued": {
           "events": {
@@ -3913,6 +3914,16 @@ modules:
           config:
             HTML5Runtime_enabled: true
       - name: afcsdk-auth
+    parameters:
+      config:
+        destinations:
+          - Name: srv-api
+            URL: ~{srv-api/srv-url}
+            Authentication: NoAuthentication
+            Type: HTTP
+            ProxyType: Internet
+            HTML5.ForwardAuthToken: true
+            HTML5.DynamicDestination: true
 
   - name: afcsdkscheduling.monitoring.job
     type: html5
@@ -3984,20 +3995,6 @@ resources:
     parameters:
       service: destination
       service-plan: lite
-      config:
-        HTML5Runtime_enabled: true
-        init_data:
-          instance:
-            existing_destinations_policy: update
-            destinations:
-              - Name: srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
-
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
@@ -4079,6 +4076,11 @@ exports[`Build Node / Kyma 1`] = `
         }
       },
       "workzone": true,
+      "broker": {
+        "[production]": {
+          "broker": true
+        }
+      },
       "sapafcsdk.scheduling.ProcessingService": {
         "queued": {
           "events": {

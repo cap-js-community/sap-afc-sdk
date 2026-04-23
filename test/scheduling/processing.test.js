@@ -426,7 +426,7 @@ describe("Processing Service", () => {
     expect(entry.status).toBe(3);
     expect(JSON.parse(entry.error)).toMatchObject({
       message: "ASSERT_DATA_TYPE",
-      name: "Error",
+      name: "ValidationError",
       stack: "ASSERT_DATA_TYPE",
       target: "results[0]/data",
     });
@@ -709,7 +709,7 @@ describe("Processing Service", () => {
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
-        name: "Error",
+        name: "ValidationError",
         message: "ASSERT_ARRAY",
         stack: "ASSERT_ARRAY",
         target: "results",
@@ -1069,7 +1069,7 @@ describe("Processing Service", () => {
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
         message: "ASSERT_ARRAY",
-        name: "Error",
+        name: "ValidationError",
         stack: "ASSERT_ARRAY",
         target: "results[0]/messages",
       });
@@ -1231,14 +1231,9 @@ describe("Processing Service", () => {
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
-        args: [
-          "xxx",
-          {
-            type: "cds.Timestamp",
-          },
-        ],
+        args: ["xxx", "Timestamp"],
         message: "ASSERT_DATA_TYPE",
-        name: "Error",
+        name: "ValidationError",
         stack: "ASSERT_DATA_TYPE",
         target: "results[0]/messages[0]/createdAt",
       });

@@ -2421,14 +2421,14 @@ exports[`Monitoring Service Get Codelists 1`] = `
   "@odata.context": "$metadata#JobStatus",
   "value": [
     {
-      "code": "cancelRequested",
-      "descr": "Requested",
-      "name": "Cancel Requested",
-    },
-    {
       "code": "canceled",
       "descr": "Canceled",
       "name": "Canceled",
+    },
+    {
+      "code": "cancelRequested",
+      "descr": "Requested",
+      "name": "Cancellation Requested",
     },
     {
       "code": "completed",
@@ -2438,12 +2438,12 @@ exports[`Monitoring Service Get Codelists 1`] = `
     {
       "code": "completedWithError",
       "descr": "Error",
-      "name": "Completed With Error",
+      "name": "Completed with Error",
     },
     {
       "code": "completedWithWarning",
       "descr": "Warning",
-      "name": "Completed With Warning",
+      "name": "Completed with Warning",
     },
     {
       "code": "failed",
@@ -2554,8 +2554,8 @@ exports[`Monitoring Service Get Codelists 5`] = `
     },
     {
       "code": "chartOfAccounts",
-      "descr": "Chart Of Accounts",
-      "name": "Chart Of Accounts",
+      "descr": "Chart of Accounts",
+      "name": "Chart of Accounts",
     },
     {
       "code": "companyCode",
@@ -3559,7 +3559,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
           "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
           "status": {
             "code": "completedWithError",
-            "name": "Completed With Error",
+            "name": "Completed with Error",
           },
           "status_code": "completedWithError",
           "testRun": false,
@@ -3594,7 +3594,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
       "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
       "status": {
         "code": "completedWithError",
-        "name": "Completed With Error",
+        "name": "Completed with Error",
       },
       "status_code": "completedWithError",
       "testRun": false,
@@ -3973,7 +3973,7 @@ exports[`Monitoring Service Get UI Flow 1`] = `
       "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
       "status": {
         "code": "completedWithError",
-        "name": "Completed With Error",
+        "name": "Completed with Error",
       },
       "status_code": "completedWithError",
       "testRun": false,
@@ -3998,7 +3998,7 @@ exports[`Monitoring Service Get UI Flow 2`] = `
   "referenceID": "9158cbab-a42b-4cb9-9656-8db72521d13d",
   "status": {
     "code": "completedWithError",
-    "name": "Completed With Error",
+    "name": "Completed with Error",
   },
   "status_code": "completedWithError",
   "testRun": false,

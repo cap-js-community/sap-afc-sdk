@@ -44,12 +44,12 @@ describe("Provider Service", () => {
       axios.defaults.headers = {
         Authorization: "",
       };
-      await expect(GET("/api-docs/api/job-scheduling/v1/")).rejects.toThrow("Request failed with status code 401");
+      await expect(GET("/api-docs/api/job-scheduling/v1/")).rejects.toThrow("401 - Unauthorized");
       cds.env.requires.auth.restrict_all_services = false;
     });
 
     it("GET API Docs - not found", async () => {
-      await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("Request failed with status code 404");
+      await expect(GET("/api-docs/api/job-scheduling/v0/")).rejects.toThrow("404 - Not Found");
     });
   });
 
@@ -124,8 +124,7 @@ describe("Provider Service", () => {
     expect(response.data).toHaveLength(2);
     cds.env.query.limit.max = limitMax;
 
-    response = await GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters");
-    expect(response.data[0].parameters).toBeUndefined();
+    await expect(GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters")).rejects.toThrow("400 - Bad Request");
 
     response = await GET("/api/job-scheduling/v1/JobDefinition?$filter=name eq 'JOB_1'");
     expect(response.data).toHaveLength(6);
@@ -254,8 +253,9 @@ describe("Provider Service", () => {
     expect(response.data).toHaveLength(2);
     cds.env.query.limit.max = limitMax;
 
-    response = await GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103?$expand=parameters");
-    expect(response.data.parameters).toBeUndefined();
+    await expect(
+      GET("/api/job-scheduling/v1/Job/3a89dfec-59f9-4a91-90fe-3c7ca7407103?$expand=parameters"),
+    ).rejects.toThrow("400 - Bad Request");
 
     response = await GET("/api/job-scheduling/v1/Job?$filter=name eq 'JOB_1'");
     expect(response.data).toHaveLength(3);
@@ -368,8 +368,9 @@ describe("Provider Service", () => {
 
     response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
     expect(response.data).toEqual([]);
-    response = await GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages");
-    expect(response.data.messages).toBeUndefined();
+    await expect(
+      GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages"),
+    ).rejects.toThrow("400 - Bad Request");
   });
 
   it("GET Job Result Data", async () => {
