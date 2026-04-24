@@ -12,7 +12,6 @@ const {
   adjustAllLines,
   copyFolderAdjusted,
   projectName,
-  adjustYAMLDocument,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
@@ -144,19 +143,6 @@ module.exports = (options) => {
 
       // cds add
       shelljs.exec(`cds add ${config.dependencies.app.join(",")} ${config.options.cds}`);
-
-      // TODO: Remove (cap/issues/19545)
-      adjustYAMLDocument("chart/Chart.yaml", (yaml) => {
-        const dependencies = yaml.get("dependencies");
-        if (dependencies && !dependencies.items.find((d) => d.get("alias") === "html5-apps-repo-runtime")) {
-          dependencies.items.push({
-            name: "service-instance",
-            alias: "html5-apps-repo-runtime",
-            version: ">0.0.0",
-          });
-        }
-        return yaml;
-      });
     }
   } catch (err) {
     console.error(err.message);

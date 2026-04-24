@@ -5,7 +5,7 @@ const cds = require("@sap/cds");
 const { authorization, cleanData, clearEventQueue, eventQueueEntry, connectToWS, processQueue } = require("../helper");
 const { JobStatus, MessageSeverity, ResultType } = require("../../srv/scheduling/common/codelist");
 
-const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
+const { GET, POST, PUT, DELETE, test, defaults } = cds.test(__dirname + "/../..");
 
 process.env.VCAP_APPLICATION = JSON.stringify({
   uris: ["sap-afc-sdk-srv.sap.com"],
@@ -20,7 +20,7 @@ describe("Provider Service", () => {
   const log = cds.test.log();
 
   beforeEach(async () => {
-    axios.defaults.headers = {
+    defaults.headers = {
       Authorization: authorization.alice,
     };
     await clearEventQueue();
@@ -41,7 +41,7 @@ describe("Provider Service", () => {
 
     it("GET API Docs - not auth", async () => {
       cds.env.requires.auth.restrict_all_services = true;
-      axios.defaults.headers = {
+      defaults.headers = {
         Authorization: "",
       };
       await expect(GET("/api-docs/api/job-scheduling/v1/")).rejects.toThrow("401 - Unauthorized");
@@ -124,7 +124,14 @@ describe("Provider Service", () => {
     expect(response.data).toHaveLength(2);
     cds.env.query.limit.max = limitMax;
 
-    await expect(GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters")).rejects.toThrow("400 - Bad Request");
+    await expect(GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters")).rejects.toMatchObject({
+      response: {
+        data: {
+          code: "400",
+          message: "EXPAND_MAX_LEVELS_EXCEEDED",
+        },
+      },
+    });
 
     response = await GET("/api/job-scheduling/v1/JobDefinition?$filter=name eq 'JOB_1'");
     expect(response.data).toHaveLength(6);

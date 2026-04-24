@@ -2,8 +2,8 @@ code;name;descr
 requested;Requested;Requested
 running;Running;Running
 completed;Completed;Completed
-completedWithWarning;Completed With Warning;Warning
-completedWithError;Completed With Error;Error
+completedWithWarning;Completed with Warning;Warning
+completedWithError;Completed with Error;Error
 failed;Failed;Failed
 cancelRequested;Cancel Requested;Requested
 canceled;Canceled;Canceled

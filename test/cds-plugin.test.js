@@ -7,7 +7,7 @@ const { config: eventQueueConfig } = require("@cap-js-community/event-queue");
 
 const log = cds.test.log();
 
-const { GET, POST, axios, test } = cds.test(__dirname + "/..");
+const { GET, POST, test, defaults } = cds.test(__dirname + "/..");
 
 process.env.PORT = 0; // Random
 
@@ -43,7 +43,7 @@ cds.env.requires["sap-afc-sdk"].broker = {
 
 describe("CDS Plugin", () => {
   beforeEach(async () => {
-    axios.defaults.headers = {
+    defaults.headers = {
       Authorization: authorization.zeus,
     };
     await clearEventQueue();

@@ -4,13 +4,13 @@ const cds = require("@sap/cds");
 
 const { authorization, cleanData, clearEventQueue, connectToWS, processQueue, callBatch } = require("../helper");
 
-const { GET, POST, PUT, DELETE, axios, test } = cds.test(__dirname + "/../..");
+const { GET, POST, PUT, DELETE, test, defaults } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
 
 describe("Monitoring Service", () => {
   beforeEach(async () => {
-    axios.defaults.headers = {
+    defaults.headers = {
       Authorization: authorization.alice,
     };
     await clearEventQueue();

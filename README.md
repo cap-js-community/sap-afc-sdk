@@ -236,8 +236,8 @@ Options can be passed to SDK via CDS environment in `cds.requires.sap-afc-sdk` s
   - `mockProcessing.default: String`: Default processing status. Default is `completed`
   - `mockProcessing.status: Object`: Status distribution values. Default is `{}`
     - `mockProcessing.status.completed: Number`: Completed status distribution value. Default is `0`
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default is `0`
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithWarning: Number`: `Completed with Warning` status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithError: Number`: `Completed with Error` status distribution value. Default is `0`
     - `mockProcessing.status.failed: Number`: Failed status distribution value. Default is `0`
 - `config: Object`: Advanced SDK configuration. See [config.json](./config.json). Default is `{}`
 
@@ -859,8 +859,8 @@ Options can be passed to SDK via Spring Boot environment in `sap-afc-sdk` sectio
   - `mockProcessing.default: String`: Default processing status. Default is `completed`
   - `mockProcessing.status: Object`: Status distribution values. Default is `{}`
     - `mockProcessing.status.completed: Number`: Completed status distribution value. Default is `0`
-    - `mockProcessing.status.completedWithWarning: Number`: Completed With Warning status distribution value. Default is `0`
-    - `mockProcessing.status.completedWithError: Number`: Completed With Error status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithWarning: Number`: `Completed with Warning` status distribution value. Default is `0`
+    - `mockProcessing.status.completedWithError: Number`: `Completed with Error` status distribution value. Default is `0`
     - `mockProcessing.status.failed: Number`: Failed status distribution value. Default is `0`
 - `syncJob: Object`: Sync job configuration. Default see below
   - `cron: String`: Sync job cron interval. Default is `0 */1 * * * *`
