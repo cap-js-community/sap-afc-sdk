@@ -37,17 +37,17 @@ jobs:
         run: npx afc init kyma
         working-directory: ./afcsdk
         env:
-          CONTAINER_REPOSITORY: ${{ variables.ARTIFACTORY_REPOSITORY }}
-          GLOBAL_DOMAIN: ${{ variables.KYMA_GLOBAL_DOMAIN }}
-          APPROUTER_URL: https://afcsdk-approuter-${{ variables.KYMA_NAMESPACE }}.${{ variables.KYMA_GLOBAL_DOMAIN }}
-          SERVER_URL: https://afcsdk-srv-${{ variables.KYMA_NAMESPACE }}.${{ variables.KYMA_GLOBAL_DOMAIN }}
+          CONTAINER_REPOSITORY: ${{ vars.ARTIFACTORY_REPOSITORY }}
+          GLOBAL_DOMAIN: ${{ vars.KYMA_GLOBAL_DOMAIN }}
+          APPROUTER_URL: https://afcsdk-approuter-${{ vars.KYMA_NAMESPACE }}.${{ vars.KYMA_GLOBAL_DOMAIN }}
+          SERVER_URL: https://afcsdk-srv-${{ vars.KYMA_NAMESPACE }}.${{ vars.KYMA_GLOBAL_DOMAIN }}
       - name: Add SDK features
         run: npx afc add -a broker,stub,mock,sample,test,http
         working-directory: ./afcsdk
         env:
-          BROKER_PASSWORD_HASH: ${{ variables.BROKER_PASSWORD_HASH }}
-          BROKER_SERVICE_ID: ${{ variables.BROKER_SERVICE_KYMA_ID }}
-          BROKER_SERVICE_PLAN_ID: ${{ variables.BROKER_SERVICE_KYMA_PLAN_ID }}
+          BROKER_PASSWORD_HASH: ${{ vars.BROKER_PASSWORD_HASH }}
+          BROKER_SERVICE_ID: ${{ vars.BROKER_SERVICE_KYMA_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ vars.BROKER_SERVICE_KYMA_PLAN_ID }}
       - name: Unit Test
         run: npm test
         working-directory: ./afcsdk
@@ -58,9 +58,9 @@ jobs:
       - name: Login Docker
         uses: docker/login-action@v4
         with:
-          registry: ${{ variables.ARTIFACTORY_REPOSITORY }}
-          username: ${{ variables.ARTIFACTORY_CI_USERNAME }}
+          registry: ${{ vars.ARTIFACTORY_REPOSITORY }}
+          username: ${{ vars.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: CDS Up
-        run: npx cds up --to k8s -n ${{ variables.KYMA_NAMESPACE }}
+        run: npx cds up --to k8s -n ${{ vars.KYMA_NAMESPACE }}
         working-directory: ./afcsdk
