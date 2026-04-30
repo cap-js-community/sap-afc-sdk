@@ -39,18 +39,18 @@ jobs:
         run: npx afc add broker,mock
         working-directory: ./afcqa
         env:
-          BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
-          BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
-          BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
+          BROKER_PASSWORD_HASH: ${{ variables.BROKER_PASSWORD_HASH }}
+          BROKER_SERVICE_ID: ${{ variables.BROKER_SERVICE_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ variables.BROKER_SERVICE_PLAN_ID }}
       - name: Install CF actions
         run: npm i @actions/core && npm i @actions/exec && npm i @actions/tool-cache
       - name: Setup CF
         uses: cap-js/cf-setup@v2
         with:
-          api: ${{ secrets.CF_API }}
-          org: ${{ secrets.CF_ORG }}
-          space: ${{ secrets.CF_SPACE }}
-          username: ${{ secrets.CF_USERNAME }}
+          api: ${{ variables.CF_API }}
+          org: ${{ variables.CF_ORG }}
+          space: ${{ variables.CF_SPACE }}
+          username: ${{ variables.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
       - name: CDS Up
         run: npx cds up --to cf

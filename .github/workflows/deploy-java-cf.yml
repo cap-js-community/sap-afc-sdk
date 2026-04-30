@@ -44,9 +44,9 @@ jobs:
         run: npx afc add -a broker,stub,mock,sample,test,http
         working-directory: ./afcjdk
         env:
-          BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_HASH }}
-          BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_ID }}
-          BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_PLAN_ID }}
+          BROKER_PASSWORD_HASH: ${{ variables.BROKER_PASSWORD_HASH }}
+          BROKER_SERVICE_ID: ${{ variables.BROKER_SERVICE_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ variables.BROKER_SERVICE_PLAN_ID }}
       - name: Unit Test
         run: npm test
         working-directory: ./afcjdk
@@ -55,10 +55,10 @@ jobs:
       - name: Setup CF
         uses: cap-js/cf-setup@v2
         with:
-          api: ${{ secrets.CF_API }}
-          org: ${{ secrets.CF_ORG }}
-          space: ${{ secrets.CF_SPACE }}
-          username: ${{ secrets.CF_USERNAME }}
+          api: ${{ variables.CF_API }}
+          org: ${{ variables.CF_ORG }}
+          space: ${{ variables.CF_SPACE }}
+          username: ${{ variables.CF_USERNAME }}
           password: ${{ secrets.CF_PASSWORD }}
       - name: CDS Up
         run: npx cds up --to cf

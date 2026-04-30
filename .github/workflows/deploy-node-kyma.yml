@@ -37,17 +37,17 @@ jobs:
         run: npx afc init kyma
         working-directory: ./afcsdk
         env:
-          CONTAINER_REPOSITORY: ${{ secrets.ARTIFACTORY_REPOSITORY }}
-          GLOBAL_DOMAIN: ${{ secrets.KYMA_GLOBAL_DOMAIN }}
-          APPROUTER_URL: https://afcsdk-approuter-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
-          SERVER_URL: https://afcsdk-srv-${{ secrets.KYMA_NAMESPACE }}.${{ secrets.KYMA_GLOBAL_DOMAIN }}
+          CONTAINER_REPOSITORY: ${{ variables.ARTIFACTORY_REPOSITORY }}
+          GLOBAL_DOMAIN: ${{ variables.KYMA_GLOBAL_DOMAIN }}
+          APPROUTER_URL: https://afcsdk-approuter-${{ variables.KYMA_NAMESPACE }}.${{ variables.KYMA_GLOBAL_DOMAIN }}
+          SERVER_URL: https://afcsdk-srv-${{ variables.KYMA_NAMESPACE }}.${{ variables.KYMA_GLOBAL_DOMAIN }}
       - name: Add SDK features
         run: npx afc add -a broker,stub,mock,sample,test,http
         working-directory: ./afcsdk
         env:
-          BROKER_PASSWORD_HASH: ${{ secrets.BROKER_PASSWORD_KYMA_HASH }}
-          BROKER_SERVICE_ID: ${{ secrets.BROKER_SERVICE_KYMA_ID }}
-          BROKER_SERVICE_PLAN_ID: ${{ secrets.BROKER_SERVICE_KYMA_PLAN_ID }}
+          BROKER_PASSWORD_HASH: ${{ variables.BROKER_PASSWORD_HASH }}
+          BROKER_SERVICE_ID: ${{ variables.BROKER_SERVICE_KYMA_ID }}
+          BROKER_SERVICE_PLAN_ID: ${{ variables.BROKER_SERVICE_KYMA_PLAN_ID }}
       - name: Unit Test
         run: npm test
         working-directory: ./afcsdk
@@ -58,9 +58,9 @@ jobs:
       - name: Login Docker
         uses: docker/login-action@v4
         with:
-          registry: ${{ secrets.ARTIFACTORY_REPOSITORY }}
-          username: ${{ secrets.ARTIFACTORY_CI_USERNAME }}
+          registry: ${{ variables.ARTIFACTORY_REPOSITORY }}
+          username: ${{ variables.ARTIFACTORY_CI_USERNAME }}
           password: ${{ secrets.ARTIFACTORY_TOKEN }}
       - name: CDS Up
-        run: npx cds up --to k8s -n ${{ secrets.KYMA_NAMESPACE }}
+        run: npx cds up --to k8s -n ${{ variables.KYMA_NAMESPACE }}
         working-directory: ./afcsdk
