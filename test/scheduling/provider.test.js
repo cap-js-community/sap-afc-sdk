@@ -127,8 +127,8 @@ describe("Provider Service", () => {
     await expect(GET("/api/job-scheduling/v1/JobDefinition?$expand=parameters")).rejects.toMatchObject({
       response: {
         data: {
-          code: "400",
-          message: "EXPAND_MAX_LEVELS_EXCEEDED",
+          code: "EXPAND_MAX_LEVELS_EXCEEDED",
+          message: "Expand depth exceeds the maximum allowed level of 0",
         },
       },
     });
