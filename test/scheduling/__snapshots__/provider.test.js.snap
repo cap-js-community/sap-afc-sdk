@@ -414,7 +414,7 @@ exports[`Provider Service Create Job (translation) 9`] = `
   {
     "code": "jobCompleted",
     "severity": "info",
-    "text": "Job completed successfully",
+    "text": "Job completed successfully.",
     "values": [],
   },
 ]
@@ -425,7 +425,7 @@ exports[`Provider Service Create Job (translation) 10`] = `
   {
     "code": "jobCompleted",
     "severity": "info",
-    "text": "Job erfolgreich abgeschlossen.",
+    "text": "Job completed successfully.",
     "values": [],
   },
 ]

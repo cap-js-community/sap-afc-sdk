@@ -89,7 +89,7 @@ describe("Processing Service", () => {
     }
     result = await SELECT.one.from("sapafcsdk.scheduling.JobResult").columns("data").where({ ID: jobDataTextResultID });
     let data = await text(result.data);
-    expect(data).toEqual("Job completed successfully");
+    expect(data).toEqual("Job completed successfully.");
     result = await SELECT.one.from("sapafcsdk.scheduling.JobResult").columns("data").where({ ID: jobDataPDFResultID });
     data = await buffer(result.data); //
     const fileData = fs.readFileSync("./srv/scheduling/assets/log.pdf");
@@ -599,7 +599,7 @@ describe("Processing Service", () => {
             messages: [
               {
                 code: "jobCompleted",
-                text: "Job completed successfully",
+                text: "Job completed successfully.",
                 severity: "info",
               },
             ],

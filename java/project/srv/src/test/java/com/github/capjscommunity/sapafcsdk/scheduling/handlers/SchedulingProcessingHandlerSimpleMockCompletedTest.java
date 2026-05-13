@@ -126,7 +126,7 @@ public class SchedulingProcessingHandlerSimpleMockCompletedTest {
     JobResult jobResult = persistenceService
       .run(Select.from(Scheduling_.JOB_RESULT).byId(textResultID))
       .single(com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.JobResult.class);
-    assertEquals("Job completed successfully", new String(jobResult.getData().readAllBytes()));
+    assertEquals("Job completed successfully.", new String(jobResult.getData().readAllBytes()));
 
     String pdfResultID = jobResults
       .stream()
