@@ -6,5 +6,5 @@ import org.springframework.cloud.servicebroker.autoconfigure.web.servlet.Service
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableAutoConfiguration(exclude = { ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = {ServiceBrokerAutoConfiguration.class, ServiceBrokerWebMvcAutoConfiguration.class})
 public class ApplicationConfig {}

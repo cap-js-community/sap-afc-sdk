@@ -29,7 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedWithWarningConfig.class })
+@ContextConfiguration(classes = {OutboxTestConfig.class, TestSimpleCompletedWithWarningConfig.class})
 public class SchedulingProcessingHandlerSimpleMockCompletedWithWarningTest {
 
   @Autowired

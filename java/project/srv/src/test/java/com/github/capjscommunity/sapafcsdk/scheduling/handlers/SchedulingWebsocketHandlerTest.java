@@ -29,7 +29,7 @@ import org.springframework.web.socket.WebSocketMessage;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class })
+@ContextConfiguration(classes = {OutboxTestConfig.class})
 public class SchedulingWebsocketHandlerTest {
 
   @Autowired

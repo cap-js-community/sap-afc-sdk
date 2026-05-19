@@ -33,7 +33,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class, TestAdvancedConfig.class })
+@ContextConfiguration(classes = {OutboxTestConfig.class, TestAdvancedConfig.class})
 public class SchedulingProcessingHandlerAdvancedMockTest {
 
   @Autowired

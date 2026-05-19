@@ -51,10 +51,11 @@ public class ServiceInstanceBindingServiceImpl implements ServiceInstanceBinding
     UUID bindingId = UUID.fromString(request.getBindingId());
     return xsuaaClient
       .getXsuaaCloneBinding(serviceInstanceId.toString(), bindingId.toString())
-      .map(xsuaaData ->
-        (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
-          .credentials(credentials(xsuaaData))
-          .build()
+      .map(
+        xsuaaData ->
+          (GetServiceInstanceBindingResponse) GetServiceInstanceAppBindingResponse.builder()
+            .credentials(credentials(xsuaaData))
+            .build()
       )
       .switchIfEmpty(
         Mono.error(new IllegalArgumentException(format(BINDING_NOT_FOUND_ERROR, bindingId, serviceInstanceId)))

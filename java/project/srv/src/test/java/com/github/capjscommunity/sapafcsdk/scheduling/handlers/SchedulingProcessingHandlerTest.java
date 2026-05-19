@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = { OutboxTestConfig.class })
+@ContextConfiguration(classes = {OutboxTestConfig.class})
 public class SchedulingProcessingHandlerTest {
 
   @Autowired
@@ -478,7 +478,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.processJob("XXX", false);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] { "XXX" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] {"XXX"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
   }
@@ -506,7 +506,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob("XXX", JobStatusCode.RUNNING, null);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] { "XXX" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] {"XXX"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -522,7 +522,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, "XXX", null);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("invalidJobStatus", new String[] { "XXX" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("invalidJobStatus", new String[] {"XXX"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -533,7 +533,7 @@ public class SchedulingProcessingHandlerTest {
       exception
         .getMessage()
         .contains(
-          messageProvider.get("statusTransitionNotAllowed", new String[] { "requested", "completed" }, Locale.ENGLISH)
+          messageProvider.get("statusTransitionNotAllowed", new String[] {"requested", "completed"}, Locale.ENGLISH)
         ),
       "Expected exception message not found: " + exception.getMessage()
     );
@@ -598,7 +598,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("invalidResultType", new String[] { "X" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("invalidResultType", new String[] {"X"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -612,7 +612,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("linkMissing", new String[] { "link" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("linkMissing", new String[] {"link"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -626,9 +626,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results5);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("mimeTypeNotAllowed", new String[] { "link" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("mimeTypeNotAllowed", new String[] {"link"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -642,9 +640,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results6);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("filenameNotAllowed", new String[] { "link" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("filenameNotAllowed", new String[] {"link"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -659,7 +655,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results7);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("dataNotAllowed", new String[] { "link" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("dataNotAllowed", new String[] {"link"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -684,9 +680,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results8);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("messagesNotAllowed", new String[] { "link" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("messagesNotAllowed", new String[] {"link"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -722,7 +716,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("mimeTypeMissing", new String[] { "data" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("mimeTypeMissing", new String[] {"data"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -736,7 +730,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("filenameMissing", new String[] { "data" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("filenameMissing", new String[] {"data"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -750,7 +744,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results3);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("dataMissing", new String[] { "data" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("dataMissing", new String[] {"data"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -778,7 +772,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results4);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("linkNotAllowed", new String[] { "data" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("linkNotAllowed", new String[] {"data"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -807,9 +801,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results5);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("messagesNotAllowed", new String[] { "data" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("messagesNotAllowed", new String[] {"data"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -845,9 +837,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results1);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("messagesMissing", new String[] { "message" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("messagesMissing", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -870,9 +860,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results2);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("messagesMissing", new String[] { "message" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("messagesMissing", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -940,7 +928,7 @@ public class SchedulingProcessingHandlerTest {
     assertTrue(
       exception
         .getMessage()
-        .contains(messageProvider.get("invalidMessageSeverity", new String[] { "X" }, Locale.ENGLISH)),
+        .contains(messageProvider.get("invalidMessageSeverity", new String[] {"X"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -961,9 +949,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results6);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("linkNotAllowed", new String[] { "message" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("linkNotAllowed", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -986,7 +972,7 @@ public class SchedulingProcessingHandlerTest {
     assertTrue(
       exception
         .getMessage()
-        .contains(messageProvider.get("mimeTypeNotAllowed", new String[] { "message" }, Locale.ENGLISH)),
+        .contains(messageProvider.get("mimeTypeNotAllowed", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1009,7 +995,7 @@ public class SchedulingProcessingHandlerTest {
     assertTrue(
       exception
         .getMessage()
-        .contains(messageProvider.get("filenameNotAllowed", new String[] { "message" }, Locale.ENGLISH)),
+        .contains(messageProvider.get("filenameNotAllowed", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1031,9 +1017,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results9);
     });
     assertTrue(
-      exception
-        .getMessage()
-        .contains(messageProvider.get("dataNotAllowed", new String[] { "message" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("dataNotAllowed", new String[] {"message"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1090,7 +1074,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.updateJob(ID, JobStatusCode.RUNNING, results11);
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("invalidLocale", new String[] { "xx" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("invalidLocale", new String[] {"xx"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1120,7 +1104,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.cancelJob("XXX");
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] { "XXX" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] {"XXX"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1133,7 +1117,7 @@ public class SchedulingProcessingHandlerTest {
       exception
         .getMessage()
         .contains(
-          messageProvider.get("statusTransitionNotAllowed", new String[] { "running", "canceled" }, Locale.ENGLISH)
+          messageProvider.get("statusTransitionNotAllowed", new String[] {"running", "canceled"}, Locale.ENGLISH)
         ),
       "Expected exception message not found: " + exception.getMessage()
     );
@@ -1164,7 +1148,7 @@ public class SchedulingProcessingHandlerTest {
       processingService.cancelJob("XXX");
     });
     assertTrue(
-      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] { "XXX" }, Locale.ENGLISH)),
+      exception.getMessage().contains(messageProvider.get("jobNotFound", new String[] {"XXX"}, Locale.ENGLISH)),
       "Expected exception message not found: " + exception.getMessage()
     );
 
@@ -1178,7 +1162,7 @@ public class SchedulingProcessingHandlerTest {
       exception
         .getMessage()
         .contains(
-          messageProvider.get("statusTransitionNotAllowed", new String[] { "completed", "canceled" }, Locale.ENGLISH)
+          messageProvider.get("statusTransitionNotAllowed", new String[] {"completed", "canceled"}, Locale.ENGLISH)
         ),
       "Expected exception message not found: " + exception.getMessage()
     );
@@ -1288,7 +1272,7 @@ public class SchedulingProcessingHandlerTest {
       processingHandler.afcUpdateJob(eventContext, job2, JobStatusCode.COMPLETED, List.of(result))
     );
 
-    assertEquals(messageProvider.get("jobNotFound", new String[] { "xxx" }, Locale.ENGLISH), exception.getMessage());
+    assertEquals(messageProvider.get("jobNotFound", new String[] {"xxx"}, Locale.ENGLISH), exception.getMessage());
 
     processingHandler.afcUpdateJob(eventContext, job, JobStatusCode.COMPLETED, List.of(result));
 

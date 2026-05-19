@@ -110,7 +110,8 @@ public class XsuaaClient {
         ? buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_SUBACCOUNT_ID, subaccountId)
         : buildCreateClonesUriPath(serviceInstanceId, Endpoints.PARAM_ORG_ID, orgId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.post()
+      this.webClient
+        .post()
         .uri(uriPath)
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -139,7 +140,8 @@ public class XsuaaClient {
   public Mono<XsuaaData> getXsuaaClone(String serviceInstanceId) {
     log.info("Getting xsuaa clone for service instance id '{}'", serviceInstanceId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.get()
+      this.webClient
+        .get()
         .uri(format(Endpoints.INSTANCE_URI, serviceInstanceId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -159,7 +161,8 @@ public class XsuaaClient {
   public Mono<Void> deleteXsuaaClone(String serviceInstanceId) {
     log.info("Deleting xsuaa clone for service instance id '{}'", serviceInstanceId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.delete()
+      this.webClient
+        .delete()
         .uri(format(Endpoints.INSTANCE_URI, serviceInstanceId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -184,7 +187,8 @@ public class XsuaaClient {
       stringifyMap(parameters)
     );
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.put()
+      this.webClient
+        .put()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -212,7 +216,8 @@ public class XsuaaClient {
   public Mono<XsuaaData> getXsuaaCloneBinding(String serviceInstanceId, String bindingId) {
     log.info("Getting xsuaa clone binding for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.get()
+      this.webClient
+        .get()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -239,7 +244,8 @@ public class XsuaaClient {
   public Mono<Void> unbindXsuaaClone(String serviceInstanceId, String bindingId) {
     log.info("Unbind xsuaa clone for service instance id '{}' binding id '{}'", serviceInstanceId, bindingId);
     return getOauthToken(xsuaaData).flatMap(token ->
-      this.webClient.delete()
+      this.webClient
+        .delete()
         .uri(format(Endpoints.BINDING_URI, serviceInstanceId, bindingId))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token.getAccessToken()))
@@ -329,7 +335,8 @@ public class XsuaaClient {
   }
 
   public Mono<OAuthToken> getOauthToken(String clientId, String clientSecret, String uaaUrl) {
-    return this.webClient.post()
+    return this.webClient
+      .post()
       .uri(uaaUrl + TOKEN_URI)
       .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
       .body(
@@ -388,9 +395,14 @@ public class XsuaaClient {
     if (value instanceof Map<?, ?> nestedMap) {
       return stringifyMap(nestedMap);
     } else if (value instanceof Collection<?> collection) {
-      return collection.stream().map(XsuaaClient::stringify).collect(Collectors.joining(", ", "[", "]"));
+      return collection
+        .stream()
+        .map(XsuaaClient::stringify)
+        .collect(Collectors.joining(", ", "[", "]"));
     } else if (value instanceof Object[] array) {
-      return Arrays.stream(array).map(XsuaaClient::stringify).collect(Collectors.joining(", ", "[", "]"));
+      return Arrays.stream(array)
+        .map(XsuaaClient::stringify)
+        .collect(Collectors.joining(", ", "[", "]"));
     } else {
       return String.valueOf(value);
     }

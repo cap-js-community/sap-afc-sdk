@@ -52,19 +52,17 @@ public class OutboxTestSetup implements AutoCloseable {
       if (!active) {
         return;
       }
-      context
-        .getChangeSetContext()
-        .register(
-          new ChangeSetListener() {
-            @Override
-            public void afterClose(boolean completed) {
-              try {
-                Thread.sleep(100);
-              } catch (InterruptedException ignored) {}
-              messageDeleted.countDown();
-            }
+      context.getChangeSetContext().register(
+        new ChangeSetListener() {
+          @Override
+          public void afterClose(boolean completed) {
+            try {
+              Thread.sleep(100);
+            } catch (InterruptedException ignored) {}
+            messageDeleted.countDown();
           }
-        );
+        }
+      );
     });
   }
 

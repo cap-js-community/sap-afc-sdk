@@ -82,7 +82,12 @@ public class SchedulingProviderController {
               .description()
               .toLower()
               .plain("like", "'" + pattern + "'")
-              .or(jd.longDescription().toLower().plain("like", "'" + pattern + "'"))
+              .or(
+                jd
+                  .longDescription()
+                  .toLower()
+                  .plain("like", "'" + pattern + "'")
+              )
           )
       );
     }

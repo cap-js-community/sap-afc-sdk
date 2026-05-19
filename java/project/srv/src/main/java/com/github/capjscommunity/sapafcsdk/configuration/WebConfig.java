@@ -35,29 +35,41 @@ public class WebConfig implements WebMvcConfigurer {
     if (afcSdkProperties.getApi() != null && afcSdkProperties.getApi().getCors() != null) {
       apiCors = afcSdkProperties.getApi().getCors();
     }
-    String[] origins = new String[] { this.endpointProvider.approuterTenantUrl(cdsRuntime.getProvidedUserInfo()) };
-    String[] methods = new String[] { "GET", "HEAD", "PUT", "PATCH", "POST", "DELETE" };
-    String[] headers = new String[] { "*" };
+    String[] origins = new String[] {this.endpointProvider.approuterTenantUrl(cdsRuntime.getProvidedUserInfo())};
+    String[] methods = new String[] {"GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"};
+    String[] headers = new String[] {"*"};
     Object originValue = apiCors.get("origin");
     if (Boolean.FALSE.equals(originValue)) {
       return;
     }
     if (originValue instanceof String) {
-      origins = new String[] { (String) originValue };
+      origins = new String[] {(String) originValue};
     } else if (originValue instanceof LinkedHashMap<?, ?>) {
-      origins = ((Map<?, ?>) originValue).values().stream().map(String::valueOf).toArray(String[]::new);
+      origins = ((Map<?, ?>) originValue)
+        .values()
+        .stream()
+        .map(String::valueOf)
+        .toArray(String[]::new);
     }
     Object methodsValue = apiCors.get("methods");
     if (methodsValue instanceof String) {
-      methods = new String[] { (String) methodsValue };
+      methods = new String[] {(String) methodsValue};
     } else if (methodsValue instanceof List) {
-      methods = ((Map<?, ?>) methodsValue).values().stream().map(String::valueOf).toArray(String[]::new);
+      methods = ((Map<?, ?>) methodsValue)
+        .values()
+        .stream()
+        .map(String::valueOf)
+        .toArray(String[]::new);
     }
     Object headersValue = apiCors.get("headers");
     if (headersValue instanceof String) {
-      headers = new String[] { (String) headersValue };
+      headers = new String[] {(String) headersValue};
     } else if (headersValue instanceof Map<?, ?>) {
-      headers = ((Map<?, ?>) headersValue).values().stream().map(String::valueOf).toArray(String[]::new);
+      headers = ((Map<?, ?>) headersValue)
+        .values()
+        .stream()
+        .map(String::valueOf)
+        .toArray(String[]::new);
     }
     boolean credentials = true;
     Object credentialsValue = apiCors.get("credentials");
