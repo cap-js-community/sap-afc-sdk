@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(ProviderService_.CDS_NAME)
-public class CustomSchedulingProviderHandler extends SchedulingProviderBase {
+public class CustomerSchedulingProviderHandler extends SchedulingProviderBase {
 
   @On(event = CqnService.EVENT_CREATE, entity = Job_.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)

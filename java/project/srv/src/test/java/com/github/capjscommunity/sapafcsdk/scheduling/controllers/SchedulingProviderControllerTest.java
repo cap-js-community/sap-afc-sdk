@@ -38,7 +38,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = {OutboxTestConfig.class, TestSimpleCompletedConfig.class})
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleCompletedConfig.class })
 public class SchedulingProviderControllerTest {
 
   @Autowired
@@ -1015,7 +1015,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("errorOnlyRunNotSupported"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("errorOnlyRunNotSupported", new String[] {"JOB_3"}, Locale.ENGLISH)
+          messageProvider.get("errorOnlyRunNotSupported", new String[] { "JOB_3" }, Locale.ENGLISH)
         )
       );
 
@@ -1043,7 +1043,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("errorOnlyRunNotSupported"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("errorOnlyRunNotSupported", new String[] {"JOB_3"}, Locale.ENGLISH)
+          messageProvider.get("errorOnlyRunNotSupported", new String[] { "JOB_3" }, Locale.ENGLISH)
         )
       );
   }
@@ -1283,7 +1283,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidEnum", new String[] {"xxx", "A"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "xxx", "A" }, Locale.ENGLISH)
         )
       );
 
@@ -1313,7 +1313,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueRequired", new String[] {"A"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueRequired", new String[] { "A" }, Locale.ENGLISH)
         )
       );
 
@@ -1344,7 +1344,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidEnum", new String[] {"22", "D"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "22", "D" }, Locale.ENGLISH)
         )
       );
 
@@ -1374,7 +1374,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidEnum", new String[] {"truefalse", "C"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidEnum", new String[] { "truefalse", "C" }, Locale.ENGLISH)
         )
       );
 
@@ -1702,7 +1702,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isNotFound())
       .andExpect(jsonPath("$.code").value("jobDefinitionNotFound"))
       .andExpect(
-        jsonPath("$.message").value(messageProvider.get("jobDefinitionNotFound", new String[] {null}, Locale.ENGLISH))
+        jsonPath("$.message").value(messageProvider.get("jobDefinitionNotFound", new String[] { null }, Locale.ENGLISH))
       );
     JSONObject job = new JSONObject(Map.of("name", "JOB_X"));
     mockMvc
@@ -1716,7 +1716,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobDefinitionNotFound"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobDefinitionNotFound", new String[] {"JOB_X"}, Locale.ENGLISH)
+          messageProvider.get("jobDefinitionNotFound", new String[] { "JOB_X" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(Map.of("name", "JOB_1"));
@@ -1741,7 +1741,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("referenceIDNoUUID"))
       .andExpect(
-        jsonPath("$.message").value(messageProvider.get("referenceIDNoUUID", new String[] {"4711"}, Locale.ENGLISH))
+        jsonPath("$.message").value(messageProvider.get("referenceIDNoUUID", new String[] { "4711" }, Locale.ENGLISH))
       );
     job = new JSONObject(Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327"));
     mockMvc
@@ -1754,7 +1754,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("jobParameterRequired"))
       .andExpect(
-        jsonPath("$.message").value(messageProvider.get("jobParameterRequired", new String[] {"A"}, Locale.ENGLISH))
+        jsonPath("$.message").value(messageProvider.get("jobParameterRequired", new String[] { "A" }, Locale.ENGLISH))
       );
     job = new JSONObject(
       Map.of("name", "JOB_1", "referenceID", "c1253940-5f25-4a0b-8585-f62bd085b327", "startDateTime", "X")
@@ -1813,7 +1813,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("startDateTimeNotSupported"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("startDateTimeNotSupported", new String[] {"JOB_1"}, Locale.ENGLISH)
+          messageProvider.get("startDateTimeNotSupported", new String[] { "JOB_1" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -1856,7 +1856,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("jobParameterNotKnown"))
       .andExpect(
-        jsonPath("$.message").value(messageProvider.get("jobParameterNotKnown", new String[] {"X"}, Locale.ENGLISH))
+        jsonPath("$.message").value(messageProvider.get("jobParameterNotKnown", new String[] { "X" }, Locale.ENGLISH))
       );
     job = new JSONObject(
       Map.of(
@@ -1881,7 +1881,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobParameterValueInvalidType"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidType", new String[] {"xxx", "C", "boolean"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidType", new String[] { "xxx", "C", "boolean" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -1910,7 +1910,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(status().isBadRequest())
       .andExpect(jsonPath("$.code").value("jobParameterReadOnly"))
       .andExpect(
-        jsonPath("$.message").value(messageProvider.get("jobParameterReadOnly", new String[] {"B"}, Locale.ENGLISH))
+        jsonPath("$.message").value(messageProvider.get("jobParameterReadOnly", new String[] { "B" }, Locale.ENGLISH))
       );
     job = new JSONObject(
       Map.of(
@@ -1933,7 +1933,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobParameterValueRequired"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueRequired", new String[] {"C"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueRequired", new String[] { "C" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -1963,7 +1963,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobParameterValueInvalidType"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidType", new String[] {"X", "C", "boolean"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidType", new String[] { "X", "C", "boolean" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -1994,7 +1994,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobParameterValueInvalidType"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidType", new String[] {"X", "D", "number"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidType", new String[] { "X", "D", "number" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -2026,7 +2026,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobParameterValueInvalidType"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobParameterValueInvalidType", new String[] {"X", "E", "datetime"}, Locale.ENGLISH)
+          messageProvider.get("jobParameterValueInvalidType", new String[] { "X", "E", "datetime" }, Locale.ENGLISH)
         )
       );
     job = new JSONObject(
@@ -2100,7 +2100,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobNotFound"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobNotFound", new String[] {"3a89dfec-59f9-4a91-90fe-3c7ca7407104"}, Locale.ENGLISH)
+          messageProvider.get("jobNotFound", new String[] { "3a89dfec-59f9-4a91-90fe-3c7ca7407104" }, Locale.ENGLISH)
         )
       );
   }
@@ -2143,7 +2143,7 @@ public class SchedulingProviderControllerTest {
       .andExpect(jsonPath("$.code").value("jobCannotBeCanceled"))
       .andExpect(
         jsonPath("$.message").value(
-          messageProvider.get("jobCannotBeCanceled", new String[] {"canceled"}, Locale.ENGLISH)
+          messageProvider.get("jobCannotBeCanceled", new String[] { "canceled" }, Locale.ENGLISH)
         )
       );
 

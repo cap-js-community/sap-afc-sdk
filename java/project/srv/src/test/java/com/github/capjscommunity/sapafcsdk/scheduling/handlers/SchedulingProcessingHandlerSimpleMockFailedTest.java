@@ -29,7 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ContextConfiguration(classes = {OutboxTestConfig.class, TestSimpleFailedConfig.class})
+@ContextConfiguration(classes = { OutboxTestConfig.class, TestSimpleFailedConfig.class })
 public class SchedulingProcessingHandlerSimpleMockFailedTest {
 
   @Autowired

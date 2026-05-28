@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @ServiceName(ProcessingService_.CDS_NAME)
 public class SchedulingProcessingHandler extends SchedulingProcessingBase implements EventHandler {
 
-  @Before(event = {ProcessJobContext.CDS_NAME, UpdateJobContext.CDS_NAME, CancelJobContext.CDS_NAME})
+  @Before(event = { ProcessJobContext.CDS_NAME, UpdateJobContext.CDS_NAME, CancelJobContext.CDS_NAME })
   public void beforeEvents(EventContext context) {
     String ID = (String) context.get("ID");
     Select<Job_> query = Select.from(JOB).columns(CQL.star(), CQL.to("parameters").expand()).byId(ID);

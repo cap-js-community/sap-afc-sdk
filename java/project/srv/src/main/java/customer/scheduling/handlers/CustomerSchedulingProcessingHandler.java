@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ServiceName(ProcessingService_.CDS_NAME)
-public class CustomSchedulingProcessingHandler extends SchedulingProcessingBase {
+public class CustomerSchedulingProcessingHandler extends SchedulingProcessingBase {
 
   @On(event = ProcessJobContext.CDS_NAME)
   @HandlerOrder(HandlerOrder.EARLY)

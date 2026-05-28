@@ -374,7 +374,7 @@ public class SchedulingMonitoringHandlerTest {
       .andExpect(status().isNotFound())
       .andExpect(
         jsonPath("$.error.message").value(
-          messageProvider.get("jobNotFound", new String[] {"1a89dfec-59f9-4a91-90fe-3c7ca7407103"}, Locale.ENGLISH)
+          messageProvider.get("jobNotFound", new String[] { "1a89dfec-59f9-4a91-90fe-3c7ca7407103" }, Locale.ENGLISH)
         )
       );
   }
@@ -416,7 +416,7 @@ public class SchedulingMonitoringHandlerTest {
       .andExpect(status().isBadRequest())
       .andExpect(
         jsonPath("$.error.message").value(
-          messageProvider.get("jobCannotBeCanceled", new String[] {"canceled"}, Locale.ENGLISH)
+          messageProvider.get("jobCannotBeCanceled", new String[] { "canceled" }, Locale.ENGLISH)
         )
       );
 
