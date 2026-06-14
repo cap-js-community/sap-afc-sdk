@@ -84,7 +84,7 @@
     "@sap-cloud-sdk/resilience": "^4.7.0",
     "@sap/cds-common-content": "^3.2.0",
     "@sap/sbf": "^6.11.4",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "cors": "^2.8.6",
     "express": "^4.22.2 || ^5.2.1",
     "helmet": "^8.2.0",
