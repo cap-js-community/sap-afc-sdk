@@ -101,7 +101,7 @@
   "devDependencies": {
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/cds-test": "^1.0.1",
-    "@cap-js/sqlite": "^2.4.0",
+    "@cap-js/sqlite": "^3.0.0",
     "@sap/cds": "^9.9.1",
     "@sap/cds-dk": "^9.9.2",
     "@sap/cds-lsp": "^9.9.0",
