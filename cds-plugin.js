@@ -32,11 +32,14 @@ cds.on("bootstrap", () => {
   serveSwaggerUI();
 });
 
+cds.on("served", async () => {
+  await handleFeatureToggles();
+  queueServices();
+  serveApiRoot();
+});
+
 cds.on("listening", () => {
   rerouteWebsocket();
-  serveApiRoot();
-  queueServices();
-  handleFeatureToggles();
 });
 
 function secureRoutes() {
@@ -340,7 +343,8 @@ function queueServices() {
   }
 }
 
-function handleFeatureToggles() {
+async function handleFeatureToggles() {
+  toggles.canInitialize && (await toggles.initializeFeatures());
   // Event-Queue
   for (const name in config.toggles.eventQueue) {
     const toggle = config.toggles.eventQueue[name];
