@@ -1,8 +1,8 @@
-"use strict";
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProcessingService } = sdk;
 
-class CustomSchedulingProcessingService extends SchedulingProcessingService {
+export default class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
     const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
@@ -34,5 +34,3 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProcessingService;

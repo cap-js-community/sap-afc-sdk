@@ -37,11 +37,11 @@ module.exports = (options) => {
     console.log(`Folder '${destFolder}' written.`);
 
     if (isNode(options)) {
-      shelljs.exec(`npm install --save-dev @cap-js/cds-test jest`, { silent: true });
+      shelljs.exec(`npm install --save-dev @cap-js/cds-test vitest`, { silent: true });
       adjustJSON("package.json", (json) => {
         json.scripts ??= {};
         if (!json.scripts.test) {
-          json.scripts.test = "jest";
+          json.scripts.test = "vitest run";
         }
       });
     } else {

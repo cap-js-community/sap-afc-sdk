@@ -1,9 +1,7 @@
-"use strict";
+import cds from "@sap/cds";
+import eventQueue from "@cap-js-community/event-queue";
 
-const cds = require("@sap/cds");
-const eventQueue = require("@cap-js-community/event-queue");
-
-const { GET, POST, test } = cds.test(__dirname + "/..");
+const { GET, POST, test } = cds.test(import.meta.dirname + "/..");
 
 async function processEventQueue() {
   await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", "sapafcsdk.scheduling.ProcessingService");

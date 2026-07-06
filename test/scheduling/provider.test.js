@@ -1191,7 +1191,7 @@ describe("Provider Service", () => {
       ).rejects.toThrowCDSError(
         400,
         "ASSERT_DATA_TYPE",
-        `Value test is not a valid sapafcsdk.scheduling.ProviderService.JobParameter`,
+        `Value test is not a valid array of sapafcsdk.scheduling.ProviderService.JobParameter`,
       );
       await expect(
         POST("/api/job-scheduling/v1/Job", {

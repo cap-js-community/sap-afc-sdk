@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Monitoring Service Get $metadata 1`] = `
+exports[`Monitoring Service > Get $metadata 1`] = `
 "<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
   <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
@@ -2416,7 +2416,7 @@ exports[`Monitoring Service Get $metadata 1`] = `
 </edmx:Edmx>"
 `;
 
-exports[`Monitoring Service Get Codelists 1`] = `
+exports[`Monitoring Service > Get Codelists 1`] = `
 {
   "@odata.context": "$metadata#JobStatus",
   "value": [
@@ -2464,7 +2464,7 @@ exports[`Monitoring Service Get Codelists 1`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 2`] = `
+exports[`Monitoring Service > Get Codelists 2`] = `
 {
   "@odata.context": "$metadata#ResultType",
   "value": [
@@ -2487,7 +2487,7 @@ exports[`Monitoring Service Get Codelists 2`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 3`] = `
+exports[`Monitoring Service > Get Codelists 3`] = `
 {
   "@odata.context": "$metadata#ParameterType",
   "value": [
@@ -2510,7 +2510,7 @@ exports[`Monitoring Service Get Codelists 3`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 4`] = `
+exports[`Monitoring Service > Get Codelists 4`] = `
 {
   "@odata.context": "$metadata#DataType",
   "value": [
@@ -2543,7 +2543,7 @@ exports[`Monitoring Service Get Codelists 4`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 5`] = `
+exports[`Monitoring Service > Get Codelists 5`] = `
 {
   "@odata.context": "$metadata#MappingType",
   "value": [
@@ -2686,7 +2686,7 @@ exports[`Monitoring Service Get Codelists 5`] = `
 }
 `;
 
-exports[`Monitoring Service Get Codelists 6`] = `
+exports[`Monitoring Service > Get Codelists 6`] = `
 {
   "@odata.context": "$metadata#MessageSeverity",
   "value": [
@@ -2718,7 +2718,7 @@ exports[`Monitoring Service Get Codelists 6`] = `
 }
 `;
 
-exports[`Monitoring Service Get Job Definitions 1`] = `
+exports[`Monitoring Service > Get Job Definitions 1`] = `
 {
   "@odata.context": "$metadata#JobDefinition",
   "value": [
@@ -3078,7 +3078,7 @@ exports[`Monitoring Service Get Job Definitions 1`] = `
 }
 `;
 
-exports[`Monitoring Service Get Job Definitions 2`] = `
+exports[`Monitoring Service > Get Job Definitions 2`] = `
 {
   "@odata.context": "$metadata#JobDefinition/$entity",
   "description": "Job Definition 1",
@@ -3150,7 +3150,7 @@ exports[`Monitoring Service Get Job Definitions 2`] = `
 }
 `;
 
-exports[`Monitoring Service Get Job Definitions 3`] = `
+exports[`Monitoring Service > Get Job Definitions 3`] = `
 {
   "@odata.context": "$metadata#JobDefinition/$entity",
   "description": "Job Definition 1",
@@ -3222,7 +3222,7 @@ exports[`Monitoring Service Get Job Definitions 3`] = `
 }
 `;
 
-exports[`Monitoring Service Get Job Definitions 4`] = `
+exports[`Monitoring Service > Get Job Definitions 4`] = `
 {
   "@odata.context": "$metadata#JobDefinition/$entity",
   "description": "Job Definition 3",
@@ -3305,7 +3305,7 @@ exports[`Monitoring Service Get Job Definitions 4`] = `
 }
 `;
 
-exports[`Monitoring Service Get Jobs (no link) 1`] = `
+exports[`Monitoring Service > Get Jobs (no link) 1`] = `
 {
   "@odata.context": "$metadata#Job",
   "value": [
@@ -3346,7 +3346,7 @@ exports[`Monitoring Service Get Jobs (no link) 1`] = `
 }
 `;
 
-exports[`Monitoring Service Get Jobs 1`] = `
+exports[`Monitoring Service > Get Jobs 1`] = `
 {
   "@odata.context": "$metadata#Job",
   "value": [
@@ -3468,7 +3468,7 @@ exports[`Monitoring Service Get Jobs 1`] = `
 }
 `;
 
-exports[`Monitoring Service Get Jobs 2`] = `
+exports[`Monitoring Service > Get Jobs 2`] = `
 {
   "@odata.context": "$metadata#Job/$entity",
   "criticality": 5,
@@ -3510,7 +3510,7 @@ exports[`Monitoring Service Get Jobs 2`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow (batch) 1`] = `
+exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
 [
   {
     "body": {
@@ -3926,7 +3926,7 @@ exports[`Monitoring Service Get UI Flow (batch) 1`] = `
 ]
 `;
 
-exports[`Monitoring Service Get UI Flow 1`] = `
+exports[`Monitoring Service > Get UI Flow 1`] = `
 {
   "@odata.context": "$metadata#Job",
   "@odata.count": 3,
@@ -3983,7 +3983,7 @@ exports[`Monitoring Service Get UI Flow 1`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 2`] = `
+exports[`Monitoring Service > Get UI Flow 2`] = `
 {
   "@odata.context": "$metadata#Job/$entity",
   "definition": {
@@ -4006,7 +4006,7 @@ exports[`Monitoring Service Get UI Flow 2`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 3`] = `
+exports[`Monitoring Service > Get UI Flow 3`] = `
 {
   "@odata.context": "../$metadata#JobResult",
   "@odata.count": 3,
@@ -4048,7 +4048,7 @@ exports[`Monitoring Service Get UI Flow 3`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 4`] = `
+exports[`Monitoring Service > Get UI Flow 4`] = `
 {
   "@odata.context": "../$metadata#JobParameter",
   "@odata.count": 5,
@@ -4160,7 +4160,7 @@ exports[`Monitoring Service Get UI Flow 4`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 5`] = `
+exports[`Monitoring Service > Get UI Flow 5`] = `
 {
   "@odata.context": "../../$metadata#JobResultMessage",
   "@odata.count": 3,
@@ -4199,7 +4199,7 @@ exports[`Monitoring Service Get UI Flow 5`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 6`] = `
+exports[`Monitoring Service > Get UI Flow 6`] = `
 {
   "@odata.context": "../$metadata#JobResult/$entity",
   "filename": null,
@@ -4214,7 +4214,7 @@ exports[`Monitoring Service Get UI Flow 6`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 7`] = `
+exports[`Monitoring Service > Get UI Flow 7`] = `
 {
   "@odata.context": "../../$metadata#JobResultMessage",
   "@odata.count": 3,
@@ -4253,4 +4253,4 @@ exports[`Monitoring Service Get UI Flow 7`] = `
 }
 `;
 
-exports[`Monitoring Service Get UI Flow 8`] = `"This is a test"`;
+exports[`Monitoring Service > Get UI Flow 8`] = `"This is a test"`;

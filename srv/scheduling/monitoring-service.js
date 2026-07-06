@@ -15,7 +15,7 @@ module.exports = class SchedulingMonitoringService extends BaseApplicationServic
       const providerService = await cds.connect.to("sapafcsdk.scheduling.ProviderService");
       const ID = req.params[0].ID;
       await providerService.tx(req).cancel(ProviderJob, ID);
-      req.notify(200, "cancelJobSuccess");
+      req.notify("cancelJobSuccess");
       return await this.read(Job, ID);
     });
 

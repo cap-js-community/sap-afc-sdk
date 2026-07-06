@@ -333,9 +333,11 @@ annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 **Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
-const { SchedulingProcessingService, JobStatus } = require("@cap-js-community/sap-afc-sdk");
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-class CustomSchedulingProcessingService extends SchedulingProcessingService {
+const { SchedulingProcessingService, JobStatus } = sdk;
+
+export default class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
     const { processJob, updateJob, cancelJob, syncJob, notify } = this.operations;
 
@@ -367,8 +369,6 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProcessingService;
 ```
 
 A stub implementation for a custom scheduling processing service can be generated via command:
@@ -475,8 +475,8 @@ In test environment the Event Queue processing is disabled per default to simpli
 In order to manually process event queue events of `ProcessingService` in test environment, the following code can be used in tests:
 
 ```js
-const cds = require("@sap/cds");
-const eventQueue = require("@cap-js-community/event-queue");
+import cds from "@sap/cds";
+import eventQueue from "@cap-js-community/event-queue";
 await eventQueue.processEventQueue(new cds.EventContext(), "CAP_OUTBOX", "sapafcsdk.scheduling.ProcessingService");
 ```
 
@@ -512,9 +512,11 @@ annotate ProviderService with @impl: '/srv/scheduling-provider-service.js';
 **Implementation file:** `/srv/scheduling-provider-service.js`
 
 ```js
-const { SchedulingProviderService } = require("@cap-js-community/sap-afc-sdk");
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-class CustomSchedulingProviderService extends SchedulingProviderService {
+const { SchedulingProviderService } = sdk;
+
+export default class CustomSchedulingProviderService extends SchedulingProviderService {
   async init() {
     const { Job, JobResult } = this.entities;
 
@@ -536,8 +538,6 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProviderService;
 ```
 
 A stub implementation for a custom scheduling provider service can be generated via command:
@@ -601,9 +601,11 @@ annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 **Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
-const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-class CustomSchedulingProcessingService extends SchedulingProcessingService {
+const { SchedulingProcessingService } = sdk;
+
+export default class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
     const { syncJob } = this.operations;
 
@@ -615,8 +617,6 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProcessingService;
 ```
 
 A stub implementation for periodic job sync can be generated via command:
@@ -678,9 +678,11 @@ annotate ProcessingService with @impl: '/srv/scheduling-processing-service.js';
 **Implementation file:** `/srv/scheduling-processing-service.js`
 
 ```js
-const { SchedulingProcessingService } = require("@cap-js-community/sap-afc-sdk");
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-class CustomSchedulingProcessingService extends SchedulingProcessingService {
+const { SchedulingProcessingService } = sdk;
+
+export default class CustomSchedulingProcessingService extends SchedulingProcessingService {
   async init() {
     const { notify } = this.operations;
 
@@ -692,8 +694,6 @@ class CustomSchedulingProcessingService extends SchedulingProcessingService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProcessingService;
 ```
 
 A stub implementation for notification handling can be generated via command:

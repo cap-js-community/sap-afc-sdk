@@ -39,6 +39,11 @@ const Dependencies = {
       version: "6.5.5",
       scope: "test",
     },
+    {
+      groupId: "org.springframework.boot",
+      artifactId: "spring-boot-starter-webmvc-test",
+      scope: "test",
+    },
   ],
 };
 

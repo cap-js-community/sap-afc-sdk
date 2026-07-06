@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
   private boolean uiEnabled;
 
   @Override
-  public void addCorsMappings(@NotNull CorsRegistry registry) {
+  public void addCorsMappings(@NonNull CorsRegistry registry) {
     Map<String, Object> apiCors = new HashMap<>();
     if (afcSdkProperties.getApi() != null && afcSdkProperties.getApi().getCors() != null) {
       apiCors = afcSdkProperties.getApi().getCors();
@@ -85,7 +85,7 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
   @Override
-  public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
+  public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
     if (uiEnabled) {
       registry.addResourceHandler("/**").addResourceLocations("classpath:/app/").setCachePeriod(3600);
     }

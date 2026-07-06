@@ -213,8 +213,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
             break;
           case DataTypeCode._BOOLEAN:
             if (
-              !(("true".equals(parameter.get("value").toString())) ||
-                ("false".equals(parameter.get("value").toString())))
+              !("true".equals(parameter.get("value").toString()) || "false".equals(parameter.get("value").toString()))
             ) {
               throw JobSchedulingException.jobParameterValueInvalidType(
                 parameter.get("value"),

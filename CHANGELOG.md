@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Version 1.0.2 - 2026-xx-xx
+## Version 1.1.0 - 2026-07-06
+
+### Added
+
+- CAP Node.js 10 / CAP Java 5
+- Migrate from Jest to Vitest
 
 ### Fixed
 
-- Dependency updates
+- Project generation improvements
 
 ## Version 1.0.1 - 2026-02-25
 

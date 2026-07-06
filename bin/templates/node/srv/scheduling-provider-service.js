@@ -1,8 +1,8 @@
-"use strict";
+import sdk from "@cap-js-community/sap-afc-sdk";
 
-const { SchedulingProviderService } = require("@cap-js-community/sap-afc-sdk");
+const { SchedulingProviderService } = sdk;
 
-class CustomSchedulingProviderService extends SchedulingProviderService {
+export default class CustomSchedulingProviderService extends SchedulingProviderService {
   async init() {
     const { Job, JobResult } = this.entities;
 
@@ -24,5 +24,3 @@ class CustomSchedulingProviderService extends SchedulingProviderService {
     super.init();
   }
 }
-
-module.exports = CustomSchedulingProviderService;

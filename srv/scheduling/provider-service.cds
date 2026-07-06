@@ -132,7 +132,7 @@ service ProviderService {
     };
 
   @title: null
-  entity JobParameter @readonly           as
+  entity JobParameter                     as
     projection on scheduling.JobParameter {
       key ID                       : String(255) @readonly,
           job.ID          as jobID : String(255) @readonly,
@@ -147,7 +147,7 @@ service ProviderService {
     };
 
   @title: null
-  entity JobResult @readonly              as
+  entity JobResult                        as
     projection on scheduling.JobResult {
       key ID                 : String(255) @readonly,
           job.ID    as jobID : String(255) @readonly,
@@ -165,7 +165,7 @@ service ProviderService {
     };
 
   @title: null
-  entity JobResultMessage @readonly       as
+  entity JobResultMessage                 as
     projection on scheduling.JobResultMessage {
       key ID                        : String(255) @readonly,
           result.ID     as resultID : String(255) @readonly,
@@ -184,7 +184,7 @@ service ProviderService {
     ExpandRestrictions.Expandable: false,
     SelectSupport.Supported      : false,
     SortRestrictions.Sortable    : false,
-    FilterRestrictions.Filterable: false,
+    FilterRestrictions.Filterable: true,
     CountRestrictions.Countable  : false,
     SearchRestrictions.Searchable: false,
     UpdateRestrictions.Updatable : false,

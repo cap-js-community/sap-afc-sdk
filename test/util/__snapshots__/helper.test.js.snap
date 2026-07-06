@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Helper labelLocales 1`] = `
+exports[`Helper > labelLocales 1`] = `
 [
   "ar",
   "bg",
@@ -9,7 +9,6 @@ exports[`Helper labelLocales 1`] = `
   "de",
   "el",
   "en",
-  "en_US_saprigi",
   "en_US_saptrc",
   "es",
   "es_MX",
@@ -42,7 +41,7 @@ exports[`Helper labelLocales 1`] = `
 ]
 `;
 
-exports[`Helper messageLocales 1`] = `
+exports[`Helper > messageLocales 1`] = `
 [
   "ar",
   "bg",
@@ -51,7 +50,6 @@ exports[`Helper messageLocales 1`] = `
   "de",
   "el",
   "en",
-  "en_US_saprigi",
   "en_US_saptrc",
   "es",
   "es_MX",

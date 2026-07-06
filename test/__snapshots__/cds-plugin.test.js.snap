@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CDS Plugin GET API Root 1`] = `
+exports[`CDS Plugin > GET API Root 1`] = `
 {
   "/api/job-scheduling/v1": "http://localhost:4004/api/job-scheduling/v1",
 }
 `;
 
-exports[`CDS Plugin GET App Config 1`] = `
+exports[`CDS Plugin > GET App Config 1`] = `
 {
   "services": {
     "ClientSideTargetResolution": {
@@ -73,7 +73,7 @@ exports[`CDS Plugin GET App Config 1`] = `
 }
 `;
 
-exports[`CDS Plugin GET Feature Toggles 1`] = `
+exports[`CDS Plugin > GET Feature Toggles 1`] = `
 {
   "eventQueue/active": {
     "config": {
@@ -92,7 +92,7 @@ exports[`CDS Plugin GET Feature Toggles 1`] = `
 }
 `;
 
-exports[`CDS Plugin GET Welcome Page 1`] = `
+exports[`CDS Plugin > GET Welcome Page 1`] = `
 "<!DOCTYPE html>
 <html>
     <head>
@@ -426,7 +426,7 @@ footer {
 "
 `;
 
-exports[`CDS Plugin POST Feature Toggles (remove) 1`] = `
+exports[`CDS Plugin > POST Feature Toggles (remove) 1`] = `
 {
   "eventQueue/active": {
     "config": {
@@ -445,7 +445,7 @@ exports[`CDS Plugin POST Feature Toggles (remove) 1`] = `
 }
 `;
 
-exports[`CDS Plugin POST Feature Toggles 1`] = `
+exports[`CDS Plugin > POST Feature Toggles 1`] = `
 {
   "eventQueue/active": {
     "config": {

@@ -539,7 +539,7 @@ public class SchedulingProcessingBase {
     if (referenceId == null || referenceId.isBlank()) {
       throw JobSchedulingException.referenceIDMissing();
     }
-    results = (results != null) ? results : new ArrayList<>();
+    results = results != null ? results : new ArrayList<>();
     for (JobResult result : results) {
       if (!ResultTypeCode.MESSAGE.equals(result.getType())) {
         throw JobSchedulingException.invalidResultType(result.getType());

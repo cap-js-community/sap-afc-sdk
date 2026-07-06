@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Processing Service AFC AFC Update Job 4`] = `
+exports[`Processing Service > AFC > AFC Update Job 4`] = `
 [
   {
     "externalJobId": "7158cbab-a42b-4cb9-9656-8db72521d13d",
@@ -10,7 +10,7 @@ exports[`Processing Service AFC AFC Update Job 4`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed 1`] = `
+exports[`Processing Service > processJob - simple mock - completed 1`] = `
 [
   {
     "filename": null,
@@ -50,7 +50,7 @@ exports[`Processing Service processJob - simple mock - completed 1`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed 2`] = `
+exports[`Processing Service > processJob - simple mock - completed 2`] = `
 [
   {
     "code": "jobBasicMock",
@@ -61,7 +61,7 @@ exports[`Processing Service processJob - simple mock - completed 2`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed 3`] = `
+exports[`Processing Service > processJob - simple mock - completed 3`] = `
 [
   {
     "code": "jobCompleted",
@@ -72,7 +72,7 @@ exports[`Processing Service processJob - simple mock - completed 3`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with error 1`] = `
+exports[`Processing Service > processJob - simple mock - completed with error 1`] = `
 [
   {
     "filename": null,
@@ -91,7 +91,7 @@ exports[`Processing Service processJob - simple mock - completed with error 1`] 
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with error 2`] = `
+exports[`Processing Service > processJob - simple mock - completed with error 2`] = `
 [
   {
     "code": "jobBasicMock",
@@ -102,7 +102,7 @@ exports[`Processing Service processJob - simple mock - completed with error 2`] 
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with error 3`] = `
+exports[`Processing Service > processJob - simple mock - completed with error 3`] = `
 [
   {
     "code": "jobCompletedWithError",
@@ -113,7 +113,7 @@ exports[`Processing Service processJob - simple mock - completed with error 3`] 
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with warning 1`] = `
+exports[`Processing Service > processJob - simple mock - completed with warning 1`] = `
 [
   {
     "filename": null,
@@ -132,7 +132,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 1`
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with warning 2`] = `
+exports[`Processing Service > processJob - simple mock - completed with warning 2`] = `
 [
   {
     "code": "jobBasicMock",
@@ -143,7 +143,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 2`
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - completed with warning 3`] = `
+exports[`Processing Service > processJob - simple mock - completed with warning 3`] = `
 [
   {
     "code": "jobCompletedWithWarning",
@@ -154,7 +154,7 @@ exports[`Processing Service processJob - simple mock - completed with warning 3`
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - failed 1`] = `
+exports[`Processing Service > processJob - simple mock - failed 1`] = `
 [
   {
     "filename": null,
@@ -173,7 +173,7 @@ exports[`Processing Service processJob - simple mock - failed 1`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - failed 2`] = `
+exports[`Processing Service > processJob - simple mock - failed 2`] = `
 [
   {
     "code": "jobBasicMock",
@@ -184,7 +184,7 @@ exports[`Processing Service processJob - simple mock - failed 2`] = `
 ]
 `;
 
-exports[`Processing Service processJob - simple mock - failed 3`] = `
+exports[`Processing Service > processJob - simple mock - failed 3`] = `
 [
   {
     "code": "jobFailed",
@@ -195,7 +195,7 @@ exports[`Processing Service processJob - simple mock - failed 3`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - results - base64 1`] = `
+exports[`Processing Service > updateJob - results - base64 1`] = `
 [
   {
     "filename": null,
@@ -221,7 +221,7 @@ exports[`Processing Service updateJob - results - base64 1`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - results - base64 2`] = `
+exports[`Processing Service > updateJob - results - base64 2`] = `
 [
   {
     "code": "jobCompleted",
@@ -232,7 +232,7 @@ exports[`Processing Service updateJob - results - base64 2`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - results - readable 1`] = `
+exports[`Processing Service > updateJob - results - readable 1`] = `
 [
   {
     "filename": "test.txt",
@@ -244,9 +244,9 @@ exports[`Processing Service updateJob - results - readable 1`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - results - readable 2`] = `[]`;
+exports[`Processing Service > updateJob - results - readable 2`] = `[]`;
 
-exports[`Processing Service updateJob - translation 1`] = `
+exports[`Processing Service > updateJob - translation 1`] = `
 [
   {
     "filename": null,
@@ -258,7 +258,7 @@ exports[`Processing Service updateJob - translation 1`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - translation 2`] = `
+exports[`Processing Service > updateJob - translation 2`] = `
 [
   {
     "code": "jobCompleted",
@@ -277,12 +277,12 @@ exports[`Processing Service updateJob - translation 2`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - translation 3`] = `
+exports[`Processing Service > updateJob - translation 3`] = `
 [
   {
     "code": "jobCompleted",
     "severity_code": "info",
-    "text": "Job completed successfully.",
+    "text": "Job terminé.",
     "values": [],
   },
   {
@@ -296,7 +296,7 @@ exports[`Processing Service updateJob - translation 3`] = `
 ]
 `;
 
-exports[`Processing Service updateJob - translation 4`] = `
+exports[`Processing Service > updateJob - translation 4`] = `
 [
   {
     "code": "jobCompleted",

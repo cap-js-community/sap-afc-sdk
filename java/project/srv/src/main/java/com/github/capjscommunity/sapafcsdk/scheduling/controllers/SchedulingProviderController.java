@@ -571,9 +571,9 @@ public class SchedulingProviderController {
   }
 
   private <T extends StructuredType<?>> Select<T> applyLimit(Select<T> query, Integer top, Integer skip) {
-    int effectiveTop = (top != null) ? top : queryMaxLimit;
-    effectiveTop = (effectiveTop <= 0) ? 1 : Math.min(effectiveTop, queryMaxLimit);
-    int effectiveSkip = (skip != null) ? skip : 0;
+    int effectiveTop = top != null ? top : queryMaxLimit;
+    effectiveTop = effectiveTop <= 0 ? 1 : Math.min(effectiveTop, queryMaxLimit);
+    int effectiveSkip = skip != null ? skip : 0;
     return query.limit(effectiveTop, effectiveSkip);
   }
 

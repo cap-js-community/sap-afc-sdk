@@ -44,7 +44,7 @@ public class EndpointProvider {
       serverUrl = afcSdkProperties.getEndpoints().getServer();
     }
     if (serverUrl != null && !serverUrl.isEmpty()) {
-      return this._serverUrl = serverUrl;
+      return (this._serverUrl = serverUrl);
     }
     try {
       String vcapApplication = System.getenv("VCAP_APPLICATION");
@@ -52,7 +52,7 @@ public class EndpointProvider {
         JsonNode vcap = objectMapper.readTree(vcapApplication);
         String url = vcap.get("uris").get(0).asText();
         if (url != null && !url.isEmpty()) {
-          return this._serverUrl = "https://" + url;
+          return (this._serverUrl = "https://" + url);
         }
       }
     } catch (JsonProcessingException ignored) {}
@@ -60,7 +60,7 @@ public class EndpointProvider {
     if (port == null || port.isEmpty()) {
       port = "8080";
     }
-    return this._serverUrl = "http://localhost:" + port;
+    return (this._serverUrl = "http://localhost:" + port);
   }
 
   public String approuterUrl() {
@@ -69,13 +69,13 @@ public class EndpointProvider {
     }
     String approuterEndpoint = env.getProperty("cds.multi-tenancy.app-ui.url");
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
-      return this._approuterUrl = approuterEndpoint;
+      return (this._approuterUrl = approuterEndpoint);
     }
     if (afcSdkProperties.getEndpoints() != null) {
       approuterEndpoint = afcSdkProperties.getEndpoints().getApprouter();
     }
     if (approuterEndpoint != null && !approuterEndpoint.isEmpty()) {
-      return this._approuterUrl = approuterEndpoint;
+      return (this._approuterUrl = approuterEndpoint);
     }
 
     String baseUrl = this.serverUrl();
@@ -86,12 +86,12 @@ public class EndpointProvider {
     Matcher matcher = pattern.matcher(baseUrl);
 
     if (vcap != null && !vcap.isEmpty()) {
-      return this._approuterUrl = matcher.replaceFirst("$1$2");
+      return (this._approuterUrl = matcher.replaceFirst("$1$2"));
     } else {
       regex = String.format("(https://.*?)-%s(.*)", SERVER_SUFFIX);
       pattern = Pattern.compile(regex);
       matcher = pattern.matcher(baseUrl);
-      return this._approuterUrl = matcher.replaceFirst("$1-" + APPROUTER_SUFFIX + "$2");
+      return (this._approuterUrl = matcher.replaceFirst("$1-" + APPROUTER_SUFFIX + "$2"));
     }
   }
 

@@ -179,7 +179,7 @@ function serveUIs() {
   let uiShowLaunchpad = cds.env.requires?.["sap-afc-sdk"]?.ui?.launchpad;
   if (uiShowLaunchpad) {
     const packageRoot = cds.utils.path.resolve(
-      require.resolve(path.join(process.env.SAP_AFC_SDK_PLUGIN_PACKAGE, "package.json"), { paths: [cds.root] }),
+      require.resolve(`${process.env.SAP_AFC_SDK_PLUGIN_PACKAGE}/package.json`, { paths: [cds.root] }),
       "..",
     );
     if (!fs.existsSync(`${cds.root}/${cds.env.folders.app}appconfig/fioriSandboxConfig.json`)) {

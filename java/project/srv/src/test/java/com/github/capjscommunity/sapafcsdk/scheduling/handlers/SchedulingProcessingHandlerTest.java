@@ -7,7 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.capjscommunity.sapafcsdk.configuration.OutboxConfig;
-import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.*;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.ExternalRequestStatus;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.TaskExternalJob;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.TaskExternalJobInput;
+import com.github.capjscommunity.sapafcsdk.model.sap.afc.integrationservice.TaskExternalJobInput_;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.*;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.Notification;
 import com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.ProcessJobContext;
@@ -28,8 +31,8 @@ import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -142,9 +145,8 @@ public class SchedulingProcessingHandlerTest {
     ProcessingService outboxedService = outboxService.outboxed(processingService);
     outboxedService.updateJob(ID, JobStatusCode.RUNNING, null);
 
-    Collection<
-      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
-    > messages = new ArrayList<>();
+    Collection<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage> messages =
+      new ArrayList<>();
 
     com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
       com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
@@ -674,9 +676,7 @@ public class SchedulingProcessingHandlerTest {
             "link",
             "https://sap.com",
             "messages",
-            new ArrayList<
-              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
-            >()
+            new ArrayList<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage>()
           )
         )
       );
@@ -797,9 +797,7 @@ public class SchedulingProcessingHandlerTest {
             "data",
             dataStream,
             "messages",
-            new ArrayList<
-              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
-            >()
+            new ArrayList<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage>()
           )
         )
       );
@@ -860,9 +858,7 @@ public class SchedulingProcessingHandlerTest {
             "type",
             ResultTypeCode.MESSAGE,
             "messages",
-            new ArrayList<
-              com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
-            >()
+            new ArrayList<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage>()
           )
         )
       );
@@ -877,9 +873,7 @@ public class SchedulingProcessingHandlerTest {
     );
 
     List<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage> messages =
-      new ArrayList<
-        com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage
-      >();
+      new ArrayList<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage>();
     com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage message =
       com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.processingservice.JobResultMessage.create();
     messages.add(message);
@@ -1229,7 +1223,7 @@ public class SchedulingProcessingHandlerTest {
       )
     );
     Optional<TaskExternalJob> afcJob = processingHandler.afcReadJob(eventContext, job2);
-    assertTrue((afcJob.isPresent()));
+    assertTrue(afcJob.isPresent());
 
     TaskExternalJob job = afcJob.get();
     assertEquals("7158cbab-a42b-4cb9-9656-8db72521d13d", job.getId());

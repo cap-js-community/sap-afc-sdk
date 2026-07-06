@@ -425,9 +425,8 @@ describe("Processing Service", () => {
     expect(entry).toBeDefined();
     expect(entry.status).toBe(3);
     expect(JSON.parse(entry.error)).toMatchObject({
-      message: "ASSERT_DATA_TYPE",
+      code: "ASSERT_DATA_TYPE",
       name: "ValidationError",
-      stack: "ASSERT_DATA_TYPE",
       target: "results[0]/data",
     });
   });
@@ -514,7 +513,7 @@ describe("Processing Service", () => {
         },
       });
       await expect(processingService.afcReadJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"referenceIDMissing"`,
+        `[referenceIDMissing: referenceIDMissing]`,
       );
       req.job.referenceID = REFERENCE_ID;
       const job = await processingService.afcReadJob(req, req.job);
@@ -539,16 +538,16 @@ describe("Processing Service", () => {
         job: {
           ID,
         },
-        reject: jest.fn((error) => {
+        reject: vi.fn((error) => {
           throw error;
         }),
       };
       await expect(processingService.afcUpdateJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"referenceIDMissing"`,
+        `[referenceIDMissing: referenceIDMissing]`,
       );
       req.job.referenceID = "xxx";
       await expect(processingService.afcUpdateJob(req, req.job)).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"jobNotFound"`,
+        `[jobNotFound: jobNotFound]`,
       );
       req.job.referenceID = REFERENCE_ID;
       await expect(
@@ -558,7 +557,7 @@ describe("Processing Service", () => {
             name: "link",
           },
         ]),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(`"invalidResultType"`);
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`[invalidResultType: invalidResultType]`);
       await processingService.afcUpdateJob(req, req.job, JobStatus.completed, [
         {
           type: ResultType.message,
@@ -629,7 +628,6 @@ describe("Processing Service", () => {
         code: "jobNotFound",
         message: "jobNotFound",
         name: "jobNotFound",
-        numericSeverity: 4,
         severity: "E",
         status: 404,
       });
@@ -647,7 +645,6 @@ describe("Processing Service", () => {
         code: "jobNotFound",
         message: "jobNotFound",
         name: "jobNotFound",
-        numericSeverity: 4,
         severity: "E",
         status: 404,
       });
@@ -663,7 +660,6 @@ describe("Processing Service", () => {
         code: "statusValueMissing",
         message: "statusValueMissing",
         name: "statusValueMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -679,7 +675,6 @@ describe("Processing Service", () => {
         code: "invalidJobStatus",
         message: "invalidJobStatus",
         name: "invalidJobStatus",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -695,7 +690,6 @@ describe("Processing Service", () => {
         code: "statusTransitionNotAllowed",
         message: "statusTransitionNotAllowed",
         name: "statusTransitionNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -709,9 +703,8 @@ describe("Processing Service", () => {
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
+        code: "ASSERT_ARRAY",
         name: "ValidationError",
-        message: "ASSERT_ARRAY",
-        stack: "ASSERT_ARRAY",
         target: "results",
       });
       await clearEventQueue();
@@ -728,7 +721,6 @@ describe("Processing Service", () => {
         args: [],
         status: 400,
         severity: "E",
-        numericSeverity: 4,
       });
       await clearEventQueue();
 
@@ -742,7 +734,6 @@ describe("Processing Service", () => {
         code: "resultTypeMissing",
         message: "resultTypeMissing",
         name: "resultTypeMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -760,7 +751,6 @@ describe("Processing Service", () => {
         code: "invalidResultType",
         message: "invalidResultType",
         name: "invalidResultType",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -783,7 +773,6 @@ describe("Processing Service", () => {
         code: "linkMissing",
         message: "linkMissing",
         name: "linkMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -808,7 +797,6 @@ describe("Processing Service", () => {
         code: "mimeTypeNotAllowed",
         message: "mimeTypeNotAllowed",
         name: "mimeTypeNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -833,7 +821,6 @@ describe("Processing Service", () => {
         code: "filenameNotAllowed",
         message: "filenameNotAllowed",
         name: "filenameNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -858,7 +845,6 @@ describe("Processing Service", () => {
         code: "dataNotAllowed",
         message: "dataNotAllowed",
         name: "dataNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -883,7 +869,6 @@ describe("Processing Service", () => {
         code: "messagesNotAllowed",
         message: "messagesNotAllowed",
         name: "messagesNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -899,7 +884,6 @@ describe("Processing Service", () => {
         code: "resultTypeMissing",
         message: "resultTypeMissing",
         name: "resultTypeMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -922,7 +906,6 @@ describe("Processing Service", () => {
         code: "mimeTypeMissing",
         message: "mimeTypeMissing",
         name: "mimeTypeMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -946,7 +929,6 @@ describe("Processing Service", () => {
         code: "filenameMissing",
         message: "filenameMissing",
         name: "filenameMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -971,7 +953,6 @@ describe("Processing Service", () => {
         code: "dataMissing",
         message: "dataMissing",
         name: "dataMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -998,7 +979,6 @@ describe("Processing Service", () => {
         code: "linkNotAllowed",
         message: "linkNotAllowed",
         name: "linkNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1025,7 +1005,6 @@ describe("Processing Service", () => {
         code: "messagesNotAllowed",
         message: "messagesNotAllowed",
         name: "messagesNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1048,7 +1027,6 @@ describe("Processing Service", () => {
         code: "messagesMissing",
         message: "messagesMissing",
         name: "messagesMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1068,9 +1046,8 @@ describe("Processing Service", () => {
       expect(entry).toBeDefined();
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
-        message: "ASSERT_ARRAY",
+        code: "ASSERT_ARRAY",
         name: "ValidationError",
-        stack: "ASSERT_ARRAY",
         target: "results[0]/messages",
       });
       await clearEventQueue();
@@ -1093,7 +1070,6 @@ describe("Processing Service", () => {
         code: "messagesMissing",
         message: "messagesMissing",
         name: "messagesMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1117,7 +1093,6 @@ describe("Processing Service", () => {
         code: "codeMissing",
         message: "codeMissing",
         name: "codeMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1145,7 +1120,6 @@ describe("Processing Service", () => {
         code: "textMissing",
         message: "textMissing",
         name: "textMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1174,7 +1148,6 @@ describe("Processing Service", () => {
         code: "severityMissing",
         message: "severityMissing",
         name: "severityMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1204,7 +1177,6 @@ describe("Processing Service", () => {
         code: "invalidMessageSeverity",
         message: "invalidMessageSeverity",
         name: "invalidMessageSeverity",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1232,9 +1204,8 @@ describe("Processing Service", () => {
       expect(entry.status).toBe(3);
       expect(JSON.parse(entry.error)).toMatchObject({
         args: ["xxx", "Timestamp"],
-        message: "ASSERT_DATA_TYPE",
+        code: "ASSERT_DATA_TYPE",
         name: "ValidationError",
-        stack: "ASSERT_DATA_TYPE",
         target: "results[0]/messages[0]/createdAt",
       });
       await clearEventQueue();
@@ -1264,7 +1235,6 @@ describe("Processing Service", () => {
         code: "linkNotAllowed",
         message: "linkNotAllowed",
         name: "linkNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1295,7 +1265,6 @@ describe("Processing Service", () => {
         code: "mimeTypeNotAllowed",
         message: "mimeTypeNotAllowed",
         name: "mimeTypeNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1326,7 +1295,6 @@ describe("Processing Service", () => {
         code: "filenameNotAllowed",
         message: "filenameNotAllowed",
         name: "filenameNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1357,7 +1325,6 @@ describe("Processing Service", () => {
         code: "dataNotAllowed",
         message: "dataNotAllowed",
         name: "dataNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1387,7 +1354,6 @@ describe("Processing Service", () => {
         code: "localeMissing",
         message: "localeMissing",
         name: "localeMissing",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1417,7 +1383,6 @@ describe("Processing Service", () => {
         code: "invalidLocale",
         message: "invalidLocale",
         name: "invalidLocale",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1434,7 +1399,6 @@ describe("Processing Service", () => {
         code: "jobNotFound",
         message: "jobNotFound",
         name: "jobNotFound",
-        numericSeverity: 4,
         severity: "E",
         status: 404,
       });
@@ -1453,7 +1417,6 @@ describe("Processing Service", () => {
         code: "statusTransitionNotAllowed",
         message: "statusTransitionNotAllowed",
         name: "statusTransitionNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });
@@ -1495,7 +1458,6 @@ describe("Processing Service", () => {
         code: "statusTransitionNotAllowed",
         message: "statusTransitionNotAllowed",
         name: "statusTransitionNotAllowed",
-        numericSeverity: 4,
         severity: "E",
         status: 400,
       });

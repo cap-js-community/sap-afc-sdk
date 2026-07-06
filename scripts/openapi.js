@@ -5,6 +5,7 @@ const path = require("path");
 const shelljs = require("shelljs");
 
 const DEFAULT_RESPONSES = require("./assets/default-responses");
+const POST_BLOCKLIST = new Set(["/Job/{ID}/parameters", "/Job/{ID}/results", "/JobResult/{ID}/messages"]);
 
 (() => {
   const check = ["--check", "-c"].includes(process.argv?.[2]);
@@ -234,9 +235,15 @@ function processSchedulingProviderService(check, skip) {
         pathKey = newKey;
       }
       const path = data.paths[pathKey];
+      if (POST_BLOCKLIST.has(pathKey)) {
+        delete path.post;
+      }
       for (const method in path) {
         const pathMethod = path[method];
         pathMethod.tags = [tag];
+        if (Array.isArray(pathMethod.parameters)) {
+          pathMethod.parameters = pathMethod.parameters.filter((p) => p.name !== "$filter");
+        }
         if (!pathMethod.responses) {
           continue;
         }

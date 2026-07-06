@@ -44,7 +44,7 @@ describe("url", () => {
       url.launchpadUrl({
         user: {
           authInfo: {
-            getSubdomain: jest.fn(() => {
+            getSubdomain: vi.fn(() => {
               return "tenant1";
             }),
           },
@@ -57,7 +57,7 @@ describe("url", () => {
       url.launchpadUrl({
         user: {
           authInfo: {
-            getSubdomain: jest.fn(() => {
+            getSubdomain: vi.fn(() => {
               return "tenant1";
             }),
           },
