@@ -62,7 +62,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
           cache: maven
       - run: npm ci
       - run: npm run java:check
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
           cache: maven
       - run: npm ci
       - run: npm run test:bin
