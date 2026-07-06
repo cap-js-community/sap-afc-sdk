@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - CAP Node.js 10 / CAP Java 5
-- Migrate from Jest to Vitest
+- Migrate from jest to vitest
 
 ### Fixed
 

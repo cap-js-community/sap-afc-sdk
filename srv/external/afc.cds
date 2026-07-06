@@ -1,6 +1,7 @@
 namespace sap.afc;
 
 @cds.external
+@protocol: 'none'
 service IntegrationService {
 
   type ExternalRequestStatus   : Integer enum {

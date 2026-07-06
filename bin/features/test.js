@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 "use strict";
 
+const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
 const { isNode, isJava, adjustJSON, copyFolderAdjusted, projectName, derivePackageName } = require("../common/util");
@@ -9,6 +10,18 @@ const Files = {
   node: "node/test",
   java: "java/test",
 };
+
+const VITEST_CONFIG = `"use strict";
+
+module.exports = {
+  test: {
+    globals: true,
+    include: ["**/test/**/*.test.js"],
+    exclude: ["**/node_modules/**"],
+    testTimeout: 60000,
+  },
+};
+`;
 
 module.exports = (options) => {
   try {
@@ -38,6 +51,11 @@ module.exports = (options) => {
 
     if (isNode(options)) {
       shelljs.exec(`npm install --save-dev @cap-js/cds-test vitest`, { silent: true });
+      const vitestConfigPath = path.join(process.cwd(), "vitest.config.js");
+      if (!fs.existsSync(vitestConfigPath)) {
+        fs.writeFileSync(vitestConfigPath, VITEST_CONFIG, "utf8");
+        console.log(`File '${vitestConfigPath}' written.`);
+      }
       adjustJSON("package.json", (json) => {
         json.scripts ??= {};
         if (!json.scripts.test) {

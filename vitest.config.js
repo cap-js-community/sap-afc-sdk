@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("path");
 const { defineConfig } = require("vitest/config");
 
 module.exports = defineConfig({
@@ -7,7 +8,7 @@ module.exports = defineConfig({
     globals: true,
     include: ["**/test/**/*.test.js"],
     exclude: ["**/node_modules/**", "**/bin/**", "**/gen/**", "**/scripts/**", "**/dist/**"],
-    setupFiles: ["./vitest.setup.js"],
+    setupFiles: [path.join(__dirname, "vitest.setup.js")],
     testTimeout: 60000,
     reporters: ["default"],
     silent: true,
