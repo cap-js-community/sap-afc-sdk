@@ -178,6 +178,7 @@ function cleanErr(err) {
   let lines = err.split("\n");
   lines = lines.filter((line) => !line.startsWith("npm warn EBADENGIN"));
   lines = lines.filter((line) => !line.startsWith("npm warn deprecated"));
+  lines = lines.filter((line) => !line.startsWith("npm warn allow-scripts"));
   return lines.join("\n").trim();
 }
 
