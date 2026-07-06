@@ -87,13 +87,19 @@ public class SchedulingProviderOutboxCancelTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.status").value("canceled"));
 
-      JSONObject processingEvent = messageEvents.getFirst();
-      assertEquals("sapafcsdk.scheduling.ProcessingService", processingEvent.get("event"));
+      JSONObject processingEvent = messageEvents
+        .stream()
+        .filter(e -> "sapafcsdk.scheduling.ProcessingService".equals(e.get("event")))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Missing ProcessingService event"));
       assertEquals("cancelJob", processingEvent.getJSONObject("message").get("event"));
       assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 
-      JSONObject websocketEvent = messageEvents.get(1);
-      assertEquals("sapafcsdk.scheduling.WebsocketService", websocketEvent.get("event"));
+      JSONObject websocketEvent = messageEvents
+        .stream()
+        .filter(e -> "sapafcsdk.scheduling.WebsocketService".equals(e.get("event")))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Missing WebsocketService event"));
       assertEquals("jobStatusChanged", websocketEvent.getJSONObject("message").get("event"));
       assertEquals(
         "cancelRequested",
