@@ -103,7 +103,7 @@
     "@cap-js/cds-test": "^1.0.1",
     "@cap-js/sqlite": "^3.0.2",
     "@sap/cds": "^10.0.3",
-    "@sap/cds-dk": "^10.0.3",
+    "@sap/cds-dk": "^10.0.4",
     "@sap/cds-lsp": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/eslint-plugin": "^1.6.21",

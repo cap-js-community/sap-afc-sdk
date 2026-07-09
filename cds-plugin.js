@@ -24,16 +24,16 @@ const config = require("./src/util/config");
 
 process.env.SAP_AFC_SDK_PLUGIN_PACKAGE ??= "@cap-js-community/sap-afc-sdk";
 
-cds.on("bootstrap", () => {
+cds.on("bootstrap", async () => {
   secureRoutes();
   addMiddlewares();
   serveBroker();
   serveUIs();
   serveSwaggerUI();
+  await handleFeatureToggles();
 });
 
-cds.on("served", async () => {
-  await handleFeatureToggles();
+cds.on("served", () => {
   queueServices();
   serveApiRoot();
 });
@@ -344,7 +344,7 @@ function queueServices() {
 }
 
 async function handleFeatureToggles() {
-  toggles.canInitialize && (await toggles.initializeFeatures());
+  await pluginsLoaded;
   // Event-Queue
   for (const name in config.toggles.eventQueue) {
     const toggle = config.toggles.eventQueue[name];
@@ -356,6 +356,8 @@ async function handleFeatureToggles() {
 }
 
 // Plugins
+let pluginsLoaded;
 module.exports = (async () => {
-  return await Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
+  pluginsLoaded = Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
+  return await pluginsLoaded;
 })();
