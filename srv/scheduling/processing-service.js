@@ -44,6 +44,7 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
 
     this.before([processJob, updateJob, cancelJob], async (req) => {
       const ID = req.data.ID;
+      await SELECT.one(Job).columns("ID").where({ ID }).forUpdate();
       const job = await SELECT.one(Job, (job) => {
         (job`.*`,
           job.parameters((parameter) => {

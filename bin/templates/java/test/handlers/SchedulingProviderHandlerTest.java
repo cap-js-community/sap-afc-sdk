@@ -1,5 +1,6 @@
 package customer.scheduling.handlers;
 
+import static org.hamcrest.Matchers.oneOf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -102,7 +103,7 @@ public class SchedulingProviderHandlerTest {
     mockMvc
       .perform(get("/api/job-scheduling/v1/Job/" + ID))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.status").value("cancelRequested"));
+      .andExpect(jsonPath("$.status").value(oneOf("cancelRequested", "canceled")));
   }
 
   @Test

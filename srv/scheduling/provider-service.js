@@ -372,6 +372,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.before(Job.actions.cancel, Job, async (req) => {
       const ID = req.params[0].ID;
+      await SELECT.one(DBJob).columns("ID").where({ ID }).forUpdate();
       const job = await SELECT.one(Job).where({ ID });
       if (!job) {
         return req.reject(JobSchedulingError.jobNotFound(ID));

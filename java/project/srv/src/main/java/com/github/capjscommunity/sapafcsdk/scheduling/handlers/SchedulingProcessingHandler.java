@@ -29,6 +29,7 @@ public class SchedulingProcessingHandler extends SchedulingProcessingBase implem
   @Before(event = { ProcessJobContext.CDS_NAME, UpdateJobContext.CDS_NAME, CancelJobContext.CDS_NAME })
   public void beforeEvents(EventContext context) {
     String ID = (String) context.get("ID");
+    persistenceService.run(Select.from(JOB).byId(ID).lock());
     Select<Job_> query = Select.from(JOB).columns(CQL.star(), CQL.to("parameters").expand()).byId(ID);
     Optional<Job> _job = persistenceService.run(query).first(Job.class);
     if (_job.isEmpty()) {

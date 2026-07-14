@@ -248,7 +248,6 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
         testRunParameter.ifPresent(jobParameter -> job.setTestRun("true".equals(jobParameter.getValue())));
       }
     }
-
     context.put("job", job);
   }
 
@@ -292,6 +291,7 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
       .targetKeys()
       .get("ID")
       .toString();
+    persistenceService.run(Select.from(JOB).byId(ID).lock());
     Optional<Job> _job = persistenceService.run(context.getCqn()).first(Job.class);
     if (_job.isEmpty()) {
       throw JobSchedulingException.jobNotFound(ID);
@@ -300,17 +300,14 @@ public class SchedulingProviderHandler extends SchedulingProviderBase implements
     if (!(JobStatusCode.REQUESTED.equals(job.getStatus()) || JobStatusCode.RUNNING.equals(job.getStatus()))) {
       throw JobSchedulingException.jobCannotBeCanceled(job.getStatus());
     }
+    context.put("job", job);
   }
 
   @On(event = JobCancelContext.CDS_NAME, entity = Job_.CDS_NAME)
   public void cancelJob(JobCancelContext context) {
-    String ID = CqnAnalyzer.create(context.getModel())
-      .analyze(context.getCqn().ref())
-      .targetKeys()
-      .get("ID")
-      .toString();
+    Job job = (Job) context.get("job");
     com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job dbJob =
-      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job.create(ID);
+      com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job.create(job.getId());
     dbJob.setStatusCode(JobStatusCode.CANCEL_REQUESTED);
     Update<com.github.capjscommunity.sapafcsdk.model.sapafcsdk.scheduling.Job_> update = Update.entity(JOB).data(dbJob);
     persistenceService.run(update);
