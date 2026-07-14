@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -508,8 +509,12 @@ public class SchedulingProviderController {
       .getAnnotationValue("@Core.ContentDisposition.Type", "attachment");
     response.setContentType(jobResult.getMimeType());
     response.setHeader("Content-Disposition", dispositionType + "; filename=\"" + jobResult.getFilename() + "\"");
+    JobResult_ ref = CQL.entity(JobResult_.class).filter(j -> j.ID().eq(ID));
+    InputStream data = providerService.data(ref);
     return outputStream -> {
-      jobResult.getData().transferTo(outputStream);
+      if (data != null) {
+        data.transferTo(outputStream);
+      }
     };
   }
 
