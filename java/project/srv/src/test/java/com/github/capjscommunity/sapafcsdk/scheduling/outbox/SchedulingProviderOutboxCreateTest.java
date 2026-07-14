@@ -81,8 +81,9 @@ public class SchedulingProviderOutboxCreateTest {
       JSONObject processingEvent = messageEvents
         .stream()
         .filter(e -> "sapafcsdk.scheduling.ProcessingService".equals(e.get("event")))
+        .filter(e -> "processJob".equals(e.getJSONObject("message").get("event")))
         .findFirst()
-        .orElseThrow(() -> new AssertionError("Missing ProcessingService event"));
+        .orElseThrow(() -> new AssertionError("Missing ProcessingService processJob event"));
       assertEquals("processJob", processingEvent.getJSONObject("message").get("event"));
       assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 

@@ -90,8 +90,9 @@ public class SchedulingProviderOutboxCancelTest {
       JSONObject processingEvent = messageEvents
         .stream()
         .filter(e -> "sapafcsdk.scheduling.ProcessingService".equals(e.get("event")))
+        .filter(e -> "cancelJob".equals(e.getJSONObject("message").get("event")))
         .findFirst()
-        .orElseThrow(() -> new AssertionError("Missing ProcessingService event"));
+        .orElseThrow(() -> new AssertionError("Missing ProcessingService cancelJob event"));
       assertEquals("cancelJob", processingEvent.getJSONObject("message").get("event"));
       assertEquals(ID, processingEvent.getJSONObject("message").getJSONObject("params").get("ID"));
 
