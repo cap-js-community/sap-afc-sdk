@@ -4,6 +4,7 @@ import static com.github.capjscommunity.sapafcsdk.model.cds.outbox.Outbox_.MESSA
 
 import com.github.capjscommunity.sapafcsdk.model.cds.outbox.Messages_;
 import com.sap.cds.ql.Delete;
+import com.sap.cds.ql.Select;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.changeset.ChangeSetListener;
 import com.sap.cds.services.impl.cds.CdsCreateEventContextImpl;
@@ -73,7 +74,15 @@ public class OutboxTestSetup implements AutoCloseable {
     if (!messageDeleted.await(Timeout, TimeUnit.SECONDS)) {
       throw new AssertionError("Timed out waiting for outbox DELETE");
     }
-    return messageEvents;
+    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(Timeout);
+    while (System.nanoTime() < deadline) {
+      long remaining = persistenceService.run(Select.from(MESSAGES).columns(m -> m.ID())).rowCount();
+      if (remaining == 0) {
+        return messageEvents;
+      }
+      Thread.sleep(100);
+    }
+    throw new AssertionError("Timed out waiting for outbox to drain");
   }
 
   @Override
