@@ -97,14 +97,6 @@ module.exports = (options) => {
   addXsuaaBroker();
   if (!checkXsuaaBroker()) {
     console.log(`Broker feature requires a project using xsuaa with service plan 'broker'`);
-    return;
-  }
-  if (!(
-    readYAML("mta.yaml")?.resources?.find(
-      (r) => r?.parameters?.service === "xsuaa" && r?.parameters?.["service-plan"] === "broker",
-    ) || readYAML("chart/values.yaml")?.xsuaa?.servicePlanName === "broker"
-  )) {
-    console.log(`Broker feature requires a project using xsuaa with service plan 'broker'`);
     return false;
   }
 
