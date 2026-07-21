@@ -344,7 +344,6 @@ function queueServices() {
 }
 
 async function handleFeatureToggles() {
-  await pluginsLoaded;
   // Event-Queue
   for (const name in config.toggles.eventQueue) {
     const toggle = config.toggles.eventQueue[name];
@@ -356,8 +355,6 @@ async function handleFeatureToggles() {
 }
 
 // Plugins
-let pluginsLoaded;
 module.exports = (async () => {
-  pluginsLoaded = Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
-  return await pluginsLoaded;
+  return await Promise.all(config.plugins.map((plugin) => require(`${plugin}/cds-plugin`)));
 })();

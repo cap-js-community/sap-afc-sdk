@@ -2781,7 +2781,6 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
-    Authentication: OAuth2UserTokenExchange
 destination:
   serviceOfferingName: destination
   servicePlanName: lite
@@ -5189,7 +5188,6 @@ approuter:
 backendDestinations:
   srv-api:
     service: srv
-    Authentication: OAuth2UserTokenExchange
 destination:
   serviceOfferingName: destination
   servicePlanName: lite

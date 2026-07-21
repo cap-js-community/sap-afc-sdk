@@ -102,8 +102,8 @@
     "@cap-js-community/sap-afc-sdk": "./",
     "@cap-js/cds-test": "^1.0.1",
     "@cap-js/sqlite": "^3.0.2",
-    "@sap/cds": "^10.0.3",
-    "@sap/cds-dk": "^10.0.4",
+    "@sap/cds": "^10.0.4",
+    "@sap/cds-dk": "^10.0.5",
     "@sap/cds-lsp": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/eslint-plugin": "^1.6.23",
@@ -111,10 +111,10 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.2.2",
     "globals": "^17.7.0",
-    "prettier": "^3.9.5",
-    "prettier-plugin-java": "^2.10.2",
+    "prettier": "^3.9.6",
+    "prettier-plugin-java": "^2.10.3",
     "vitest": "^4.1.10",
-    "ws": "^8.21.0"
+    "ws": "^8.21.1"
   },
   "cds": {
     "server": {
