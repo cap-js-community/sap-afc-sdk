@@ -8,7 +8,7 @@
   "main": "webapp/index.html",
   "dependencies": {},
   "devDependencies": {
-    "@ui5/cli": "^4.0.57",
+    "@ui5/cli": "^4.0.58",
     "@sap/ux-ui5-tooling": "^1.28.0",
     "ui5-task-zipper": "^3.6.1"
   },
