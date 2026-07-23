@@ -4,12 +4,12 @@
 const fs = require("fs");
 const path = require("path");
 const shelljs = require("shelljs");
-const fetch = require("node-fetch");
 const https = require("https");
 const YAML = require("yaml");
 const commander = require("commander");
 const { open } = require("openurl");
 const prompt = require("prompt-sync")();
+const fetch = (...args) => import("node-fetch").then(({ default: f }) => f(...args));
 
 const { adjustLines, generateHashBrokerPassword } = require("../common/util");
 
