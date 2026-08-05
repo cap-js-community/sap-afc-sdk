@@ -21,7 +21,7 @@ const projectDir = path.join(workingDir, PROJECT);
 const Commands = {
   BEGIN: [`cd ${tempDir}`],
   CDS_NODE: [`npx cds init ${PROJECT} --nodejs`],
-  CDS_JAVA: [`npx cds init ${PROJECT} --java`],
+  CDS_JAVA: [`npm_config_allow_remote=all npx cds init ${PROJECT} --java`],
   INSTALL: [`cd ${PROJECT}`, "cp ../../test/.npmrc .", "cp ../../test/.npmignore .", "npm install ../../../"],
   AFC_CF: ["npx afc init cf"],
   AFC_KYMA: ["npx afc init kyma"],
@@ -179,6 +179,8 @@ function cleanErr(err) {
   lines = lines.filter((line) => !line.startsWith("npm warn EBADENGIN"));
   lines = lines.filter((line) => !line.startsWith("npm warn deprecated"));
   lines = lines.filter((line) => !line.startsWith("npm warn allow-scripts"));
+  lines = lines.filter((line) => !line.startsWith("npm warn install-scripts"));
+  lines = lines.filter((line) => !line.startsWith("npm notice run"));
   return lines.join("\n").trim();
 }
 

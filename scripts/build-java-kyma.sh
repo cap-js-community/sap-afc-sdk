@@ -12,7 +12,7 @@ export GLOBAL_DOMAIN=c-589f01f.stage.kyma.ondemand.com
 rm -rf temp/afcjdk
 mkdir -p temp
 cd temp
-npx cds init afcjdk --java
+npm_config_allow_remote=all npx cds init afcjdk --java
 cd afcjdk
 cp ../../.npmrc . && npm install ../../../ # npm install github:cap-js-community/sap-afc-sdk
 npx afc init kyma

@@ -9,7 +9,7 @@ const YAML = require("yaml");
 const commander = require("commander");
 const { open } = require("openurl");
 const prompt = require("prompt-sync")();
-const fetch = async (...args) => await (await import("node-fetch")).default(...args);
+const fetch = require("node-fetch").default;
 
 const { adjustLines, generateHashBrokerPassword } = require("../common/util");
 

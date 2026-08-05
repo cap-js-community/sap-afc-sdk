@@ -83,7 +83,7 @@
     "@sap-cloud-sdk/http-client": "^4.8.0",
     "@sap-cloud-sdk/resilience": "^4.8.0",
     "@sap/cds-common-content": "^3.2.0",
-    "@sap/sbf": "^6.11.7",
+    "@sap/sbf": "^6.11.9",
     "commander": "^15.0.0",
     "cors": "^2.8.6",
     "express": "^4.22.2 || ^5.2.1",
@@ -100,21 +100,21 @@
   },
   "devDependencies": {
     "@cap-js-community/sap-afc-sdk": "./",
-    "@cap-js/cds-test": "^1.0.1",
+    "@cap-js/cds-test": "^1.0.2",
     "@cap-js/sqlite": "^3.0.2",
-    "@sap/cds": "^10.0.4",
-    "@sap/cds-dk": "^10.0.5",
+    "@sap/cds": "^10.0.5",
+    "@sap/cds-dk": "^10.0.6",
     "@sap/cds-lsp": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.10",
-    "@vitest/eslint-plugin": "^1.6.24",
-    "eslint": "^10.7.0",
+    "@vitest/eslint-plugin": "^1.6.26",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.2.2",
-    "globals": "^17.7.0",
+    "globals": "^17.9.0",
     "prettier": "^3.9.6",
     "prettier-plugin-java": "^2.10.3",
     "vitest": "^4.1.10",
-    "ws": "^8.21.1"
+    "ws": "^8.21.2"
   },
   "cds": {
     "server": {
@@ -248,5 +248,10 @@
   },
   "sapux": [
     "app/scheduling.monitoring.job"
-  ]
+  ],
+  "allowScripts": {
+    "@scarf/scarf@1.4.0": true,
+    "fsevents@2.3.3": true,
+    "protobufjs@8.0.3": true
+  }
 }

@@ -23,7 +23,7 @@
     <java.version>21</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <cds.services.version>5.0.0</cds.services.version>
+    <cds.services.version>5.0.1</cds.services.version>
     <spring.boot.version>4.1.0</spring.boot.version>
     <spring.cloud.version>5.0.1</spring.cloud.version>
     <spring.doc.version>3.0.3</spring.doc.version>
@@ -151,7 +151,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.1</version>
       </plugin>
     </plugins>
     <pluginManagement>
@@ -191,7 +191,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>flatten-maven-plugin</artifactId>
-          <version>1.7.3</version>
+          <version>1.8.0</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -201,7 +201,7 @@
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
-          <version>1.25.7</version>
+          <version>1.25.8</version>
         </plugin>
         <plugin>
           <groupId>com.sap.cds</groupId>
