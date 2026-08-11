@@ -17,7 +17,7 @@
 
 		<!-- DEPENDENCIES VERSION -->
 		<jdk.version>25</jdk.version>
-		<cds.services.version>5.0.1</cds.services.version>
+		<cds.services.version>5.0.2</cds.services.version>
 		<spring.boot.version>4.1.0</spring.boot.version>
 		<spring.cloud.version>5.0.1</spring.cloud.version>
 		<spring.doc.version>3.0.3</spring.doc.version>
