@@ -34,7 +34,7 @@ const Commands = {
 const Files = {
   COMMON: [
     "package.json",
-    "app/router/xs-app.json",
+    ".deploy/app-router/xs-app.json",
     "http/scheduling/provider.cloud.http",
     "http/scheduling/provider.local.http",
   ],

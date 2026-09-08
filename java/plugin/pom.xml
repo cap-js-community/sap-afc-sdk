@@ -25,8 +25,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cds.services.version>5.0.2</cds.services.version>
     <spring.boot.version>4.1.0</spring.boot.version>
-    <spring.cloud.version>5.0.1</spring.cloud.version>
-    <spring.doc.version>3.0.3</spring.doc.version>
+    <spring.cloud.version>5.1.1</spring.cloud.version>
+    <spring.doc.version>3.1.0</spring.doc.version>
   </properties>
   <groupId>com.github.capjscommunity</groupId>
   <artifactId>sap-afc-sdk</artifactId>
@@ -201,7 +201,7 @@
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
-          <version>1.25.8</version>
+          <version>1.30.0</version>
         </plugin>
         <plugin>
           <groupId>com.sap.cds</groupId>

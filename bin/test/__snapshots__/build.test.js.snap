@@ -24,7 +24,7 @@ exports[`Build > Java / CF 1`] = `
 `;
 
 exports[`Build > Java / CF 2`] = `
-"app/router/xs-app.json
+".deploy/app-router/xs-app.json
 
 {
   "routes": [
@@ -1275,7 +1275,7 @@ modules:
 
   - name: afcsdk
     type: approuter.nodejs
-    path: app/router
+    path: .deploy/app-router
     parameters:
       keep-existing-routes: true
       disk-quota: 256M
@@ -1350,9 +1350,24 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
+        type: org.cloudfoundry.managed-service
         parameters:
+          service: xsuaa
+          service-plan: application
+          path: ./xs-security.json
+          config:
+            xsappname: afcsdk-\${org}-\${space}
+            tenant-mode: dedicated
+            oauth2-configuration:
+              credential-types:
+                - "binding-secret"
+                - "x509"
+              redirect-uris:
+                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
+        requires:
+          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -1417,6 +1432,8 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
+      service-key:
+        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
@@ -1446,7 +1463,7 @@ exports[`Build > Java / Kyma 1`] = `
 `;
 
 exports[`Build > Java / Kyma 2`] = `
-"app/router/xs-app.json
+".deploy/app-router/xs-app.json
 
 {
   "routes": [
@@ -2868,15 +2885,15 @@ modules:
       buildpack:
         type: nodejs
         builder: builder-jammy-base
-        path: app/router
+        path: .deploy/app-router
         env:
           BP_NODE_RUN_SCRIPTS: ""
   - name: afcsdk-html5-deployer
     build-parameters:
       buildpack:
-        type: sapse/application-content-deployer-buildpack:1.4.0
+        type: sapse/application-content-deployer-buildpack:1.5.0
         builder: builder-jammy-base
-        path: app/html5-deployer
+        path: .deploy/html5-deployer
 "
 `;
 
@@ -2947,7 +2964,7 @@ exports[`Build > Node / CF 1`] = `
 `;
 
 exports[`Build > Node / CF 2`] = `
-"app/router/xs-app.json
+".deploy/app-router/xs-app.json
 
 {
   "routes": [
@@ -3908,7 +3925,7 @@ modules:
       - name: afcsdk-db
   - name: afcsdk
     type: approuter.nodejs
-    path: app/router
+    path: .deploy/app-router
     parameters:
       keep-existing-routes: true
       disk-quota: 256M
@@ -3982,9 +3999,24 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
+        type: org.cloudfoundry.managed-service
         parameters:
+          service: xsuaa
+          service-plan: application
+          path: ./xs-security.json
+          config:
+            xsappname: afcsdk-\${org}-\${space}
+            tenant-mode: dedicated
+            oauth2-configuration:
+              credential-types:
+                - "binding-secret"
+                - "x509"
+              redirect-uris:
+                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
+        requires:
+          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -4065,6 +4097,8 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
+      service-key:
+        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
@@ -4137,7 +4171,7 @@ exports[`Build > Node / Kyma 1`] = `
 `;
 
 exports[`Build > Node / Kyma 2`] = `
-"app/router/xs-app.json
+".deploy/app-router/xs-app.json
 
 {
   "routes": [
@@ -5273,14 +5307,14 @@ modules:
       buildpack:
         type: nodejs
         builder: builder-jammy-base
-        path: app/router
+        path: .deploy/app-router
         env:
           BP_NODE_RUN_SCRIPTS: ""
   - name: afcsdk-html5-deployer
     build-parameters:
       buildpack:
-        type: sapse/application-content-deployer-buildpack:1.4.0
+        type: sapse/application-content-deployer-buildpack:1.5.0
         builder: builder-jammy-base
-        path: app/html5-deployer
+        path: .deploy/html5-deployer
 "
 `;
