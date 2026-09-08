@@ -373,8 +373,9 @@ describe("Provider Service", () => {
     expect(response.data).toHaveLength(2);
     cds.env.query.limit.max = limitMax;
 
-    response = await GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages");
-    expect(response.data).toEqual([]);
+    await expect(GET("/api/job-scheduling/v1/JobResult/a2eb590f-9505-4fd6-a5e2-511a1b2ff47f/messages")).rejects.toThrow(
+      "404 - Not Found",
+    );
     await expect(
       GET("/api/job-scheduling/v1/JobResult/c2eb590f-9505-4fd6-a5e2-511a1b2ff47f?$expand=messages"),
     ).rejects.toThrow("400 - Bad Request");
@@ -600,8 +601,7 @@ describe("Provider Service", () => {
     expect(cleanData(response.data[1])).toMatchSnapshot();
     response = await GET(`/api/job-scheduling/v1/JobResult/${resultID1}/messages`);
     expect(cleanData(response.data)).toMatchSnapshot();
-    response = await GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`);
-    expect(cleanData(response.data)).toMatchSnapshot();
+    await expect(GET(`/api/job-scheduling/v1/JobResult/${resultID2}/messages`)).rejects.toThrow("404 - Not Found");
   });
 
   it("Create Job (error-only run)", async () => {

@@ -343,7 +343,7 @@ function processAfter() {
   });
 
   // Approuter
-  adjustJSON("app/router/xs-app.json", (json) => {
+  adjustJSON(".deploy/app-router/xs-app.json", (json) => {
     json.websockets = { enabled: true };
   });
 }

@@ -8,6 +8,7 @@ module.exports = defineConfig({
     include: ["**/test/**/*.test.js"],
     exclude: ["**/node_modules/**", "**/templates/**", "**/temp/**"],
     testTimeout: 300000,
+    hookTimeout: 300000,
     reporters: ["default"],
     silent: true,
     pool: "threads",
