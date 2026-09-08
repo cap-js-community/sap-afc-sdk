@@ -24,7 +24,7 @@
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cds.services.version>5.0.2</cds.services.version>
-    <spring.boot.version>4.1.0</spring.boot.version>
+    <spring.boot.version>4.1.1</spring.boot.version>
     <spring.cloud.version>5.1.1</spring.cloud.version>
     <spring.doc.version>3.1.0</spring.doc.version>
   </properties>
