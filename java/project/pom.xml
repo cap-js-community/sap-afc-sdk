@@ -18,7 +18,7 @@
 		<!-- DEPENDENCIES VERSION -->
 		<jdk.version>25</jdk.version>
 		<cds.services.version>5.0.2</cds.services.version>
-		<spring.boot.version>4.1.0</spring.boot.version>
+		<spring.boot.version>4.1.1</spring.boot.version>
 		<spring.cloud.version>5.1.1</spring.cloud.version>
 		<spring.doc.version>3.1.0</spring.doc.version>
 		<xsuaa.version>4.1.2</xsuaa.version>
@@ -78,7 +78,7 @@
 			<!-- JAVA VERSION -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.15.0</version>
+				<version>3.16.0</version>
 				<configuration>
 					<release>${jdk.version}</release>
 					<encoding>UTF-8</encoding>
@@ -98,7 +98,7 @@
 			<!-- SUREFIRE VERSION -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.6</version>
+				<version>3.6.0</version>
 			</plugin>
 
 			<!-- POM FLATTENING FOR CI FRIENDLY VERSIONS -->
