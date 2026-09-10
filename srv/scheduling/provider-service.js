@@ -12,6 +12,8 @@ const { launchpadUrl } = require("../../src/util/url");
 const isUUID = (input) =>
   input && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(input);
 
+const isParentExistsQuery = (query) => (query?.SELECT?.columns ?? []).some((column) => column?.as === "$parent");
+
 module.exports = class SchedulingProviderService extends BaseApplicationService {
   async init() {
     const {
@@ -43,7 +45,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
     });
 
     this.before("READ", [JobResult], (req) => {
-      if (req.params.length === 0) {
+      if (req.params.length === 0 && !isParentExistsQuery(req.query)) {
         return req.reject(JobSchedulingError.accessOnlyByKey());
       }
     });
