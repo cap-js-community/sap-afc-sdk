@@ -53,7 +53,10 @@ public class SchedulingProviderControllerTest {
   @Test
   @WithMockUser("authenticated")
   public void getWelcomePage() throws Exception {
-    mockMvc.perform(get("/")).andExpect(header().string("Content-Type", "text/html")).andExpect(status().isOk());
+    mockMvc
+      .perform(get("/"))
+      .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
+      .andExpect(status().isOk());
   }
 
   @Test

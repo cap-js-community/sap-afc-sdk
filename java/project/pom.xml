@@ -17,10 +17,10 @@
 
 		<!-- DEPENDENCIES VERSION -->
 		<jdk.version>25</jdk.version>
-		<cds.services.version>5.0.2</cds.services.version>
+		<cds.services.version>5.1.1</cds.services.version>
 		<spring.boot.version>4.1.1</spring.boot.version>
 		<spring.cloud.version>5.1.1</spring.cloud.version>
-		<spring.doc.version>3.1.0</spring.doc.version>
+		<spring.doc.version>3.1.1</spring.doc.version>
 		<xsuaa.version>4.1.2</xsuaa.version>
 
 		<cds.install-node.downloadUrl>https://nodejs.org/dist/</cds.install-node.downloadUrl>
