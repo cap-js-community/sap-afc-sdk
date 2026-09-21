@@ -1350,24 +1350,9 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
-        type: org.cloudfoundry.managed-service
         parameters:
-          service: xsuaa
-          service-plan: application
-          path: ./xs-security.json
-          config:
-            xsappname: afcsdk-\${org}-\${space}
-            tenant-mode: dedicated
-            oauth2-configuration:
-              credential-types:
-                - "binding-secret"
-                - "x509"
-              redirect-uris:
-                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
-        requires:
-          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -1432,8 +1417,6 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-      service-key:
-        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
@@ -3999,24 +3982,9 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
-        type: org.cloudfoundry.managed-service
         parameters:
-          service: xsuaa
-          service-plan: application
-          path: ./xs-security.json
-          config:
-            xsappname: afcsdk-\${org}-\${space}
-            tenant-mode: dedicated
-            oauth2-configuration:
-              credential-types:
-                - "binding-secret"
-                - "x509"
-              redirect-uris:
-                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
-        requires:
-          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -4097,8 +4065,6 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-      service-key:
-        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
