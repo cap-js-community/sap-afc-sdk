@@ -10,7 +10,6 @@ const {
   isNode,
   readYAML,
   generateHashBrokerPassword,
-  adjustYAMLDocument,
   adjustYAMLAllDocuments,
   adjustJSON,
 } = require("../common/util");
@@ -186,44 +185,8 @@ module.exports = (options) => {
 };
 
 function addXsuaaBroker() {
-  // CF
-  adjustYAMLDocument("mta.yaml", (yaml) => {
-    for (const resource of yaml.get("resources").items) {
-      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
-        resource.setIn(["parameters", "service-plan"], "application");
-      }
-    }
-    return yaml;
-  });
-
-  // Kyma
-  adjustYAMLDocument("chart/values.yaml", (yaml) => {
-    if (yaml.getIn(["xsuaa", "servicePlanName"])) {
-      yaml.setIn(["xsuaa", "servicePlanName"], "application");
-    }
-    return yaml;
-  });
-
   // cds add
-  shelljs.exec(`cds add ${config.dependencies.broker.join(",")} ${config.options.cds}`);
-
-  // CF
-  adjustYAMLDocument("mta.yaml", (yaml) => {
-    for (const resource of yaml.get("resources").items) {
-      if (resource.getIn(["parameters", "service"]) === "xsuaa") {
-        resource.setIn(["parameters", "service-plan"], "broker");
-      }
-    }
-    return yaml;
-  });
-
-  // Kyma
-  adjustYAMLDocument("chart/values.yaml", (yaml) => {
-    if (yaml.getIn(["xsuaa", "servicePlanName"])) {
-      yaml.setIn(["xsuaa", "servicePlanName"], "broker");
-    }
-    return yaml;
-  });
+  shelljs.exec(`cds add ${config.dependencies.broker.join(",")} ${config.options.cds} --plan broker`);
 }
 
 function checkXsuaaBroker() {
