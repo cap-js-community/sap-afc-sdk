@@ -2421,14 +2421,14 @@ exports[`Monitoring Service > Get Codelists 1`] = `
   "@odata.context": "$metadata#JobStatus",
   "value": [
     {
+      "code": "cancelRequested",
+      "descr": "Requested",
+      "name": "Cancel Requested",
+    },
+    {
       "code": "canceled",
       "descr": "Canceled",
       "name": "Canceled",
-    },
-    {
-      "code": "cancelRequested",
-      "descr": "Requested",
-      "name": "Cancellation Requested",
     },
     {
       "code": "completed",
@@ -3572,7 +3572,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "1247",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3605,7 +3605,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "681",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3657,7 +3657,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "589",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3779,7 +3779,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "1760",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3828,7 +3828,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "709",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3853,7 +3853,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "221",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,
@@ -3902,7 +3902,7 @@ exports[`Monitoring Service > Get UI Flow (batch) 1`] = `
     "error": undefined,
     "headers": {
       "content-length": "709",
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8; ieee754compatible=true",
       "odata-version": "4.0",
     },
     "status": 200,

@@ -94,334 +94,316 @@ exports[`CDS Plugin > GET Feature Toggles 1`] = `
 
 exports[`CDS Plugin > GET Welcome Page 1`] = `
 "<!DOCTYPE html>
-<html>
-    <head>
-        <title>@cap-js-community/sap-afc-sdk</title>
-        <meta name="color-scheme" content="dark light">
-        <style>
-body {
-  font-family: Avenir Next, sans-serif;
-  background: #f8fbff;
-}
+<html lang="en">
+<head>
+  <title>@cap-js-community/sap-afc-sdk</title>
+  <meta name="color-scheme" content="dark light">
+  <link rel="stylesheet" href="/.cap/index.css">
+  <script src="/.cap/index-client.js" defer></script>
+  <script> document.app_info = {"name":"@cap-js-community/sap-afc-sdk","webapps":[{"href":"/launchpad.html","label":"launchpad.html"},{"href":"/scheduling.monitoring.job/webapp/index.html","label":"scheduling.monitoring.job/webapp"},{"href":"//custom/scheduling.monitoring.job","label":"/custom/scheduling.monitoring.job"}],"agents":[]} </script>
+</head>
+<body>
 
-body #welcome {
-  margin: 30px auto 50px;
-  padding: 0 30px;
-  max-width: 900px;
-}
+  <label class="theme-switch" title="Toggle dark mode">
+    <input id="theme-switch" type="checkbox" aria-label="Toggle dark mode">
+    <span class="theme-switch-track" aria-hidden="true"><span class="theme-switch-sun">☀</span><span class="theme-switch-moon">☾</span></span>
+  </label>
 
-body #welcome h1, #welcome h3, #welcome h2, #welcome p {
-  margin: 20px 0;
-  color: #47637d;
-  font-weight: 400;
-}
+  <h1> Welcome to <i>@sap/cds</i> Server </h1>
+  <p id="subtitle"> Serving <i>@cap-js-community/sap-afc-sdk</i> </p>
 
-body #welcome h3.header {
-  margin: 20px 0 0 0;
-  background-color: #537492;
-  color: white;
-}
 
-body #welcome h3 a {
-  color: inherit;
-  font-weight: 500;
-}
+  <section id="webapps">
+    <h2> Web Apps: </h2>
+    <ul>
+      <li><a href="\${href}" target="_blank">\${label}</a></li>
+    </ul>
+  </section>
 
-body #welcome h3 a span {
-  padding: 5px 15px;
-  font-weight: 300;
-  transition: all 0.2s ease-in;
-}
 
-body #welcome h3 a:first-child span {
-  display: inline-block;
-  padding: 5px 15px;
-}
+  <section id="agents">
+    <h2> Agents: </h2>
+    <ul>
+      <li>
+        <a href="\${href}" target="_blank" title="Chat Preview"> \${label} </a>
+        <a href="\${card}" target="_blank" class="agent-card-link"> Agent Card </a>
+      </li>
+    </ul>
+  </section>
 
-body #welcome h3 a span:hover {
-  color: #92b2d0;
-}
 
-body #welcome ul {
-  margin: 0;
-  background: #91adc5;
-  list-style-type: none;
-  padding-inline-start: 20px;
-}
-
-body #welcome li {
-  display: inline-grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  width: 100%;
-  margin-bottom: 1px;
-  background-color: #d0e9ff;
-  padding: 0;
-  /*
-  -moz-transition: background color 0.2s ease-in;
-  -webkit-transition: background 0.2s ease-in;
-  -o-transition: background 0.2s ease-in;
-  /* Standard */
-  transition: all 0.1s ease-in;
-}
-
-body #welcome ul li div:not(:first-child) a {
-  font-weight: 300;
-}
-
-body #welcome a {
-  text-decoration: none;
-}
-
-body #welcome li a, body #welcome li > span {
-  padding: 4px 10px;
-  font-weight: 500;
-  color: #1d5985;
-  transition: all 0.1s ease-in;
-}
-body #welcome li.operation span {
-  font-style: italic;
-}
-
-body #welcome li a span:hover {
-  color: #f0faff;
-  background-color: #a7c8e1;
-}
-
-body #welcome .preview {
-  font-size: small;
-}
-
-footer {
-  border-top: .5px solid;
-  margin-top: 44px;
-  padding-top: 22px;
-  width: 400px;
-  font-size: 90%;
-}
-
-@media (prefers-color-scheme: dark) {
-  body { background: #0a2138; }
-
-  body #welcome h1, #welcome h3, #welcome h2, #welcome p {
-      color: #a6c1d9;
-  }
-  body #welcome h3 a {
-      color: #e2efff;
-  }
-  body #welcome ul {
-      background: #7894ad;
-  }
-  body #welcome li {
-      background-color: #506d88;
-  }
-  body #welcome li a, body #welcome li:hover div:not(:first-child) a, body #welcome li > span {
-      color: #d0e4f2;
-  }
-  body #welcome li a:hover {
-      color: white;
-      background-color: #7894ad;
-  }
-
-  body #welcome h3.header {
-      background-color: #304c65;
-  }
-
-  footer {
-      border-top: .5px solid #456;
-      color: #567;
-  }
-}
-        </style>
-    </head>
-    <body>
-        <div id="welcome">
-            <h1> Welcome to <i>@sap/cds</i> Server </h1>
-            <p class="subtitle"> Serving @cap-js-community/sap-afc-sdk</p>
-
-            <p> These are the paths currently served:</p>
-
-            <h2> Web Applications: </h2>
-            <ul>
-                <li><a href="launchpad.html"><span>/launchpad.html</span></a></li>
-<li><a href="scheduling.monitoring.job/webapp/index.html"><span>/scheduling.monitoring.job/webapp</span></a></li>
-<li><a href="/custom/scheduling.monitoring.job"><span>/custom/scheduling.monitoring.job</span></a></li>
-            </ul>
-
-            <h2> Service Endpoints: </h2>
-            
-      <div id="featureservice-rest">
-        <h3 class="header">
-          <a href="rest/feature"><span>/rest/feature</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-          <li id="featureservice-rest-state" class="operation">
-            <div>
-              <a href="rest/feature/state" title="/rest/feature/state"><span>state ()</span></a>
+  <section id="provided-services" class="services">
+    <h2> Services: </h2> <button class="toggle-button"></button>
+    
+    <details id="sapafcsdk_scheduling_monitoringservice" data-protocols="odata" data-paths='["odata/v4/job-scheduling/monitoring"]' data-selected-protocol="odata">
+      <summary>
+        <span class="srv-name">Monitoring Service</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"><button type="button" class="badge" role="radio" data-protocol="odata" aria-checked="true" tabindex="0">odata</button></span>
+      </summary>
+      <ul>
+          <li class="describe-row">
+            <div class="entity-row describe-row-layout">
+              <span class="describe-left"><a class="entity-name describe-link" href="odata/v4/job-scheduling/monitoring/$metadata" title="OData EDMX" data-describes='["odata/v4/job-scheduling/monitoring/$metadata"]' data-labels='["/$metadata"]' data-titles='["OData EDMX"]'><span class="kind-pill kind-schema" title="A schema / metadata document">meta</span><span class="label">/$metadata</span></a></span>
+              
+              <span class="describe-right">
+              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/monitoring-service.cds:6" title="Open declaration">Declaration</a></span></span>
             </div>
           </li>
-        </ul>
-      </div>
-  
-      <div id="sapafcsdk_scheduling_monitoringservice-odata">
-        <h3 class="header">
-          <a href="odata/v4/job-scheduling/monitoring"><span>/odata/v4/job-scheduling/monitoring</span></a><span>/</span> <a href="odata/v4/job-scheduling/monitoring/$metadata"><span>$metadata</span></a> 
-        </h3>
-        <ul>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobdefinition">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobDefinition"><span>JobDefinition</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobdefinition">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobDefinition" data-base="JobDefinition"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobDefinition</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobDefinition#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobparameterdefinition">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobParameterDefinition"><span>JobParameterDefinition</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobparameterdefinition">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobParameterDefinition" data-base="JobParameterDefinition"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobParameterDefinition</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameterDefinition#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameterDefinition#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-parametertype">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/ParameterType"><span>ParameterType</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-parametertype">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/ParameterType" data-base="ParameterType"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>ParameterType</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ParameterType#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ParameterType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-datatype">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/DataType"><span>DataType</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-datatype">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/DataType" data-base="DataType"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>DataType</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/DataType#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/DataType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-mappingtype">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/MappingType"><span>MappingType</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-mappingtype">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/MappingType" data-base="MappingType"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>MappingType</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MappingType#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MappingType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-job">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/Job"><span>Job</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-job">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/Job" data-base="Job"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>Job</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/Job#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/Job#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobstatus">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobStatus"><span>JobStatus</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobstatus">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobStatus" data-base="JobStatus"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobStatus</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobStatus#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobStatus#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobparameter">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobParameter"><span>JobParameter</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobparameter">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobParameter" data-base="JobParameter"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobParameter</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameter#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobParameter#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobresult">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobResult"><span>JobResult</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobresult">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobResult" data-base="JobResult"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobResult</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResult#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResult#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-resulttype">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/ResultType"><span>ResultType</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-resulttype">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/ResultType" data-base="ResultType"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>ResultType</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ResultType#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/ResultType#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-jobresultmessage">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/JobResultMessage"><span>JobResultMessage</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-jobresultmessage">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/JobResultMessage" data-base="JobResultMessage"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobResultMessage</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResultMessage#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/JobResultMessage#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_monitoringservice-odata-messageseverity">
-            <div>
-              <a href="odata/v4/job-scheduling/monitoring/MessageSeverity"><span>MessageSeverity</span></a>
+          <li id="sapafcsdk_scheduling_monitoringservice-messageseverity">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="odata/v4/job-scheduling/monitoring/MessageSeverity" data-base="MessageSeverity"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>MessageSeverity</a><span class="entity-right"><span class="extra-links"><a class="extra-link" data-always href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MessageSeverity#preview-app" title="Preview in Fiori elements">Fiori preview</a></span></span>
             </div>
-            <div><a href="/$fiori-preview/sapafcsdk.scheduling.MonitoringService/MessageSeverity#preview-app"><span class="preview" title="Preview in Fiori elements">Fiori preview</span></a></div>
           </li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
-      <div id="sapafcsdk_scheduling_providerservice-rest">
-        <h3 class="header">
-          <a href="api/job-scheduling/v1"><span>/api/job-scheduling/v1</span></a> <span><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></span>
-        </h3>
-        <ul>
-          <li id="sapafcsdk_scheduling_providerservice-rest-capabilities">
-            <div>
-              <a href="api/job-scheduling/v1/Capabilities"><span>Capabilities</span></a>
+      </ul>
+    </details>
+    <details id="sapafcsdk_scheduling_providerservice" data-protocols="rest" data-paths='["api/job-scheduling/v1"]' data-selected-protocol="rest">
+      <summary>
+        <span class="srv-name">Provider Service</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"><button type="button" class="badge" role="radio" data-protocol="rest" aria-checked="true" tabindex="0">rest</button></span>
+      </summary>
+      <ul>
+          <li class="describe-row">
+            <div class="entity-row describe-row-layout">
+              <span class="describe-left"></span>
+              
+              <span class="describe-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span>
+              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/provider-service.cds:37" title="Open declaration">Declaration</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobdefinition">
-            <div>
-              <a href="api/job-scheduling/v1/JobDefinition"><span>JobDefinition</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-capabilities">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/Capabilities" data-base="Capabilities"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>Capabilities</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobparameterdefinition">
-            <div>
-              <a href="api/job-scheduling/v1/JobParameterDefinition"><span>JobParameterDefinition</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-jobdefinition">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobDefinition" data-base="JobDefinition"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobDefinition</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobdefinitiontext">
-            <div>
-              <a href="api/job-scheduling/v1/JobDefinitionText"><span>JobDefinitionText</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-jobparameterdefinition">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobParameterDefinition" data-base="JobParameterDefinition"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobParameterDefinition</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-job">
-            <div>
-              <a href="api/job-scheduling/v1/Job"><span>Job</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-jobdefinitiontext">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobDefinitionText" data-base="JobDefinitionText"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobDefinitionText</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobparameter">
-            <div>
-              <a href="api/job-scheduling/v1/JobParameter"><span>JobParameter</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-job">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/Job" data-base="Job"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>Job</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobresult">
-            <div>
-              <a href="api/job-scheduling/v1/JobResult"><span>JobResult</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-jobparameter">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobParameter" data-base="JobParameter"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobParameter</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-          <li id="sapafcsdk_scheduling_providerservice-rest-jobresultmessage">
-            <div>
-              <a href="api/job-scheduling/v1/JobResultMessage"><span>JobResultMessage</span></a>
+          <li id="sapafcsdk_scheduling_providerservice-jobresult">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobResult" data-base="JobResult"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobResult</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
             </div>
-            <div><a href="/api-docs/api/job-scheduling/v1"><span class="preview" title="Show in Swagger UI">Open API</span></a></div>
           </li>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
-      <div id="sapafcsdk_scheduling_websocketservice-ws">
-        <h3 class="header">
-          <a href="ws/job-scheduling"><span>/ws/job-scheduling</span></a> 
-        </h3>
-        <ul>
-        </ul>
-        <ul>
-        </ul>
-      </div>
-  
+          <li id="sapafcsdk_scheduling_providerservice-jobresultmessage">
+            <div class="entity-row entity-row-3col">
+              <a class="entity-name" href="api/job-scheduling/v1/JobResultMessage" data-base="JobResultMessage"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>JobResultMessage</a><span class="entity-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span></span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_providerservice-notify" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="api/job-scheduling/v1/notify" data-base="notify"><span class="kind-pill kind-action" title="A custom action or function">action</span>notify</a>
+            </div>
+          </li>
+      </ul>
+    </details>
+  </section>
 
-            <footer>
-                This is an automatically generated page. <br>
-                You can replace it with a custom <code>./app/index.html</code>.
-            </footer>
-        </div>
+  <section id="required-services" class="services">
+    <h2> Required Services: </h2> <button class="toggle-button"></button>
+    
+    <details id="featureservice" data-protocols="rest" data-paths='["rest/feature"]' data-selected-protocol="rest">
+      <summary>
+        <span class="srv-name">Feature Service</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"><button type="button" class="badge" role="radio" data-protocol="rest" aria-checked="true" tabindex="0">rest</button></span>
+      </summary>
+      <ul>
+          <li class="describe-row">
+            <div class="entity-row describe-row-layout">
+              <span class="describe-left"></span>
+              
+              <span class="describe-right">
+              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/node_modules/@cap-js-community/feature-toggle-library/src/service/feature-service.cds:3" title="Open declaration">Declaration</a></span></span>
+            </div>
+          </li>
+          <li id="featureservice-state" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="rest/feature/state" data-base="state"><span class="kind-pill kind-function" title="A custom action or function">action</span>state</a>
+            </div>
+          </li>
+          <li id="featureservice-redisread" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="rest/feature/redisRead" data-base="redisRead"><span class="kind-pill kind-action" title="A custom action or function">action</span>redisRead</a>
+            </div>
+          </li>
+          <li id="featureservice-redisupdate" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="rest/feature/redisUpdate" data-base="redisUpdate"><span class="kind-pill kind-action" title="A custom action or function">action</span>redisUpdate</a>
+            </div>
+          </li>
+          <li id="featureservice-redissendcommand" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="rest/feature/redisSendCommand" data-base="redisSendCommand"><span class="kind-pill kind-action" title="A custom action or function">action</span>redisSendCommand</a>
+            </div>
+          </li>
+      </ul>
+    </details>
+    <details id="sapafcsdk_scheduling_processingservice" data-protocols="" data-paths='[]' data-selected-protocol="undefined">
+      <summary>
+        <span class="srv-name">Processing Service</span><span class="srv-status srv-status-mocked" title="Served locally as a mock">mocked</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"></span>
+      </summary>
+      <ul>
+          <li id="sapafcsdk_scheduling_processingservice-processjob" class="operation">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-action" title="A custom action or function">action</span>processJob</span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_processingservice-updatejob" class="operation">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-action" title="A custom action or function">action</span>updateJob</span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_processingservice-canceljob" class="operation">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-action" title="A custom action or function">action</span>cancelJob</span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_processingservice-syncjob" class="operation">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-action" title="A custom action or function">action</span>syncJob</span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_processingservice-notify" class="operation">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-action" title="A custom action or function">action</span>notify</span>
+            </div>
+          </li>
+      </ul>
+    </details>
+    <details id="sapafcsdk_scheduling_websocketservice" data-protocols="ws" data-paths='["ws/job-scheduling"]' data-selected-protocol="ws">
+      <summary>
+        <span class="srv-name">Websocket Service</span><span class="srv-status srv-status-mocked" title="Served locally as a mock">mocked</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"><button type="button" class="badge" role="radio" data-protocol="ws" aria-checked="true" tabindex="0">ws</button></span>
+      </summary>
+      <ul>
+          <li class="describe-row">
+            <div class="entity-row describe-row-layout">
+              <span class="describe-left"></span>
+              
+              <span class="describe-right">
+              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/websocket-service.cds:7" title="Open declaration">Declaration</a></span></span>
+            </div>
+          </li>
+          <li id="sapafcsdk_scheduling_websocketservice-eventqueuecluster_jobstatuschanged" class="operation">
+            <div class="entity-row">
+              <a class="entity-name" href="ws/job-scheduling/eventQueueCluster.jobStatusChanged" data-base="eventQueueCluster.jobStatusChanged"><span class="kind-pill kind-action" title="A custom action or function">action</span>eventQueueCluster.jobStatusChanged</a>
+            </div>
+          </li>
+      </ul>
+    </details>
+    <details id="afc" data-protocols="" data-paths='[]' data-selected-protocol="undefined">
+      <summary>
+        <span class="srv-name">Afc</span><span class="srv-status srv-status-mocked" title="Served locally as a mock">mocked</span>
+        <span class="protocol-badges" role="radiogroup" aria-label="Served protocols"></span>
+      </summary>
+      <ul>
+          <li id="afc-taskexternaljob">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>TaskExternalJob</span>
+            </div>
+          </li>
+          <li id="afc-taskexternaljobinput">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>TaskExternalJobInput</span>
+            </div>
+          </li>
+          <li id="afc-taskexternaljobinputresult">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>TaskExternalJobInputResult</span>
+            </div>
+          </li>
+          <li id="afc-taskexternaljobinputresultmessage">
+            <div class="entity-row">
+              <span class="entity-name"><span class="kind-pill kind-entity" title="A main entity, explicitly exposed">entity</span>TaskExternalJobInputResultMessage</span>
+            </div>
+          </li>
+      </ul>
+    </details>
+  </section>
 
-    </body>
+
+  <footer>
+    This is an automatically generated page. <br>
+    You can replace it with a custom <code>./app/index.html</code>.
+  </footer>
+
+</body>
 </html>
 "
 `;

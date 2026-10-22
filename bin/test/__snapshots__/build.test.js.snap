@@ -29,15 +29,23 @@ exports[`Build > Java / CF 2`] = `
 {
   "routes": [
     {
-      "source": "^/(.*)$",
-      "target": "$1",
+      "source": "^/?odata/(.*)$",
+      "target": "/odata/$1",
       "destination": "srv-api",
-      "csrfProtection": true
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
     }
   ],
   "websockets": {
     "enabled": true
-  }
+  },
+  "authenticationMethod": "route"
 }
 "
 `;
@@ -777,7 +785,7 @@ exports[`Build > Java / CF 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -898,19 +906,19 @@ cds:
 management:
   endpoint:
     health:
-      show-components: always
       probes:
         enabled: true
+      show-components: always
   endpoints:
     web:
       exposure:
         include: health
   health:
+    db:
+      enabled: true
     defaults:
       enabled: false
     ping:
-      enabled: true
-    db:
       enabled: true
 cds:
   index-page:
@@ -1350,24 +1358,9 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
-        type: org.cloudfoundry.managed-service
         parameters:
-          service: xsuaa
-          service-plan: application
-          path: ./xs-security.json
-          config:
-            xsappname: afcsdk-\${org}-\${space}
-            tenant-mode: dedicated
-            oauth2-configuration:
-              credential-types:
-                - "binding-secret"
-                - "x509"
-              redirect-uris:
-                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
-        requires:
-          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -1396,6 +1389,8 @@ resources:
     parameters:
       service: destination
       service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
@@ -1432,8 +1427,6 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-      service-key:
-        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
@@ -1468,15 +1461,23 @@ exports[`Build > Java / Kyma 2`] = `
 {
   "routes": [
     {
-      "source": "^/(.*)$",
-      "target": "$1",
+      "source": "^/?odata/(.*)$",
+      "target": "/odata/$1",
       "destination": "srv-api",
-      "csrfProtection": true
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
     }
   ],
   "websockets": {
     "enabled": true
-  }
+  },
+  "authenticationMethod": "route"
 }
 "
 `;
@@ -2221,7 +2222,7 @@ exports[`Build > Java / Kyma 10`] = `
     <dependency>
       <groupId>com.github.capjscommunity</groupId>
       <artifactId>sap-afc-sdk</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -2342,19 +2343,19 @@ cds:
 management:
   endpoint:
     health:
-      show-components: always
       probes:
         enabled: true
+      show-components: always
   endpoints:
     web:
       exposure:
         include: health
   health:
+    db:
+      enabled: true
     defaults:
       enabled: false
     ping:
-      enabled: true
-    db:
       enabled: true
 cds:
   index-page:
@@ -2969,15 +2970,23 @@ exports[`Build > Node / CF 2`] = `
 {
   "routes": [
     {
-      "source": "^/(.*)$",
-      "target": "$1",
+      "source": "^/?odata/(.*)$",
+      "target": "/odata/$1",
       "destination": "srv-api",
-      "csrfProtection": true
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
     }
   ],
   "websockets": {
     "enabled": true
-  }
+  },
+  "authenticationMethod": "route"
 }
 "
 `;
@@ -3999,24 +4008,9 @@ modules:
         parameters:
           content-target: true
       - name: afcsdk-auth
-        type: org.cloudfoundry.managed-service
         parameters:
-          service: xsuaa
-          service-plan: application
-          path: ./xs-security.json
-          config:
-            xsappname: afcsdk-\${org}-\${space}
-            tenant-mode: dedicated
-            oauth2-configuration:
-              credential-types:
-                - "binding-secret"
-                - "x509"
-              redirect-uris:
-                - https://*~{app-api/app-uri}/**
           service-key:
             name: afcsdk-auth-key
-        requires:
-          - name: app-api
     build-parameters:
       no-source: true
     parameters:
@@ -4061,6 +4055,8 @@ resources:
     parameters:
       service: destination
       service-plan: lite
+      config:
+        HTML5Runtime_enabled: true
     requires:
       - name: srv-api
   - name: afcsdk-cloud-logging
@@ -4097,8 +4093,6 @@ resources:
             - "x509"
           redirect-uris:
             - https://*~{app-api/app-uri}/**
-      service-key:
-        name: afcsdk-auth-key
     requires:
       - name: app-api
 "
@@ -4176,15 +4170,23 @@ exports[`Build > Node / Kyma 2`] = `
 {
   "routes": [
     {
-      "source": "^/(.*)$",
-      "target": "$1",
+      "source": "^/?odata/(.*)$",
+      "target": "/odata/$1",
       "destination": "srv-api",
-      "csrfProtection": true
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
     }
   ],
   "websockets": {
     "enabled": true
-  }
+  },
+  "authenticationMethod": "route"
 }
 "
 `;
