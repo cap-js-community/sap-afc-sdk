@@ -34,7 +34,6 @@ cds.on("bootstrap", async () => {
 });
 
 cds.on("served", () => {
-  queueServices();
   serveApiRoot();
 });
 
@@ -332,15 +331,6 @@ function addLinkToIndexHtml(service, apiPath) {
     return { href: apiPath, name: "Open API", title: "Show in Swagger UI" };
   };
   service.$linkProviders ? service.$linkProviders.push(provider) : (service.$linkProviders = [provider]);
-}
-
-function queueServices() {
-  for (const service in config.services) {
-    if (cds.services[service] && cds.requires[service]?.queued && config.services[service].queued) {
-      cds.services[service].options.queued = cds.requires[service].queued;
-      cds.services[service] = cds.queued(cds.services[service]);
-    }
-  }
 }
 
 async function handleFeatureToggles() {

@@ -9,20 +9,6 @@
   "apps": {
     "scheduling.monitoring.job": {}
   },
-  "services": {
-    "sapafcsdk.scheduling.ProcessingService": {
-      "queued": true
-    },
-    "sapafcsdk.scheduling.WebsocketService": {
-      "queued": true
-    },
-    "sap.afc.IntegrationService": {
-      "queued": true
-    },
-    "afc": {
-      "queued": true
-    }
-  },
   "toggles": {
     "eventQueue": {
       "isEventQueueActive": "eventQueue/active",

@@ -135,17 +135,20 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     }
     if (statusChanged) {
       const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-      await schedulingWebsocketService.tx(req).emit(
-        "jobStatusChanged",
-        {
-          IDs: [job.ID],
-          status,
-        },
-        {
-          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
-          "x-eventQueue-referenceEntityKey": job.ID,
-        },
-      );
+      await cds
+        .queued(schedulingWebsocketService)
+        .tx(req)
+        .emit(
+          "jobStatusChanged",
+          {
+            IDs: [job.ID],
+            status,
+          },
+          {
+            "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
+            "x-eventQueue-referenceEntityKey": job.ID,
+          },
+        );
     }
   }
 
@@ -476,16 +479,19 @@ module.exports = class SchedulingProcessingService extends BaseApplicationServic
     }
     const afc = await cds.connect.to("afc");
     const { TaskExternalJobInput } = afc.entities;
-    await afc.tx(req).send({
-      query: afc.create(TaskExternalJobInput).entries({
-        externalJobId: job.referenceID,
-        jobStatus: status,
-        results,
-      }),
-      headers: {
-        "x-eventQueue-referenceEntity": "sap.afc.IntegrationService.TaskExternalJob",
-        "x-eventQueue-referenceEntityKey": job.referenceID,
-      },
-    });
+    await cds
+      .queued(afc)
+      .tx(req)
+      .send({
+        query: afc.create(TaskExternalJobInput).entries({
+          externalJobId: job.referenceID,
+          jobStatus: status,
+          results,
+        }),
+        headers: {
+          "x-eventQueue-referenceEntity": "sap.afc.IntegrationService.TaskExternalJob",
+          "x-eventQueue-referenceEntityKey": job.referenceID,
+        },
+      });
   }
 };

@@ -23,7 +23,7 @@
     <java.version>21</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <cds.services.version>5.1.1</cds.services.version>
+    <cds.services.version>5.2.0</cds.services.version>
     <spring.boot.version>4.1.1</spring.boot.version>
     <spring.cloud.version>5.2.0</spring.cloud.version>
     <spring.doc.version>3.1.1</spring.doc.version>
@@ -196,7 +196,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.15</version>
+          <version>0.8.16</version>
         </plugin>
         <plugin>
           <groupId>org.pitest</groupId>

@@ -345,7 +345,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.after("CREATE", Job, async (data, req) => {
       const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
-      await schedulingProcessingService.tx(req).send(
+      await cds.queued(schedulingProcessingService).tx(req).send(
         "processJob",
         {
           ID: data.ID,
@@ -358,17 +358,20 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         },
       );
       const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-      await schedulingWebsocketService.tx(req).emit(
-        "jobStatusChanged",
-        {
-          IDs: [data.ID],
-          status: data.status,
-        },
-        {
-          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
-          "x-eventQueue-referenceEntityKey": data.ID,
-        },
-      );
+      await cds
+        .queued(schedulingWebsocketService)
+        .tx(req)
+        .emit(
+          "jobStatusChanged",
+          {
+            IDs: [data.ID],
+            status: data.status,
+          },
+          {
+            "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
+            "x-eventQueue-referenceEntityKey": data.ID,
+          },
+        );
       delete data.parameters;
     });
 
@@ -393,7 +396,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.after(Job.actions.cancel, Job, async (data, req) => {
       const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
-      await schedulingProcessingService.tx(req).send(
+      await cds.queued(schedulingProcessingService).tx(req).send(
         "cancelJob",
         {
           ID: req.job.ID,
@@ -404,17 +407,20 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
         },
       );
       const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-      await schedulingWebsocketService.tx(req).emit(
-        "jobStatusChanged",
-        {
-          IDs: [req.job.ID],
-          status: JobStatus.cancelRequested,
-        },
-        {
-          "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
-          "x-eventQueue-referenceEntityKey": req.job.ID,
-        },
-      );
+      await cds
+        .queued(schedulingWebsocketService)
+        .tx(req)
+        .emit(
+          "jobStatusChanged",
+          {
+            IDs: [req.job.ID],
+            status: JobStatus.cancelRequested,
+          },
+          {
+            "x-eventQueue-referenceEntity": "sapafcsdk.scheduling.Job",
+            "x-eventQueue-referenceEntityKey": req.job.ID,
+          },
+        );
     });
 
     this.before(JobResult.actions.data, JobResult, async (req) => {
@@ -432,7 +438,7 @@ module.exports = class SchedulingProviderService extends BaseApplicationService 
 
     this.on(notify, async (req) => {
       const schedulingProcessingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
-      await schedulingProcessingService.tx(req).send("notify", req.data);
+      await cds.queued(schedulingProcessingService).tx(req).send("notify", req.data);
     });
 
     return super.init();

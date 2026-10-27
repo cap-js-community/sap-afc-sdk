@@ -22,7 +22,7 @@ describe("Processing Service", () => {
   const log = cds.test.log();
 
   beforeAll(async () => {
-    processingService = await cds.connect.to("sapafcsdk.scheduling.ProcessingService");
+    processingService = cds.queued(await cds.connect.to("sapafcsdk.scheduling.ProcessingService"));
     const afc = await cds.connect.to("afc");
     afc.on("#succeeded", () => {});
     afc.on("#failed", () => {});

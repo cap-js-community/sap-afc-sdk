@@ -1,5 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Processing Service > AFC > AFC Update Job 4`] = `
+[
+  {
+    "externalJobId": "7158cbab-a42b-4cb9-9656-8db72521d13d",
+    "jobStatus": "completed",
+    "requestStatus": 0,
+  },
+]
+`;
+
 exports[`Processing Service > processJob - simple mock - completed 1`] = `
 [
   {
