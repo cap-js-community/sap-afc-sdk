@@ -8,7 +8,13 @@ const { test } = cds.test(__dirname + "/../..");
 
 process.env.PORT = 0; // Random
 
+let websocketService;
+
 describe("Websocket Service", () => {
+  beforeAll(async () => {
+    websocketService = cds.queued(await cds.connect.to("sapafcsdk.scheduling.WebsocketService"));
+  });
+
   beforeEach(async () => {
     await clearEventQueue();
     await test.data.reset();
@@ -18,8 +24,7 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let message = ws.message("jobStatusChanged");
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
@@ -37,9 +42,7 @@ describe("Websocket Service", () => {
       base: "/scheduling.monitoring.job",
     });
     let message = ws.message("jobStatusChanged");
-
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
@@ -58,8 +61,7 @@ describe("Websocket Service", () => {
     });
     let message = ws.message("jobStatusChanged");
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
@@ -76,18 +78,17 @@ describe("Websocket Service", () => {
     const ws = await connectToWS("job-scheduling");
     let messages = ws.message("jobStatusChanged", 2);
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
 
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["ZZZ"],
       status: "completed",
     });
 
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["YYY"],
       status: "running",
     });
@@ -115,8 +116,7 @@ describe("Websocket Service", () => {
       event.timeBucket = cron;
     }
 
-    const schedulingWebsocketService = await cds.connect.to("sapafcsdk.scheduling.WebsocketService");
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["XXX"],
       status: "running",
     });
@@ -124,7 +124,7 @@ describe("Websocket Service", () => {
     let entry = await eventQueueEntry("sapafcsdk.scheduling.WebsocketService.jobStatusChanged", undefined, "XXX");
     expect(entry.startAfter).toBeDefined();
 
-    await schedulingWebsocketService.emit("jobStatusChanged", {
+    await websocketService.emit("jobStatusChanged", {
       IDs: ["YYY"],
       status: "running",
     });
