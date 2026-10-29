@@ -63,14 +63,8 @@ function processJava(version) {
   // Maven
   for (const plugin of Plugins) {
     const pluginPath = path.join(__dirname, "../builds", `${plugin.artifactId}-${version}.${plugin.packaging}`);
-    const args = [
-      "install:install-file",
-      `-Dfile=${pluginPath}`,
-      `-DgroupId=${plugin.groupId}`,
-      `-DartifactId=${plugin.artifactId}`,
-      `-Dversion=${version}`,
-      `-Dpackaging=${plugin.packaging}`,
-    ];
+    // pre-built custom POM is included with the artifact in the local repository (transitive dependencies)
+    const args = ["install:install-file", `-Dfile=${pluginPath}`];
     const result = shelljs.exec(`mvn ${args.join(" ")}`);
     if (result.code === 0) {
       console.log(`Successfully installed ${plugin.artifactId} version ${version} to local Maven repository.`);

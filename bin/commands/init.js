@@ -16,7 +16,6 @@ const { isNode, adjustJSON, adjustYAMLDocument, adjustXML } = require("../common
 const Version = require(path.join(__dirname, "../../package.json")).version;
 
 const Versions = {
-  "spring.cloud.version": "5.2.0",
   "spring.security.version": "6.5.11",
 };
 
@@ -39,19 +38,10 @@ const Dependencies = {
       version: Version,
     },
     {
-      groupId: "org.springframework.cloud",
-      artifactId: "spring-cloud-starter-open-service-broker",
-      version: Versions["spring.cloud.version"],
-    },
-    {
       groupId: "org.springframework.security",
       artifactId: "spring-security-test",
       version: Versions["spring.security.version"],
       scope: "test",
-    },
-    {
-      groupId: "org.springframework.boot",
-      artifactId: "spring-boot-starter-websocket",
     },
     {
       groupId: "org.springframework.boot",
