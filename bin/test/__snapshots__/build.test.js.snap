@@ -788,9 +788,14 @@ exports[`Build > Java / CF 10`] = `
       <version>1.1.2</version>
     </dependency>
     <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-open-service-broker</artifactId>
+      <version>5.2.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
-      <version>6.5.5</version>
+      <version>6.5.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -2226,9 +2231,14 @@ exports[`Build > Java / Kyma 10`] = `
       <version>1.1.2</version>
     </dependency>
     <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-open-service-broker</artifactId>
+      <version>5.2.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
-      <version>6.5.5</version>
+      <version>6.5.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
