@@ -51,6 +51,10 @@ const Dependencies = {
     },
     {
       groupId: "org.springframework.boot",
+      artifactId: "spring-boot-starter-websocket",
+    },
+    {
+      groupId: "org.springframework.boot",
       artifactId: "spring-boot-starter-webmvc-test",
       scope: "test",
     },
