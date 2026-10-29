@@ -100,7 +100,7 @@ exports[`CDS Plugin > GET Welcome Page 1`] = `
   <meta name="color-scheme" content="dark light">
   <link rel="stylesheet" href="/.cap/index.css">
   <script src="/.cap/index-client.js" defer></script>
-  <script> document.app_info = {"name":"@cap-js-community/sap-afc-sdk","webapps":[{"href":"/launchpad.html","label":"launchpad.html"},{"href":"/scheduling.monitoring.job/webapp/index.html","label":"scheduling.monitoring.job/webapp"},{"href":"//custom/scheduling.monitoring.job","label":"/custom/scheduling.monitoring.job"}],"agents":[]} </script>
+  <script> document.app_info = {"name":"@cap-js-community/sap-afc-sdk","webapps":[{"href":"/launchpad.html","label":"launchpad.html"},{"href":"/scheduling.monitoring.job/webapp/index.html","label":"scheduling.monitoring.job/webapp"},{"href":"/custom/scheduling.monitoring.job","label":"/custom/scheduling.monitoring.job"}],"agents":[]} </script>
 </head>
 <body>
 
@@ -146,7 +146,7 @@ exports[`CDS Plugin > GET Welcome Page 1`] = `
               <span class="describe-left"><a class="entity-name describe-link" href="odata/v4/job-scheduling/monitoring/$metadata" title="OData EDMX" data-describes='["odata/v4/job-scheduling/monitoring/$metadata"]' data-labels='["/$metadata"]' data-titles='["OData EDMX"]'><span class="kind-pill kind-schema" title="A schema / metadata document">meta</span><span class="label">/$metadata</span></a></span>
               
               <span class="describe-right">
-              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/monitoring-service.cds:6" title="Open declaration">Declaration</a></span></span>
+              <span class="source-links"><a class="src-link" href="vscode://file/<cwd>/srv/scheduling/monitoring-service.cds:6" title="Open declaration">Declaration</a></span></span>
             </div>
           </li>
           <li id="sapafcsdk_scheduling_monitoringservice-jobdefinition">
@@ -222,7 +222,7 @@ exports[`CDS Plugin > GET Welcome Page 1`] = `
               <span class="describe-left"></span>
               
               <span class="describe-right"><span class="extra-links"><a class="extra-link" href="/api-docs/api/job-scheduling/v1" title="Show in Swagger UI">Open API</a></span>
-              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/provider-service.cds:37" title="Open declaration">Declaration</a></span></span>
+              <span class="source-links"><a class="src-link" href="vscode://file/<cwd>/srv/scheduling/provider-service.cds:37" title="Open declaration">Declaration</a></span></span>
             </div>
           </li>
           <li id="sapafcsdk_scheduling_providerservice-capabilities">
@@ -288,7 +288,7 @@ exports[`CDS Plugin > GET Welcome Page 1`] = `
               <span class="describe-left"></span>
               
               <span class="describe-right">
-              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/node_modules/@cap-js-community/feature-toggle-library/src/service/feature-service.cds:3" title="Open declaration">Declaration</a></span></span>
+              <span class="source-links"><a class="src-link" href="vscode://file/<cwd>/node_modules/@cap-js-community/feature-toggle-library/src/service/feature-service.cds:3" title="Open declaration">Declaration</a></span></span>
             </div>
           </li>
           <li id="featureservice-state" class="operation">
@@ -357,7 +357,7 @@ exports[`CDS Plugin > GET Welcome Page 1`] = `
               <span class="describe-left"></span>
               
               <span class="describe-right">
-              <span class="source-links"><a class="src-link" href="vscode://file//Users/D045365/Documents/git/sap-afc-sdk/srv/scheduling/websocket-service.cds:7" title="Open declaration">Declaration</a></span></span>
+              <span class="source-links"><a class="src-link" href="vscode://file/<cwd>/srv/scheduling/websocket-service.cds:7" title="Open declaration">Declaration</a></span></span>
             </div>
           </li>
           <li id="sapafcsdk_scheduling_websocketservice-eventqueuecluster_jobstatuschanged" class="operation">
