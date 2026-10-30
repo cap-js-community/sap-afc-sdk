@@ -7,11 +7,12 @@ const shelljs = require("shelljs");
 const config = require("../config.json");
 
 const {
+  projectName,
   adjustJSON,
   adjustYAMLAllDocument,
   adjustAllLines,
   copyFolderAdjusted,
-  projectName,
+  cdsPostAdjustments,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
@@ -143,6 +144,7 @@ module.exports = (options) => {
 
       // cds add
       shelljs.exec(`cds add ${config.dependencies.app.join(",")} ${config.options.cds}`);
+      cdsPostAdjustments();
     }
   } catch (err) {
     console.error(err.message);

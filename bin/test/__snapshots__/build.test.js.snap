@@ -29,25 +29,18 @@ exports[`Build > Java / CF 2`] = `
 {
   "routes": [
     {
-      "source": "^/?odata/(.*)$",
-      "target": "/odata/$1",
-      "destination": "srv-api",
-      "csrfProtection": true,
-      "authenticationType": "xsuaa"
-    },
-    {
-      "source": "^(.*)$",
+      "source": "^/(.*)$",
       "target": "$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
   "authenticationMethod": "route"
-}
-"
+}"
 `;
 
 exports[`Build > Java / CF 3`] = `
@@ -1462,25 +1455,18 @@ exports[`Build > Java / Kyma 2`] = `
 {
   "routes": [
     {
-      "source": "^/?odata/(.*)$",
-      "target": "/odata/$1",
-      "destination": "srv-api",
-      "csrfProtection": true,
-      "authenticationType": "xsuaa"
-    },
-    {
-      "source": "^(.*)$",
+      "source": "^/(.*)$",
       "target": "$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
   "authenticationMethod": "route"
-}
-"
+}"
 `;
 
 exports[`Build > Java / Kyma 3`] = `
@@ -2971,25 +2957,18 @@ exports[`Build > Node / CF 2`] = `
 {
   "routes": [
     {
-      "source": "^/?odata/(.*)$",
-      "target": "/odata/$1",
-      "destination": "srv-api",
-      "csrfProtection": true,
-      "authenticationType": "xsuaa"
-    },
-    {
-      "source": "^(.*)$",
+      "source": "^/(.*)$",
       "target": "$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
   "authenticationMethod": "route"
-}
-"
+}"
 `;
 
 exports[`Build > Node / CF 3`] = `
@@ -4172,25 +4151,18 @@ exports[`Build > Node / Kyma 2`] = `
 {
   "routes": [
     {
-      "source": "^/?odata/(.*)$",
-      "target": "/odata/$1",
-      "destination": "srv-api",
-      "csrfProtection": true,
-      "authenticationType": "xsuaa"
-    },
-    {
-      "source": "^(.*)$",
+      "source": "^/(.*)$",
       "target": "$1",
-      "service": "html5-apps-repo-rt",
-      "authenticationType": "xsuaa"
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
   "authenticationMethod": "route"
-}
-"
+}"
 `;
 
 exports[`Build > Node / Kyma 3`] = `

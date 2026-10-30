@@ -202,6 +202,19 @@ function adjustXML(file, callback) {
   return false;
 }
 
+function cdsPostAdjustments() {
+  // Approuter routes
+  adjustJSON(".deploy/app-router/xs-app.json", (json) => {
+    json.routes = (json.routes ?? []).filter((route) => {
+      if (route.destination === "srv-api") {
+        route.source = "^/(.*)$";
+        route.target = "$1";
+      }
+      return !["html5-apps-repo-rt"].includes(route.service);
+    });
+  });
+}
+
 function generateHashBrokerPassword() {
   const result = shelljs.exec("npx -y -p @sap/sbf hash-broker-password -b").stdout;
   const parts = result.split("\n");
@@ -299,6 +312,7 @@ module.exports = {
   adjustYAMLAllDocument,
   adjustYAMLAllDocuments,
   adjustXML,
+  cdsPostAdjustments,
   generateHashBrokerPassword,
   copyFolder,
   copyFolderAdjusted,
