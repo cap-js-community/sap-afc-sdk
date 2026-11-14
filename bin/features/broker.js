@@ -12,7 +12,6 @@ const {
   generateHashBrokerPassword,
   adjustYAMLAllDocuments,
   adjustJSON,
-  cdsPostAdjustments,
 } = require("../common/util");
 const YAML = require("yaml");
 const shelljs = require("shelljs");
@@ -188,7 +187,6 @@ module.exports = (options) => {
 function addXsuaaBroker() {
   // cds add
   shelljs.exec(`cds add ${config.dependencies.broker.join(",")} ${config.options.cds} --plan broker`);
-  cdsPostAdjustments();
 }
 
 function checkXsuaaBroker() {
