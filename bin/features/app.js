@@ -12,7 +12,6 @@ const {
   adjustYAMLAllDocument,
   adjustAllLines,
   copyFolderAdjusted,
-  cdsPostAdjustments,
 } = require("../common/util");
 const { merge } = require("../../src/util/helper");
 
@@ -144,7 +143,6 @@ module.exports = (options) => {
 
       // cds add
       shelljs.exec(`cds add ${config.dependencies.app.join(",")} ${config.options.cds}`);
-      cdsPostAdjustments();
     }
   } catch (err) {
     console.error(err.message);

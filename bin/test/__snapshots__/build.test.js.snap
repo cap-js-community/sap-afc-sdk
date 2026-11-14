@@ -32,15 +32,15 @@ exports[`Build > Java / CF 2`] = `
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
-      "authenticationType": "xsuaa",
       "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
-  "authenticationMethod": "route"
-}"
+  "welcomeFile": "/afcsdkschedulingmonitoringjob/index.html"
+}
+"
 `;
 
 exports[`Build > Java / CF 3`] = `
@@ -1458,15 +1458,15 @@ exports[`Build > Java / Kyma 2`] = `
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
-      "authenticationType": "xsuaa",
       "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
-  "authenticationMethod": "route"
-}"
+  "welcomeFile": "/afcsdkschedulingmonitoringjob/index.html"
+}
+"
 `;
 
 exports[`Build > Java / Kyma 3`] = `
@@ -2772,9 +2772,9 @@ approuter:
       memory: 500M
   health:
     liveness:
-      path: /
+      path: ""
     readiness:
-      path: /
+      path: ""
   envFrom:
     - configMapRef:
         name: "{{ .Release.Name }}-approuter-configmap"
@@ -2960,15 +2960,15 @@ exports[`Build > Node / CF 2`] = `
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
-      "authenticationType": "xsuaa",
       "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
-  "authenticationMethod": "route"
-}"
+  "welcomeFile": "/afcsdkschedulingmonitoringjob/index.html"
+}
+"
 `;
 
 exports[`Build > Node / CF 3`] = `
@@ -4154,15 +4154,15 @@ exports[`Build > Node / Kyma 2`] = `
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
-      "authenticationType": "xsuaa",
       "csrfProtection": true
     }
   ],
   "websockets": {
     "enabled": true
   },
-  "authenticationMethod": "route"
-}"
+  "welcomeFile": "/afcsdkschedulingmonitoringjob/index.html"
+}
+"
 `;
 
 exports[`Build > Node / Kyma 3`] = `
@@ -5184,9 +5184,9 @@ approuter:
       memory: 500M
   health:
     liveness:
-      path: /
+      path: ""
     readiness:
-      path: /
+      path: ""
   envFrom:
     - configMapRef:
         name: "{{ .Release.Name }}-approuter-configmap"
