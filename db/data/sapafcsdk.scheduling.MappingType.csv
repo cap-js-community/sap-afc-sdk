@@ -23,6 +23,9 @@ customField1;Custom Field 1;Custom Field 1
 customField2;Custom Field 2;Custom Field 2
 customField3;Custom Field 3;Custom Field 3
 taskListID;Task List ID;Task List ID
+taskListUUID;Task List UUID;Task List UUID
 taskListDescription;Task List Description;Task List Description
 taskID;Task ID;Task ID
+taskUUID;Task UUID;Task UUID
 taskDescription;Task Description;Task Description
+taskURL;Task URL;Task URL

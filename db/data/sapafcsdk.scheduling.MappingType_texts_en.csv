@@ -23,6 +23,9 @@ locale;code;name;descr
 "en";customField2;Custom Field 2;Custom Field 2
 "en";customField3;Custom Field 3;Custom Field 3
 "en";taskListID;Task List ID;Task List ID
+"en";taskListUUID;Task List UUID;Task List UUID
 "en";taskListDescription;Task List Description;Task List Description
 "en";taskID;Task ID;Task ID
+"en";taskUUID;Task UUID;Task UUID
 "en";taskDescription;Task Description;Task Description
+"en";taskURL;Task URL;Task URL

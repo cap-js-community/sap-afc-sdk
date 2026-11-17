@@ -874,6 +874,10 @@ exports[`Monitoring Service > Get $metadata 1`] = `
               <Annotation Term="Core.SymbolicName" String="taskDescription"/>
               <PropertyValue Property="Value" String="taskDescription"/>
             </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskURL"/>
+              <PropertyValue Property="Value" String="taskURL"/>
+            </Record>
           </Collection>
         </Annotation>
       </Annotations>
@@ -2264,6 +2268,10 @@ exports[`Monitoring Service > Get $metadata 1`] = `
               <Annotation Term="Core.SymbolicName" String="taskDescription"/>
               <PropertyValue Property="Value" String="taskDescription"/>
             </Record>
+            <Record Type="Validation.AllowedValue">
+              <Annotation Term="Core.SymbolicName" String="taskURL"/>
+              <PropertyValue Property="Value" String="taskURL"/>
+            </Record>
           </Collection>
         </Annotation>
       </Annotations>
@@ -2666,6 +2674,21 @@ exports[`Monitoring Service > Get Codelists 5`] = `
       "code": "taskListID",
       "descr": "Task List ID",
       "name": "Task List ID",
+    },
+    {
+      "code": "taskListUUID",
+      "descr": "Task List UUID",
+      "name": "Task List UUID",
+    },
+    {
+      "code": "taskURL",
+      "descr": "Task URL",
+      "name": "Task URL",
+    },
+    {
+      "code": "taskUUID",
+      "descr": "Task UUID",
+      "name": "Task UUID",
     },
     {
       "code": "testRun",

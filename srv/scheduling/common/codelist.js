@@ -48,9 +48,12 @@ module.exports = {
     customField2: "customField2",
     customField3: "customField3",
     taskListID: "taskListID",
+    taskListUUID: "taskListUUID",
     taskListDescription: "taskListDescription",
     taskID: "taskID",
+    taskUUID: "taskUUID",
     taskDescription: "taskDescription",
+    taskURL: "taskURL",
   },
   ResultType: {
     link: "link",

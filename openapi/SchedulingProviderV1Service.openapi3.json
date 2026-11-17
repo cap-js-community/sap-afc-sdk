@@ -1622,7 +1622,8 @@
               "taskListDescription",
               "taskID",
               "taskUUID",
-              "taskDescription"
+              "taskDescription",
+              "taskURL"
             ]
           },
           "value": {
