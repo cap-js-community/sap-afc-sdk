@@ -258,6 +258,7 @@ type MappingTypeCode            : String(255) enum {
   taskID;
   taskUUID;
   taskDescription;
+  taskURL;
 };
 
 @title: '{i18n>MappingType}'

@@ -38,9 +38,12 @@ export namespace sapafcsdk.scheduling {
     | "customField2"
     | "customField3"
     | "taskListID"
+    | "taskListUUID"
     | "taskListDescription"
     | "taskID"
-    | "taskDescription";
+    | "taskUUID"
+    | "taskDescription"
+    | "taskURL";
 
   export type ResultTypeCode = "link" | "data" | "message";
   export type MessageSeverityCode = "success" | "info" | "warning" | "error";
@@ -335,9 +338,12 @@ export const MappingType: {
   customField2: "customField2";
   customField3: "customField3";
   taskListID: "taskListID";
+  taskListUUID: "taskListUUID";
   taskListDescription: "taskListDescription";
   taskID: "taskID";
+  taskUUID: "taskUUID";
   taskDescription: "taskDescription";
+  taskURL: "taskURL";
 }
 
 export const ResultType: {
